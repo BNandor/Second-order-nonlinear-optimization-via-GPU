@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DDouble.cuh
+math.h
+-
+
+/home/spaceman/dissertation/finmat/ParallelLBFGS/main.cu
+iostream
+-
+core/AD/DDouble.cuh
+/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DDouble.cuh
+
