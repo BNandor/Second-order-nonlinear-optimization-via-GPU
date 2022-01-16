@@ -66,10 +66,22 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DDouble.cpp">
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DFloat.cpp">
 			<Option target="ParallelLBFGS"/>
 		</Unit>
-		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DDouble.cuh">
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DFloat.cuh">
+			<Option target="ParallelLBFGS"/>
+		</Unit>
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DFunction.cpp">
+			<Option target="ParallelLBFGS"/>
+		</Unit>
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/DFunction.cuh">
+			<Option target="ParallelLBFGS"/>
+		</Unit>
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/AD/HeapSet.cuh">
+			<Option target="ParallelLBFGS"/>
+		</Unit>
+		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/core/common/Tests.cuh">
 			<Option target="ParallelLBFGS"/>
 		</Unit>
 		<Unit filename="/home/spaceman/dissertation/finmat/ParallelLBFGS/main.cu">

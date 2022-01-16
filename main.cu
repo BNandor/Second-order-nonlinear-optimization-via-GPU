@@ -1,20 +1,56 @@
 #include <iostream>
-#include "core/AD/DDouble.cuh"
+#include "core/common/Tests.cuh"
 
-int main() {
+void testDFloat() {
     DFloat *dev_c;
     DFloat *c = (DFloat *) malloc(sizeof(DFloat));
     unsigned *dev_global_id;
-    cudaMalloc((void **) &dev_c, sizeof(DFloat));
     cudaMalloc((void **) &dev_global_id, sizeof(unsigned));
+    cudaMalloc((void **) &dev_c, sizeof(DFloat));
+
 
     unsigned global_id_val = 0;
     cudaMemcpy(dev_global_id, &global_id_val, sizeof(unsigned), cudaMemcpyHostToDevice);
-    test<<<1, 1>>>(dev_c, dev_global_id);
+    testDFloatKernel<<<1, 1>>>(dev_c, dev_global_id);
 
     cudaMemcpy(c, dev_c, sizeof(DFloat), cudaMemcpyDeviceToHost);
+    assert(c->value == 36);
     cudaFree(dev_c);
     cudaFree(dev_global_id);
     free(c);
+}
+
+void testDFuncBFS() {
+    unsigned **dev_BFS;
+    cudaMalloc((void **) &dev_BFS, sizeof(unsigned *));
+
+    unsigned *dev_BFSSize;
+    cudaMalloc((void **) &dev_BFSSize, sizeof(unsigned));
+
+    unsigned *dev_global_id;
+    cudaMalloc((void **) &dev_global_id, sizeof(unsigned));
+
+    functionTestsKernel<<<1, 1>>>(dev_BFS, dev_BFSSize, dev_global_id);
+    unsigned BFSSize;
+    cudaMemcpy(&BFSSize, dev_BFSSize, sizeof(unsigned), cudaMemcpyDeviceToHost);
+    unsigned *BFS;
+    BFS = (unsigned *) malloc(sizeof(unsigned) * BFSSize);
+    unsigned *dev_BFS_pointer;
+    cudaMemcpy(dev_BFS_pointer, dev_BFS, sizeof(unsigned *), cudaMemcpyDeviceToHost);
+    cudaMemcpy(BFS, dev_BFS_pointer, sizeof(unsigned) * BFSSize, cudaMemcpyDeviceToHost);
+
+    free(BFS);
+}
+
+int main() {
+    testDFloat();
+    testDFuncBFS();
     return 0;
 }
+
+// Create the Function concept: ([DFloat a])-> compute parameter index order once (BFS), and propagate derivatives that way
+// will have: orderArray[operatorTreeSize] - container indices of parameter in order
+//            parameters[maxIndex]-contains references of DFloat parameters
+// calculate local stack size limit,
+// keep a min heap of size operatorTreeSize and a statistical vector to check for duplicates.
+// OPT: keep the orderArray in shared memory, to reduce
