@@ -26,7 +26,7 @@ public:
     }
 
     __host__ __device__ void insert(unsigned element) {
-        printf("inserting %d \n", element);
+//        printf("inserting %d \n", element);
         assert(n < size);
         assert(element < size);
         if (used[element]) {
@@ -51,7 +51,7 @@ public:
     }
 
     __host__ __device__ void removeNext() {
-        printf("removing %d \n", elements[0]);
+//        printf("removing %d \n", elements[0]);
         assert(n >= 1);
         used[elements[0]] = false;
         elements[0] = elements[n - 1];
