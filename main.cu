@@ -21,6 +21,7 @@ void testDFloat() {
 }
 
 void testDFuncBFS() {
+
     unsigned *dev_global_id;
     cudaMalloc((void **) &dev_global_id, sizeof(unsigned));
     unsigned global_id_val = 0;

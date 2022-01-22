@@ -11,6 +11,7 @@
 #include "../AD/DMultiplicationFunction.cuh"
 #include "../AD/DMinusFunction.cuh"
 #include "../AD/DIDFunction.cuh"
+#include "../AD/Operations.cuh"
 #include <stdio.h>
 
 __global__ void testDFloatKernel(DFloat *c, unsigned *globalIndex) {
@@ -28,26 +29,26 @@ __global__ void functionTestsKernel(unsigned *index) {
                             DFloat(2.0, globalIndex, &globalIndex),
                             DFloat(4.0, globalIndex, &globalIndex)};
 
-    DIDFunction idX = DIDFunction(0);
-    DIDFunction idY = DIDFunction(1);
-    DIDFunction idY2 = DIDFunction(2);
-    DMultiplicationFunction x1 = DMultiplicationFunction(&idX, &idY);
-    DMultiplicationFunction x2 = DMultiplicationFunction(&x1, &idY2);
-    DPlusFunction x3 = DPlusFunction(&x1, &x2);
+    DIDFunction idX = parameters[0];
+    DIDFunction idY = parameters[1];
+    DIDFunction idY2 = parameters[2];
+    DMultiplicationFunction x1 = idX * idY;
+    DMultiplicationFunction x2 = x1 * idY2;
+    DPlusFunction x3 = x1 + x2;
 
-    DFloat &result = x3(parameters, 6);
-    result.setPartialDerivatives(parameters);
+    DFloat *result = x3(parameters, 6);
+    result->setPartialDerivatives(parameters);
     printf("globalindex: %d \n", globalIndex);
-    printf("resultderivative: %f \n", result.derivative);
+    printf("resultderivative: %f \n", result->derivative);
 
-    for (int i = 0; i < 6; i++) {
-        printf("%f: \n", parameters[i].derivative);
+    for (auto &parameter : parameters) {
+        printf("%f: \n", parameter.derivative);
     }
 
-//    printf("%f \n", parameters[idX.index].derivative);
-//    printf("%f \n", parameters[x1.index].derivative);
-//    printf("%f \n", parameters[x2.index].derivative);
-//    printf("%f \n", parameters[x3.index].derivative);
+    printf("%f \n", parameters[idX.index].derivative);
+    printf("%f \n", parameters[x1.index].derivative);
+    printf("%f \n", parameters[x2.index].derivative);
+    printf("%f \n", parameters[x3.index].derivative);
     assert(parameters[idX.index].derivative == 10.00);
     assert(parameters[x1.index].derivative == 5.00);
     assert(parameters[x2.index].derivative == 1.00);

@@ -18,17 +18,18 @@ public:
     }
 
     __host__ __device__
-    DFloat &operator()(DFloat *parameterList, unsigned size) override {
+    DFloat *operator()(DFloat *parameterList, unsigned size) override {
         if (resultValue != nullptr) {
-            return *resultValue;
+            return resultValue;
         }
-        DFloat result = (*op1)(parameterList, size) * (*op2)(parameterList, size);
+        DFloat result = *(*op1)(parameterList, size) * *(*op2)(parameterList, size);
         index = result.index;
         assert(index < size);
         parameterList[index] = result;
         resultValue = &parameterList[index];
-        return parameterList[index];
+        return resultValue;
     }
+
 };
 
 #endif //PARALLELLBFGS_DMULTIPLICATIONFUNCTION_CUH

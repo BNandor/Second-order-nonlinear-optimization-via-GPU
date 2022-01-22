@@ -12,15 +12,15 @@ private:
     unsigned id;
 public:
     __host__ __device__
-    DIDFunction(unsigned id) : id(id) {
+    DIDFunction(DFloat &value) : id(value.index) {
         index = id;
         resultValue = nullptr;
     }
 
     __host__ __device__
-    DFloat &operator()(DFloat *parameterList, unsigned size) override {
+    DFloat *operator()(DFloat *parameterList, unsigned size) override {
         assert(index < size);
-        return parameterList[id];
+        return &parameterList[id];
     }
 };
 
