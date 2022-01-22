@@ -21,29 +21,17 @@ void testDFloat() {
 }
 
 void testDFuncBFS() {
-    unsigned **dev_BFS;
-    cudaMalloc((void **) &dev_BFS, sizeof(unsigned *));
-
-    unsigned *dev_BFSSize;
-    cudaMalloc((void **) &dev_BFSSize, sizeof(unsigned));
-
     unsigned *dev_global_id;
     cudaMalloc((void **) &dev_global_id, sizeof(unsigned));
+    unsigned global_id_val = 0;
+    cudaMemcpy(dev_global_id, &global_id_val, sizeof(unsigned), cudaMemcpyHostToDevice);
+    functionTestsKernel<<<1, 1>>>(dev_global_id);
+    cudaFree(dev_global_id);
 
-    functionTestsKernel<<<1, 1>>>(dev_BFS, dev_BFSSize, dev_global_id);
-    unsigned BFSSize;
-    cudaMemcpy(&BFSSize, dev_BFSSize, sizeof(unsigned), cudaMemcpyDeviceToHost);
-    unsigned *BFS;
-    BFS = (unsigned *) malloc(sizeof(unsigned) * BFSSize);
-    unsigned *dev_BFS_pointer;
-    cudaMemcpy(dev_BFS_pointer, dev_BFS, sizeof(unsigned *), cudaMemcpyDeviceToHost);
-    cudaMemcpy(BFS, dev_BFS_pointer, sizeof(unsigned) * BFSSize, cudaMemcpyDeviceToHost);
-
-    free(BFS);
 }
 
 int main() {
-    testDFloat();
+//    testDFloat();
     testDFuncBFS();
     return 0;
 }
