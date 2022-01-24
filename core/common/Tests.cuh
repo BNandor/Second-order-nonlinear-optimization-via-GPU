@@ -128,19 +128,45 @@ __global__ void functionTestsKernel(unsigned *index) {
 ////    }
 //}
 
-
-__global__ void testF1DFloat(double *x, unsigned xSize) {
+__global__ void testF1DFloat(double *globalX, unsigned globalXSize) {
+    unsigned iterationCount = 30000;
     F1 f1 = F1();
 
-    DDouble *t5 = f1.costFunction(x, xSize, threadIdx.x);
-    printf("result: %f\n", t5->value);
-    f1.setJacobian();
-
-    printf("Jacobian:\n");
-    for (double i : f1.J) {
-        printf("%f\n", i);
+    const unsigned xSize = 2;
+    double x1[xSize] = {globalX[2 * threadIdx.x], globalX[2 * threadIdx.x + 1]};
+    double x2[xSize];
+    double *x = x1;
+    double *xNext = x2;
+    double alpha = 100;
+    double *tmp;
+    for (unsigned i = 0; i < iterationCount; i++) {
+        double f = f1.eval(x, xSize)->value;
+//        printf("f %d: %f\n", i, f);
+        f1.setJacobian();
+        alpha = 100;
+        f1.evalStep(x, xNext, xSize, alpha);
+        double fNext = f1.eval(xNext, xSize)->value;
+        while (fNext >= f) {
+            alpha = alpha / 2;
+            f1.evalStep(x, xNext, xSize, alpha);
+            fNext = f1.eval(xNext, xSize)->value;
+//            printf("alpha: %.10f\n", alpha);
+//            printf("fNext: %f.10\n", fNext);
+        }
+        tmp = x;
+        x = xNext;
+        xNext = tmp;
     }
-    printf("derivative: %f\n", f1.operatorTree[3].derivative);
+    printf("x ");
+    for (unsigned j = 0; j < xSize; j++) {
+        printf("%f ", x[j]);
+    }
+    printf("\n");
+//    printf("Jacobian:\n");
+//    for (double i : f1.J) {
+//        printf("%f\n", i);
+//    }
+//    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 }
 
 #endif //PARALLELLBFGS_TESTS_CUH

@@ -17,7 +17,6 @@ public:
     static const unsigned constantSize = 3;
     unsigned globalIndex = 0;
     double J[parameterSize];
-
     DDouble operatorTree[operatorTreeSize] = {};
 
     __device__ __host__
@@ -26,21 +25,17 @@ public:
     }
 
     __device__ __host__
-    DDouble *costFunction(double *x, unsigned xSize, unsigned threadId) override {
-        printf("initOperatorTree\n");
-        initOperatorTree(x, xSize, threadId);
-        printf("setting const, param references\n");
+    DDouble *eval(double *x, unsigned xSize) {
+        initOperatorTree(x, xSize);
         DDouble *hundred = &operatorTree[0];
         DDouble *one = &operatorTree[1];
         DDouble *minOne = &operatorTree[2];
         DDouble *x0 = &operatorTree[3];
         DDouble *x1 = &operatorTree[4];
 
-        printf("f1\n");
         operatorTree[5] = x0->square();
         operatorTree[6] = *x1 - operatorTree[5];
         operatorTree[7] = operatorTree[6].square();
-        printf("f1\n");
         operatorTree[8] = *hundred * operatorTree[7];
 
         operatorTree[9] = *x0 * *minOne;
@@ -48,6 +43,14 @@ public:
         operatorTree[11] = operatorTree[10].square();
         operatorTree[12] = operatorTree[8] + operatorTree[11];
         return &operatorTree[12];
+    }
+
+    __device__ __host__
+    void evalStep(double *x, double *xNext, unsigned xSize, double alpha) {
+        assert(xSize == parameterSize);
+        for (unsigned i = 0; i < xSize; i++) {
+            xNext[i] = x[i] - alpha * J[i];
+        }
     }
 
     __device__ __host__
@@ -65,9 +68,11 @@ public:
     }
 
     __device__ __host__
-    void initOperatorTree(double *x, unsigned xSize, unsigned threadId) {
-        operatorTree[3].value = x[2 * threadId];
-        operatorTree[4].value = x[2 * threadId + 1];
+    void initOperatorTree(double *x, unsigned xSize) {
+        assert(xSize == parameterSize);
+        for (unsigned i = 0; i < parameterSize; i++) {
+            operatorTree[constantSize + i].value = x[i];
+        }
         globalIndex = parameterSize + constantSize;
     }
 
@@ -81,16 +86,9 @@ public:
     __device__ __host__ void setJacobian() {
         clearDerivatives();
         operatorTree[operatorTreeSize - 1].setPartialDerivatives(operatorTree);
-        unsigned i = 0;
-        unsigned paramsSeen = 0;
-        while (i < operatorTreeSize && paramsSeen < parameterSize) {
-            if (operatorTree[i].operation == ID) {
-                J[paramsSeen] = operatorTree[i].derivative;
-                paramsSeen++;
-            }
-            i++;
+        for (unsigned i = constantSize; i < constantSize + parameterSize; i++) {
+            J[i - constantSize] = operatorTree[i].derivative;
         }
-        assert(paramsSeen == parameterSize);
     }
 };
 
