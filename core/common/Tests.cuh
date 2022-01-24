@@ -91,7 +91,7 @@ __global__ void functionTestsKernel(unsigned *index) {
 
 //__global__ void testF1Kernel(unsigned *params) {
 //    unsigned globalIndex = 0;
-//    DDouble parameters[14] = {DDouble(100.0, globalIndex, &globalIndex),
+//    DDouble operatorTree[14] = {DDouble(100.0, globalIndex, &globalIndex),
 //                             DDouble(2.0, globalIndex, &globalIndex),
 //                             DDouble(100.0, globalIndex, &globalIndex, CONST),
 //                             DDouble(1.0, globalIndex, &globalIndex, CONST),
@@ -105,44 +105,42 @@ __global__ void functionTestsKernel(unsigned *index) {
 //    DMinusFunction t1 = x1 - x0square;
 //    DSquareFunction t1square = DSquareFunction(&t1);
 //    DMultiplicationFunction th = hundred * t1square;
-//    DDouble *f2 = th(parameters, 13);
+//    DDouble *f2 = th(operatorTree, 13);
 //    DMultiplicationFunction t2 = x0 * minOne;
 //    DPlusFunction t3 = t2 + one;
 //    DSquareFunction t4 = DSquareFunction(&t3);
-//    DDouble *f1 = t4(parameters, 13);
+//    DDouble *f1 = t4(operatorTree, 13);
 //    DPlusFunction t5 = th + t4;
 //    DDouble s = *f1 + *f2;
 //    printf("\nt4 rv: %u\n", t4.resultValue);
 //    printf("\nth rv: %u\n", th.resultValue);
-////    DDouble *f3 = t5(parameters, 13);
+////    DDouble *f3 = t5(operatorTree, 13);
 //
 //    printf("f3: %u\n", s.index);
 //    printf("f2: %f\n", f2->value);
 ////    printf("f1: %f\n", f1->value);
 //
-////    result->setPartialDerivatives(parameters);
+////    result->setPartialDerivatives(operatorTree);
 ////    printf("globalindex: %d \n", globalIndex);
 ////    printf("result: %f", result->value);
-////    for (auto &parameter : parameters) {
+////    for (auto &parameter : operatorTree) {
 ////        printf("%f: \n", parameter.derivative);
 ////    }
 //}
 
-__global__ void testF1DFloat(unsigned *params) {
-    unsigned globalIndex = 0;
-    const int parameterSize = 13;
-    DDouble parameters[parameterSize] = {
-            DDouble(100.0, globalIndex, &globalIndex),
-            DDouble(2.0, globalIndex, &globalIndex),
-            DDouble(100.0, globalIndex, &globalIndex, CONST),
-            DDouble(1.0, globalIndex, &globalIndex, CONST),
-            DDouble(-1.0, globalIndex, &globalIndex, CONST)};
 
+__global__ void testF1DFloat(double *x, unsigned xSize) {
     F1 f1 = F1();
-    DDouble *t5 = f1.costFunction(parameters, parameterSize);
-    t5->setPartialDerivatives(parameters);
+
+    DDouble *t5 = f1.costFunction(x, xSize, threadIdx.x);
     printf("result: %f\n", t5->value);
-    printf("derivative: %f\n", parameters[0].derivative);
+    f1.setJacobian();
+
+    printf("Jacobian:\n");
+    for (double i : f1.J) {
+        printf("%f\n", i);
+    }
+    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 }
 
 #endif //PARALLELLBFGS_TESTS_CUH

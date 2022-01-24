@@ -10,7 +10,7 @@
 class Problem {
 public:
     __device__ __host__
-    virtual DDouble *costFunction(DDouble *parameters, unsigned size) {
+    virtual DDouble *costFunction(double *x, unsigned xSize, unsigned threadId) {
         assert(false);
         return nullptr;
     };

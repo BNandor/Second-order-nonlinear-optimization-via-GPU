@@ -33,12 +33,13 @@ void testDFuncBFS() {
 }
 
 void testF1() {
-    unsigned *dev_global_id;
-    cudaMalloc((void **) &dev_global_id, sizeof(unsigned));
-    unsigned global_id_val = 0;
-    cudaMemcpy(dev_global_id, &global_id_val, sizeof(unsigned), cudaMemcpyHostToDevice);
-    testF1DFloat<<<1, 1>>>(dev_global_id);
-    cudaFree(dev_global_id);
+    unsigned xSize = 2;
+    double *dev_x;
+    cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+    double x[2] = {100.0, 2.0};
+    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
+    testF1DFloat<<<1, 1>>>(dev_x, xSize);
+    cudaFree(dev_x);
 }
 
 int main() {

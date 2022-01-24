@@ -41,7 +41,7 @@ public:
     DDouble() : value(0),
                 index(-1),
                 globalIndex(nullptr),
-                operation(CONST),
+                operation(ID),
                 argumentCount(0),
                 operatorTreeSize(1),
                 derivative(0.0),
