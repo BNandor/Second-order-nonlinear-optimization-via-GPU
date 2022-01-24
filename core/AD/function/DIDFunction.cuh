@@ -12,14 +12,16 @@ private:
     unsigned id;
 public:
     __host__ __device__
-    DIDFunction(DFloat &value) : id(value.index) {
+    DIDFunction(unsigned id) : id(id) {
         index = id;
         resultValue = nullptr;
     }
 
     __host__ __device__
-    DFloat *operator()(DFloat *parameterList, unsigned size) override {
+    DDouble *operator()(DDouble *parameterList, unsigned size) override {
+        printf("applying id\n");
         assert(index < size);
+        printf("id result index: %d", index);
         return &parameterList[id];
     }
 };

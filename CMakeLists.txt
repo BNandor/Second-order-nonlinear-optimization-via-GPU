@@ -3,7 +3,7 @@ project(ParallelLBFGS CUDA)
 
 set(CMAKE_CUDA_STANDARD 14)
 
-add_executable(ParallelLBFGS main.cu core/AD/DFloat.cuh core/AD/DFunction.cuh core/common/Tests.cuh core/AD/DIDFunction.cuh core/AD/DPlusFunction.cuh core/AD/DMinusFunction.cuh core/AD/DMultiplicationFunction.cuh core/AD/Operations.cuh)
+add_executable(ParallelLBFGS main.cu core/AD/DDouble.cuh core/AD/function/DFunction.cuh core/common/Tests.cuh core/AD/function/DIDFunction.cuh core/AD/function/DPlusFunction.cuh core/AD/function/DMinusFunction.cuh core/AD/function/DMultiplicationFunction.cuh core/AD/function/Operations.cuh core/problem/Problem.cuh core/problem/F1.cuh core/AD/function/DSquareFunction.cuh)
 
 set_target_properties(
         ParallelLBFGS

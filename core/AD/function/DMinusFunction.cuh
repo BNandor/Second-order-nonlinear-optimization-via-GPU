@@ -18,12 +18,14 @@ public:
     }
 
     __host__ __device__
-    DFloat *operator()(DFloat *parameterList, unsigned size) override {
+    DDouble *operator()(DDouble *parameterList, unsigned size) override {
+        printf("applying minus\n");
         if (resultValue != nullptr) {
             return resultValue;
         }
-        DFloat result = *(*op1)(parameterList, size) - *(*op2)(parameterList, size);
+        DDouble result = *(*op1)(parameterList, size) - *(*op2)(parameterList, size);
         index = result.index;
+        printf("minus result index: %d", index);
         assert(index < size);
         parameterList[index] = result;
         resultValue = &parameterList[index];

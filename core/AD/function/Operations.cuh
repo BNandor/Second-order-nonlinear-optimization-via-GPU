@@ -8,17 +8,17 @@
 #include "DMultiplicationFunction.cuh"
 #include "DPlusFunction.cuh"
 
-__device__
+__host__ __device__
 DMultiplicationFunction operator*(DFunction &a, DFunction &b) {
     return DMultiplicationFunction(&a, &b);
 }
 
-__device__
+__host__ __device__
 DPlusFunction operator+(DFunction &a, DFunction &b) {
     return DPlusFunction(&a, &b);
 }
 
-__device__
+__host__ __device__
 DMinusFunction operator-(DFunction &a, DFunction &b) {
     return DMinusFunction(&a, &b);
 }

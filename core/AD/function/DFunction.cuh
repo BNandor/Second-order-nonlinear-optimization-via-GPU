@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_DFUNCTION_CUHH
 #define PARALLELLBFGS_DFUNCTION_CUHH
 
-#include "DFloat.cuh"
+#include "../DDouble.cuh"
 
 #include <assert.h>
 
@@ -13,10 +13,11 @@ class DFunction {
 
 public:
     unsigned index;
-    DFloat *resultValue;
+    DDouble *resultValue;
 
     __host__ __device__
-    virtual DFloat *operator()(DFloat *parameterList, unsigned size) = 0;
+    virtual DDouble *operator()(DDouble *parameterList, unsigned size) = 0;
+
 };
 
 #endif //PARALLELLBFGS_DFUNCTION_CUHH
