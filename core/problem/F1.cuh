@@ -12,16 +12,21 @@
 
 class F1 : public Problem {
 public:
-    static const unsigned operatorTreeSize = 13;
-    static const unsigned parameterSize = 2;
-    static const unsigned constantSize = 3;
-    unsigned globalIndex = 0;
-    double J[parameterSize];
-    DDouble operatorTree[operatorTreeSize] = {};
+    static const unsigned F1operatorTreeSize = 13;
+    static const unsigned F1parameterSize = 2;
+    static const unsigned F1constantSize = 3;
+    double F1J[F1parameterSize];
+    DDouble F1operatorTree[F1operatorTreeSize] = {};
 
     __device__ __host__
-    F1() {
-        initConst();
+    F1(double *constants, unsigned constantsSize) {
+        operatorTreeSize = F1operatorTreeSize;
+        parameterSize = F1parameterSize;
+        constantSize = F1constantSize;
+        operatorTree = F1operatorTree;
+        J = F1J;
+        initConst(constants, constantsSize);
+        initIndex();
     }
 
     __device__ __host__
@@ -43,52 +48,6 @@ public:
         operatorTree[11] = operatorTree[10].square();
         operatorTree[12] = operatorTree[8] + operatorTree[11];
         return &operatorTree[12];
-    }
-
-    __device__ __host__
-    void evalStep(double *x, double *xNext, unsigned xSize, double alpha) {
-        assert(xSize == parameterSize);
-        for (unsigned i = 0; i < xSize; i++) {
-            xNext[i] = x[i] - alpha * J[i];
-        }
-    }
-
-    __device__ __host__
-    void initConst() {
-        operatorTree[0].value = 100.0;
-        operatorTree[1].value = 1.0;
-        operatorTree[2].value = -1.0;
-        for (unsigned i = 0; i < constantSize; i++) {
-            operatorTree[i].operation = CONST;
-        }
-        for (unsigned i = 0; i < constantSize + parameterSize; i++) {
-            operatorTree[i].index = i;
-            operatorTree[i].globalIndex = &globalIndex;
-        }
-    }
-
-    __device__ __host__
-    void initOperatorTree(double *x, unsigned xSize) {
-        assert(xSize == parameterSize);
-        for (unsigned i = 0; i < parameterSize; i++) {
-            operatorTree[constantSize + i].value = x[i];
-        }
-        globalIndex = parameterSize + constantSize;
-    }
-
-    __device__ __host__
-    void clearDerivatives() {
-        for (unsigned i = 0; i < operatorTreeSize; i++) {
-            operatorTree[i].derivative = 0.0;
-        }
-    }
-
-    __device__ __host__ void setJacobian() {
-        clearDerivatives();
-        operatorTree[operatorTreeSize - 1].setPartialDerivatives(operatorTree);
-        for (unsigned i = constantSize; i < constantSize + parameterSize; i++) {
-            J[i - constantSize] = operatorTree[i].derivative;
-        }
     }
 };
 

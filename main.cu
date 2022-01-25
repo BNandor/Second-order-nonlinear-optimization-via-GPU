@@ -42,10 +42,33 @@ void testF1() {
     cudaFree(dev_x);
 }
 
+void testPlaneFitting() {
+    const unsigned xSize = 3;
+    const unsigned dataSize = 6;
+    double *dev_x;
+    double *dev_dx;
+    double *dev_F;
+    double *dev_data;
+    cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+    cudaMalloc((void **) &dev_dx, xSize * sizeof(double));
+    cudaMalloc((void **) &dev_F, sizeof(double));
+    cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
+    double x[xSize] = {5.5, 99.0, -1.0};
+    double data[dataSize] = {1.0, 1.0, 1.0, 2.0, 0.0, 0.0};
+    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
+    testPlaneFitting<<<1, 2>>>(dev_x, dev_dx, dev_F, dev_data);
+    cudaFree(dev_x);
+    cudaFree(dev_dx);
+    cudaFree(dev_F);
+    cudaFree(dev_data);
+}
+
 int main() {
 //    testDFloat();
 //    testDFuncBFS();
-    testF1();
+//    testF1();
+    testPlaneFitting();
     return 0;
 }
 
