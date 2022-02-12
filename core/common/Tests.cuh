@@ -172,8 +172,8 @@
 //}
 #define  X_DIM 3
 #define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 2
-#define  ITERATION_COUNT 100
+#define  OBSERVARVATION_COUNT 200
+#define  ITERATION_COUNT 1000
 #define  ALPHA 100
 __constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
@@ -229,7 +229,6 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
 
         threadF = 0;
         spanningTID = threadIdx.x;
-
         while (spanningTID < OBSERVARVATION_COUNT) {
             f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
             threadF += f1.eval(x, X_DIM)->value;
@@ -248,27 +247,52 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         __syncthreads();// sharedF, sharedDX is complete for all threads
         double f = sharedF;
         printf("tid: %d f %d: %f\n", threadIdx.x, i, f);
+//        if (threadIdx.x == 0) {// TODO line search cost over all observations
+        for (unsigned j = 0; j < X_DIM; j++) {
+            J[j] = sharedDX[j];// TODO add Jacobian variable indexing
+        }
+
+        alpha = ALPHA;
+
         if (threadIdx.x == 0) {
-            for (unsigned j = 0; j < X_DIM; j++) {
-                J[j] = sharedDX[j];// TODO add Jacobian variable indexing
-            }
-
-            alpha = ALPHA;
-
+            sharedF = 0;
+        }
+        __syncthreads();// sharedF is cleared, local J is copied
+        double fNext = 0;
+        spanningTID = threadIdx.x;
+        f1.evalStep(x, xNext, X_DIM, J, alpha);
+        while (spanningTID < OBSERVARVATION_COUNT) {
+            f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+            fNext += f1.eval(xNext, X_DIM)->value;
+            spanningTID += blockDim.x;
+        }
+        atomicAdd(&sharedF, fNext); // TODO reduce over threads, not using atomicAdd
+        __syncthreads();//
+        while (sharedF > f) {
+            alpha = alpha / 2;
             f1.evalStep(x, xNext, X_DIM, J, alpha);
-            double fNext = f1.eval(xNext, X_DIM)->value;
-            while (fNext > f) {
-                alpha = alpha / 2;
-                f1.evalStep(x, xNext, X_DIM, J, alpha);
-                fNext = f1.eval(xNext, X_DIM)->value;
+            fNext = 0;
+            if (threadIdx.x == 0) {
+                sharedF = 0;
+            }
+            __syncthreads();// sharedF is cleared, local J is copied
+            spanningTID = threadIdx.x;
+            f1.evalStep(x, xNext, X_DIM, J, alpha);
+            while (spanningTID < OBSERVARVATION_COUNT) {
+                f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+                fNext += f1.eval(xNext, X_DIM)->value;
+                spanningTID += blockDim.x;
+            }
+            atomicAdd(&sharedF, fNext); // TODO reduce over threads, not using atomicAdd
+            __syncthreads();//
 //            printf("alpha: %.10f\n", alpha);
 //            printf("fNext: %.10f\n", fNext);
 //            printf("fPrev: %.10f\n", f);
-            }
-            for (unsigned j = 0; j < X_DIM; j++) {
-                sharedX[j] = xNext[j];
-            }
         }
+        for (unsigned j = 0; j < X_DIM; j++) {
+            sharedX[j] = xNext[j];
+        }
+//        }
         __syncthreads();//globalX is xNext for all threads
         for (unsigned j = 0; j < X_DIM; j++) {
             xNext[j] = sharedX[j];

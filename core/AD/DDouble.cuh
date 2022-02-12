@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <assert.h>
 
 enum DOperation {
     SQUARE, SQRT, PLUS, MINUS, MUL, DIV, ID, COS, SIN, INVERSE, CONST
@@ -150,6 +151,9 @@ public:
             }
                 break;
             case SQRT: {
+#ifdef SAFE
+                assert(std::sqrt(parameterList[node.arguments[0]->index].value != 0.0));
+#endif
                 parameterList[node.arguments[0]->index].derivative +=
                         node.derivative * 0.5 / std::sqrt(parameterList[node.arguments[0]->index].value);
             }
