@@ -19,9 +19,11 @@ public:
 
     __host__ __device__
     DDouble *operator()(DDouble *parameterList, unsigned size) override {
+#ifdef SAFE
         printf("applying id\n");
         assert(index < size);
         printf("id result index: %d", index);
+#endif
         return &parameterList[id];
     }
 };

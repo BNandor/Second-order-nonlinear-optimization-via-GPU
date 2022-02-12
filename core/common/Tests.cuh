@@ -17,17 +17,17 @@
 #include "../problem/PlaneFitting.cuh"
 #include <stdio.h>
 
-__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
-    DDouble a = DDouble(2.0, atomicAdd(globalIndex, 1), globalIndex);
-    DDouble b = DDouble(4.0, atomicAdd(globalIndex, 1), globalIndex);
-//    *c = ((a * b).square().sqrt() - a / b.inverse()).sin().cos();
-    DDouble sum = a + b;
-    *c = sum * sum;
-    printf("testing \n");
-}
+//__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
+//    DDouble a = DDouble(2.0, atomicAdd(globalIndex, 1), globalIndex);
+//    DDouble b = DDouble(4.0, atomicAdd(globalIndex, 1), globalIndex);
+////    *c = ((a * b).square().sqrt() - a / b.inverse()).sin().cos();
+//    DDouble sum = a + b;
+//    *c = sum * sum;
+//    printf("testing \n");
+//}
 
-__global__ void functionTestsKernel(unsigned *index) {
-    unsigned globalIndex = 0;
+//__global__ void functionTestsKernel(unsigned *index) {
+//    unsigned globalIndex = 0;
 //    DIDFunction idX = 0;
 //    DIDFunction idY = 1;
 //    DIDFunction idY2 = 2;
@@ -88,7 +88,7 @@ __global__ void functionTestsKernel(unsigned *index) {
 //    f1.setPartialDerivatives(inv);
 //    assert(x.derivative == -0.25);
 //    printf("%f \n", x.derivative);
-}
+//}
 
 //__global__ void testF1Kernel(unsigned *params) {
 //    unsigned globalIndex = 0;
@@ -129,81 +129,83 @@ __global__ void functionTestsKernel(unsigned *index) {
 ////    }
 //}
 
-__global__ void testF1DFloat(double *globalX, unsigned globalXSize) {
-    unsigned iterationCount = 30000;
-    double constants[3] = {100.0, 1.0, -1.0};
-    F1 f1 = F1(constants, 3);
-
-    const unsigned xSize = 2;
-    double x1[xSize] = {globalX[2 * threadIdx.x], globalX[2 * threadIdx.x + 1]};
-    double x2[xSize];
-    double *x = x1;
-    double *xNext = x2;
-    double alpha = 100;
-    double *tmp;
-    for (unsigned i = 0; i < iterationCount; i++) {
-        double f = f1.eval(x, xSize)->value;
-//        printf("f %d: %f\n", i, f);
-        f1.evalJacobian();
-        alpha = 100;
-        f1.evalStep(x, xNext, xSize, f1.J, alpha);
-        double fNext = f1.eval(xNext, xSize)->value;
-        while (fNext >= f) {
-            alpha = alpha / 2;
-            f1.evalStep(x, xNext, xSize, f1.J, alpha);
-            fNext = f1.eval(xNext, xSize)->value;
-//            printf("alpha: %.10f\n", alpha);
-//            printf("fNext: %f.10\n", fNext);
-        }
-        tmp = x;
-        x = xNext;
-        xNext = tmp;
-    }
-    printf("x ");
-    for (unsigned j = 0; j < xSize; j++) {
-        printf("%f ", x[j]);
-    }
-    printf("\n");
-//    printf("Jacobian:\n");
-//    for (double i : f1.J) {
-//        printf("%f\n", i);
+//__global__ void testF1DFloat(double *globalX, unsigned globalXSize) {
+//    unsigned iterationCount = 30000;
+//    double constants[3] = {100.0, 1.0, -1.0};
+//    F1 f1 = F1(constants, 3);
+//
+//    const unsigned xSize = 2;
+//    double x1[xSize] = {globalX[2 * threadIdx.x], globalX[2 * threadIdx.x + 1]};
+//    double x2[xSize];
+//    double *x = x1;
+//    double *xNext = x2;
+//    double alpha = 100;
+//    double *tmp;
+//    for (unsigned i = 0; i < iterationCount; i++) {
+//        double f = f1.eval(x, xSize)->value;
+////        printf("f %d: %f\n", i, f);
+//        f1.evalJacobian();
+//        alpha = 100;
+//        f1.evalStep(x, xNext, xSize, f1.J, alpha);
+//        double fNext = f1.eval(xNext, xSize)->value;
+//        while (fNext >= f) {
+//            alpha = alpha / 2;
+//            f1.evalStep(x, xNext, xSize, f1.J, alpha);
+//            fNext = f1.eval(xNext, xSize)->value;
+////            printf("alpha: %.10f\n", alpha);
+////            printf("fNext: %f.10\n", fNext);
+//        }
+//        tmp = x;
+//        x = xNext;
+//        xNext = tmp;
 //    }
-//    printf("derivative: %f\n", f1.operatorTree[3].derivative);
-}
+//    printf("x ");
+//    for (unsigned j = 0; j < xSize; j++) {
+//        printf("%f ", x[j]);
+//    }
+//    printf("\n");
+////    printf("Jacobian:\n");
+////    for (double i : f1.J) {
+////        printf("%f\n", i);
+////    }
+////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
+//}
+#define  X_DIM 3
+#define  OBSERVARVATION_DIM 3
+#define  OBSERVARVATION_COUNT 2
+#define  ITERATION_COUNT 100
+#define  ALPHA 100
+__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
-__device__ void evalF() {
+__global__ void
+testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use shared memory instead of global memory
 
-}
-
-__global__ void testPlaneFitting(double *globalX, double *globalDX, double *globalF,
-                                 double *data) { // use shared memory instead of global memory
-    unsigned iterationCount = 100;
-    const unsigned xSize = 3;
-    const unsigned constantsSize = 3;
-    double constants[constantsSize] = {data[3 * threadIdx.x], data[3 * threadIdx.x + 1], data[3 * threadIdx.x + 2]};
-
-    PlaneFitting f1 = PlaneFitting(constants, constantsSize);
-    double x1[xSize] = {globalX[0], globalX[1], globalX[2]};
-    double J[xSize] = {};
-    double x2[xSize];
+    double observation[OBSERVARVATION_DIM] = {};
+    for (unsigned i = 0; i < OBSERVARVATION_DIM; i++) {
+        observation[i] = dev_const_observations[OBSERVARVATION_DIM * threadIdx.x + i];
+    }
+    PlaneFitting f1 = PlaneFitting(observation, OBSERVARVATION_DIM);
+    double x1[X_DIM] = {globalX[0], globalX[1], globalX[2]};
+    double J[X_DIM] = {};
+    double x2[X_DIM];
     double *x = x1;
     double *xNext = x2;
-    double alpha = 100;
+    double alpha = ALPHA;
     double *tmp;
-    for (unsigned i = 0; i < iterationCount; i++) {
+    for (unsigned i = 0; i < ITERATION_COUNT; i++) {
         // reset state
         *globalF = 0.0;
         if (threadIdx.x == 0) {
-            for (unsigned j = 0; j < xSize; j++) {
+            for (unsigned j = 0; j < X_DIM; j++) {
                 globalDX[j] = 0.0;
             }
         }
         __syncthreads(); // globalF, globalDX cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
 
-        atomicAdd(globalF, f1.eval(x, xSize)->value); // reduce over threads, not using atomicAdd
+        atomicAdd(globalF, f1.eval(x, X_DIM)->value); // reduce over threads, not using atomicAdd
 
         f1.evalJacobian();
-        for (unsigned j = 0; j < xSize; j++) {
+        for (unsigned j = 0; j < X_DIM; j++) {
             atomicAdd(&globalDX[j], f1.J[j]);// TODO add jacobian variable indexing
         }
 
@@ -211,28 +213,28 @@ __global__ void testPlaneFitting(double *globalX, double *globalDX, double *glob
         double f = *globalF;
         printf("tid: %d f %d: %f\n", threadIdx.x, i, f);
         if (threadIdx.x == 0) {
-            for (unsigned j = 0; j < xSize; j++) {
+            for (unsigned j = 0; j < X_DIM; j++) {
                 J[j] = globalDX[j];// TODO add Jacobian variable indexing
             }
 
-            alpha = 100;
+            alpha = ALPHA;
 
-            f1.evalStep(x, xNext, xSize, J, alpha);
-            double fNext = f1.eval(xNext, xSize)->value;
+            f1.evalStep(x, xNext, X_DIM, J, alpha);
+            double fNext = f1.eval(xNext, X_DIM)->value;
             while (fNext > f) {
                 alpha = alpha / 2;
-                f1.evalStep(x, xNext, xSize, J, alpha);
-                fNext = f1.eval(xNext, xSize)->value;
+                f1.evalStep(x, xNext, X_DIM, J, alpha);
+                fNext = f1.eval(xNext, X_DIM)->value;
 //            printf("alpha: %.10f\n", alpha);
 //            printf("fNext: %.10f\n", fNext);
 //            printf("fPrev: %.10f\n", f);
             }
-            for (unsigned j = 0; j < xSize; j++) {
+            for (unsigned j = 0; j < X_DIM; j++) {
                 globalX[j] = xNext[j];
             }
         }
         __syncthreads();//globalX is xNext for all threads
-        for (unsigned j = 0; j < xSize; j++) {
+        for (unsigned j = 0; j < X_DIM; j++) {
             xNext[j] = globalX[j];
         }
         tmp = x;
@@ -241,10 +243,10 @@ __global__ void testPlaneFitting(double *globalX, double *globalDX, double *glob
         __syncthreads();//x,xNext is set for all threads
     }
     printf("x ");
-    for (unsigned j = 0; j < xSize; j++) {
+    for (unsigned j = 0; j < X_DIM; j++) {
         printf("%f ", x[j]);
     }
-    printf("\n");
+//    printf("\n");
 //    printf("Jacobian:\n");
 //    for (double i : f1.J) {
 //        printf("%f\n", i);

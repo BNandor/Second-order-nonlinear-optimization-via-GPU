@@ -25,8 +25,10 @@ public:
         }
         DDouble result = *(*op1)(parameterList, size) - *(*op2)(parameterList, size);
         index = result.index;
+#ifdef SAFE
         printf("minus result index: %d", index);
         assert(index < size);
+#endif
         parameterList[index] = result;
         resultValue = &parameterList[index];
         return resultValue;

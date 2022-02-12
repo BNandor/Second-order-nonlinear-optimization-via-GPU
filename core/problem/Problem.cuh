@@ -16,11 +16,6 @@ public:
     double *J;
     DDouble *operatorTree;
 
-    __device__ __host__
-    virtual DDouble *eval(double *x, unsigned xSize) {
-        assert(false);
-        return nullptr;
-    };
 
     __device__ __host__
     void clearDerivatives() {
@@ -39,7 +34,9 @@ public:
 
     __device__ __host__
     void evalStep(double *x, double *xNext, unsigned xSize, double *jacobian, double alpha) {
+#ifdef SAFE
         assert(xSize == parameterSize);
+#endif
         for (unsigned i = 0; i < xSize; i++) {
             xNext[i] = x[i] - alpha * jacobian[i];
         }
@@ -47,7 +44,9 @@ public:
 
     __device__ __host__
     void initOperatorTree(double *x, unsigned xSize) {
+#ifdef SAFE
         assert(xSize == parameterSize);
+#endif
         for (unsigned i = 0; i < parameterSize; i++) {
             operatorTree[constantSize + i].value = x[i];
         }
@@ -64,7 +63,9 @@ public:
 
     __device__ __host__
     void initConst(double *constants, unsigned constantsSize) {
+#ifdef SAFE
         assert(constantsSize == this->constantSize);
+#endif
         for (unsigned i = 0; i < constantSize; i++) {
             operatorTree[i].operation = CONST;
             operatorTree[i].value = constants[i];

@@ -25,8 +25,10 @@ public:
         }
         DDouble result = *(*op1)(parameterList, size) * *(*op2)(parameterList, size);
         index = result.index;
-        printf("mul result index: %d\n", index);
+#ifdef SAFE
         assert(index < size);
+        printf("mul result index: %d\n", index);
+#endif
         parameterList[index] = result;
         resultValue = &parameterList[index];
         return resultValue;
