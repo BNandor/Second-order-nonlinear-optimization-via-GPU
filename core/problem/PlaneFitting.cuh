@@ -19,12 +19,16 @@ public:
     DDouble ThisOperatorTree[ThisOperatorTreeSize] = {};
 
     __device__ __host__
-    PlaneFitting(double *constants, unsigned constantsSize) {
+    PlaneFitting() {
         operatorTreeSize = ThisOperatorTreeSize;
         parameterSize = ThisParameterSize;
         constantSize = ThisConstantSize;
         operatorTree = ThisOperatorTree;
         J = ThisJ;
+    }
+
+    __device__ __host__
+    void setConstants(double *constants, unsigned constantsSize) {
         initConst(constants, constantsSize);
         initIndex();
     }

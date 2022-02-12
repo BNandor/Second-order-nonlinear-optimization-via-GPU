@@ -179,12 +179,7 @@ __constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION
 
 __global__ void
 testPlaneFitting(double *globalX) { // use shared memory instead of global memory
-    // LOAD THREAD OBSERVATION
-    double observation[OBSERVARVATION_DIM] = {}; // reserve space for local observation
-    for (unsigned i = 0; i < OBSERVARVATION_DIM; i++) { // load observation into memory
-        observation[i] = dev_const_observations[OBSERVARVATION_DIM * threadIdx.x + i];
-    }
-    PlaneFitting f1 = PlaneFitting(observation, OBSERVARVATION_DIM);
+    PlaneFitting f1 = PlaneFitting();
     // every thread has a local observation loaded into local memory
 
     // LOAD MODEL INTO SHARED MEMORY
@@ -192,10 +187,10 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
     __shared__ double sharedDX[X_DIM];
     __shared__ double sharedF;
 
-    unsigned smCopyTID = threadIdx.x;
-    while (smCopyTID < X_DIM) {
-        sharedX[smCopyTID] = globalX[smCopyTID];
-        smCopyTID += blockDim.x;
+    unsigned spanningTID = threadIdx.x;
+    while (spanningTID < X_DIM) {
+        sharedX[spanningTID] = globalX[spanningTID];
+        spanningTID += blockDim.x;
     }
     __syncthreads();
     // every thread can access the model in shared memory
@@ -213,6 +208,7 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
 
     double alpha = ALPHA;
     double *tmp;
+    double threadF = 0;
     // every thread has a copy of the shared model loaded, and an empty Jacobian
 
     for (unsigned i = 0; i < ITERATION_COUNT; i++) {
@@ -220,18 +216,33 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         if (threadIdx.x == 0) {
             sharedF = 0.0;
         }
-        smCopyTID = threadIdx.x;
-        while (smCopyTID < X_DIM) {
-            sharedDX[smCopyTID] = 0.0;
-            smCopyTID += blockDim.x;
+
+        spanningTID = threadIdx.x;
+        while (spanningTID < X_DIM) {
+            sharedDX[spanningTID] = 0.0;
+            spanningTID += blockDim.x;
         }
-        __syncthreads(); // sharedF, sharedDX cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-
-        atomicAdd(&sharedF, f1.eval(x, X_DIM)->value); // TODO reduce over threads, not using atomicAdd
-
-        f1.evalJacobian();
         for (unsigned j = 0; j < X_DIM; j++) {
-            atomicAdd(&sharedDX[j], f1.J[j]);// TODO add jacobian variable indexing
+            J[j] = 0;
+        }
+        __syncthreads(); // sharedF, sharedDX, J is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+
+        threadF = 0;
+        spanningTID = threadIdx.x;
+
+        while (spanningTID < OBSERVARVATION_COUNT) {
+            f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+            threadF += f1.eval(x, X_DIM)->value;
+            f1.evalJacobian();
+            for (unsigned j = 0; j < X_DIM; j++) {
+                J[j] += f1.J[j];// TODO add jacobian variable indexing
+            }
+            spanningTID += blockDim.x;
+        }
+
+        atomicAdd(&sharedF, threadF); // TODO reduce over threads, not using atomicAdd
+        for (unsigned j = 0; j < X_DIM; j++) {
+            atomicAdd(&sharedDX[j], J[j]);// TODO add jacobian variable indexing
         }
 
         __syncthreads();// sharedF, sharedDX is complete for all threads
@@ -267,9 +278,12 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         xNext = tmp;
         __syncthreads();//x,xNext is set for all threads
     }
-    printf("x ");
-    for (unsigned j = 0; j < X_DIM; j++) {
-        printf("%f ", x[j]);
+    if (threadIdx.x == 0) {
+        printf("x ");
+        for (unsigned j = 0; j < X_DIM; j++) {
+            printf("%f ", x[j]);
+        }
+        printf("\nWith: %d threads in block %d\n", blockDim.x, blockIdx.x);
     }
 //    printf("\n");
 //    printf("Jacobian:\n");
