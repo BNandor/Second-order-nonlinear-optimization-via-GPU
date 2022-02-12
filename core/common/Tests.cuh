@@ -179,19 +179,38 @@ __constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION
 
 __global__ void
 testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use shared memory instead of global memory
-
-    double observation[OBSERVARVATION_DIM] = {};
-    for (unsigned i = 0; i < OBSERVARVATION_DIM; i++) {
+    // LOAD THREAD OBSERVATION
+    double observation[OBSERVARVATION_DIM] = {}; // reserve space for local observation
+    for (unsigned i = 0; i < OBSERVARVATION_DIM; i++) { // load observation into memory
         observation[i] = dev_const_observations[OBSERVARVATION_DIM * threadIdx.x + i];
     }
     PlaneFitting f1 = PlaneFitting(observation, OBSERVARVATION_DIM);
-    double x1[X_DIM] = {globalX[0], globalX[1], globalX[2]};
-    double J[X_DIM] = {};
+    // every thread has a local observation loaded into local memory
+
+    // LOAD MODEL INTO SHARED MEMORY
+    __shared__ double sharedX[X_DIM];
+    unsigned smCopyTID = threadIdx.x;
+    while (smCopyTID < X_DIM) {
+        sharedX[smCopyTID] = globalX[smCopyTID];
+        smCopyTID += blockDim.x;
+    }
+    __syncthreads();
+    // every thread can access the model in shared memory
+
+    double x1[X_DIM] = {};
+    for (unsigned i = 0; i < X_DIM; i++) { // load observation into memory
+        x1[i] = sharedX[i];
+    }
     double x2[X_DIM];
     double *x = x1;
     double *xNext = x2;
+
+    double J[X_DIM] = {};
+
     double alpha = ALPHA;
     double *tmp;
+
+
     for (unsigned i = 0; i < ITERATION_COUNT; i++) {
         // reset state
         *globalF = 0.0;
@@ -230,12 +249,12 @@ testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use sh
 //            printf("fPrev: %.10f\n", f);
             }
             for (unsigned j = 0; j < X_DIM; j++) {
-                globalX[j] = xNext[j];
+                sharedX[j] = xNext[j];
             }
         }
         __syncthreads();//globalX is xNext for all threads
         for (unsigned j = 0; j < X_DIM; j++) {
-            xNext[j] = globalX[j];
+            xNext[j] = sharedX[j];
         }
         tmp = x;
         x = xNext;
