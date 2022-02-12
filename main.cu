@@ -3,6 +3,7 @@
 #define SAFE
 
 #include "core/common/Tests.cuh"
+#include <random>
 
 //void testDFloat() {
 //    DDouble *dev_c;
@@ -45,14 +46,30 @@
 //    cudaFree(dev_x);
 //}
 
+void generatePlanePoints(double A, double B, double C, double *data, unsigned pointCount) {
+    std::uniform_real_distribution<double> unif(0, 1);
+    std::default_random_engine re;
+    std::normal_distribution<double> normal(0.0, 1);
+
+    for (int i = 0; i < pointCount; i++) {
+        data[i * OBSERVARVATION_DIM] = unif(re);
+        data[i * OBSERVARVATION_DIM + 1] = unif(re);
+        data[i * OBSERVARVATION_DIM + 2] =
+                A * data[i * OBSERVARVATION_DIM] + B * data[i * OBSERVARVATION_DIM + 1] + C + normal(re);
+    }
+}
 
 void testPlaneFitting() {
     const unsigned xSize = X_DIM;
     const unsigned dataSize = OBSERVARVATION_DIM * OBSERVARVATION_COUNT;
     double *dev_x;
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
-    double x[xSize] = {5.5, 99.0, -1.0};
-    double data[dataSize] = {1.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    double x[xSize] = {1, 1, 1.0};
+    double A = 5.5;
+    double B = 99;
+    double C = -1;
+    double data[dataSize] = {};
+    generatePlanePoints(A, B, C, data, OBSERVARVATION_COUNT);
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpyToSymbol(dev_const_observations, &data, (OBSERVARVATION_COUNT * OBSERVARVATION_DIM) * sizeof(double), 0,
                        cudaMemcpyHostToDevice);

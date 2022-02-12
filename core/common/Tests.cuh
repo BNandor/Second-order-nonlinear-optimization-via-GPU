@@ -172,8 +172,8 @@
 //}
 #define  X_DIM 3
 #define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 200
-#define  ITERATION_COUNT 1000
+#define  OBSERVARVATION_COUNT 2000
+#define  ITERATION_COUNT 100
 #define  ALPHA 100
 __constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
@@ -246,7 +246,6 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
 
         __syncthreads();// sharedF, sharedDX is complete for all threads
         double f = sharedF;
-        printf("tid: %d f %d: %f\n", threadIdx.x, i, f);
 //        if (threadIdx.x == 0) {// TODO line search cost over all observations
         for (unsigned j = 0; j < X_DIM; j++) {
             J[j] = sharedDX[j];// TODO add Jacobian variable indexing
@@ -255,6 +254,7 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         alpha = ALPHA;
 
         if (threadIdx.x == 0) {
+            printf("it:  %d: f %f ", i, f);
             sharedF = 0;
         }
         __syncthreads();// sharedF is cleared, local J is copied
@@ -301,6 +301,13 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         x = xNext;
         xNext = tmp;
         __syncthreads();//x,xNext is set for all threads
+        if (threadIdx.x == 0) {
+            printf("x ");
+            for (unsigned j = 0; j < X_DIM; j++) {
+                printf("%f ", xNext[j]);
+            }
+            printf("\n");
+        }
     }
     if (threadIdx.x == 0) {
         printf("x ");
