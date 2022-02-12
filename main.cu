@@ -46,20 +46,14 @@ void testPlaneFitting() {
     const unsigned xSize = 3;
     const unsigned dataSize = 6;
     double *dev_x;
-    double *dev_dx;
-    double *dev_F;
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
-    cudaMalloc((void **) &dev_dx, xSize * sizeof(double));
-    cudaMalloc((void **) &dev_F, sizeof(double));
     double x[xSize] = {5.5, 99.0, -1.0};
     double data[dataSize] = {1.0, 1.0, 1.0, 2.0, 0.0, 0.0};
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpyToSymbol(dev_const_observations, &data, (OBSERVARVATION_COUNT * OBSERVARVATION_DIM) * sizeof(double), 0,
                        cudaMemcpyHostToDevice);
-    testPlaneFitting<<<1, 2>>>(dev_x, dev_dx, dev_F);
+    testPlaneFitting<<<1, 2>>>(dev_x);
     cudaFree(dev_x);
-    cudaFree(dev_dx);
-    cudaFree(dev_F);
 }
 
 int main() {

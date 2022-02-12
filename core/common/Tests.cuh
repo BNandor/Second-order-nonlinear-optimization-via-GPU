@@ -178,7 +178,7 @@
 __constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
 __global__ void
-testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use shared memory instead of global memory
+testPlaneFitting(double *globalX) { // use shared memory instead of global memory
     // LOAD THREAD OBSERVATION
     double observation[OBSERVARVATION_DIM] = {}; // reserve space for local observation
     for (unsigned i = 0; i < OBSERVARVATION_DIM; i++) { // load observation into memory
@@ -189,6 +189,9 @@ testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use sh
 
     // LOAD MODEL INTO SHARED MEMORY
     __shared__ double sharedX[X_DIM];
+    __shared__ double sharedDX[X_DIM];
+    __shared__ double sharedF;
+
     unsigned smCopyTID = threadIdx.x;
     while (smCopyTID < X_DIM) {
         sharedX[smCopyTID] = globalX[smCopyTID];
@@ -197,6 +200,7 @@ testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use sh
     __syncthreads();
     // every thread can access the model in shared memory
 
+    // INITIALIZE LOCAL MODEL
     double x1[X_DIM] = {};
     for (unsigned i = 0; i < X_DIM; i++) { // load observation into memory
         x1[i] = sharedX[i];
@@ -209,31 +213,33 @@ testPlaneFitting(double *globalX, double *globalDX, double *globalF) { // use sh
 
     double alpha = ALPHA;
     double *tmp;
-
+    // every thread has a copy of the shared model loaded, and an empty Jacobian
 
     for (unsigned i = 0; i < ITERATION_COUNT; i++) {
         // reset state
-        *globalF = 0.0;
         if (threadIdx.x == 0) {
-            for (unsigned j = 0; j < X_DIM; j++) {
-                globalDX[j] = 0.0;
-            }
+            sharedF = 0.0;
         }
-        __syncthreads(); // globalF, globalDX cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+        smCopyTID = threadIdx.x;
+        while (smCopyTID < X_DIM) {
+            sharedDX[smCopyTID] = 0.0;
+            smCopyTID += blockDim.x;
+        }
+        __syncthreads(); // sharedF, sharedDX cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
 
-        atomicAdd(globalF, f1.eval(x, X_DIM)->value); // reduce over threads, not using atomicAdd
+        atomicAdd(&sharedF, f1.eval(x, X_DIM)->value); // TODO reduce over threads, not using atomicAdd
 
         f1.evalJacobian();
         for (unsigned j = 0; j < X_DIM; j++) {
-            atomicAdd(&globalDX[j], f1.J[j]);// TODO add jacobian variable indexing
+            atomicAdd(&sharedDX[j], f1.J[j]);// TODO add jacobian variable indexing
         }
 
-        __syncthreads();// globalF, globalDX is complete for all threads
-        double f = *globalF;
+        __syncthreads();// sharedF, sharedDX is complete for all threads
+        double f = sharedF;
         printf("tid: %d f %d: %f\n", threadIdx.x, i, f);
         if (threadIdx.x == 0) {
             for (unsigned j = 0; j < X_DIM; j++) {
-                J[j] = globalDX[j];// TODO add Jacobian variable indexing
+                J[j] = sharedDX[j];// TODO add Jacobian variable indexing
             }
 
             alpha = ALPHA;
