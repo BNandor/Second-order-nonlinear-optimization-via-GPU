@@ -172,13 +172,13 @@
 //}
 #define  X_DIM 3
 #define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 2000
+#define  OBSERVARVATION_COUNT 20000
 #define  ITERATION_COUNT 100
 #define  ALPHA 100
-__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
+//__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
 __global__ void
-testPlaneFitting(double *globalX) { // use shared memory instead of global memory
+testPlaneFitting(double *globalX, double *globalData) { // use shared memory instead of global memory
     PlaneFitting f1 = PlaneFitting();
     // every thread has a local observation loaded into local memory
 
@@ -230,7 +230,7 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         threadF = 0;
         spanningTID = threadIdx.x;
         while (spanningTID < OBSERVARVATION_COUNT) {
-            f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+            f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
             threadF += f1.eval(x, X_DIM)->value;
             f1.evalJacobian();
             for (unsigned j = 0; j < X_DIM; j++) {
@@ -262,7 +262,7 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
         spanningTID = threadIdx.x;
         f1.evalStep(x, xNext, X_DIM, J, alpha);
         while (spanningTID < OBSERVARVATION_COUNT) {
-            f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+            f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
             fNext += f1.eval(xNext, X_DIM)->value;
             spanningTID += blockDim.x;
         }
@@ -279,7 +279,7 @@ testPlaneFitting(double *globalX) { // use shared memory instead of global memor
             spanningTID = threadIdx.x;
             f1.evalStep(x, xNext, X_DIM, J, alpha);
             while (spanningTID < OBSERVARVATION_COUNT) {
-                f1.setConstants(&dev_const_observations[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+                f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
                 fNext += f1.eval(xNext, X_DIM)->value;
                 spanningTID += blockDim.x;
             }

@@ -60,27 +60,58 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
 }
 
 void testPlaneFitting() {
+    cudaEvent_t start, stop, startCopy, stopCopy;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventCreate(&startCopy);
+    cudaEventCreate(&stopCopy);
+
     const unsigned xSize = X_DIM;
     const unsigned dataSize = OBSERVARVATION_DIM * OBSERVARVATION_COUNT;
     double *dev_x;
+    double *dev_data;
+
+    // ALLOCATE DEVICE MEMORY
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+    cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
+
+    // GENERATE PROBLEM
     double x[xSize] = {1, 1, 1.0};
     double A = 5.5;
     double B = 99;
     double C = -1;
     double data[dataSize] = {};
     generatePlanePoints(A, B, C, data, OBSERVARVATION_COUNT);
+
+    // COPY TO DEVICE
+    cudaEventRecord(startCopy);
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpyToSymbol(dev_const_observations, &data, (OBSERVARVATION_COUNT * OBSERVARVATION_DIM) * sizeof(double), 0,
-                       cudaMemcpyHostToDevice);
-    testPlaneFitting<<<1, 128>>>(dev_x);
+    cudaMemcpy(dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
+    cudaEventRecord(stopCopy);
+    cudaEventRecord(start);
+
+    // EXECUTE KERNEL
+    testPlaneFitting<<<1, 128>>>(dev_x, dev_data);
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+
+    float memcpyMilli = 0;
+    cudaEventElapsedTime(&memcpyMilli, startCopy, stopCopy);
+
+    float kernelMilli = 0;
+    cudaEventElapsedTime(&kernelMilli, start, stop);
+    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
+
     cudaFree(dev_x);
+    cudaFree(dev_data);
 }
 
 int main() {
 //    testDFloat();
 //    testDFuncBFS();
 //    testF1();
+
     testPlaneFitting();
     return 0;
 }
