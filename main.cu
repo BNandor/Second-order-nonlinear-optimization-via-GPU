@@ -46,6 +46,15 @@
 //    cudaFree(dev_x);
 //}
 
+void generateInitialPopulation(double *x, unsigned xSize) {
+    std::uniform_real_distribution<double> unif(-1000, 1000);
+    std::default_random_engine re;
+    for (int i = 0; i < xSize; i++) {
+        x[i] = unif(re);
+    }
+}
+
+
 void generatePlanePoints(double A, double B, double C, double *data, unsigned pointCount) {
     std::uniform_real_distribution<double> unif(0, 1);
     std::default_random_engine re;
@@ -66,7 +75,7 @@ void testPlaneFitting() {
     cudaEventCreate(&startCopy);
     cudaEventCreate(&stopCopy);
 
-    const unsigned xSize = X_DIM;
+    const unsigned xSize = X_DIM * POPULATION_SIZE;
     const unsigned dataSize = OBSERVARVATION_DIM * OBSERVARVATION_COUNT;
     double *dev_x;
     double *dev_data;
@@ -76,12 +85,14 @@ void testPlaneFitting() {
     cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
 
     // GENERATE PROBLEM
-    double x[xSize] = {1, 1, 1.0};
+    double x[xSize] = {};
+    double data[dataSize] = {};
+
     double A = 5.5;
     double B = 99;
     double C = -1;
-    double data[dataSize] = {};
     generatePlanePoints(A, B, C, data, OBSERVARVATION_COUNT);
+    generateInitialPopulation(x, xSize);
 
     // COPY TO DEVICE
     cudaEventRecord(startCopy);
@@ -91,7 +102,7 @@ void testPlaneFitting() {
     cudaEventRecord(start);
 
     // EXECUTE KERNEL
-    testPlaneFitting<<<1, 128>>>(dev_x, dev_data);
+    testPlaneFitting<<<POPULATION_SIZE, 128>>>(dev_x, dev_data);
 
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);

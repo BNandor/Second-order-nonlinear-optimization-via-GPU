@@ -171,9 +171,10 @@
 ////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 //}
 #define  X_DIM 3
+#define  POPULATION_SIZE 20
 #define  OBSERVARVATION_DIM 3
 #define  OBSERVARVATION_COUNT 20000
-#define  ITERATION_COUNT 100
+#define  ITERATION_COUNT 1000
 #define  ALPHA 100
 //__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
@@ -188,8 +189,9 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
     __shared__ double sharedF;
 
     unsigned spanningTID = threadIdx.x;
+    const unsigned modelStartingIndex = X_DIM * blockIdx.x;
     while (spanningTID < X_DIM) {
-        sharedX[spanningTID] = globalX[spanningTID];
+        sharedX[spanningTID] = globalX[modelStartingIndex + spanningTID];
         spanningTID += blockDim.x;
     }
     __syncthreads();
@@ -210,8 +212,9 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
     double *tmp;
     double threadF = 0;
     // every thread has a copy of the shared model loaded, and an empty Jacobian
-
-    for (unsigned i = 0; i < ITERATION_COUNT; i++) {
+    double costDifference = INT_MAX;
+    const double epsilon = 1e-7;
+    for (unsigned i = 0; i < ITERATION_COUNT && costDifference > epsilon; i++) {
         // reset state
         if (threadIdx.x == 0) {
             sharedF = 0.0;
@@ -252,9 +255,9 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
         }
 
         alpha = ALPHA;
-
+        __syncthreads();// f is set for all threads
         if (threadIdx.x == 0) {
-            printf("it:  %d: f %f ", i, f);
+//            printf("it:  %d: f %f \n", i, f);
             sharedF = 0;
         }
         __syncthreads();// sharedF is cleared, local J is copied
@@ -275,7 +278,7 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
             if (threadIdx.x == 0) {
                 sharedF = 0;
             }
-            __syncthreads();// sharedF is cleared, local J is copied
+            __syncthreads();// sharedF is cleared
             spanningTID = threadIdx.x;
             f1.evalStep(x, xNext, X_DIM, J, alpha);
             while (spanningTID < OBSERVARVATION_COUNT) {
@@ -300,14 +303,15 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
         tmp = x;
         x = xNext;
         xNext = tmp;
+        costDifference = std::abs(f - sharedF);
         __syncthreads();//x,xNext is set for all threads
-        if (threadIdx.x == 0) {
-            printf("x ");
-            for (unsigned j = 0; j < X_DIM; j++) {
-                printf("%f ", xNext[j]);
-            }
-            printf("\n");
-        }
+//        if (threadIdx.x == 0) {
+//            printf("x ");
+//            for (unsigned j = 0; j < X_DIM; j++) {
+//                printf("%f ", xNext[j]);
+//            }
+//            printf("\n");
+//        }
     }
     if (threadIdx.x == 0) {
         printf("x ");
