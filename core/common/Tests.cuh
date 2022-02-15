@@ -31,9 +31,9 @@
 //    DIDFunction idX = 0;
 //    DIDFunction idY = 1;
 //    DIDFunction idY2 = 2;
-//    DMultiplicationFunction x1 = idX * idY;
-//    DMultiplicationFunction x2 = x1 * idY2;
-//    DPlusFunction x3 = x1 + x2;
+//    DMultiplicationFunction localContext.x1 = idX * idY;
+//    DMultiplicationFunction localContext.x2 = localContext.x1 * idY2;
+//    DPlusFunction x3 = localContext.x1 + localContext.x2;
 //
 //
 //    DDouble parameters[6] = {DDouble(1.0, globalIndex, &globalIndex),
@@ -50,23 +50,23 @@
 //    }
 //
 //    printf("%f \n", parameters[idX.index].derivative);
-//    printf("%f \n", parameters[x1.index].derivative);
-//    printf("%f \n", parameters[x2.index].derivative);
+//    printf("%f \n", parameters[localContext.x1.index].derivative);
+//    printf("%f \n", parameters[localContext.x2.index].derivative);
 //    printf("%f \n", parameters[x3.index].derivative);
 //    assert(parameters[idX.index].derivative == 10.00);
-//    assert(parameters[x1.index].derivative == 5.00);
-//    assert(parameters[x2.index].derivative == 1.00);
+//    assert(parameters[localContext.x1.index].derivative == 5.00);
+//    assert(parameters[localContext.x2.index].derivative == 1.00);
 //    assert(parameters[x3.index].derivative == 1.00);
 
 //    DIDFunction idX = 0;
 //    DIDFunction two = 1;
 //    DSquareFunction xsquare = DSquareFunction(&idX);
-//    DMultiplicationFunction x1 = two * xsquare;
+//    DMultiplicationFunction localContext.x1 = two * xsquare;
 //
 //    DDouble parameters[4] = {DDouble(1.0, globalIndex, &globalIndex),
 //                            DDouble(2.0, globalIndex, &globalIndex, CONST)};
 //
-//    DDouble *result = x1(parameters, 4);
+//    DDouble *result = localContext.x1(parameters, 4);
 //    result->setPartialDerivatives(parameters);
 //    printf("globalindex: %d \n", globalIndex);
 //    printf("dx %f \n", parameters[idX.index].derivative);
@@ -98,12 +98,12 @@
 //                             DDouble(1.0, globalIndex, &globalIndex, CONST),
 //                             DDouble(-1.0, globalIndex, &globalIndex, CONST)};
 //    DIDFunction x0 = 0;
-//    DIDFunction x1 = 1;
+//    DIDFunction localContext.x1 = 1;
 //    DIDFunction hundred = 2;
 //    DIDFunction one = 3;
 //    DIDFunction minOne = 4;
 //    DSquareFunction x0square = DSquareFunction(&x0);
-//    DMinusFunction t1 = x1 - x0square;
+//    DMinusFunction t1 = localContext.x1 - x0square;
 //    DSquareFunction t1square = DSquareFunction(&t1);
 //    DMultiplicationFunction th = hundred * t1square;
 //    DDouble *f2 = th(operatorTree, 13);
@@ -135,22 +135,22 @@
 //    F1 f1 = F1(constants, 3);
 //
 //    const unsigned xSize = 2;
-//    double x1[xSize] = {globalX[2 * threadIdx.x], globalX[2 * threadIdx.x + 1]};
-//    double x2[xSize];
-//    double *x = x1;
-//    double *xNext = x2;
+//    double localContext.x1[xSize] = {globalX[2 * threadIdx.x], globalX[2 * threadIdx.x + 1]};
+//    double localContext.x2[xSize];
+//    double *x = localContext.x1;
+//    double *xNext = localContext.x2;
 //    double alpha = 100;
 //    double *tmp;
 //    for (unsigned i = 0; i < iterationCount; i++) {
 //        double f = f1.eval(x, xSize)->value;
 ////        printf("f %d: %f\n", i, f);
-//        f1.evalJacobian();
+//        f1.evallocalContext.Jacobian();
 //        alpha = 100;
-//        f1.evalStep(x, xNext, xSize, f1.J, alpha);
+//        f1.evalStep(x, xNext, xSize, f1.localContext.J, alpha);
 //        double fNext = f1.eval(xNext, xSize)->value;
 //        while (fNext >= f) {
 //            alpha = alpha / 2;
-//            f1.evalStep(x, xNext, xSize, f1.J, alpha);
+//            f1.evalStep(x, xNext, xSize, f1.localContext.J, alpha);
 //            fNext = f1.eval(xNext, xSize)->value;
 ////            printf("alpha: %.10f\n", alpha);
 ////            printf("fNext: %f.10\n", fNext);
@@ -164,8 +164,8 @@
 //        printf("%f ", x[j]);
 //    }
 //    printf("\n");
-////    printf("Jacobian:\n");
-////    for (double i : f1.J) {
+////    printf("localContext.Jacobian:\n");
+////    for (double i : f1.localContext.J) {
 ////        printf("%f\n", i);
 ////    }
 ////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
@@ -173,10 +173,88 @@
 #define  X_DIM 3
 #define  POPULATION_SIZE 20
 #define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 20000
+#define  OBSERVARVATION_COUNT 2000
 #define  ITERATION_COUNT 1000
 #define  ALPHA 100
 //__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
+
+struct SharedContext {
+    double sharedX[X_DIM];
+    double sharedDX[X_DIM];
+    double sharedF;
+};
+
+struct LocalContext {
+    double J[X_DIM];
+    double x1[X_DIM];
+    double x2[X_DIM];
+    double *xCurrent;
+    double *xNext;
+    double threadF;
+    double alpha;
+};
+
+__device__
+void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
+    if (threadIdx == 0) {
+        sharedContext->sharedF = 0.0;
+    }
+    for (unsigned spanningTID = threadIdx; spanningTID < X_DIM; spanningTID += blockDim.x) {
+        sharedContext->sharedDX[spanningTID] = 0.0;
+    }
+}
+
+__device__
+void reduceObservations(LocalContext *localContext, PlaneFitting *f1, double *globalData) {
+    localContext->threadF = 0;
+    for (unsigned j = 0; j < X_DIM; j++) {
+        localContext->J[j] = 0;
+    }
+    for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVARVATION_COUNT; spanningTID += blockDim.x) {
+        f1->setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+        localContext->threadF += f1->eval(localContext->xCurrent, X_DIM)->value;
+        f1->evalJacobian();
+        for (unsigned j = 0; j < X_DIM; j++) {
+            localContext->J[j] += f1->J[j];// TODO add jacobian variable indexing
+        }
+    }
+}
+
+__device__
+void lineSearch(LocalContext *localContext,
+                SharedContext *sharedContext,
+                PlaneFitting *f1,
+                double *globalData,
+                double currentF) {
+    double fNext;
+    localContext->alpha = ALPHA;
+
+    do {
+        localContext->alpha = localContext->alpha / 2;
+        f1->evalStep(localContext->xCurrent, localContext->xNext, X_DIM, localContext->J, localContext->alpha);
+        fNext = 0;
+        if (threadIdx.x == 0) {
+            sharedContext->sharedF = 0;
+        }
+        __syncthreads();// sharedContext.sharedF is cleared
+        for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVARVATION_COUNT; spanningTID += blockDim.x) {
+            f1->setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+            fNext += f1->eval(localContext->xNext, X_DIM)->value;
+        }
+        atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
+        __syncthreads();//
+    } while (sharedContext->sharedF > currentF);
+}
+
+__device__
+void swapModels(LocalContext *localContext, SharedContext *sharedContext) {
+    for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+        sharedContext->sharedX[spanningTID] = localContext->xNext[spanningTID];
+    }
+    double *tmp = localContext->xCurrent;
+    localContext->xCurrent = localContext->xNext;
+    localContext->xNext = tmp;
+}
 
 __global__ void
 testPlaneFitting(double *globalX, double *globalData) { // use shared memory instead of global memory
@@ -184,148 +262,61 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
     // every thread has a local observation loaded into local memory
 
     // LOAD MODEL INTO SHARED MEMORY
-    __shared__ double sharedX[X_DIM];
-    __shared__ double sharedDX[X_DIM];
-    __shared__ double sharedF;
-
-    unsigned spanningTID = threadIdx.x;
+    __shared__ SharedContext sharedContext;
     const unsigned modelStartingIndex = X_DIM * blockIdx.x;
-    while (spanningTID < X_DIM) {
-        sharedX[spanningTID] = globalX[modelStartingIndex + spanningTID];
-        spanningTID += blockDim.x;
+    for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+        sharedContext.sharedX[spanningTID] = globalX[modelStartingIndex + spanningTID];
     }
     __syncthreads();
     // every thread can access the model in shared memory
 
     // INITIALIZE LOCAL MODEL
-    double x1[X_DIM] = {};
+    LocalContext localContext;
     for (unsigned i = 0; i < X_DIM; i++) { // load observation into memory
-        x1[i] = sharedX[i];
+        localContext.x1[i] = sharedContext.sharedX[i];
     }
-    double x2[X_DIM];
-    double *x = x1;
-    double *xNext = x2;
+    localContext.xCurrent = localContext.x1;
+    localContext.xNext = localContext.x2;
 
-    double J[X_DIM] = {};
-
-    double alpha = ALPHA;
-    double *tmp;
-    double threadF = 0;
-    // every thread has a copy of the shared model loaded, and an empty Jacobian
+    localContext.alpha = ALPHA;
+    double fCurrent;
+    // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
     double costDifference = INT_MAX;
     const double epsilon = 1e-7;
     for (unsigned i = 0; i < ITERATION_COUNT && costDifference > epsilon; i++) {
-        // reset state
-        if (threadIdx.x == 0) {
-            sharedF = 0.0;
-        }
-
-        spanningTID = threadIdx.x;
-        while (spanningTID < X_DIM) {
-            sharedDX[spanningTID] = 0.0;
-            spanningTID += blockDim.x;
-        }
+        resetSharedState(&sharedContext, threadIdx.x);
+        __syncthreads();
+        // sharedContext.sharedF, sharedContext.sharedDX, localContext.J is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+        reduceObservations(&localContext, &f1, globalData);
+        // localContext.threadF,localContext.J[j] are calculated
+        atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         for (unsigned j = 0; j < X_DIM; j++) {
-            J[j] = 0;
+            atomicAdd(&sharedContext.sharedDX[j], localContext.J[j]);// TODO add jacobian variable indexing
         }
-        __syncthreads(); // sharedF, sharedDX, J is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+        __syncthreads();
+        // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
 
-        threadF = 0;
-        spanningTID = threadIdx.x;
-        while (spanningTID < OBSERVARVATION_COUNT) {
-            f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
-            threadF += f1.eval(x, X_DIM)->value;
-            f1.evalJacobian();
-            for (unsigned j = 0; j < X_DIM; j++) {
-                J[j] += f1.J[j];// TODO add jacobian variable indexing
-            }
-            spanningTID += blockDim.x;
-        }
-
-        atomicAdd(&sharedF, threadF); // TODO reduce over threads, not using atomicAdd
+        fCurrent = sharedContext.sharedF;
         for (unsigned j = 0; j < X_DIM; j++) {
-            atomicAdd(&sharedDX[j], J[j]);// TODO add jacobian variable indexing
+            localContext.J[j] = sharedContext.sharedDX[j];// TODO add localContext.Jacobian variable indexing
         }
-
-        __syncthreads();// sharedF, sharedDX is complete for all threads
-        double f = sharedF;
-//        if (threadIdx.x == 0) {// TODO line search cost over all observations
-        for (unsigned j = 0; j < X_DIM; j++) {
-            J[j] = sharedDX[j];// TODO add Jacobian variable indexing
-        }
-
-        alpha = ALPHA;
-        __syncthreads();// f is set for all threads
-        if (threadIdx.x == 0) {
-//            printf("it:  %d: f %f \n", i, f);
-            sharedF = 0;
-        }
-        __syncthreads();// sharedF is cleared, local J is copied
-        double fNext = 0;
-        spanningTID = threadIdx.x;
-        f1.evalStep(x, xNext, X_DIM, J, alpha);
-        while (spanningTID < OBSERVARVATION_COUNT) {
-            f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
-            fNext += f1.eval(xNext, X_DIM)->value;
-            spanningTID += blockDim.x;
-        }
-        atomicAdd(&sharedF, fNext); // TODO reduce over threads, not using atomicAdd
-        __syncthreads();//
-        while (sharedF > f) {
-            alpha = alpha / 2;
-            f1.evalStep(x, xNext, X_DIM, J, alpha);
-            fNext = 0;
-            if (threadIdx.x == 0) {
-                sharedF = 0;
-            }
-            __syncthreads();// sharedF is cleared
-            spanningTID = threadIdx.x;
-            f1.evalStep(x, xNext, X_DIM, J, alpha);
-            while (spanningTID < OBSERVARVATION_COUNT) {
-                f1.setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
-                fNext += f1.eval(xNext, X_DIM)->value;
-                spanningTID += blockDim.x;
-            }
-            atomicAdd(&sharedF, fNext); // TODO reduce over threads, not using atomicAdd
-            __syncthreads();//
-//            printf("alpha: %.10f\n", alpha);
-//            printf("fNext: %.10f\n", fNext);
-//            printf("fPrev: %.10f\n", f);
-        }
-        for (unsigned j = 0; j < X_DIM; j++) {
-            sharedX[j] = xNext[j];
-        }
-//        }
-        __syncthreads();//globalX is xNext for all threads
-        for (unsigned j = 0; j < X_DIM; j++) {
-            xNext[j] = sharedX[j];
-        }
-        tmp = x;
-        x = xNext;
-        xNext = tmp;
-        costDifference = std::abs(f - sharedF);
-        __syncthreads();//x,xNext is set for all threads
-//        if (threadIdx.x == 0) {
-//            printf("x ");
-//            for (unsigned j = 0; j < X_DIM; j++) {
-//                printf("%f ", xNext[j]);
-//            }
-//            printf("\n");
-//        }
+        __syncthreads();// fCurrent is set for all threads
+        lineSearch(&localContext, &sharedContext, &f1, globalData, fCurrent);
+        // xNext contains the model for the next iteration
+        swapModels(&localContext, &sharedContext);
+        //
+        costDifference = std::abs(fCurrent - sharedContext.sharedF);
+        __syncthreads();
+        //xCurrent,xNext is set for all threads
     }
+
     if (threadIdx.x == 0) {
-        printf("x ");
+        printf("xCurrent ");
         for (unsigned j = 0; j < X_DIM; j++) {
-            printf("%f ", x[j]);
+            printf("%f ", localContext.xCurrent[j]);
         }
         printf("\nWith: %d threads in block %d\n", blockDim.x, blockIdx.x);
     }
-//    printf("\n");
-//    printf("Jacobian:\n");
-//    for (double i : f1.J) {
-//        printf("%f\n", i);
-//    }
-//    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 }
 
 #endif //PARALLELLBFGS_TESTS_CUH

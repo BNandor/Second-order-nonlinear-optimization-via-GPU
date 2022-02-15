@@ -25,12 +25,12 @@ public:
         constantSize = ThisConstantSize;
         operatorTree = ThisOperatorTree;
         J = ThisJ;
+        initIndex();
     }
 
     __device__ __host__
     void setConstants(double *constants, unsigned constantsSize) {
         initConst(constants, constantsSize);
-        initIndex();
     }
 
     __device__ __host__
