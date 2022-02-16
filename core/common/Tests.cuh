@@ -15,6 +15,7 @@
 #include "../AD/function/Operations.cuh"
 #include "../problem/F1.cuh"
 #include "../problem/PlaneFitting.cuh"
+
 #include <stdio.h>
 
 //__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
@@ -170,12 +171,6 @@
 ////    }
 ////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 //}
-#define  X_DIM 3
-#define  POPULATION_SIZE 20
-#define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 2000
-#define  ITERATION_COUNT 1000
-#define  ALPHA 100
 //__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
 
 struct SharedContext {
@@ -193,6 +188,7 @@ struct LocalContext {
     double threadF;
     double alpha;
 };
+
 
 __device__
 void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
@@ -257,7 +253,7 @@ void swapModels(LocalContext *localContext, SharedContext *sharedContext) {
 }
 
 __global__ void
-testPlaneFitting(double *globalX, double *globalData) { // use shared memory instead of global memory
+testPlaneFitting(double *globalX, double *globalData, double *globalF) { // use shared memory instead of global memory
     PlaneFitting f1 = PlaneFitting();
     // every thread has a local observation loaded into local memory
 
@@ -295,16 +291,16 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
         }
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
-
         fCurrent = sharedContext.sharedF;
+        __syncthreads();
+        // fCurrent is set for all threads
         for (unsigned j = 0; j < X_DIM; j++) {
             localContext.J[j] = sharedContext.sharedDX[j];// TODO add localContext.Jacobian variable indexing
         }
-        __syncthreads();// fCurrent is set for all threads
         lineSearch(&localContext, &sharedContext, &f1, globalData, fCurrent);
         // xNext contains the model for the next iteration
         swapModels(&localContext, &sharedContext);
-        //
+
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
         __syncthreads();
         //xCurrent,xNext is set for all threads
@@ -315,7 +311,8 @@ testPlaneFitting(double *globalX, double *globalData) { // use shared memory ins
         for (unsigned j = 0; j < X_DIM; j++) {
             printf("%f ", localContext.xCurrent[j]);
         }
-        printf("\nWith: %d threads in block %d\n", blockDim.x, blockIdx.x);
+        globalF[blockIdx.x] = sharedContext.sharedF;
+        printf("\nWith: %d threads in block %d f: %.10f\n", blockDim.x, blockIdx.x, sharedContext.sharedF);
     }
 }
 

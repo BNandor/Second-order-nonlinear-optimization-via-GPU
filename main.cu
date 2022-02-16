@@ -2,9 +2,12 @@
 
 #define SAFE
 
+#include "core/common/Constants.cuh"
 #include "core/common/Tests.cuh"
+#include "core/optimizer/DifferentialEvolution.cuh"
+#include <curand.h>
+#include <curand_kernel.h>
 #include <random>
-
 //void testDFloat() {
 //    DDouble *dev_c;
 //    DDouble *c = (DDouble *) malloc(sizeof(DDouble));
@@ -69,6 +72,7 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
 }
 
 void testPlaneFitting() {
+    curandState *dev_curandState;
     cudaEvent_t start, stop, startCopy, stopCopy;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
@@ -78,12 +82,22 @@ void testPlaneFitting() {
     const unsigned xSize = X_DIM * POPULATION_SIZE;
     const unsigned dataSize = OBSERVARVATION_DIM * OBSERVARVATION_COUNT;
     double *dev_x;
+    double *dev_xDE;
+    double *dev_x1;
+    double *dev_x2;
     double *dev_data;
+    double *dev_F;
+    double *dev_FDE;
+    double *dev_F1;
+    double *dev_F2;
 
     // ALLOCATE DEVICE MEMORY
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+    cudaMalloc((void **) &dev_xDE, xSize * sizeof(double));
     cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
-
+    cudaMalloc((void **) &dev_F, POPULATION_SIZE * sizeof(double));
+    cudaMalloc((void **) &dev_FDE, POPULATION_SIZE * sizeof(double));
+    cudaMalloc(&dev_curandState, THREADS_PER_GRID * sizeof(curandState));
     // GENERATE PROBLEM
     double x[xSize] = {};
     double data[dataSize] = {};
@@ -102,20 +116,42 @@ void testPlaneFitting() {
     cudaEventRecord(start);
 
     // EXECUTE KERNEL
-    testPlaneFitting<<<POPULATION_SIZE, 128>>>(dev_x, dev_data);
+    // initialize curand
+    setupCurand<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_curandState);
+    dev_x1 = dev_x;
+    dev_x2 = dev_xDE;
+    dev_F1 = dev_F;
+    dev_F2 = dev_FDE;
 
+    testPlaneFitting<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
+
+    for (unsigned i = 0; i < 60; i++) {
+        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
+        //dev_x2 is the differential model
+        testPlaneFitting<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
+        //evaluated differential model into F2
+        selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
+        //select the best models from current and differential models
+        std::swap(dev_x1, dev_x2);
+        std::swap(dev_F1, dev_F2);
+        // dev_x1 contains the next models, dev_F1 contains the associated costs
+    }
+
+    //dev_x2 contains the best models
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
     float memcpyMilli = 0;
     cudaEventElapsedTime(&memcpyMilli, startCopy, stopCopy);
-
     float kernelMilli = 0;
     cudaEventElapsedTime(&kernelMilli, start, stop);
     printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
 
     cudaFree(dev_x);
+    cudaFree(dev_xDE);
     cudaFree(dev_data);
+    cudaFree(dev_F);
+    cudaFree(dev_FDE);
 }
 
 int main() {

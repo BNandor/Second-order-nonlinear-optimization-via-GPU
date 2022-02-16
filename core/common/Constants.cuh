@@ -1,0 +1,21 @@
+//
+// Created by spaceman on 2022. 02. 16..
+//
+
+#ifndef PARALLELLBFGS_CONSTANTS_CUH
+#define PARALLELLBFGS_CONSTANTS_CUH
+
+#define  X_DIM 3
+#define  POPULATION_SIZE 10
+#define  OBSERVARVATION_DIM 3
+#define  OBSERVARVATION_COUNT 2000
+#define  ITERATION_COUNT 1000
+#define  ALPHA 100
+#define  THREADS_PER_BLOCK 128
+#define  THREADS_PER_GRID (THREADS_PER_BLOCK*POPULATION_SIZE)
+
+// Differential Evolution Control parameters
+#define CR 0.99
+#define F 1.5
+
+#endif //PARALLELLBFGS_CONSTANTS_CUH
