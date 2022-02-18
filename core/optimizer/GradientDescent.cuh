@@ -2,8 +2,8 @@
 // Created by spaceman on 2022. 01. 16..
 //
 
-#ifndef PARALLELLBFGS_TESTS_CUH
-#define PARALLELLBFGS_TESTS_CUH
+#ifndef PARALLELLBFGS_GRADIENTDESCENT_CUH
+#define PARALLELLBFGS_GRADIENTDESCENT_CUH
 
 #include "../AD/DDouble.cuh"
 #include "../AD/function/DFunction.cuh"
@@ -15,6 +15,7 @@
 #include "../AD/function/Operations.cuh"
 #include "../problem/F1.cuh"
 #include "../problem/PlaneFitting.cuh"
+#include "../problem/Rosenbrock2D.cuh"
 
 #include <stdio.h>
 
@@ -171,7 +172,7 @@
 ////    }
 ////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 //}
-//__constant__ double dev_const_observations[OBSERVARVATION_COUNT * OBSERVARVATION_DIM];
+//__constant__ double dev_const_observations[OBSERVATION_COUNT * OBSERVATION_DIM];
 
 struct SharedContext {
     double sharedX[X_DIM];
@@ -201,13 +202,20 @@ void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
 }
 
 __device__
-void reduceObservations(LocalContext *localContext, PlaneFitting *f1, double *globalData) {
+void reduceObservations(LocalContext *localContext,
+#ifdef PROBLEM_PLANEFITTING
+        PlaneFitting *f1,
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+                        Rosenbrock2D *f1,
+#endif
+                        double *globalData) {
     localContext->threadF = 0;
     for (unsigned j = 0; j < X_DIM; j++) {
         localContext->J[j] = 0;
     }
-    for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVARVATION_COUNT; spanningTID += blockDim.x) {
-        f1->setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+    for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVATION_COUNT; spanningTID += blockDim.x) {
+        f1->setConstants(&globalData[OBSERVATION_DIM * spanningTID], OBSERVATION_DIM);
         localContext->threadF += f1->eval(localContext->xCurrent, X_DIM)->value;
         f1->evalJacobian();
         for (unsigned j = 0; j < X_DIM; j++) {
@@ -219,7 +227,12 @@ void reduceObservations(LocalContext *localContext, PlaneFitting *f1, double *gl
 __device__
 void lineSearch(LocalContext *localContext,
                 SharedContext *sharedContext,
-                PlaneFitting *f1,
+#ifdef PROBLEM_PLANEFITTING
+        PlaneFitting *f1,
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+                Rosenbrock2D *f1,
+#endif
                 double *globalData,
                 double currentF) {
     double fNext;
@@ -233,8 +246,8 @@ void lineSearch(LocalContext *localContext,
             sharedContext->sharedF = 0;
         }
         __syncthreads();// sharedContext.sharedF is cleared
-        for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVARVATION_COUNT; spanningTID += blockDim.x) {
-            f1->setConstants(&globalData[OBSERVARVATION_DIM * spanningTID], OBSERVARVATION_DIM);
+        for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVATION_COUNT; spanningTID += blockDim.x) {
+            f1->setConstants(&globalData[OBSERVATION_DIM * spanningTID], OBSERVATION_DIM);
             fNext += f1->eval(localContext->xNext, X_DIM)->value;
         }
         atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
@@ -253,8 +266,14 @@ void swapModels(LocalContext *localContext, SharedContext *sharedContext) {
 }
 
 __global__ void
-testPlaneFitting(double *globalX, double *globalData, double *globalF) { // use shared memory instead of global memory
+gradientDescent(double *globalX, double *globalData,
+                double *globalF) { // use shared memory instead of global memory
+#ifdef PROBLEM_PLANEFITTING
     PlaneFitting f1 = PlaneFitting();
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+    Rosenbrock2D f1 = Rosenbrock2D();
+#endif
     // every thread has a local observation loaded into local memory
 
     // LOAD MODEL INTO SHARED MEMORY
@@ -268,6 +287,7 @@ testPlaneFitting(double *globalX, double *globalData, double *globalF) { // use 
 
     // INITIALIZE LOCAL MODEL
     LocalContext localContext;
+
     for (unsigned i = 0; i < X_DIM; i++) { // load observation into memory
         localContext.x1[i] = sharedContext.sharedX[i];
     }
@@ -279,7 +299,8 @@ testPlaneFitting(double *globalX, double *globalData, double *globalF) { // use 
     // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
     double costDifference = INT_MAX;
     const double epsilon = 1e-7;
-    for (unsigned i = 0; i < ITERATION_COUNT && costDifference > epsilon; i++) {
+    unsigned it;
+    for (it = 0; it < ITERATION_COUNT && costDifference > epsilon; it++) {
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX, localContext.J is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
@@ -312,8 +333,9 @@ testPlaneFitting(double *globalX, double *globalData, double *globalF) { // use 
             printf("%f ", localContext.xCurrent[j]);
         }
         globalF[blockIdx.x] = sharedContext.sharedF;
-        printf("\nWith: %d threads in block %d f: %.10f\n", blockDim.x, blockIdx.x, sharedContext.sharedF);
+        printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
+               sharedContext.sharedF);
     }
 }
 
-#endif //PARALLELLBFGS_TESTS_CUH
+#endif //PARALLELLBFGS_GRADIENTDESCENT_CUH

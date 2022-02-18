@@ -1,9 +1,11 @@
 #include <iostream>
 
 #define SAFE
+#define PROBLEM_ROSENBROCK2D
+//#define PROBLEM_PLANEFITTING
 
 #include "core/common/Constants.cuh"
-#include "core/common/Tests.cuh"
+#include "core/optimizer/GradientDescent.cuh"
 #include "core/optimizer/DifferentialEvolution.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
@@ -64,10 +66,10 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     std::normal_distribution<double> normal(0.0, 1);
 
     for (int i = 0; i < pointCount; i++) {
-        data[i * OBSERVARVATION_DIM] = unif(re);
-        data[i * OBSERVARVATION_DIM + 1] = unif(re);
-        data[i * OBSERVARVATION_DIM + 2] =
-                A * data[i * OBSERVARVATION_DIM] + B * data[i * OBSERVARVATION_DIM + 1] + C + normal(re);
+        data[i * OBSERVATION_DIM] = unif(re);
+        data[i * OBSERVATION_DIM + 1] = unif(re);
+        data[i * OBSERVATION_DIM + 2] =
+                A * data[i * OBSERVATION_DIM] + B * data[i * OBSERVATION_DIM + 1] + C + normal(re);
     }
 }
 
@@ -80,7 +82,7 @@ void testPlaneFitting() {
     cudaEventCreate(&stopCopy);
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
-    const unsigned dataSize = OBSERVARVATION_DIM * OBSERVARVATION_COUNT;
+    const unsigned dataSize = OBSERVATION_DIM * OBSERVATION_COUNT;
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;
@@ -98,16 +100,23 @@ void testPlaneFitting() {
     cudaMalloc((void **) &dev_F, POPULATION_SIZE * sizeof(double));
     cudaMalloc((void **) &dev_FDE, POPULATION_SIZE * sizeof(double));
     cudaMalloc(&dev_curandState, THREADS_PER_GRID * sizeof(curandState));
+
     // GENERATE PROBLEM
     double x[xSize] = {};
     double data[dataSize] = {};
-
+#ifdef PROBLEM_PLANEFITTING
     double A = -5.5;
     double B = 99;
     double C = -1;
-    generatePlanePoints(A, B, C, data, OBSERVARVATION_COUNT);
+    generatePlanePoints(A, B, C, data, OBSERVATION_COUNT);
     generateInitialPopulation(x, xSize);
+#endif
 
+#ifdef PROBLEM_ROSENBROCK2D
+    data[0] = 100.0;
+    data[1] = 1.0;
+    generateInitialPopulation(x, xSize);
+#endif
     // COPY TO DEVICE
     cudaEventRecord(startCopy);
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
@@ -123,12 +132,12 @@ void testPlaneFitting() {
     dev_F1 = dev_F;
     dev_F2 = dev_FDE;
 
-    testPlaneFitting<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
+    gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
 
     for (unsigned i = 0; i < 60; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
-        testPlaneFitting<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
+        gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
         //select the best models from current and differential models
