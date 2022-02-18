@@ -43,6 +43,7 @@ void differentialEvolutionStep(double *oldX, double *newX, curandState *curandSt
         sharedA = localA;
         sharedB = localB;
         sharedC = localC;
+        printf("DE: a:%d,b:%d,c:%d,x:%d \n", localA, localB, localC, blockIdx.x);
     }
     __syncthreads();
     localA = sharedA;

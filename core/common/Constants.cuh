@@ -8,7 +8,7 @@
 #define  X_DIM 3
 #define  POPULATION_SIZE 10
 #define  OBSERVARVATION_DIM 3
-#define  OBSERVARVATION_COUNT 2000
+#define  OBSERVARVATION_COUNT 20000
 #define  ITERATION_COUNT 1000
 #define  ALPHA 100
 #define  THREADS_PER_BLOCK 128
@@ -16,6 +16,6 @@
 
 // Differential Evolution Control parameters
 #define CR 0.99
-#define F 1.5
+#define F 0.2
 
 #endif //PARALLELLBFGS_CONSTANTS_CUH

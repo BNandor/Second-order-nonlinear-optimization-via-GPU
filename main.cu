@@ -50,7 +50,7 @@
 //}
 
 void generateInitialPopulation(double *x, unsigned xSize) {
-    std::uniform_real_distribution<double> unif(-1000, 1000);
+    std::uniform_real_distribution<double> unif(-10000, 100000);
     std::default_random_engine re;
     for (int i = 0; i < xSize; i++) {
         x[i] = unif(re);
@@ -102,7 +102,7 @@ void testPlaneFitting() {
     double x[xSize] = {};
     double data[dataSize] = {};
 
-    double A = 5.5;
+    double A = -5.5;
     double B = 99;
     double C = -1;
     generatePlanePoints(A, B, C, data, OBSERVARVATION_COUNT);
