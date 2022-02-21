@@ -13,7 +13,7 @@ public:
     unsigned parameterSize;
     unsigned constantSize;
     unsigned globalIndex = 0;
-    double *J;
+    unsigned *jacobianIndices;
     DDouble *operatorTree;
 
 
@@ -27,19 +27,6 @@ public:
     __device__ __host__ void evalJacobian() {
         clearDerivatives();
         operatorTree[operatorTreeSize - 1].setPartialDerivatives(operatorTree);
-        for (unsigned i = constantSize; i < constantSize + parameterSize; i++) {
-            J[i - constantSize] = operatorTree[i].derivative;
-        }
-    }
-
-    __device__ __host__
-    void evalStep(double *x, double *xNext, unsigned xSize, double *jacobian, double alpha) {
-#ifdef SAFE
-        assert(xSize == parameterSize);
-#endif
-        for (unsigned i = 0; i < xSize; i++) {
-            xNext[i] = x[i] - alpha * jacobian[i];
-        }
     }
 
     __device__ __host__
@@ -54,11 +41,29 @@ public:
     }
 
     __device__ __host__
+    void initOperatorTreePartially(double *x, const unsigned startIndex, const unsigned xSize,
+                                   const unsigned operatorTreeParameterStartIndex) {
+        for (unsigned i = 0; i < xSize; i++) {
+            operatorTree[constantSize + operatorTreeParameterStartIndex + i].value = x[startIndex + i];
+            jacobianIndices[operatorTreeParameterStartIndex + i] = startIndex + i;
+        }
+        globalIndex = parameterSize + constantSize;
+    }
+
+    __device__ __host__
     void initIndex() {
         for (unsigned i = 0; i < constantSize + parameterSize; i++) {
             operatorTree[i].index = i;
             operatorTree[i].globalIndex = &globalIndex;
         }
+    }
+
+    __device__ __host__
+    DDouble *getConst(unsigned i) {
+#ifdef SAFE
+        assert(i < constantSize);
+#endif
+        return &operatorTree[i];
     }
 
     __device__ __host__

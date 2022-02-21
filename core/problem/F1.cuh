@@ -15,8 +15,8 @@ public:
     static const unsigned F1operatorTreeSize = 13;
     static const unsigned F1parameterSize = 2;
     static const unsigned F1constantSize = 3;
-    double F1J[F1parameterSize];
     DDouble F1operatorTree[F1operatorTreeSize] = {};
+    unsigned ThisJacobianIndices[F1parameterSize] = {};
 
     __device__ __host__
     F1(double *constants, unsigned constantsSize) {
@@ -24,7 +24,7 @@ public:
         parameterSize = F1parameterSize;
         constantSize = F1constantSize;
         operatorTree = F1operatorTree;
-        J = F1J;
+        jacobianIndices = ThisJacobianIndices;
         initConst(constants, constantsSize);
         initIndex();
     }

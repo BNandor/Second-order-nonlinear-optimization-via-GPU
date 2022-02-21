@@ -15,8 +15,8 @@ public:
     static const unsigned ThisOperatorTreeSize = 12;
     static const unsigned ThisParameterSize = 3;
     static const unsigned ThisConstantSize = 3;
-    double ThisJ[ThisParameterSize];
     DDouble ThisOperatorTree[ThisOperatorTreeSize] = {};
+    unsigned ThisJacobianIndices[ThisParameterSize] = {};
 
     __device__ __host__
     PlaneFitting() {
@@ -24,7 +24,7 @@ public:
         parameterSize = ThisParameterSize;
         constantSize = ThisConstantSize;
         operatorTree = ThisOperatorTree;
-        J = ThisJ;
+        jacobianIndices = ThisJacobianIndices;
         initIndex();
     }
 
@@ -36,7 +36,8 @@ public:
     __device__ __host__
     DDouble *eval(double *x, unsigned xSize) {
 //        Math.pow((point.pz - (x(0)*point.x + x(1) * point.py + x(2))),2)
-        initOperatorTree(x, xSize);
+//        initOperatorTree(x, xSize);
+        initOperatorTreePartially(x, 0, 3, 0);
         DDouble *cx = &operatorTree[0];
         DDouble *cy = &operatorTree[1];
         DDouble *cz = &operatorTree[2];

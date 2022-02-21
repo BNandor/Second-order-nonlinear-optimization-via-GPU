@@ -1,8 +1,9 @@
 #include <iostream>
 
 #define SAFE
-#define PROBLEM_ROSENBROCK2D
-//#define PROBLEM_PLANEFITTING
+//#define PROBLEM_ROSENBROCK2D
+#define PROBLEM_PLANEFITTING
+//#define PROBLEM_SNLP
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/GradientDescent.cuh"
@@ -66,10 +67,10 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     std::normal_distribution<double> normal(0.0, 1);
 
     for (int i = 0; i < pointCount; i++) {
-        data[i * OBSERVATION_DIM] = unif(re);
-        data[i * OBSERVATION_DIM + 1] = unif(re);
-        data[i * OBSERVATION_DIM + 2] =
-                A * data[i * OBSERVATION_DIM] + B * data[i * OBSERVATION_DIM + 1] + C + normal(re);
+        data[i * CONSTANT_DIM] = unif(re);
+        data[i * CONSTANT_DIM + 1] = unif(re);
+        data[i * CONSTANT_DIM + 2] =
+                A * data[i * CONSTANT_DIM] + B * data[i * CONSTANT_DIM + 1] + C + normal(re);
     }
 }
 
@@ -82,7 +83,7 @@ void testPlaneFitting() {
     cudaEventCreate(&stopCopy);
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
-    const unsigned dataSize = OBSERVATION_DIM * OBSERVATION_COUNT;
+    const unsigned dataSize = CONSTANT_DIM * CONSTANT_COUNT;
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;
@@ -108,7 +109,7 @@ void testPlaneFitting() {
     double A = -5.5;
     double B = 99;
     double C = -1;
-    generatePlanePoints(A, B, C, data, OBSERVATION_COUNT);
+    generatePlanePoints(A, B, C, data, CONSTANT_COUNT);
     generateInitialPopulation(x, xSize);
 #endif
 

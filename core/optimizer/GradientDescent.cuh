@@ -16,6 +16,7 @@
 #include "../problem/F1.cuh"
 #include "../problem/PlaneFitting.cuh"
 #include "../problem/Rosenbrock2D.cuh"
+#include "../problem/SNLP.cuh"
 
 #include <stdio.h>
 
@@ -172,20 +173,18 @@
 ////    }
 ////    printf("derivative: %f\n", f1.operatorTree[3].derivative);
 //}
-//__constant__ double dev_const_observations[OBSERVATION_COUNT * OBSERVATION_DIM];
+//__constant__ double dev_const_observations[CONSTANT_COUNT * CONSTANT_DIM];
 
 struct SharedContext {
-    double sharedX[X_DIM];
+    double sharedX1[X_DIM];
+    double sharedX2[X_DIM];
     double sharedDX[X_DIM];
+    double *xCurrent;
+    double *xNext;
     double sharedF;
 };
 
 struct LocalContext {
-    double J[X_DIM];
-    double x1[X_DIM];
-    double x2[X_DIM];
-    double *xCurrent;
-    double *xNext;
     double threadF;
     double alpha;
 };
@@ -203,24 +202,32 @@ void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
 
 __device__
 void reduceObservations(LocalContext *localContext,
+                        SharedContext *sharedContext,
 #ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1,
+                        PlaneFitting *f1,
 #endif
 #ifdef PROBLEM_ROSENBROCK2D
-                        Rosenbrock2D *f1,
+        Rosenbrock2D *f1,
+#endif
+#ifdef PROBLEM_SNLP
+        SNLP *f1,
 #endif
                         double *globalData) {
     localContext->threadF = 0;
-    for (unsigned j = 0; j < X_DIM; j++) {
-        localContext->J[j] = 0;
-    }
-    for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVATION_COUNT; spanningTID += blockDim.x) {
-        f1->setConstants(&globalData[OBSERVATION_DIM * spanningTID], OBSERVATION_DIM);
-        localContext->threadF += f1->eval(localContext->xCurrent, X_DIM)->value;
+    for (unsigned spanningTID = threadIdx.x; spanningTID < CONSTANT_COUNT; spanningTID += blockDim.x) {
+        f1->setConstants(&globalData[CONSTANT_DIM * spanningTID], CONSTANT_DIM);
+        localContext->threadF += f1->eval(sharedContext->xCurrent, X_DIM)->value;
         f1->evalJacobian();
-        for (unsigned j = 0; j < X_DIM; j++) {
-            localContext->J[j] += f1->J[j];// TODO add jacobian variable indexing
+        for (unsigned j = 0; j < PARAMETER_DIM; j++) {
+            atomicAdd(&sharedContext->sharedDX[f1->ThisJacobianIndices[j]],
+                      f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
         }
+    }
+}
+
+__device__ void lineStep(double *x, double *xNext, unsigned xSize, double *jacobian, double alpha) {
+    for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+        xNext[spanningTID] = x[spanningTID] - alpha * jacobian[spanningTID];
     }
 }
 
@@ -228,10 +235,13 @@ __device__
 void lineSearch(LocalContext *localContext,
                 SharedContext *sharedContext,
 #ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1,
+                PlaneFitting *f1,
 #endif
 #ifdef PROBLEM_ROSENBROCK2D
-                Rosenbrock2D *f1,
+        Rosenbrock2D *f1,
+#endif
+#ifdef PROBLEM_SNLP
+        SNLP *f1,
 #endif
                 double *globalData,
                 double currentF) {
@@ -239,16 +249,17 @@ void lineSearch(LocalContext *localContext,
     localContext->alpha = ALPHA;
 
     do {
-        localContext->alpha = localContext->alpha / 2;
-        f1->evalStep(localContext->xCurrent, localContext->xNext, X_DIM, localContext->J, localContext->alpha);
-        fNext = 0;
+        lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
+                 localContext->alpha);
         if (threadIdx.x == 0) {
             sharedContext->sharedF = 0;
         }
+        fNext = 0;
+        localContext->alpha = localContext->alpha / 2;
         __syncthreads();// sharedContext.sharedF is cleared
-        for (unsigned spanningTID = threadIdx.x; spanningTID < OBSERVATION_COUNT; spanningTID += blockDim.x) {
-            f1->setConstants(&globalData[OBSERVATION_DIM * spanningTID], OBSERVATION_DIM);
-            fNext += f1->eval(localContext->xNext, X_DIM)->value;
+        for (unsigned spanningTID = threadIdx.x; spanningTID < CONSTANT_COUNT; spanningTID += blockDim.x) {
+            f1->setConstants(&globalData[CONSTANT_DIM * spanningTID], CONSTANT_DIM);
+            fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
         }
         atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
         __syncthreads();//
@@ -256,13 +267,10 @@ void lineSearch(LocalContext *localContext,
 }
 
 __device__
-void swapModels(LocalContext *localContext, SharedContext *sharedContext) {
-    for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-        sharedContext->sharedX[spanningTID] = localContext->xNext[spanningTID];
-    }
-    double *tmp = localContext->xCurrent;
-    localContext->xCurrent = localContext->xNext;
-    localContext->xNext = tmp;
+void swapModels(SharedContext *sharedContext) {
+    double *tmp = sharedContext->xCurrent;
+    sharedContext->xCurrent = sharedContext->xNext;
+    sharedContext->xNext = tmp;
 }
 
 __global__ void
@@ -274,13 +282,17 @@ gradientDescent(double *globalX, double *globalData,
 #ifdef PROBLEM_ROSENBROCK2D
     Rosenbrock2D f1 = Rosenbrock2D();
 #endif
+#ifdef PROBLEM_SNLP
+    SNLP f1 = SNLP();
+#endif
     // every thread has a local observation loaded into local memory
 
     // LOAD MODEL INTO SHARED MEMORY
-    __shared__ SharedContext sharedContext;
+    __shared__
+    SharedContext sharedContext;
     const unsigned modelStartingIndex = X_DIM * blockIdx.x;
     for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-        sharedContext.sharedX[spanningTID] = globalX[modelStartingIndex + spanningTID];
+        sharedContext.sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
     }
     __syncthreads();
     // every thread can access the model in shared memory
@@ -288,11 +300,10 @@ gradientDescent(double *globalX, double *globalData,
     // INITIALIZE LOCAL MODEL
     LocalContext localContext;
 
-    for (unsigned i = 0; i < X_DIM; i++) { // load observation into memory
-        localContext.x1[i] = sharedContext.sharedX[i];
+    if (threadIdx.x == 0) {
+        sharedContext.xCurrent = sharedContext.sharedX1;
+        sharedContext.xNext = sharedContext.sharedX2;
     }
-    localContext.xCurrent = localContext.x1;
-    localContext.xNext = localContext.x2;
 
     localContext.alpha = ALPHA;
     double fCurrent;
@@ -303,24 +314,20 @@ gradientDescent(double *globalX, double *globalData,
     for (it = 0; it < ITERATION_COUNT && costDifference > epsilon; it++) {
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
-        // sharedContext.sharedF, sharedContext.sharedDX, localContext.J is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, &f1, globalData);
-        // localContext.threadF,localContext.J[j] are calculated
+        // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+        reduceObservations(&localContext, &sharedContext, &f1, globalData);
+        // localContext.threadF are calculated
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
-        for (unsigned j = 0; j < X_DIM; j++) {
-            atomicAdd(&sharedContext.sharedDX[j], localContext.J[j]);// TODO add jacobian variable indexing
-        }
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
         fCurrent = sharedContext.sharedF;
         __syncthreads();
         // fCurrent is set for all threads
-        for (unsigned j = 0; j < X_DIM; j++) {
-            localContext.J[j] = sharedContext.sharedDX[j];// TODO add localContext.Jacobian variable indexing
-        }
         lineSearch(&localContext, &sharedContext, &f1, globalData, fCurrent);
-        // xNext contains the model for the next iteration
-        swapModels(&localContext, &sharedContext);
+        if (threadIdx.x == 0) {
+            // sharedContext.xNext contains the model for the next iteration
+            swapModels(&sharedContext);
+        }
 
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
         __syncthreads();
@@ -330,7 +337,7 @@ gradientDescent(double *globalX, double *globalData,
     if (threadIdx.x == 0) {
         printf("xCurrent ");
         for (unsigned j = 0; j < X_DIM; j++) {
-            printf("%f ", localContext.xCurrent[j]);
+            printf("%f ", sharedContext.xCurrent[j]);
         }
         globalF[blockIdx.x] = sharedContext.sharedF;
         printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,

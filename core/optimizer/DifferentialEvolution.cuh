@@ -8,6 +8,7 @@
 #include <curand.h>
 #include <curand_kernel.h>
 #include "../common/Constants.cuh"
+#include <assert.h>
 
 __global__
 void setupCurand(curandState *state) {
@@ -17,6 +18,9 @@ void setupCurand(curandState *state) {
 
 __global__
 void differentialEvolutionStep(double *oldX, double *newX, curandState *curandState) {
+#ifdef SAFE
+    assert(blockDim.x >= 4);
+#endif
     int idx = threadIdx.x + blockDim.x * blockIdx.x;
     __shared__ unsigned sharedA;
     __shared__ unsigned sharedB;

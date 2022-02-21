@@ -3,7 +3,7 @@ project(ParallelLBFGS CUDA)
 
 set(CMAKE_CUDA_STANDARD 14)
 
-add_executable(ParallelLBFGS main.cu core/AD/DDouble.cuh core/AD/function/DFunction.cuh core/optimizer/GradientDescent.cuh core/AD/function/DIDFunction.cuh core/AD/function/DPlusFunction.cuh core/AD/function/DMinusFunction.cuh core/AD/function/DMultiplicationFunction.cuh core/AD/function/Operations.cuh core/problem/Problem.cuh core/problem/F1.cuh core/AD/function/DSquareFunction.cuh core/problem/PlaneFitting.cuh core/optimizer/DifferentialEvolution.cuh core/common/Constants.cuh core/problem/Rosenbrock2D.cuh)
+add_executable(ParallelLBFGS main.cu core/AD/DDouble.cuh core/AD/function/DFunction.cuh core/optimizer/GradientDescent.cuh core/AD/function/DIDFunction.cuh core/AD/function/DPlusFunction.cuh core/AD/function/DMinusFunction.cuh core/AD/function/DMultiplicationFunction.cuh core/AD/function/Operations.cuh core/problem/Problem.cuh core/problem/F1.cuh core/AD/function/DSquareFunction.cuh core/problem/PlaneFitting.cuh core/optimizer/DifferentialEvolution.cuh core/common/Constants.cuh core/problem/Rosenbrock2D.cuh core/problem/SNLP.cuh)
 
 set_target_properties(
         ParallelLBFGS

@@ -15,8 +15,8 @@ public:
     static const unsigned ThisOperatorTreeSize = 11;
     static const unsigned ThisParameterSize = 2;
     static const unsigned ThisConstantSize = 2;
-    double ThisJ[ThisParameterSize];
     DDouble ThisOperatorTree[ThisOperatorTreeSize] = {};
+    unsigned ThisJacobianIndices[ThisParameterSize] = {};
 
     __device__ __host__
     Rosenbrock2D() {
@@ -24,7 +24,8 @@ public:
         parameterSize = ThisParameterSize;
         constantSize = ThisConstantSize;
         operatorTree = ThisOperatorTree;
-        J = ThisJ;
+        jacobianIndices = ThisJacobianIndices;
+        jacobianIndices = ThisJacobianIndices;
         initIndex();
     }
 
@@ -36,7 +37,8 @@ public:
     __device__ __host__
     DDouble *eval(double *x, unsigned xSize) {
         //(c(0) - x(0))^2 + c(1)*(x(1) - x(0)^2)^2
-        initOperatorTree(x, xSize);
+//        initOperatorTree(x, xSize);
+        initOperatorTreePartially(x, 0, 2, 0);
         operatorTree[4] = operatorTree[0] - operatorTree[2];
         operatorTree[5] = operatorTree[4].square();
         operatorTree[6] = operatorTree[2].square();
