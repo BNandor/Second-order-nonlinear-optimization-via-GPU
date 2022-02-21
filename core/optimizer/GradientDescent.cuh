@@ -204,13 +204,13 @@ __device__
 void reduceObservations(LocalContext *localContext,
                         SharedContext *sharedContext,
 #ifdef PROBLEM_PLANEFITTING
-                        PlaneFitting *f1,
+        PlaneFitting *f1,
 #endif
 #ifdef PROBLEM_ROSENBROCK2D
         Rosenbrock2D *f1,
 #endif
 #ifdef PROBLEM_SNLP
-        SNLP *f1,
+                        SNLP *f1,
 #endif
                         double *globalData) {
     localContext->threadF = 0;
@@ -235,13 +235,13 @@ __device__
 void lineSearch(LocalContext *localContext,
                 SharedContext *sharedContext,
 #ifdef PROBLEM_PLANEFITTING
-                PlaneFitting *f1,
+        PlaneFitting *f1,
 #endif
 #ifdef PROBLEM_ROSENBROCK2D
         Rosenbrock2D *f1,
 #endif
 #ifdef PROBLEM_SNLP
-        SNLP *f1,
+                SNLP *f1,
 #endif
                 double *globalData,
                 double currentF) {
@@ -330,11 +330,12 @@ gradientDescent(double *globalX, double *globalData,
         }
 
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
+
         __syncthreads();
         //xCurrent,xNext is set for all threads
     }
 
-    if (threadIdx.x == 0) {
+    if (threadIdx.x == 0 && blockIdx.x == 0) {
         printf("xCurrent ");
         for (unsigned j = 0; j < X_DIM; j++) {
             printf("%f ", sharedContext.xCurrent[j]);

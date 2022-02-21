@@ -2,8 +2,8 @@
 
 #define SAFE
 //#define PROBLEM_ROSENBROCK2D
-#define PROBLEM_PLANEFITTING
-//#define PROBLEM_SNLP
+//#define PROBLEM_PLANEFITTING
+#define PROBLEM_SNLP
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/GradientDescent.cuh"
@@ -118,6 +118,19 @@ void testPlaneFitting() {
     data[1] = 1.0;
     generateInitialPopulation(x, xSize);
 #endif
+
+#ifdef PROBLEM_SNLP
+    data[0] = 0;
+    data[1] = 1;
+    data[2] = 4;
+    data[3] = 0;
+    data[4] = 2;
+    data[5] = 4;
+    data[6] = 1;
+    data[7] = 2;
+    data[8] = 4;
+    generateInitialPopulation(x, xSize);
+#endif
     // COPY TO DEVICE
     cudaEventRecord(startCopy);
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
@@ -135,7 +148,7 @@ void testPlaneFitting() {
 
     gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
 
-    for (unsigned i = 0; i < 60; i++) {
+    for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
         gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);

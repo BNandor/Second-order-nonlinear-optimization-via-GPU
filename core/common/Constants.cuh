@@ -26,8 +26,9 @@
 #define  CONSTANT_COUNT 3
 #endif
 
-#define  POPULATION_SIZE 40
+#define  POPULATION_SIZE 1
 
+#define DE_ITERATION_COUNT 0
 #define  ITERATION_COUNT 10000
 #define  ALPHA 200
 #define  THREADS_PER_BLOCK 128
