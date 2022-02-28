@@ -20,10 +20,10 @@
 #endif
 
 #ifdef PROBLEM_SNLP
-#define  X_DIM 6
+#define  X_DIM 200
 #define  PARAMETER_DIM 4
 #define  CONSTANT_DIM 3
-#define  CONSTANT_COUNT 3
+#define  CONSTANT_COUNT 100
 #endif
 
 #define  POPULATION_SIZE 1

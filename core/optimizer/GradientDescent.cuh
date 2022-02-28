@@ -179,9 +179,11 @@ struct SharedContext {
     double sharedX1[X_DIM];
     double sharedX2[X_DIM];
     double sharedDX[X_DIM];
+    double sharedDXNormPartialSum[THREADS_PER_BLOCK];
     double *xCurrent;
     double *xNext;
     double sharedF;
+    double sharedDXNorm;
 };
 
 struct LocalContext {
@@ -198,6 +200,7 @@ void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
     for (unsigned spanningTID = threadIdx; spanningTID < X_DIM; spanningTID += blockDim.x) {
         sharedContext->sharedDX[spanningTID] = 0.0;
     }
+    sharedContext->sharedDXNormPartialSum[threadIdx] = 0;
 }
 
 __device__
@@ -262,7 +265,7 @@ void lineSearch(LocalContext *localContext,
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
         }
         atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
-        __syncthreads();//
+        __syncthreads();
     } while (sharedContext->sharedF > currentF);
 }
 
@@ -305,13 +308,16 @@ gradientDescent(double *globalX, double *globalData,
         sharedContext.xNext = sharedContext.sharedX2;
     }
 
+
     localContext.alpha = ALPHA;
     double fCurrent;
     // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
     double costDifference = INT_MAX;
+
     const double epsilon = 1e-7;
+    sharedContext.sharedDXNorm = epsilon + 1;
     unsigned it;
-    for (it = 0; it < ITERATION_COUNT && costDifference > epsilon; it++) {
+    for (it = 0; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
@@ -321,25 +327,51 @@ gradientDescent(double *globalX, double *globalData,
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
         fCurrent = sharedContext.sharedF;
+        if (threadIdx.x == 0) {
+            sharedContext.sharedDXNorm = 0;
+        }
         __syncthreads();
-        // fCurrent is set for all threads
+        // fCurrent is set, sharedDXNorm is cleared for all threads,
         lineSearch(&localContext, &sharedContext, &f1, globalData, fCurrent);
         if (threadIdx.x == 0) {
             // sharedContext.xNext contains the model for the next iteration
             swapModels(&sharedContext);
         }
+        double localDXNorm = 0;
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            localDXNorm += std::pow(sharedContext.sharedDX[spanningTID], 2);
+            // TODO reduce over threads, not using atomicAdd
+        }
+        sharedContext.sharedDXNormPartialSum[threadIdx.x] = localDXNorm;
+        __syncthreads();
+
+        if (threadIdx.x == 0) {
+            double localDXNormFinal = 0;
+            for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
+                localDXNormFinal += sharedContext.sharedDXNormPartialSum[itdxnorm];
+            }
+            sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
+        }
+
 
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
-
         __syncthreads();
         //xCurrent,xNext is set for all threads
+        if (/*it % 500 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
+            printf("xCurrent ");
+            for (unsigned j = 0; j < X_DIM - 1; j++) {
+                printf("%f,", sharedContext.xCurrent[j]);
+            }
+            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+        }
     }
 
-    if (threadIdx.x == 0 && blockIdx.x == 0) {
+    if (threadIdx.x == 0) {
         printf("xCurrent ");
-        for (unsigned j = 0; j < X_DIM; j++) {
-            printf("%f ", sharedContext.xCurrent[j]);
+        for (unsigned j = 0; j < X_DIM - 1; j++) {
+            printf("%f,", sharedContext.xCurrent[j]);
         }
+        printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
         globalF[blockIdx.x] = sharedContext.sharedF;
         printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
                sharedContext.sharedF);

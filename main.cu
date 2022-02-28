@@ -4,6 +4,8 @@
 //#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
 #define PROBLEM_SNLP
+#define PROBLEM_INPUT "poly100"
+
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/GradientDescent.cuh"
@@ -11,6 +13,8 @@
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
+#include <fstream>
+
 //void testDFloat() {
 //    DDouble *dev_c;
 //    DDouble *c = (DDouble *) malloc(sizeof(DDouble));
@@ -53,8 +57,8 @@
 //}
 
 void generateInitialPopulation(double *x, unsigned xSize) {
-    std::uniform_real_distribution<double> unif(-10000, 100000);
-    std::default_random_engine re;
+    std::uniform_real_distribution<double> unif(-100000, 100000);
+    std::default_random_engine re(time(NULL));
     for (int i = 0; i < xSize; i++) {
         x[i] = unif(re);
     }
@@ -71,6 +75,23 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
         data[i * CONSTANT_DIM + 1] = unif(re);
         data[i * CONSTANT_DIM + 2] =
                 A * data[i * CONSTANT_DIM] + B * data[i * CONSTANT_DIM + 1] + C + normal(re);
+    }
+}
+
+void readSNLPProblem(double *data, std::string filename) {
+    std::fstream input;
+    input.open(filename.c_str());
+    if (input.is_open()) {
+        unsigned cData = 0;
+        while (input.good()) {
+            input >> data[cData];
+            cData++;
+        }
+        std::cout << "read: " << cData << " expected: " << CONSTANT_COUNT * CONSTANT_DIM << std::endl;
+        assert(cData == CONSTANT_COUNT * CONSTANT_DIM);
+    } else {
+        std::cerr << "err: could not open " << filename << std::endl;
+        exit(1);
     }
 }
 
@@ -120,15 +141,7 @@ void testPlaneFitting() {
 #endif
 
 #ifdef PROBLEM_SNLP
-    data[0] = 0;
-    data[1] = 1;
-    data[2] = 4;
-    data[3] = 0;
-    data[4] = 2;
-    data[5] = 4;
-    data[6] = 1;
-    data[7] = 2;
-    data[8] = 4;
+    readSNLPProblem(data, "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlp");
     generateInitialPopulation(x, xSize);
 #endif
     // COPY TO DEVICE
