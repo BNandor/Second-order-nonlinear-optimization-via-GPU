@@ -2,8 +2,8 @@
 
 #define SAFE
 //#define PROBLEM_ROSENBROCK2D
-#define PROBLEM_PLANEFITTING
-//#define PROBLEM_SNLP
+//#define PROBLEM_PLANEFITTING
+#define PROBLEM_SNLP
 #define PROBLEM_INPUT "poly100"
 
 
@@ -71,10 +71,10 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     std::normal_distribution<double> normal(0.0, 1);
 
     for (int i = 0; i < pointCount; i++) {
-        data[i * CONSTANT_DIM] = unif(re);
-        data[i * CONSTANT_DIM + 1] = unif(re);
-        data[i * CONSTANT_DIM + 2] =
-                A * data[i * CONSTANT_DIM] + B * data[i * CONSTANT_DIM + 1] + C + normal(re);
+        data[i * RESIDUAL_CONSTANTS_DIM_1] = unif(re);
+        data[i * RESIDUAL_CONSTANTS_DIM_1 + 1] = unif(re);
+        data[i * RESIDUAL_CONSTANTS_DIM_1 + 2] =
+                A * data[i * RESIDUAL_CONSTANTS_DIM_1] + B * data[i * RESIDUAL_CONSTANTS_DIM_1 + 1] + C + normal(re);
     }
 }
 
@@ -87,8 +87,9 @@ void readSNLPProblem(double *data, std::string filename) {
             input >> data[cData];
             cData++;
         }
-        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_1 * CONSTANT_DIM << std::endl;
-        assert(cData == RESIDUAL_CONSTANTS_COUNT_1 * CONSTANT_DIM);
+        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1
+                  << std::endl;
+        assert(cData == RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1);
     } else {
         std::cerr << "err: could not open " << filename << std::endl;
         exit(1);
@@ -104,7 +105,13 @@ void testPlaneFitting() {
     cudaEventCreate(&stopCopy);
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
-    const unsigned dataSize = CONSTANT_DIM * RESIDUAL_CONSTANTS_COUNT_1;
+
+#ifdef  PROBLEM_SNLP
+    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
+                              RESIDUAL_CONSTANTS_DIM_2 * RESIDUAL_CONSTANTS_COUNT_2;
+#else
+    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
+#endif
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;
@@ -143,6 +150,7 @@ void testPlaneFitting() {
 
 #ifdef PROBLEM_SNLP
     readSNLPProblem(data, "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlp");
+    data[dataSize - 4] = 1000;
     generateInitialPopulation(x, xSize);
 #endif
     // COPY TO DEVICE

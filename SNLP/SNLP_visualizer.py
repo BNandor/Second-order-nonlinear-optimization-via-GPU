@@ -26,11 +26,11 @@ with open(history, 'r') as f:
                 
         arr = np.array(lines)
         for line in arr:
-            centroidx = np.sum(line[0::2])/(line.size//2)
-            centroidy = np.sum(line[1::2])/(line.size//2)
-            line = line  - np.array([centroidx,centroidy]*(line.size//2))
-            line[1::2] = line[1::2] * (100.0/(max(line[1::2])-min(line[1::2])))
-            line[0::2] = line[0::2] * (100.0/(max(line[0::2])-min(line[0::2])))
+            # centroidx = np.sum(line[0::2])/(line.size//2)
+            # centroidy = np.sum(line[1::2])/(line.size//2)
+            # line = line  - np.array([centroidx,centroidy]*(line.size//2))
+            # line[1::2] = line[1::2] * (100.0/(max(line[1::2])-min(line[1::2])))
+            # line[0::2] = line[0::2] * (100.0/(max(line[0::2])-min(line[0::2])))
             edgeLines=np.array([ [[line[0::2][int(edge[0])],line[1::2][int(edge[0])]],[line[0::2][int(edge[1])],line[1::2][int(edge[1])]]] for edge in edges])
             colors = np.array([[0,1.0/(1.0001**(abs(np.sum((line[0]-line[1])**2)-edge[2]))),0]for line,edge in zip(edgeLines,edges)])
             colors[:,0]=1-colors[:,1]
