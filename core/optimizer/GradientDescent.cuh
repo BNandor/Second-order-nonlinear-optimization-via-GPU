@@ -189,6 +189,7 @@ struct SharedContext {
 struct LocalContext {
     double threadF;
     double alpha;
+    void *residualProblems[RESIDUAL_COUNT];
 };
 
 
@@ -206,20 +207,23 @@ void resetSharedState(SharedContext *sharedContext, unsigned threadIdx) {
 __device__
 void reduceObservations(LocalContext *localContext,
                         SharedContext *sharedContext,
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1,
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D *f1,
-#endif
-#ifdef PROBLEM_SNLP
-                        SNLP *f1,
-#endif
                         double *globalData) {
     localContext->threadF = 0;
-    for (unsigned spanningTID = threadIdx.x; spanningTID < CONSTANT_COUNT; spanningTID += blockDim.x) {
-        f1->setConstants(&globalData[CONSTANT_DIM * spanningTID], CONSTANT_DIM);
-        localContext->threadF += f1->eval(sharedContext->xCurrent, X_DIM)->value;
+#ifdef PROBLEM_PLANEFITTING
+    PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+    Rosenbrock2D *f1 = ((Rosenbrock2D *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_SNLP
+    SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
+#endif
+
+    for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
+        f1->setConstants(&globalData[CONSTANT_DIM * spanningTID],
+                         CONSTANT_DIM);
+        localContext->threadF += f1->eval(sharedContext->xCurrent,
+                                          X_DIM)->value;
         f1->evalJacobian();
         for (unsigned j = 0; j < PARAMETER_DIM; j++) {
             atomicAdd(&sharedContext->sharedDX[f1->ThisJacobianIndices[j]],
@@ -237,20 +241,19 @@ __device__ void lineStep(double *x, double *xNext, unsigned xSize, double *jacob
 __device__
 void lineSearch(LocalContext *localContext,
                 SharedContext *sharedContext,
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1,
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D *f1,
-#endif
-#ifdef PROBLEM_SNLP
-                SNLP *f1,
-#endif
                 double *globalData,
                 double currentF) {
     double fNext;
     localContext->alpha = ALPHA;
-
+#ifdef PROBLEM_PLANEFITTING
+    PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+    Rosenbrock2D *f1 = ((Rosenbrock2D *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_SNLP
+    SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
+#endif
     do {
         lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
                  localContext->alpha);
@@ -260,7 +263,7 @@ void lineSearch(LocalContext *localContext,
         fNext = 0;
         localContext->alpha = localContext->alpha / 2;
         __syncthreads();// sharedContext.sharedF is cleared
-        for (unsigned spanningTID = threadIdx.x; spanningTID < CONSTANT_COUNT; spanningTID += blockDim.x) {
+        for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
             f1->setConstants(&globalData[CONSTANT_DIM * spanningTID], CONSTANT_DIM);
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
         }
@@ -308,8 +311,9 @@ gradientDescent(double *globalX, double *globalData,
         sharedContext.xNext = sharedContext.sharedX2;
     }
 
-
     localContext.alpha = ALPHA;
+    localContext.residualProblems[0] = &f1;
+
     double fCurrent;
     // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
     double costDifference = INT_MAX;
@@ -321,7 +325,7 @@ gradientDescent(double *globalX, double *globalData,
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, &sharedContext, &f1, globalData);
+        reduceObservations(&localContext, &sharedContext, globalData);
         // localContext.threadF are calculated
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         __syncthreads();
@@ -332,11 +336,12 @@ gradientDescent(double *globalX, double *globalData,
         }
         __syncthreads();
         // fCurrent is set, sharedDXNorm is cleared for all threads,
-        lineSearch(&localContext, &sharedContext, &f1, globalData, fCurrent);
+        lineSearch(&localContext, &sharedContext, globalData, fCurrent);
         if (threadIdx.x == 0) {
             // sharedContext.xNext contains the model for the next iteration
             swapModels(&sharedContext);
         }
+
         double localDXNorm = 0;
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             localDXNorm += std::pow(sharedContext.sharedDX[spanningTID], 2);
@@ -357,7 +362,7 @@ gradientDescent(double *globalX, double *globalData,
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
         __syncthreads();
         //xCurrent,xNext is set for all threads
-        if (/*it % 500 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
+        if (it % 500 == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
             printf("xCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
                 printf("%f,", sharedContext.xCurrent[j]);

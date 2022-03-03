@@ -2,8 +2,8 @@
 
 #define SAFE
 //#define PROBLEM_ROSENBROCK2D
-//#define PROBLEM_PLANEFITTING
-#define PROBLEM_SNLP
+#define PROBLEM_PLANEFITTING
+//#define PROBLEM_SNLP
 #define PROBLEM_INPUT "poly100"
 
 
@@ -87,8 +87,8 @@ void readSNLPProblem(double *data, std::string filename) {
             input >> data[cData];
             cData++;
         }
-        std::cout << "read: " << cData << " expected: " << CONSTANT_COUNT * CONSTANT_DIM << std::endl;
-        assert(cData == CONSTANT_COUNT * CONSTANT_DIM);
+        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_1 * CONSTANT_DIM << std::endl;
+        assert(cData == RESIDUAL_CONSTANTS_COUNT_1 * CONSTANT_DIM);
     } else {
         std::cerr << "err: could not open " << filename << std::endl;
         exit(1);
@@ -104,7 +104,7 @@ void testPlaneFitting() {
     cudaEventCreate(&stopCopy);
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
-    const unsigned dataSize = CONSTANT_DIM * CONSTANT_COUNT;
+    const unsigned dataSize = CONSTANT_DIM * RESIDUAL_CONSTANTS_COUNT_1;
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;
@@ -114,6 +114,7 @@ void testPlaneFitting() {
     double *dev_FDE;
     double *dev_F1;
     double *dev_F2;
+
 
     // ALLOCATE DEVICE MEMORY
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
@@ -130,7 +131,7 @@ void testPlaneFitting() {
     double A = -5.5;
     double B = 99;
     double C = -1;
-    generatePlanePoints(A, B, C, data, CONSTANT_COUNT);
+    generatePlanePoints(A, B, C, data, RESIDUAL_CONSTANTS_COUNT_1);
     generateInitialPopulation(x, xSize);
 #endif
 
