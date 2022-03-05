@@ -96,6 +96,24 @@ void readSNLPProblem(double *data, std::string filename) {
     }
 }
 
+void readSNLPAnchors(double *data, std::string filename) {
+    std::fstream input;
+    input.open(filename.c_str());
+    if (input.is_open()) {
+        unsigned cData = 0;
+        while (input.good()) {
+            input >> data[cData];
+            cData++;
+        }
+        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_2 * RESIDUAL_CONSTANTS_DIM_2
+                  << std::endl;
+        assert(cData == RESIDUAL_CONSTANTS_COUNT_2 * RESIDUAL_CONSTANTS_DIM_2);
+    } else {
+        std::cerr << "err: could not open " << filename << std::endl;
+        exit(1);
+    }
+}
+
 void testPlaneFitting() {
     curandState *dev_curandState;
     cudaEvent_t start, stop, startCopy, stopCopy;
@@ -150,7 +168,8 @@ void testPlaneFitting() {
 
 #ifdef PROBLEM_SNLP
     readSNLPProblem(data, "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlp");
-    data[dataSize - 4] = 1000;
+    readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
+                    "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlpa");
     generateInitialPopulation(x, xSize);
 #endif
     // COPY TO DEVICE

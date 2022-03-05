@@ -392,7 +392,7 @@ gradientDescent(double *globalX, double *globalData,
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
         __syncthreads();
         //xCurrent,xNext is set for all threads
-        if (it % 50 == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+        if (it % 5 == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
             printf("xCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
                 printf("%f,", sharedContext.xCurrent[j]);
