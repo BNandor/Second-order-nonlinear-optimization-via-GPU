@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 
 
-problemName="poly100"
+problemName="poly1000"
 problempath="./problems/"+problemName
 history=problempath+"/csv/"+problemName+".csv"
 problem=problempath+"/"+problemName+".snlp"

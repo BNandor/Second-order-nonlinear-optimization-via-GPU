@@ -4,7 +4,7 @@
 //#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
 #define PROBLEM_SNLP
-#define PROBLEM_INPUT "poly100"
+#define PROBLEM_INPUT "poly1000"
 
 
 #include "core/common/Constants.cuh"

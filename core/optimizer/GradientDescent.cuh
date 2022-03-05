@@ -219,7 +219,6 @@ void reduceObservations(LocalContext *localContext,
 #ifdef PROBLEM_SNLP
     SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
 #endif
-
     for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
         f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
                          RESIDUAL_CONSTANTS_DIM_1);
@@ -341,7 +340,8 @@ gradientDescent(double *globalX, double *globalData,
     localContext.residualConstants[0] = globalData;
 #ifdef  PROBLEM_SNLP
     localContext.residualProblems[1] = &f2;
-    localContext.residualConstants[1] = globalData + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
+    localContext.residualConstants[1] =
+            localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
 #endif
     double fCurrent;
     // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
@@ -350,8 +350,9 @@ gradientDescent(double *globalX, double *globalData,
     const double epsilon = 1e-7;
     sharedContext.sharedDXNorm = epsilon + 1;
     unsigned it;
-    // TODO put cost difference back:q
-    for (it = 0; it < ITERATION_COUNT && sharedContext.sharedDXNorm > epsilon; it++) {
+
+    for (it = 0; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
@@ -387,7 +388,6 @@ gradientDescent(double *globalX, double *globalData,
             }
             sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
         }
-
 
         costDifference = std::abs(fCurrent - sharedContext.sharedF);
         __syncthreads();

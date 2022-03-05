@@ -1,7 +1,7 @@
 import random
 
-n=100
-maxDist = 10
+n=1000
+maxDist = 100
 for i in range(n):
     a=i
     b=random.randint(0,n-1)
