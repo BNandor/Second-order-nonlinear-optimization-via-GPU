@@ -1,13 +1,14 @@
 #include <iostream>
 
 #define SAFE
-//#define PROBLEM_ROSENBROCK2D
+#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
-#define PROBLEM_SNLP
+//#define PROBLEM_SNLP
 #define PROBLEM_INPUT "poly1000"
 
 
 #include "core/common/Constants.cuh"
+#include "core/optimizer/LBFGS.cuh"
 #include "core/optimizer/GradientDescent.cuh"
 #include "core/optimizer/DifferentialEvolution.cuh"
 #include <curand.h>
@@ -55,6 +56,24 @@
 //    testF1DFloat<<<1, 1>>>(dev_x, xSize);
 //    cudaFree(dev_x);
 //}
+//void testQueue() {
+//    unsigned xSize = 2;
+//    double *dev_x;
+//    cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+//    double x[2] = {100.0, 2.0};
+//    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
+//    testQueue<<<1, 1>>>(dev_x);
+//    cudaFree(dev_x);
+//}
+//void testDot() {
+//    unsigned xSize = 2;
+//    double *dev_x;
+//    cudaMalloc((void **) &dev_x, xSize * sizeof(double));
+//    double x[2] = {100.0, 2.0};
+//    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
+//    testDot<<<1, THREADS_PER_BLOCK>>>(dev_x);
+//    cudaFree(dev_x);
+//}
 
 void generateInitialPopulation(double *x, unsigned xSize) {
     std::uniform_real_distribution<double> unif(-100000, 100000);
@@ -78,6 +97,7 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     }
 }
 
+#ifdef PROBLEM_SNLP
 void readSNLPProblem(double *data, std::string filename) {
     std::fstream input;
     input.open(filename.c_str());
@@ -113,6 +133,7 @@ void readSNLPAnchors(double *data, std::string filename) {
         exit(1);
     }
 }
+#endif
 
 void testPlaneFitting() {
     curandState *dev_curandState;
@@ -152,6 +173,7 @@ void testPlaneFitting() {
     // GENERATE PROBLEM
     double x[xSize] = {};
     double data[dataSize] = {};
+
 #ifdef PROBLEM_PLANEFITTING
     double A = -5.5;
     double B = 99;
@@ -161,9 +183,11 @@ void testPlaneFitting() {
 #endif
 
 #ifdef PROBLEM_ROSENBROCK2D
-    data[0] = 100.0;
-    data[1] = 1.0;
-    generateInitialPopulation(x, xSize);
+    data[0] = 1.0;
+    data[1] = 100.0;
+    x[0] = 100.0;
+    x[1] = 2.0;
+//    generateInitialPopulation(x, xSize);
 #endif
 
 #ifdef PROBLEM_SNLP
@@ -187,12 +211,12 @@ void testPlaneFitting() {
     dev_F1 = dev_F;
     dev_F2 = dev_FDE;
 
-    gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
+    LBFGS::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
-        gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
+        LBFGS::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
         //select the best models from current and differential models
@@ -224,6 +248,8 @@ int main() {
 //    testF1();
 
     testPlaneFitting();
+//    testQueue();
+//    testDot();
     return 0;
 }
 
