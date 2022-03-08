@@ -4,7 +4,7 @@
 #define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
 //#define PROBLEM_SNLP
-#define PROBLEM_INPUT "poly1000"
+#define PROBLEM_INPUT "poly100"
 
 
 #include "core/common/Constants.cuh"
@@ -98,6 +98,7 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
 }
 
 #ifdef PROBLEM_SNLP
+
 void readSNLPProblem(double *data, std::string filename) {
     std::fstream input;
     input.open(filename.c_str());
@@ -133,6 +134,7 @@ void readSNLPAnchors(double *data, std::string filename) {
         exit(1);
     }
 }
+
 #endif
 
 void testPlaneFitting() {

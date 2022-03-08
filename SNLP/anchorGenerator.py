@@ -1,6 +1,6 @@
 import random
 
-n=1000
+n=100
 anchorCount=10
 maxDist = 1000
 minX = -10000
