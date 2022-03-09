@@ -63,6 +63,13 @@ namespace LBFGS {
     }
 
     __device__
+    void setAll(double *a, const double b, unsigned size) {
+        for (unsigned spanningTID = threadIdx.x; spanningTID < size; spanningTID += blockDim.x) {
+            a[spanningTID] = b;
+        }
+    }
+
+    __device__
     void mulNoSync(double *a, double b, double *result, unsigned size) {
         for (unsigned spanningTID = threadIdx.x; spanningTID < size; spanningTID += blockDim.x) {
             result[spanningTID] = a[spanningTID] * b;
@@ -160,6 +167,7 @@ namespace LBFGS {
     __device__
     void lineSearch(LocalContext *localContext,
                     SharedContext *sharedContext,
+                    double *DX,
                     double currentF) {
         double fNext;
         localContext->alpha = ALPHA;
@@ -174,8 +182,53 @@ namespace LBFGS {
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
 #endif
         do {
-            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
+            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
                      localContext->alpha);
+            if (threadIdx.x == 0) {
+                sharedContext->sharedF = 0;
+            }
+            fNext = 0;
+            localContext->alpha = localContext->alpha / 2;
+            __syncthreads();// sharedContext.sharedF is cleared
+            for (unsigned spanningTID = threadIdx.x;
+                 spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
+                f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
+                                 RESIDUAL_CONSTANTS_DIM_1);
+                fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
+            }
+#ifdef PROBLEM_SNLP
+            for (unsigned spanningTID = threadIdx.x;
+                 spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
+                f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
+                                 RESIDUAL_CONSTANTS_DIM_2);
+                fNext += f2->eval(sharedContext->xCurrent,
+                                  X_DIM)->value;
+            }
+#endif
+            atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
+            __syncthreads();
+        } while (sharedContext->sharedF > currentF);
+    }
+
+    __device__
+    void LBFGSlineSearch(LocalContext *localContext,
+                         SharedContext *sharedContext,
+                         double *DX,
+                         double currentF) {
+        double fNext;
+        localContext->alpha = ALPHA;
+#ifdef PROBLEM_PLANEFITTING
+        PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+        Rosenbrock2D *f1 = ((Rosenbrock2D *) localContext->residualProblems[0]);
+#endif
+#ifdef PROBLEM_SNLP
+        SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
+        SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
+#endif
+        do {
+            aMinusBtimesCNoSync(sharedContext->xCurrent, -localContext->alpha, DX, sharedContext->xNext, X_DIM);
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
             }
@@ -321,11 +374,14 @@ namespace LBFGS {
             }
             __syncthreads();
             // fCurrent is set, sharedDXNorm is cleared for all threads,
-            lineSearch(&localContext, &sharedContext, fCurrent);
+            lineSearch(&localContext, &sharedContext, sharedContext.sharedDX, fCurrent);
             // sharedContext.xNext contains the model for the next iteration, sharedContext.sharedDX is for sharedContext.xCurrent model
+            // sharedContext.sharedF is set for xNext
             minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back], X_DIM);
             // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
-            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[sQueue.back], globalData);
+            //setAll(sharedContext.lbfgsQueueY[yQueue.back], 0, X_DIM); // not necessary initially
+            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back], globalData);
+            __syncthreads();
             // DX[xNext] in sharedContext.lbfgsQueueY[queue.back]
             // DX[xCurrent] in sharedContext.sharedDX
             minusNoSync(sharedContext.lbfgsQueueY[yQueue.back], sharedContext.sharedDX,
@@ -352,68 +408,102 @@ namespace LBFGS {
         }
 
         double costDifference = INT_MAX;
-//        for (; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
-        // reset states
-        resetSharedState(&sharedContext, threadIdx.x);
-        if (threadIdx.x == 0) {
-            sharedContext.sharedDXNorm = 0;
-        }
-        reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX, globalData);
-        atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
-        __syncthreads();
-        approximateImplicitHessian(sharedContext.sharedDX, it, &sQueue, &yQueue, &sharedContext);
-        __syncthreads();
-        // sharedContext.lbfgsR is set for all threads
+        for (; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+            // reset states
+            resetSharedState(&sharedContext, threadIdx.x);
+            if (threadIdx.x == 0) {
+                sharedContext.sharedDXNorm = 0;
+            }
+            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX, globalData);
+            atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
+            __syncthreads();
+            // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
+            approximateImplicitHessian(sharedContext.sharedDX, it, &sQueue, &yQueue, &sharedContext);
+            // sharedContext.lbfgsR is set / threads
+            fCurrent = sharedContext.sharedF;
+            LBFGSlineSearch(&localContext, &sharedContext, sharedContext.lbfgsR, fCurrent);
+            // sharedContext.sharedF is set for xNext
+            __syncthreads();// TODO check if necessary
+            // sharedContext.lbfgsR is set for all threads
+            // sharedContext.xNext contains the model for the next iteration, sharedContext.lbfgsR is for sharedContext.xCurrent model
+            minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back], X_DIM);
+            // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
+            setAll(sharedContext.lbfgsQueueY[yQueue.back], 0, X_DIM);
+            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back], globalData);
+            __syncthreads();
+            // DX[xNext] in sharedContext.lbfgsQueueY[queue.back]
+            // DX[xCurrent] in sharedContext.sharedDX
+            __syncthreads();// remove this
+            minusNoSync(sharedContext.lbfgsQueueY[yQueue.back], sharedContext.sharedDX,
+                        sharedContext.lbfgsQueueY[yQueue.back], X_DIM);
+            // sharedContext.lbfgsQueueY[queue.back]: DX[xNext] - DX[xCurrent]
+            __syncthreads();
+            // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
+            // sharedContext.lbfgsQueueY[queue.back] = DX[xNext] - DX[xCurrent]
+            sQueue.enqueue(sharedContext.lbfgsQueueS[sQueue.back]);
+            yQueue.enqueue(sharedContext.lbfgsQueueY[yQueue.back]);
+            if (threadIdx.x == 0) {
+                // sharedContext.xNext contains the model for the next iteration
+                swapModels(&sharedContext);
+            }
+            // xCurrent<->xNext
+            // Stopping criteria
+            double localDXNorm = 0;
+            for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+                localDXNorm += std::pow(sharedContext.sharedDX[spanningTID], 2);
+                // TODO reduce over threads, not using atomicAdd
+            }
+            sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;
+            __syncthreads();
 
-        fCurrent = sharedContext.sharedF;
+            if (threadIdx.x == 0) {
+                double localDXNormFinal = 0;
+                for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
+                    localDXNormFinal += sharedContext.sharedScratchPad[itdxnorm];
+                }
+                sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
+            }
 
-        // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
-
-//            double localDXNorm = 0;
-//            for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-//                localDXNorm += std::pow(sharedContext.sharedDX[spanningTID], 2);
-//                // TODO reduce over threads, not using atomicAdd
-//            }
-//            sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;
-//            __syncthreads();
-//
+            costDifference = std::abs(fCurrent - sharedContext.sharedF);
 //            if (threadIdx.x == 0) {
-//                double localDXNormFinal = 0;
-//                for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
-//                    localDXNormFinal += sharedContext.sharedScratchPad[itdxnorm];
+//                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
+//                printf("S: ");
+//                unsigned sIterator = sQueue.getIterator();
+//                while (sQueue.hasNext(sIterator)) {
+//                    double *s = sQueue.next(sIterator);
+//                    for (int i = 0; i < X_DIM; i++) {
+//                        printf("%.16f ", s[i]);
+//                    }
+//                    printf(",");
 //                }
-//                sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
-//            }
 //
-//            costDifference = std::abs(fCurrent - sharedContext.sharedF);
-//        }
+//                printf("\nY: ");
+//                unsigned yIterator = yQueue.getIterator();
+//                while (yQueue.hasNext(yIterator)) {
+//                    double *y = yQueue.next(yIterator);
+//                    for (int i = 0; i < X_DIM; i++) {
+//                        printf("%.16f ", y[i]);
+//                    }
+//                    printf(",");
+//                }
+//
+//                printf("\nR:");
+//                for (int i = 0; i < X_DIM; i++) {
+//                    printf("%.16f ", sharedContext.lbfgsR[i]);
+//                }
+//
+//                printf("\nxCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%.16f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
+//            }
+
+            __syncthreads();
+        }
 
         if (threadIdx.x == 0) {
             // print Queues after GD
-            printf("S: ");
-            unsigned sIterator = sQueue.getIterator();
-            while (sQueue.hasNext(sIterator)) {
-                double *s = sQueue.next(sIterator);
-                for (int i = 0; i < X_DIM; i++) {
-                    printf("%f ", s[i]);
-                }
-                printf(",");
-            }
-
-            printf("\nY: ");
-            unsigned yIterator = yQueue.getIterator();
-            while (yQueue.hasNext(yIterator)) {
-                double *y = yQueue.next(yIterator);
-                for (int i = 0; i < X_DIM; i++) {
-                    printf("%f ", y[i]);
-                }
-                printf(",");
-            }
-            printf("\nR:");
-            for (int i = 0; i < X_DIM; i++) {
-                printf("%f ", sharedContext.lbfgsR[i]);
-            }
-
             printf("\nxCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
                 printf("%f,", sharedContext.xCurrent[j]);
