@@ -201,7 +201,7 @@ namespace LBFGS {
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
                                  RESIDUAL_CONSTANTS_DIM_2);
-                fNext += f2->eval(sharedContext->xCurrent,
+                fNext += f2->eval(sharedContext->xNext,
                                   X_DIM)->value;
             }
 #endif
@@ -228,13 +228,27 @@ namespace LBFGS {
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
 #endif
         do {
+//            if (threadIdx.x == 0) {
+//                printf("nextF:%f, currentF:%f costDiff %.20f: alpha: %f\n", sharedContext->sharedF, currentF,
+//                       sharedContext->sharedF - currentF, localContext->alpha);
+//            }
             aMinusBtimesCNoSync(sharedContext->xCurrent, -localContext->alpha, DX, sharedContext->xNext, X_DIM);
+//            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
+//            0);
+//            copyNoSync(sharedContext->xNext, sharedContext->xCurrent, X_DIM);
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
             }
             fNext = 0;
             localContext->alpha = localContext->alpha / 2;
             __syncthreads();// sharedContext.sharedF is cleared
+//            if (threadIdx.x == 0) {
+//                // print Queues after GD
+//                printf("\nxNext top 10");
+//                for (unsigned j = 0; j < 10; j++) {
+//                    printf("%f,", sharedContext->xNext[j]);
+//                }
+//            }
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
                 f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
@@ -246,7 +260,7 @@ namespace LBFGS {
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
                                  RESIDUAL_CONSTANTS_DIM_2);
-                fNext += f2->eval(sharedContext->xCurrent,
+                fNext += f2->eval(sharedContext->xNext,
                                   X_DIM)->value;
             }
 #endif
@@ -409,11 +423,13 @@ namespace LBFGS {
 
         double costDifference = INT_MAX;
         for (; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+
             // reset states
             resetSharedState(&sharedContext, threadIdx.x);
             if (threadIdx.x == 0) {
                 sharedContext.sharedDXNorm = 0;
             }
+            __syncthreads();// sharedContext.sharedF is cleared
             reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX, globalData);
             atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
@@ -421,12 +437,14 @@ namespace LBFGS {
             approximateImplicitHessian(sharedContext.sharedDX, it, &sQueue, &yQueue, &sharedContext);
             // sharedContext.lbfgsR is set / threads
             fCurrent = sharedContext.sharedF;
+            __syncthreads();
             LBFGSlineSearch(&localContext, &sharedContext, sharedContext.lbfgsR, fCurrent);
             // sharedContext.sharedF is set for xNext
             __syncthreads();// TODO check if necessary
             // sharedContext.lbfgsR is set for all threads
             // sharedContext.xNext contains the model for the next iteration, sharedContext.lbfgsR is for sharedContext.xCurrent model
             minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back], X_DIM);
+
             // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
             setAll(sharedContext.lbfgsQueueY[yQueue.back], 0, X_DIM);
             reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back], globalData);
@@ -465,7 +483,7 @@ namespace LBFGS {
             }
 
             costDifference = std::abs(fCurrent - sharedContext.sharedF);
-//            if (threadIdx.x == 0) {
+            if (threadIdx.x == 0) {
 //                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
 //                printf("S: ");
 //                unsigned sIterator = sQueue.getIterator();
@@ -491,13 +509,13 @@ namespace LBFGS {
 //                for (int i = 0; i < X_DIM; i++) {
 //                    printf("%.16f ", sharedContext.lbfgsR[i]);
 //                }
-//
-//                printf("\nxCurrent ");
-//                for (unsigned j = 0; j < X_DIM - 1; j++) {
-//                    printf("%.16f,", sharedContext.xCurrent[j]);
-//                }
-//                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
-//            }
+
+                printf("\nxCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%.16f,", sharedContext.xCurrent[j]);
+                }
+                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
+            }
 
             __syncthreads();
         }

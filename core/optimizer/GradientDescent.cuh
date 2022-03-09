@@ -338,7 +338,7 @@ namespace GD {
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
                                  RESIDUAL_CONSTANTS_DIM_2);
-                fNext += f2->eval(sharedContext->xCurrent,
+                fNext += f2->eval(sharedContext->xNext,
                                   X_DIM)->value;
             }
 #endif
@@ -444,13 +444,13 @@ namespace GD {
             costDifference = std::abs(fCurrent - sharedContext.sharedF);
             __syncthreads();
             //xCurrent,xNext is set for all threads
-            if (it % 5 == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
-                printf("xCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-            }
+//            if (/*it % 5 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
+//                printf("xCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//            }
         }
 
         if (threadIdx.x == 0) {

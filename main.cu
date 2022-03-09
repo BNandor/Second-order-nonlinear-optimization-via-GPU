@@ -1,9 +1,9 @@
 #include <iostream>
 
 #define SAFE
-#define PROBLEM_ROSENBROCK2D
+//#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
-//#define PROBLEM_SNLP
+#define PROBLEM_SNLP
 #define PROBLEM_INPUT "poly100"
 
 
