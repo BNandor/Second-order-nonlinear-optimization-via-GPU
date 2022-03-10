@@ -25,11 +25,14 @@
 namespace LBFGS {
 
 #define LBFGS_M 5
+#define LBFGS_LINESEARCH_C1 0.0001
+#define LBFGS_LINESEARCH_C2 0.9
 
     struct SharedContext {
         double sharedX1[X_DIM];
         double sharedX2[X_DIM];
         double sharedDX[X_DIM];
+        double xdimScratchPad[X_DIM];
         double lbfgsQueueS[LBFGS_M][X_DIM];
         double lbfgsQueueY[LBFGS_M][X_DIM];
         double lbfgsR[X_DIM];
@@ -119,8 +122,7 @@ namespace LBFGS {
     __device__
     void reduceObservations(LocalContext *localContext,
                             double *x,
-                            double *dx,
-                            double *globalData) {
+                            double *dx) {
         localContext->threadF = 0;
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
@@ -270,6 +272,132 @@ namespace LBFGS {
     }
 
     __device__
+    void zoom(LocalContext
+              *localContext, SharedContext *sharedContext, double alpha0, double alpha1, double *r,
+              double *DXNext, double currentF, double JdotR) {
+//        printf("zoom  %f to %f\n", alpha0, alpha1);
+        double alphaLow = alpha0;
+        double alphaHigh = alpha1;
+        double alphaMid;
+        double fAlphaMid;
+        double gradientAlphaMid;
+        do {
+//      println("alphaLow "+alphaLow)
+//      println("alphaHigh "+alphaHigh)
+            alphaMid = (alphaLow + alphaHigh) / 2.0;
+            aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+            // xNext = x + alphaMid*r
+            if (threadIdx.x == 0) {
+                sharedContext->sharedF = 0;
+            }
+            setAll(DXNext, 0, X_DIM);
+            __syncthreads();
+            // DXNext, sharedF is 0
+            reduceObservations(localContext, sharedContext->xNext, DXNext);
+            // localContext.threadF are calculated
+            atomicAdd(&sharedContext->sharedF, localContext->threadF);
+            __syncthreads();
+            // DXNext, sharedF =  f(x + alphaMid.r),xNext = x + alphaMid*r
+            fAlphaMid = sharedContext->sharedF;
+
+            if (fAlphaMid > currentF + LBFGS_LINESEARCH_C1 * alphaMid * JdotR) {
+                alphaHigh = alphaMid;
+            } else {
+                aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaLow, r, sharedContext->xNext, X_DIM);
+                // xNext = x + alphaLow*r
+                __syncthreads();//
+                if (threadIdx.x == 0) {
+                    sharedContext->sharedF = 0;
+                }
+                setAll(sharedContext->xdimScratchPad, 0, X_DIM);
+                __syncthreads();
+                // xdimScratchPad, sharedF is 0
+                reduceObservations(localContext, sharedContext->xNext, sharedContext->xdimScratchPad);
+                // localContext.threadF are calculated
+                atomicAdd(&sharedContext->sharedF, localContext->threadF);
+                __syncthreads();
+                // xdimScratchPad, sharedF =  f(x + alphaLow.r),xNext = x + alphaLow*r
+                if (fAlphaMid >= sharedContext->sharedF) {
+                    alphaHigh = alphaMid;
+                } else {
+                    gradientAlphaMid = dot(DXNext, r, X_DIM, *sharedContext);
+                    if (abs(gradientAlphaMid) <= -LBFGS_LINESEARCH_C2 * JdotR) {
+//                    return alphaMid
+                        aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+                        __syncthreads();
+                        if (threadIdx.x == 0) {
+                            sharedContext->sharedF = fAlphaMid;
+                        }
+                        __syncthreads();
+                        // DXNext, sharedF =  f(x + alphaMid.r),xNext = x + alphaMid*r
+                        return;
+                    }
+                    if (gradientAlphaMid * (alphaHigh - alphaLow) >= 0) {
+                        alphaHigh = alphaLow;
+                    }
+                    alphaLow = alphaMid;
+                }
+            }
+            __syncthreads();
+        } while (alphaLow != alphaHigh);
+        printf("Error, could not zoom!\n");
+    }
+
+    __device__
+    void LBFGSlineSearchWolfeConditions(LocalContext
+                                        *localContext,
+                                        SharedContext *sharedContext,
+                                        double *J,
+                                        double *r,
+                                        double *DXNext,
+                                        double currentF
+    ) {
+//        LBFGS_LINESEARCH_C2
+        double alphaMax = 10000;
+        double alpha0 = 0.0;
+        double alpha1 = 1.0;
+        unsigned i = 1;
+        bool zoomed = false;
+        double falpha1;
+        double falpha0 = currentF;
+        double gradientAlpha1;
+        double JdotR = dot(J, r, X_DIM, *sharedContext);
+        do {
+            aMinusBtimesCNoSync(sharedContext->xCurrent, -alpha1, r, sharedContext->xNext, X_DIM);
+            // xNext = x + alpha1*r
+            if (threadIdx.x == 0) {
+                sharedContext->sharedF = 0;
+            }
+            setAll(DXNext, 0, X_DIM);
+            __syncthreads();
+            // DXNext, sharedF is 0
+            reduceObservations(localContext, sharedContext->xNext, DXNext);
+            // localContext.threadF are calculated
+            atomicAdd(&sharedContext->sharedF, localContext->threadF);
+            __syncthreads();
+            // DXNext, sharedF =  f(x + alpha1.r),xNext = x + alpha1*r
+            falpha1 = sharedContext->sharedF;
+
+            if (falpha1 > currentF + alpha1 * LBFGS_LINESEARCH_C1 * JdotR ||
+                (i > 1 && falpha1 >= falpha0)) {
+                return zoom(localContext, sharedContext, alpha0, alpha1, r, DXNext, currentF, JdotR);
+            }
+            gradientAlpha1 = dot(DXNext, r, X_DIM, *sharedContext);
+            if (abs(gradientAlpha1) <= -LBFGS_LINESEARCH_C2 * JdotR) {
+                return;
+            }
+            if (gradientAlpha1 >= 0) {
+                return zoom(localContext, sharedContext, alpha1, alpha0, r, DXNext, currentF, JdotR);
+            }
+            alpha0 = alpha1;
+            falpha0 = falpha1;
+            alpha1 = alpha1 * 2;
+            i += 1;
+        } while (alpha1 < alphaMax);
+        printf("error: reached max bracket in linesearch");
+    }
+
+    __device__
     void swapModels(SharedContext *sharedContext) {
         double *tmp = sharedContext->xCurrent;
         sharedContext->xCurrent = sharedContext->xNext;
@@ -311,7 +439,8 @@ namespace LBFGS {
             if (i >= 0) {
                 s = sQueue->next(sIt);
                 y = yQueue->next(yIt);
-                double t = (alphas[k - i - 1] - dot(y, sharedContext->lbfgsR, X_DIM, *sharedContext) * ros[k - i - 1]);
+                double t = (alphas[k - i - 1] -
+                            dot(y, sharedContext->lbfgsR, X_DIM, *sharedContext) * ros[k - i - 1]);
                 aMinusBtimesCNoSync(sharedContext->lbfgsR, -t, s, sharedContext->lbfgsR, X_DIM);
                 __syncthreads();
             }
@@ -376,9 +505,10 @@ namespace LBFGS {
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX, globalData);
+            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX);
             // localContext.threadF are calculated
-            atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
+            atomicAdd(&sharedContext.sharedF,
+                      localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             fCurrent = sharedContext.sharedF;
@@ -391,10 +521,11 @@ namespace LBFGS {
             lineSearch(&localContext, &sharedContext, sharedContext.sharedDX, fCurrent);
             // sharedContext.xNext contains the model for the next iteration, sharedContext.sharedDX is for sharedContext.xCurrent model
             // sharedContext.sharedF is set for xNext
-            minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back], X_DIM);
+            minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back],
+                        X_DIM);
             // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
             //setAll(sharedContext.lbfgsQueueY[yQueue.back], 0, X_DIM); // not necessary initially
-            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back], globalData);
+            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back]);
             __syncthreads();
             // DX[xNext] in sharedContext.lbfgsQueueY[queue.back]
             // DX[xCurrent] in sharedContext.sharedDX
@@ -430,24 +561,24 @@ namespace LBFGS {
                 sharedContext.sharedDXNorm = 0;
             }
             __syncthreads();// sharedContext.sharedF is cleared
-            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX, globalData);
-            atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
+            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.sharedDX);
+            atomicAdd(&sharedContext.sharedF,
+                      localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             approximateImplicitHessian(sharedContext.sharedDX, it, &sQueue, &yQueue, &sharedContext);
             // sharedContext.lbfgsR is set / threads
             fCurrent = sharedContext.sharedF;
             __syncthreads();
-            LBFGSlineSearch(&localContext, &sharedContext, sharedContext.lbfgsR, fCurrent);
-            // sharedContext.sharedF is set for xNext
+            LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.sharedDX, sharedContext.lbfgsR,
+                                           sharedContext.lbfgsQueueY[yQueue.back], fCurrent);
+            // sharedContext.lbfgsQueueY[yQueue.back], sharedContext.sharedF =f(xNext), xNext set
             __syncthreads();// TODO check if necessary
             // sharedContext.lbfgsR is set for all threads
             // sharedContext.xNext contains the model for the next iteration, sharedContext.lbfgsR is for sharedContext.xCurrent model
-            minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back], X_DIM);
-
+            minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.lbfgsQueueS[sQueue.back],
+                        X_DIM);
             // sharedContext.lbfgsQueueS[queue.back] = xNext - xCurrent
-            setAll(sharedContext.lbfgsQueueY[yQueue.back], 0, X_DIM);
-            reduceObservations(&localContext, sharedContext.xNext, sharedContext.lbfgsQueueY[yQueue.back], globalData);
             __syncthreads();
             // DX[xNext] in sharedContext.lbfgsQueueY[queue.back]
             // DX[xCurrent] in sharedContext.sharedDX
@@ -532,5 +663,6 @@ namespace LBFGS {
                    sharedContext.sharedF);
         }
     }
+
 }
 #endif //PARALLELLBFGS_LBFGS_CUH
