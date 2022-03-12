@@ -1,11 +1,12 @@
 #include <iostream>
 
 #define SAFE
-#define PROBLEM_ROSENBROCK2D
+//#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
-//#define PROBLEM_SNLP
+#define PROBLEM_SNLP
 #define PROBLEM_INPUT "poly100"
 
+#define SOLVER GD//LBFGS
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/LBFGS.cuh"
@@ -213,12 +214,12 @@ void testPlaneFitting() {
     dev_F1 = dev_F;
     dev_F2 = dev_FDE;
 
-    LBFGS::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
+    SOLVER::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
-        LBFGS::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
+        SOLVER::gradientDescent<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
         //select the best models from current and differential models

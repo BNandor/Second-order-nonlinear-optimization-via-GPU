@@ -43,8 +43,8 @@ public:
         operatorTree[8] = operatorTree[1] - operatorTree[5];
         operatorTree[9] = operatorTree[8].square();
         operatorTree[10] = operatorTree[7] + operatorTree[9];
-        operatorTree[11] = operatorTree[3].square();
-        operatorTree[12] = operatorTree[10] - operatorTree[11];
+        operatorTree[11] = operatorTree[10].sqrt();
+        operatorTree[12] = operatorTree[3] - operatorTree[11];
         operatorTree[13] = operatorTree[12].square();
         return &operatorTree[13];
     }

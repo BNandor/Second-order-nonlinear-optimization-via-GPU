@@ -641,7 +641,7 @@ namespace LBFGS {
 //                    printf("%.16f ", sharedContext.lbfgsR[i]);
 //                }
 
-                printf("\nxCurrent ");
+                printf("xCurrent ");
                 for (unsigned j = 0; j < X_DIM - 1; j++) {
                     printf("%.16f,", sharedContext.xCurrent[j]);
                 }

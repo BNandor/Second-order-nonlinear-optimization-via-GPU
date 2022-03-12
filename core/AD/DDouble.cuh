@@ -10,7 +10,7 @@
 #include <assert.h>
 
 enum DOperation {
-    SQUARE, SQRT, PLUS, MINUS, MUL, DIV, ID, COS, SIN, INVERSE, CONST
+    SQUARE, SQRT, PLUS, MINUS, MUL, DIV, ID, COS, SIN, INVERSE, CONST, EXP
 };
 
 struct DDouble {
@@ -117,6 +117,13 @@ public:
         return cos;
     }
 
+    __host__ __device__ DDouble exp() {
+        DDouble exp = DDouble(std::exp(value), *globalIndex, globalIndex, EXP, 1);
+        exp.arguments[0] = this;
+        exp.operatorTreeSize = this->operatorTreeSize + 1;
+        return exp;
+    }
+
     __host__ __device__ bool operator<(const DDouble &other) {
         return this->value < other.value;
     }
@@ -151,9 +158,9 @@ public:
             }
                 break;
             case SQRT: {
-#ifdef SAFE
-                assert(std::sqrt(parameterList[node.arguments[0]->index].value != 0.0));
-#endif
+//#ifdef SAFE
+//                assert(std::sqrt(parameterList[node.arguments[0]->index].value) != 0.0);
+//#endif
                 parameterList[node.arguments[0]->index].derivative +=
                         node.derivative * 0.5 / std::sqrt(parameterList[node.arguments[0]->index].value);
             }
@@ -181,6 +188,11 @@ public:
             case SIN: {
                 parameterList[node.arguments[0]->index].derivative +=
                         node.derivative * std::cos(parameterList[node.arguments[0]->index].value);
+            }
+                break;
+            case EXP: {
+                parameterList[node.arguments[0]->index].derivative +=
+                        node.derivative * std::exp(parameterList[node.arguments[0]->index].value);
             }
                 break;
             case INVERSE: {

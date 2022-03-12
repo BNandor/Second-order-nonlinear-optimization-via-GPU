@@ -40,16 +40,14 @@ public:
 //        initOperatorTree(x, xSize);
         initOperatorTreePartially(x, trunc(operatorTree[0].value) * 2, 2, 0);
         initOperatorTreePartially(x, trunc(operatorTree[1].value) * 2, 2, 2);
-
         operatorTree[7] = operatorTree[3] - operatorTree[5];
         operatorTree[8] = operatorTree[7].square();
         operatorTree[9] = operatorTree[4] - operatorTree[6];
         operatorTree[10] = operatorTree[9].square();
         operatorTree[11] = operatorTree[8] + operatorTree[10];
-        operatorTree[12] = operatorTree[2].square();
-        operatorTree[13] = operatorTree[11] - operatorTree[12];
+        operatorTree[12] = operatorTree[11].sqrt();
+        operatorTree[13] = operatorTree[2] - operatorTree[12];
         operatorTree[14] = operatorTree[13].square();
-
         return &operatorTree[14];
     }
 };
