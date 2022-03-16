@@ -5,10 +5,10 @@
 #ifndef PARALLELLBFGS_SNLP_CUH
 #define PARALLELLBFGS_SNLP_CUH
 
-#include "Problem.cuh"
-#include "../AD/function/DFunction.cuh"
-#include "../AD/function/DSquareFunction.cuh"
-#include "../AD/DDouble.cuh"
+#include "../Problem.cuh"
+#include "../../AD/function/DFunction.cuh"
+#include "../../AD/function/DSquareFunction.cuh"
+#include "../../AD/DDouble.cuh"
 #include <math.h>
 
 class SNLP : public Problem {

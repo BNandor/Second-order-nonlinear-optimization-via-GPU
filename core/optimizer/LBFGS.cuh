@@ -16,8 +16,8 @@
 #include "../problem/F1.cuh"
 #include "../problem/PlaneFitting.cuh"
 #include "../problem/Rosenbrock2D.cuh"
-#include "../problem/SNLP.cuh"
-#include "../problem/SNLPAnchor.cuh"
+#include "../problem/SNLP/SNLP.cuh"
+#include "../problem/SNLP/SNLPAnchor.cuh"
 #include "../common/FIFOQueue.cuh"
 #include <stdio.h>
 
@@ -132,6 +132,11 @@ namespace LBFGS {
 #endif
 #ifdef PROBLEM_SNLP
         SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
+        SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
+#endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
 #endif
         for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
             f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
@@ -144,8 +149,8 @@ namespace LBFGS {
                           f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
             }
         }
-#ifdef PROBLEM_SNLP
-        SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
+
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
         for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
             f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
                              RESIDUAL_CONSTANTS_DIM_2);
@@ -183,6 +188,10 @@ namespace LBFGS {
         SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
 #endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+#endif
         do {
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
                      localContext->alpha);
@@ -198,7 +207,8 @@ namespace LBFGS {
                                  RESIDUAL_CONSTANTS_DIM_1);
                 fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
             }
-#ifdef PROBLEM_SNLP
+
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
@@ -229,6 +239,10 @@ namespace LBFGS {
         SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
 #endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+#endif
         do {
 //            if (threadIdx.x == 0) {
 //                printf("nextF:%f, currentF:%f costDiff %.20f: alpha: %f\n", sharedContext->sharedF, currentF,
@@ -257,7 +271,8 @@ namespace LBFGS {
                                  RESIDUAL_CONSTANTS_DIM_1);
                 fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
             }
-#ifdef PROBLEM_SNLP
+
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
@@ -461,6 +476,11 @@ namespace LBFGS {
         SNLP f1 = SNLP();
         SNLPAnchor f2 = SNLPAnchor();
 #endif
+
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+#endif
         // every thread has a local observation loaded into local memory
         FIFOQueue sQueue = FIFOQueue();
         FIFOQueue yQueue = FIFOQueue();
@@ -486,7 +506,7 @@ namespace LBFGS {
         localContext.alpha = ALPHA;
         localContext.residualProblems[0] = &f1;
         localContext.residualConstants[0] = globalData;
-#ifdef  PROBLEM_SNLP
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
         localContext.residualProblems[1] = &f2;
         localContext.residualConstants[1] =
                 localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
@@ -614,6 +634,7 @@ namespace LBFGS {
             }
 
             costDifference = std::abs(fCurrent - sharedContext.sharedF);
+#ifdef PRINT
             if (threadIdx.x == 0) {
 //                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
 //                printf("S: ");
@@ -647,6 +668,7 @@ namespace LBFGS {
                 }
                 printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
             }
+#endif
 
             __syncthreads();
         }

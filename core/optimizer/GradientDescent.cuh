@@ -16,9 +16,11 @@
 #include "../problem/F1.cuh"
 #include "../problem/PlaneFitting.cuh"
 #include "../problem/Rosenbrock2D.cuh"
-#include "../problem/SNLP.cuh"
-#include "../problem/SNLPAnchor.cuh"
+#include "../problem/SNLP/SNLP.cuh"
+#include "../problem/SNLP/SNLPAnchor.cuh"
 #include "../common/FIFOQueue.cuh"
+#include "../problem/SNLP/SNLP3D.cuh"
+#include "../problem/SNLP/SNLP3DAnchor.cuh"
 #include <stdio.h>
 
 //__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
@@ -269,6 +271,9 @@ namespace GD {
 #ifdef PROBLEM_SNLP
         SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
 #endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+#endif
         for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
             f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
                              RESIDUAL_CONSTANTS_DIM_1);
@@ -282,6 +287,12 @@ namespace GD {
         }
 #ifdef PROBLEM_SNLP
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
+#endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+#endif
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
+
         for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
             f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
                              RESIDUAL_CONSTANTS_DIM_2);
@@ -290,7 +301,7 @@ namespace GD {
             f2->evalJacobian();
             for (unsigned j = 0; j < RESIDUAL_PARAMETERS_DIM_2; j++) {
                 atomicAdd(&sharedContext->sharedDX[f2->ThisJacobianIndices[j]],
-                          f2->operatorTree[f2->constantSize + j].derivative);// TODO add jacobian variable indexing
+                          f2->operatorTree[f2->constantSize + j].derivative);
             }
         }
 #endif
@@ -318,6 +329,10 @@ namespace GD {
         SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
         SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
 #endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
+        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+#endif
         do {
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
                      localContext->alpha);
@@ -333,7 +348,7 @@ namespace GD {
                                  RESIDUAL_CONSTANTS_DIM_1);
                 fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
             }
-#ifdef PROBLEM_SNLP
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
                 f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
@@ -367,6 +382,10 @@ namespace GD {
         SNLP f1 = SNLP();
         SNLPAnchor f2 = SNLPAnchor();
 #endif
+#ifdef PROBLEM_SNLP3D
+        SNLP3D f1 = SNLP3D();
+        SNLP3DAnchor f2 = SNLP3DAnchor();
+#endif
         // every thread has a local observation loaded into local memory
 
         // LOAD MODEL INTO SHARED MEMORY
@@ -390,7 +409,7 @@ namespace GD {
         localContext.alpha = ALPHA;
         localContext.residualProblems[0] = &f1;
         localContext.residualConstants[0] = globalData;
-#ifdef  PROBLEM_SNLP
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
         localContext.residualProblems[1] = &f2;
         localContext.residualConstants[1] =
                 localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
@@ -444,13 +463,15 @@ namespace GD {
             costDifference = std::abs(fCurrent - sharedContext.sharedF);
             __syncthreads();
             //xCurrent,xNext is set for all threads
-//            if (/*it % 5 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
-//                printf("xCurrent ");
-//                for (unsigned j = 0; j < X_DIM - 1; j++) {
-//                    printf("%f,", sharedContext.xCurrent[j]);
-//                }
-//                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-//            }
+#ifdef PRINT
+            if (/*it % 5 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
+                printf("xCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%f,", sharedContext.xCurrent[j]);
+                }
+                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+            }
+#endif
         }
 
         if (threadIdx.x == 0) {
