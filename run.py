@@ -56,8 +56,8 @@ def runSNLP3D():
     [runSNLP(problem=problem) for problem in problems]
     fvisualizer = visualize.FVisualizer(problems)
     fvisualizer.visualize()
-    # xvisualizer = visualize.SNLP3DVisualizer(problems)
-    # xvisualizer.visualize()
+    xvisualizer = visualize.SNLP3DVisualizer(problems)
+    xvisualizer.visualize()
 
 def runSNLP2D():
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP", 
@@ -71,10 +71,10 @@ def runSNLP2D():
                                     "./SNLP/problems/poly100/poly100.snlpa"],
                         outputPath="./SNLP/problems/poly100/csv/2D/GD")
     problems = [problemLBFGS,problemGD]
-    # [runSNLP(problem=problem) for problem in problems]
+    [runSNLP(problem=problem) for problem in problems]
     fvisualizer = visualize.FVisualizer(problems)
     fvisualizer.visualize()
     xvisualizer = visualize.SNLP2DVisualizer(problems)
     xvisualizer.visualize()
 
-runSNLP2D()
+runSNLP3D()
