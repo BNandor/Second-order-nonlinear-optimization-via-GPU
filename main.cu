@@ -1,22 +1,12 @@
 #include <iostream>
 
-#define SAFE
-#define PRINT
-#define  OPTIMIZER LBFGS
+//#define SAFE
+//#define PRINT
+//#define  OPTIMIZER LBFGS
 //#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
 //#define PROBLEM_SNLP
-#define PROBLEM_SNLP3D
-
-#ifdef PROBLEM_SNLP3D
-#define PROBLEM_DIR "SNLP3D"
-#endif
-
-#ifdef PROBLEM_SNLP
-#define PROBLEM_DIR "SNLP"
-#endif
-
-#define PROBLEM_INPUT "poly100"
+//#define PROBLEM_SNLP3D
 
 
 #include "core/common/Constants.cuh"
@@ -205,13 +195,10 @@ void testPlaneFitting() {
 #endif
 
 #if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-    readSNLPProblem(data,
-                    "./" + std::string(PROBLEM_DIR) + "/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT +
-                    ".snlp");
+    readSNLPProblem(data, PROBLEM_PATH);
 
     readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
-                    "./" + std::string(PROBLEM_DIR) + "/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT +
-                    ".snlpa");
+                    PROBLEM_ANCHOR_PATH);
     generateInitialPopulation(x, xSize);
 #endif
     // COPY TO DEVICE
