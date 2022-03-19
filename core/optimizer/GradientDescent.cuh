@@ -418,7 +418,7 @@ namespace GD {
         // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
         double costDifference = INT_MAX;
 
-        const double epsilon = 1e-7;
+        const double epsilon = FEPSILON;
         sharedContext.sharedDXNorm = epsilon + 1;
         unsigned it;
 
@@ -470,6 +470,7 @@ namespace GD {
                     printf("%f,", sharedContext.xCurrent[j]);
                 }
                 printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("f: %f\n", fCurrent);
             }
 #endif
         }

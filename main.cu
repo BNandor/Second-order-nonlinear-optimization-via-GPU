@@ -1,12 +1,21 @@
 #include <iostream>
 
 #define SAFE
-//#define PRINT
+#define PRINT
 #define  OPTIMIZER LBFGS
 //#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
-#define PROBLEM_SNLP
-//#define PROBLEM_SNLP3D
+//#define PROBLEM_SNLP
+#define PROBLEM_SNLP3D
+
+#ifdef PROBLEM_SNLP3D
+#define PROBLEM_DIR "SNLP3D"
+#endif
+
+#ifdef PROBLEM_SNLP
+#define PROBLEM_DIR "SNLP"
+#endif
+
 #define PROBLEM_INPUT "poly100"
 
 
@@ -79,7 +88,7 @@
 //}
 
 void generateInitialPopulation(double *x, unsigned xSize) {
-    std::uniform_real_distribution<double> unif(-100000, 100000);
+    std::uniform_real_distribution<double> unif(-1000, 1000);
     std::default_random_engine re(time(NULL));
     for (int i = 0; i < xSize; i++) {
         x[i] = unif(re);
@@ -100,7 +109,7 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     }
 }
 
-#ifdef PROBLEM_SNLP
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
 
 void readSNLPProblem(double *data, std::string filename) {
     std::fstream input;
@@ -150,7 +159,7 @@ void testPlaneFitting() {
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
 
-#ifdef  PROBLEM_SNLP
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
     const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
                               RESIDUAL_CONSTANTS_DIM_2 * RESIDUAL_CONSTANTS_COUNT_2;
 #else
@@ -195,10 +204,14 @@ void testPlaneFitting() {
 //    generateInitialPopulation(x, xSize);
 #endif
 
-#ifdef PROBLEM_SNLP
-    readSNLPProblem(data, "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlp");
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
+    readSNLPProblem(data,
+                    "./" + std::string(PROBLEM_DIR) + "/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT +
+                    ".snlp");
+
     readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
-                    "./SNLP/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT + ".snlpa");
+                    "./" + std::string(PROBLEM_DIR) + "/problems/" + std::string(PROBLEM_INPUT) + "/" + PROBLEM_INPUT +
+                    ".snlpa");
     generateInitialPopulation(x, xSize);
 #endif
     // COPY TO DEVICE

@@ -18,6 +18,8 @@
 #include "../problem/Rosenbrock2D.cuh"
 #include "../problem/SNLP/SNLP.cuh"
 #include "../problem/SNLP/SNLPAnchor.cuh"
+#include "../problem/SNLP/SNLP3D.cuh"
+#include "../problem/SNLP/SNLP3DAnchor.cuh"
 #include "../common/FIFOQueue.cuh"
 #include <stdio.h>
 
@@ -478,8 +480,8 @@ namespace LBFGS {
 #endif
 
 #ifdef PROBLEM_SNLP3D
-        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
-        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
+        SNLP3D f1 = SNLP3D();
+        SNLP3DAnchor f2 = SNLP3DAnchor();
 #endif
         // every thread has a local observation loaded into local memory
         FIFOQueue sQueue = FIFOQueue();
@@ -515,7 +517,7 @@ namespace LBFGS {
         // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
 
 
-        const double epsilon = 1e-7;
+        const double epsilon = FEPSILON;
         sharedContext.sharedDXNorm = epsilon + 1;
         int it;
 
@@ -533,9 +535,9 @@ namespace LBFGS {
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             fCurrent = sharedContext.sharedF;
 
-            if (threadIdx.x == 0) {
-                printf("it: %d f: %f\n", it, fCurrent);
-            }
+//            if (threadIdx.x == 0) {
+//                printf("it: %d f: %f\n", it, fCurrent);
+//            }
             __syncthreads();
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             lineSearch(&localContext, &sharedContext, sharedContext.sharedDX, fCurrent);
@@ -563,12 +565,13 @@ namespace LBFGS {
             }
             __syncthreads();
             //xCurrent,xNext is set for all threads
-            if (it % 5 == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+            if (threadIdx.x == 0 && blockIdx.x == 0) {
                 printf("xCurrent ");
                 for (unsigned j = 0; j < X_DIM - 1; j++) {
                     printf("%f,", sharedContext.xCurrent[j]);
                 }
                 printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("f: %f\n", fCurrent);
             }
         }
 
@@ -667,6 +670,7 @@ namespace LBFGS {
                     printf("%.16f,", sharedContext.xCurrent[j]);
                 }
                 printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("f: %f\n", fCurrent);
             }
 #endif
 
