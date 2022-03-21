@@ -52,7 +52,7 @@ class SNLP3DVisualizer:
                 colors[:,0]=1-colors[:,1]
                 line_segments = Line3DCollection(edgeLines, colors=colors,linestyle='solid',linewidth=1)
                 currentAx.add_collection(line_segments)
-                currentAx.scatter(currentX[0::3], currentX[1::3],currentX[2::3], s=20,c="g")
+                currentAx.scatter(currentX[0::3], currentX[1::3],currentX[2::3], s=1,c="g")
                 anchorLines=np.array([ [[anchor[0],anchor[1],anchor[2]],[currentX[0::3][int(anchor[3])],currentX[1::3][int(anchor[3])],currentX[2::3][int(anchor[3])]]] for anchor in currentAnchors])
                 anchorSegments = Line3DCollection(anchorLines,linestyle='solid',linewidth=1)
                 currentAx.add_collection(anchorSegments)

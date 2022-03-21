@@ -106,8 +106,7 @@ void readSNLPProblem(double *data, std::string filename) {
     input.open(filename.c_str());
     if (input.is_open()) {
         unsigned cData = 0;
-        while (input.good()) {
-            input >> data[cData];
+        while (input >> data[cData]) {
             cData++;
         }
         std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1
@@ -124,8 +123,7 @@ void readSNLPAnchors(double *data, std::string filename) {
     input.open(filename.c_str());
     if (input.is_open()) {
         unsigned cData = 0;
-        while (input.good()) {
-            input >> data[cData];
+        while (input >> data[cData]) {
             cData++;
         }
         std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_2 * RESIDUAL_CONSTANTS_DIM_2
