@@ -3,7 +3,7 @@ from platform import node
 backslash="\\"
 dquote='"'
 
-OptProblem = namedtuple("OptProblem", "name optimizer inputPaths outputPath constantsSizes modelsize")
+OptProblem = namedtuple("OptProblem", "name optimizer inputPaths outputPath constantsSizes modelsize framesize")
 
 XHIST="xhistory.csv"
 FHIST="fhistory.csv"
@@ -22,4 +22,5 @@ class SNLP:
                  -DRESIDUAL_CONSTANTS_COUNT_1={self.optproblem.constantsSizes[0]} \
                  -DRESIDUAL_CONSTANTS_COUNT_2={self.optproblem.constantsSizes[1]} \
                  -DX_DIM={self.optproblem.modelsize} \
+                 -DFRAMESIZE={self.optproblem.framesize} \
                  {optionalFlags}"

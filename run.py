@@ -41,21 +41,23 @@ def runSNLP(problem:SNLP.OptProblem):
                      currentProblem.optproblem.outputPath,
                      SNLP.FHIST)                  
 
-def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize):
+def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize,framesize):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP3D", 
                         optimizer="LBFGS", 
                         inputPaths=[f"{problemPath}/{problemName}", 
                                     f"{problemPath}/{anchorName}"],
                         outputPath=f"{problemPath}/csv/3D/LBFGS",
                         constantsSizes=residualSizes,
-                        modelsize=modelsize)
+                        modelsize=modelsize,
+                        framesize=framesize)
     problemGD = SNLP.OptProblem(name="PROBLEM_SNLP3D", 
                         optimizer="GD", 
                         inputPaths=[f"{problemPath}/{problemName}", 
                                     f"{problemPath}/{anchorName}"],
                         outputPath=f"{problemPath}/csv/3D/GD",
                         constantsSizes=residualSizes,
-                        modelsize=modelsize)
+                        modelsize=modelsize,
+                        framesize=framesize)
     problems = [problemLBFGS,problemGD]
     [runSNLP(problem=problem) for problem in problems]
     fvisualizer = visualize.FVisualizer(problems)
@@ -63,55 +65,59 @@ def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize):
     xvisualizer = visualize.SNLP3DVisualizer(problems)
     xvisualizer.visualize()
 
-def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize):
+def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesize):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP", 
                         optimizer="LBFGS", 
                         inputPaths=[f"{problemPath}/{problemName}", 
                                     f"{problemPath}/{anchorName}"],
                         outputPath=f"{problemPath}/csv/2D/LBFGS",
                         constantsSizes=residualSizes,
-                        modelsize=modelsize)
+                        modelsize=modelsize,
+                        framesize=framesize)
     problemGD = SNLP.OptProblem(name="PROBLEM_SNLP", 
                         optimizer="GD", 
                         inputPaths=[f"{problemPath}/{problemName}", 
                                     f"{problemPath}/{anchorName}"],
                         outputPath=f"{problemPath}/csv/2D/GD",
                         constantsSizes=residualSizes,
-                        modelsize=modelsize)
+                        modelsize=modelsize,
+                        framesize=framesize)
     problems = [problemLBFGS,problemGD]
-    [runSNLP(problem=problem) for problem in problems]
+    # [runSNLP(problem=problem) for problem in problems]
     fvisualizer = visualize.FVisualizer(problems)
     fvisualizer.visualize()
     xvisualizer = visualize.SNLP2DVisualizer(problems)
     xvisualizer.visualize()
 
 
-# generator=generate.Generate3DStructuredProblem1(nodecount=120, 
-#                                                 outPath="./SNLP3D/problems/poly100",
-#                                                 problemName="spiral.snlp",
-#                                                 anchorName="spiral.snlpa")
-
-# problemSize=generator.generateSNLPProblem(100)
-# anchorSize=generator.generateSNLPProblemAnchors(1000)
-
-# runSNLP3D(generator.outPath,
-#           generator.problemName,
-#           generator.anchorName,
-#           [problemSize,
-#           anchorSize],
-#           generator.modelsize())
-
-generator=generate.Generate2DStructuredProblem1(nodecount=10, 
-                                                outPath="./SNLP2D/problems/poly100",
-                                                problemName="spiral.snlp",                     
+generator=generate.Generate3DStructuredProblem1(nodecount=120, 
+                                                outPath="./SNLP3D/problems/poly100",
+                                                problemName="spiral.snlp",
                                                 anchorName="spiral.snlpa")
 
-problemSize=generator.generateSNLPProblem(400)
+problemSize=generator.generateSNLPProblem(100)
 anchorSize=generator.generateSNLPProblemAnchors(1000)
 
-runSNLP2D(generator.outPath,
+runSNLP3D(generator.outPath,
           generator.problemName,
           generator.anchorName,
           [problemSize,
           anchorSize],
-          generator.modelsize())
+          generator.modelsize(),
+          10)
+
+# generator=generate.Generate2DStructuredProblem1(nodecount=20, 
+#                                                 outPath="./SNLP2D/problems/poly100",
+#                                                 problemName="spiral.snlp",                     
+#                                                 anchorName="spiral.snlpa")
+
+# problemSize=generator.generateSNLPProblem(400)
+# anchorSize=generator.generateSNLPProblemAnchors(1000)
+
+# runSNLP2D(generator.outPath,
+#           generator.problemName,
+#           generator.anchorName,
+#           [problemSize,
+#           anchorSize],
+#           generator.modelsize(),
+# 5)

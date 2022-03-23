@@ -21,11 +21,9 @@ class SNLP3DVisualizer:
             with open(problempath,'r') as edgesf:
                 with open(anchorspath,'r') as anchorsf:
                     edges = np.array([[float(num) for num in edge.rstrip().split(' ')] for edge in edgesf])
-                    allx = [[float(num) for num in xline.rstrip().split(',')] for xline in xhistf]
-                    xs= []
-                    for x in allx:
-                        if len(x) == len(allx[0]):
-                            xs.append(x)
+                    allx = [[num for num in xline.rstrip().split(',')] for xline in xhistf]
+                    allx = [xline for xline in allx if len(xline) == len(allx[0])]
+                    xs = [[float(num) for num in xline] for xline in allx]
                     allanchors = np.array([[float(num) for num in anchor.rstrip().split(' ')] for anchor in anchorsf])
                     return SNLPVisualizerData(edges=edges,xs=np.array(xs),anchors=allanchors)
     def setAx(self,ax):
@@ -74,11 +72,9 @@ class SNLP2DVisualizer:
             with open(problempath,'r') as edgesf:
                 with open(anchorspath,'r') as anchorsf:
                     edges = np.array([[float(num) for num in edge.rstrip().split(' ')] for edge in edgesf])
-                    allx = [[float(num) for num in xline.rstrip().split(',')] for xline in xhistf]
-                    xs= []
-                    for x in allx:
-                        if len(x) == len(allx[0]):
-                            xs.append(x)
+                    allx = [[num for num in xline.rstrip().split(',')] for xline in xhistf]
+                    allx = [xline for xline in allx if len(xline) == len(allx[0])]
+                    xs = [[float(num) for num in xline] for xline in allx]
                     allanchors = np.array([[float(num) for num in anchor.rstrip().split(' ')] for anchor in anchorsf])
                     return SNLPVisualizerData(edges=edges,xs=np.array(xs),anchors=allanchors)
                     
@@ -119,7 +115,7 @@ class SNLP2DVisualizer:
 class FVisualizer:
     def __init__(self,problems:List[SNLP.OptProblem]) -> None:
         self.problems=problems
-        self.skipfirst=100
+        self.skipfirst=100//problems[0].framesize
 
     def visualize(self):
         fhistories=[f"{problem.outputPath}/{SNLP.FHIST}" for problem in self.problems]

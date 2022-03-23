@@ -370,8 +370,8 @@ namespace GD {
     }
 
     __global__ void
-    gradientDescent(double *globalX, double *globalData,
-                    double *globalF) { // use shared memory instead of global memory
+    optimize(double *globalX, double *globalData,
+             double *globalF) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting f1 = PlaneFitting();
 #endif
@@ -464,7 +464,7 @@ namespace GD {
             __syncthreads();
             //xCurrent,xNext is set for all threads
 #ifdef PRINT
-            if (/*it % 5 == 0 &&*/ threadIdx.x == 0 && blockIdx.x == 0) {
+            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
                 printf("xCurrent ");
                 for (unsigned j = 0; j < X_DIM - 1; j++) {
                     printf("%f,", sharedContext.xCurrent[j]);
@@ -475,12 +475,14 @@ namespace GD {
 #endif
         }
 
-        if (threadIdx.x == 0) {
+        if (threadIdx.x == 0 && blockIdx.x == 0) {
             printf("xCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
                 printf("%f,", sharedContext.xCurrent[j]);
             }
             printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+        }
+        if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
             printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
                    sharedContext.sharedF);

@@ -466,8 +466,8 @@ namespace LBFGS {
     }
 
     __global__ void
-    gradientDescent(double *globalX, double *globalData,
-                    double *globalF) { // use shared memory instead of global memory
+    optimize(double *globalX, double *globalData,
+             double *globalF) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting f1 = PlaneFitting();
 #endif
@@ -638,7 +638,7 @@ namespace LBFGS {
 
             costDifference = std::abs(fCurrent - sharedContext.sharedF);
 #ifdef PRINT
-            if (threadIdx.x == 0) {
+            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
 //                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
 //                printf("S: ");
 //                unsigned sIterator = sQueue.getIterator();
