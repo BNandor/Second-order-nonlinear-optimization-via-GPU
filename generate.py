@@ -11,6 +11,9 @@ class Generate3DStructuredProblem1:
     def modelsize(self):
         return self.nodecount*3
 
+    def name(self):
+        return "3DStructure1"
+
     def generateSNLPProblem(self,maxDist):
         if not os.path.exists(self.outPath):
             os.makedirs(f"{self.outPath}")
@@ -66,6 +69,10 @@ class Generate2DStructuredProblem1:
 
     def modelsize(self):
         return self.nodecount*2
+
+    def name(self):
+        return "2DStructure1"
+
 
     def generateSNLPProblem(self,maxDist):
         if not os.path.exists(self.outPath):

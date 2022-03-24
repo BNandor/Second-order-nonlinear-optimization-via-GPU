@@ -2,12 +2,13 @@
 
 //#define SAFE
 //#define PRINT
-//#define  OPTIMIZER LBFGS
+
 //#define PROBLEM_ROSENBROCK2D
 //#define PROBLEM_PLANEFITTING
 //#define PROBLEM_SNLP
 //#define PROBLEM_SNLP3D
 
+//#define GLOBAL_SHARED_MEM
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/LBFGS.cuh"
@@ -138,12 +139,14 @@ void readSNLPAnchors(double *data, std::string filename) {
 #endif
 
 void testPlaneFitting() {
+
     curandState *dev_curandState;
     cudaEvent_t start, stop, startCopy, stopCopy;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
     cudaEventCreate(&startCopy);
     cudaEventCreate(&stopCopy);
+
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
 
@@ -153,6 +156,11 @@ void testPlaneFitting() {
 #else
     const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
 #endif
+#ifdef GLOBAL_SHARED_MEM
+    OPTIMIZER::SharedContext *dev_sharedContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
+    cudaMalloc(&dev_sharedContext, sizeof(OPTIMIZER::SharedContext)/* TODO here have POPULATION_SIZE of these*/);
+#endif
+
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;
@@ -162,6 +170,7 @@ void testPlaneFitting() {
     double *dev_FDE;
     double *dev_F1;
     double *dev_F2;
+
 
 
     // ALLOCATE DEVICE MEMORY
@@ -214,12 +223,21 @@ void testPlaneFitting() {
     dev_F1 = dev_F;
     dev_F2 = dev_FDE;
 
-    OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1);
+    OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data,
+            dev_F1
+#ifdef GLOBAL_SHARED_MEM
+            , dev_sharedContext
+#endif
+    );
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
-        OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2);
+        OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2
+#ifdef GLOBAL_SHARED_MEM
+                , dev_sharedContext
+#endif
+        );
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
         //select the best models from current and differential models
@@ -236,13 +254,19 @@ void testPlaneFitting() {
     cudaEventElapsedTime(&memcpyMilli, startCopy, stopCopy);
     float kernelMilli = 0;
     cudaEventElapsedTime(&kernelMilli, start, stop);
-    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
+//    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
+    printf("\ntime ms : %f\n", kernelMilli);
+
 
     cudaFree(dev_x);
     cudaFree(dev_xDE);
     cudaFree(dev_data);
     cudaFree(dev_F);
     cudaFree(dev_FDE);
+
+#ifdef GLOBAL_SHARED_MEM
+    cudaFree(dev_sharedContext);
+#endif
 }
 
 int main() {

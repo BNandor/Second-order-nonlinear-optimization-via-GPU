@@ -371,7 +371,11 @@ namespace GD {
 
     __global__ void
     optimize(double *globalX, double *globalData,
-             double *globalF) { // use shared memory instead of global memory
+             double *globalF
+#ifdef GLOBAL_SHARED_MEM
+            , SharedContext *globalSharedContext
+#endif
+    ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting f1 = PlaneFitting();
 #endif
@@ -388,9 +392,13 @@ namespace GD {
 #endif
         // every thread has a local observation loaded into local memory
 
+#ifdef GLOBAL_SHARED_MEM
+        SharedContext &sharedContext = *globalSharedContext;
+#else
         // LOAD MODEL INTO SHARED MEMORY
         __shared__
         SharedContext sharedContext;
+#endif
         const unsigned modelStartingIndex = X_DIM * blockIdx.x;
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             sharedContext.sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
@@ -484,8 +492,11 @@ namespace GD {
         }
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
-            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
-                   sharedContext.sharedF);
+            printf("\nthreads:%d", blockDim.x);
+            printf("\niterations:%d", it);
+            printf("\nfinal f: %.10f", sharedContext.sharedF);
+//            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
+//                   sharedContext.sharedF);
         }
     }
 }

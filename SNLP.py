@@ -3,10 +3,12 @@ from platform import node
 backslash="\\"
 dquote='"'
 
-OptProblem = namedtuple("OptProblem", "name optimizer inputPaths outputPath constantsSizes modelsize framesize")
+OptProblem = namedtuple("OptProblem", "name optimizer inputPaths outputPath constantsSizes modelsize framesize metrics")
+Metrics= namedtuple("Metrics","path options")
 
 XHIST="xhistory.csv"
 FHIST="fhistory.csv"
+METRICS="metrics.csv"
 
 class SNLP:
     def __init__(self,optproblem:OptProblem) -> None:
