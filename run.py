@@ -45,7 +45,7 @@ def findReplaceFirst(logs,find,replace,replacedWith):
     return finds[0].rstrip().replace(replace,replacedWith)
 
 def appendMetrics(logs,metrics:SNLP.Metrics,metricsName):
-    metricKeys=["time ms :","threads:","iterations:","final f: "]
+    metricKeys=["time ms :","threads:","iterations:","final f: ","fevaluations: "]
     measurements=[findReplaceFirst(logs,metricKey,metricKey,"") for metricKey in metricKeys]
     appendColumnsTo(outPath=metrics.path,outName=metricsName,columns=metrics.options + measurements)
 
@@ -119,10 +119,10 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
 
 metricOptions="-DGLOBAL_SHARED_MEM"              
 # metricOptions=""
-# currentflags=f"-DPRINT {metricOptions}"
-currentflags=f" {metricOptions}"
+currentflags=f"-DPRINT {metricOptions}"
+# currentflags=f" {metricOptions}"
 
-generator=generate.Generate3DStructuredProblem1(nodecount=1000, 
+generator=generate.Generate3DStructuredProblem1(nodecount=100, 
                                                 outPath="./SNLP3D/problems/poly100",
                                                 problemName="spiral.snlp",
                                                 anchorName="spiral.snlpa")
@@ -132,7 +132,7 @@ problemSize=generator.generateSNLPProblem(100)
 anchorSize=generator.generateSNLPProblemAnchors(1000)
 
 options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
-testCount=10
+testCount=1
 for testCase in range(testCount):
     print(f"testcase {testCase}\n")
     runSNLP3D(generator.outPath,
@@ -141,7 +141,7 @@ for testCase in range(testCount):
           [problemSize,
           anchorSize],
           generator.modelsize(),
-          10,currentflags,options)
+          100,currentflags,options)
 
 # generator=generate.Generate2DStructuredProblem1(nodecount=20, 
 #                                                 outPath="./SNLP2D/problems/poly100",

@@ -38,7 +38,7 @@ namespace LBFGS {
         double lbfgsQueueS[LBFGS_M][X_DIM];
         double lbfgsQueueY[LBFGS_M][X_DIM];
         double lbfgsR[X_DIM];
-        double sharedScratchPad[THREADS_PER_BLOCK];
+        double sharedScratchPad[THREADS_PER_BLOCK]; // TODO make these shared (which fit)
         double sharedResult;
         double *xCurrent;
         double *xNext;
@@ -51,6 +51,7 @@ namespace LBFGS {
         double alpha;
         void *residualProblems[RESIDUAL_COUNT];
         double *residualConstants[RESIDUAL_COUNT];
+        unsigned fEvaluations;
     };
 
     __device__
@@ -125,6 +126,7 @@ namespace LBFGS {
     void reduceObservations(LocalContext *localContext,
                             double *x,
                             double *dx) {
+        ++localContext->fEvaluations;
         localContext->threadF = 0;
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
@@ -195,6 +197,7 @@ namespace LBFGS {
         SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
 #endif
         do {
+            ++localContext->fEvaluations;
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
                      localContext->alpha);
             if (threadIdx.x == 0) {
@@ -516,6 +519,7 @@ namespace LBFGS {
         }
 
         localContext.alpha = ALPHA;
+        localContext.fEvaluations = 0;
         localContext.residualProblems[0] = &f1;
         localContext.residualConstants[0] = globalData;
 #if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
@@ -698,6 +702,7 @@ namespace LBFGS {
             printf("\nthreads:%d", blockDim.x);
             printf("\niterations:%d", it);
             printf("\nfinal f: %.10f", sharedContext.sharedF);
+            printf("\nfevaluations: %d", localContext.fEvaluations);
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
         }

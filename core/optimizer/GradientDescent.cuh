@@ -244,6 +244,7 @@ namespace GD {
         double alpha;
         void *residualProblems[RESIDUAL_COUNT];
         double *residualConstants[RESIDUAL_COUNT];
+        unsigned fEvaluations;
     };
 
     __device__
@@ -261,7 +262,9 @@ namespace GD {
     void reduceObservations(LocalContext *localContext,
                             SharedContext *sharedContext,
                             double *globalData) {
+        ++localContext->fEvaluations;
         localContext->threadF = 0;
+
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
 #endif
@@ -334,6 +337,7 @@ namespace GD {
         SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
 #endif
         do {
+            ++localContext->fEvaluations;
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
                      localContext->alpha);
             if (threadIdx.x == 0) {
@@ -413,7 +417,7 @@ namespace GD {
             sharedContext.xCurrent = sharedContext.sharedX1;
             sharedContext.xNext = sharedContext.sharedX2;
         }
-
+        localContext.fEvaluations = 0;
         localContext.alpha = ALPHA;
         localContext.residualProblems[0] = &f1;
         localContext.residualConstants[0] = globalData;
@@ -490,11 +494,13 @@ namespace GD {
             }
             printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
         }
+
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
             printf("\nthreads:%d", blockDim.x);
             printf("\niterations:%d", it);
             printf("\nfinal f: %.10f", sharedContext.sharedF);
+            printf("\nfevaluations: %d", localContext.fEvaluations);
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
         }
