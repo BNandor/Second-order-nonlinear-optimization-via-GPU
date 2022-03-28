@@ -84,4 +84,20 @@ void selectBestModels(const double *oldX, double *newX, const double *oldF, doub
     }
 }
 
+__global__
+void printBestF(double *
+
+F) {
+if (threadIdx.x == 0 && blockIdx.x == 0) {
+double min = F[0];
+for (
+unsigned i = 1; i < gridDim.x; i++) {
+if (min > F[i]) {
+min = F[i];
+}
+}
+printf("\nfinal f: %.10f", min);
+}
+
+}
 #endif //PARALLELLBFGS_DIFFERENTIALEVOLUTION_CUH

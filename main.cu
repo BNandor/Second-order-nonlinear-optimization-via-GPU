@@ -156,10 +156,10 @@ void testPlaneFitting() {
 #else
     const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
 #endif
-#ifdef GLOBAL_SHARED_MEM
-    OPTIMIZER::SharedContext *dev_sharedContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
-    cudaMalloc(&dev_sharedContext, sizeof(OPTIMIZER::SharedContext)/* TODO here have POPULATION_SIZE of these*/);
-#endif
+//#ifdef GLOBAL_SHARED_MEM
+    OPTIMIZER::GlobalData *dev_globalContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
+    cudaMalloc(&dev_globalContext, sizeof(OPTIMIZER::GlobalData)/* TODO here have POPULATION_SIZE of these*/);
+//#endif
 
     double *dev_x;
     double *dev_xDE;
@@ -225,18 +225,18 @@ void testPlaneFitting() {
 
     OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data,
             dev_F1
-#ifdef GLOBAL_SHARED_MEM
-            , dev_sharedContext
-#endif
+//#ifdef GLOBAL_SHARED_MEM
+            , dev_globalContext
+//#endif
     );
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
         OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2
-#ifdef GLOBAL_SHARED_MEM
-                , dev_sharedContext
-#endif
+//#ifdef GLOBAL_SHARED_MEM
+                , dev_globalContext
+//#endif
         );
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
@@ -265,7 +265,7 @@ void testPlaneFitting() {
     cudaFree(dev_FDE);
 
 #ifdef GLOBAL_SHARED_MEM
-    cudaFree(dev_sharedContext);
+    cudaFree(dev_globalContext);
 #endif
 }
 

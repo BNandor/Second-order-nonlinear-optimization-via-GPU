@@ -227,10 +227,14 @@
 //}
 
 namespace GD {
-    struct SharedContext {
+    struct GlobalData {
         double sharedX1[X_DIM];
         double sharedX2[X_DIM];
         double sharedDX[X_DIM];
+    };
+
+    struct SharedContext {
+        GlobalData *globalData;
         double sharedScratchPad[THREADS_PER_BLOCK];
         double sharedResult;
         double *xCurrent;
@@ -253,7 +257,7 @@ namespace GD {
             sharedContext->sharedF = 0.0;
         }
         for (unsigned spanningTID = threadIdx; spanningTID < X_DIM; spanningTID += blockDim.x) {
-            sharedContext->sharedDX[spanningTID] = 0.0;
+            sharedContext->globalData->sharedDX[spanningTID] = 0.0;
         }
         sharedContext->sharedScratchPad[threadIdx] = 0; // TODO check if necessary
     }
@@ -284,7 +288,7 @@ namespace GD {
                                               X_DIM)->value;
             f1->evalJacobian();
             for (unsigned j = 0; j < RESIDUAL_PARAMETERS_DIM_1; j++) {
-                atomicAdd(&sharedContext->sharedDX[f1->ThisJacobianIndices[j]],
+                atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]],
                           f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
             }
         }
@@ -303,7 +307,7 @@ namespace GD {
                                               X_DIM)->value;
             f2->evalJacobian();
             for (unsigned j = 0; j < RESIDUAL_PARAMETERS_DIM_2; j++) {
-                atomicAdd(&sharedContext->sharedDX[f2->ThisJacobianIndices[j]],
+                atomicAdd(&sharedContext->globalData->sharedDX[f2->ThisJacobianIndices[j]],
                           f2->operatorTree[f2->constantSize + j].derivative);
             }
         }
@@ -338,7 +342,7 @@ namespace GD {
 #endif
         do {
             ++localContext->fEvaluations;
-            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->sharedDX,
+            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->globalData->sharedDX,
                      localContext->alpha);
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
@@ -376,9 +380,9 @@ namespace GD {
     __global__ void
     optimize(double *globalX, double *globalData,
              double *globalF
-#ifdef GLOBAL_SHARED_MEM
-            , SharedContext *globalSharedContext
-#endif
+//#ifdef GLOBAL_SHARED_MEM
+            , GlobalData *globalSharedContext
+//#endif
     ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting f1 = PlaneFitting();
@@ -395,17 +399,18 @@ namespace GD {
         SNLP3DAnchor f2 = SNLP3DAnchor();
 #endif
         // every thread has a local observation loaded into local memory
-
-#ifdef GLOBAL_SHARED_MEM
-        SharedContext &sharedContext = *globalSharedContext;
-#else
-        // LOAD MODEL INTO SHARED MEMORY
         __shared__
         SharedContext sharedContext;
-#endif
+//#ifdef GLOBAL_SHARED_MEM
+        sharedContext.globalData = globalSharedContext;
+//#else
+        // LOAD MODEL INTO SHARED MEMORY
+//        __shared__
+//        SharedContext sharedContext;
+//#endif
         const unsigned modelStartingIndex = X_DIM * blockIdx.x;
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-            sharedContext.sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
+            sharedContext.globalData->sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
         }
         __syncthreads();
         // every thread can access the model in shared memory
@@ -414,8 +419,8 @@ namespace GD {
         LocalContext localContext;
 
         if (threadIdx.x == 0) {
-            sharedContext.xCurrent = sharedContext.sharedX1;
-            sharedContext.xNext = sharedContext.sharedX2;
+            sharedContext.xCurrent = sharedContext.globalData->sharedX1;
+            sharedContext.xNext = sharedContext.globalData->sharedX2;
         }
         localContext.fEvaluations = 0;
         localContext.alpha = ALPHA;
@@ -438,12 +443,12 @@ namespace GD {
 
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
-            // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+            // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
             reduceObservations(&localContext, &sharedContext, globalData);
             // localContext.threadF are calculated
             atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
-            // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
+            // sharedContext.sharedF, sharedContext-globalData->sharedDXis complete for all threads
             fCurrent = sharedContext.sharedF;
             if (threadIdx.x == 0) {
                 sharedContext.sharedDXNorm = 0;
@@ -458,7 +463,7 @@ namespace GD {
 
             double localDXNorm = 0;
             for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-                localDXNorm += std::pow(sharedContext.sharedDX[spanningTID], 2);
+                localDXNorm += std::pow(sharedContext.globalData->sharedDX[spanningTID], 2);
                 // TODO reduce over threads, not using atomicAdd
             }
             sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;

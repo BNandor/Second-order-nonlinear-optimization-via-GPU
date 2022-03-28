@@ -122,7 +122,7 @@ metricOptions="-DGLOBAL_SHARED_MEM"
 currentflags=f"-DPRINT {metricOptions}"
 # currentflags=f" {metricOptions}"
 
-generator=generate.Generate3DStructuredProblem1(nodecount=100, 
+generator=generate.Generate3DStructuredProblem1(nodecount=1000, 
                                                 outPath="./SNLP3D/problems/poly100",
                                                 problemName="spiral.snlp",
                                                 anchorName="spiral.snlpa")
