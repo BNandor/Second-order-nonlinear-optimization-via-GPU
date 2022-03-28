@@ -402,7 +402,7 @@ namespace GD {
         __shared__
         SharedContext sharedContext;
 //#ifdef GLOBAL_SHARED_MEM
-        sharedContext.globalData = globalSharedContext;
+        sharedContext.globalData = globalSharedContext+sizeof(GlobalData)*blockIdx.x;
 //#else
         // LOAD MODEL INTO SHARED MEMORY
 //        __shared__

@@ -50,7 +50,7 @@
 //#define  RESIDUAL_CONSTANTS_COUNT_2 1
 #endif
 
-#define  POPULATION_SIZE 1
+#define  POPULATION_SIZE 5
 
 #define  DE_ITERATION_COUNT 0
 #define  ITERATION_COUNT 500

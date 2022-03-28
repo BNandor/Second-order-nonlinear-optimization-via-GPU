@@ -201,6 +201,7 @@ namespace LBFGS {
         SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
 #endif
         do {
+
             ++localContext->fEvaluations;
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
                      localContext->alpha);
@@ -209,6 +210,7 @@ namespace LBFGS {
             }
             fNext = 0;
             localContext->alpha = localContext->alpha / 2;
+
             __syncthreads();// sharedContext.sharedF is cleared
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
@@ -216,7 +218,10 @@ namespace LBFGS {
                                  RESIDUAL_CONSTANTS_DIM_1);
                 fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
             }
-
+//            if(threadIdx.x == 0) {
+////            printf("Global data at %lu for block %d\n", sizeof(GlobalData) * blockIdx.x, blockIdx.x);
+//                printf("after: %d",blockIdx.x);
+//            }
 #if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
             for (unsigned spanningTID = threadIdx.x;
                  spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
@@ -502,7 +507,8 @@ namespace LBFGS {
         SharedContext sharedContext;
 
 //#ifdef GLOBAL_SHARED_MEM
-        sharedContext.globalData = globalSharedContext;
+        sharedContext.globalData = globalSharedContext+sizeof(GlobalData)*blockIdx.x;
+
 //#else
 //        // LOAD MODEL INTO SHARED MEMORY
 //        __shared__
@@ -545,6 +551,7 @@ namespace LBFGS {
              it++) {
 
             resetSharedState(&sharedContext, threadIdx.x);
+
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
             reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
@@ -552,15 +559,18 @@ namespace LBFGS {
             atomicAdd(&sharedContext.sharedF,
                       localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
+
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             fCurrent = sharedContext.sharedF;
 
 //            if (threadIdx.x == 0) {
 //                printf("it: %d f: %f\n", it, fCurrent);
 //            }
+
             __syncthreads();
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             lineSearch(&localContext, &sharedContext, sharedContext.globalData->sharedDX, fCurrent);
+
             // sharedContext.xNext contains the model for the next iteration, sharedContext.sharedDX is for sharedContext.xCurrent model
             // sharedContext.sharedF is set for xNext
             minusNoSync(sharedContext.xNext, sharedContext.xCurrent, sharedContext.globalData->lbfgsQueueS[sQueue.back],

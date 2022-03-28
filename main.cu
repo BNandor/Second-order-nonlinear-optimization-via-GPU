@@ -158,7 +158,8 @@ void testPlaneFitting() {
 #endif
 //#ifdef GLOBAL_SHARED_MEM
     OPTIMIZER::GlobalData *dev_globalContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
-    cudaMalloc(&dev_globalContext, sizeof(OPTIMIZER::GlobalData)/* TODO here have POPULATION_SIZE of these*/);
+    cudaMalloc(&dev_globalContext, sizeof(OPTIMIZER::GlobalData)*POPULATION_SIZE/* TODO here have POPULATION_SIZE of these*/);
+    printf("Allocating %lu global memory\n",sizeof(OPTIMIZER::GlobalData)*POPULATION_SIZE);
 //#endif
 
     double *dev_x;
@@ -245,7 +246,7 @@ void testPlaneFitting() {
         std::swap(dev_F1, dev_F2);
         // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
-
+    printBestF<<<1,1>>>(dev_F1,POPULATION_SIZE);
     //dev_x2 contains the best models
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
