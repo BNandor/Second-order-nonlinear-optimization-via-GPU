@@ -402,7 +402,8 @@ namespace GD {
         __shared__
         SharedContext sharedContext;
 //#ifdef GLOBAL_SHARED_MEM
-        sharedContext.globalData = globalSharedContext+sizeof(GlobalData)*blockIdx.x;
+        sharedContext.globalData = &globalSharedContext[blockIdx.x];
+
 //#else
         // LOAD MODEL INTO SHARED MEMORY
 //        __shared__
@@ -439,7 +440,7 @@ namespace GD {
         sharedContext.sharedDXNorm = epsilon + 1;
         unsigned it;
 
-        for (it = 0; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+        for (it = 0; localContext.fEvaluations < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
 
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
@@ -504,8 +505,7 @@ namespace GD {
             globalF[blockIdx.x] = sharedContext.sharedF;
             printf("\nthreads:%d", blockDim.x);
             printf("\niterations:%d", it);
-            printf("\nfinal f: %.10f", sharedContext.sharedF);
-            printf("\nfevaluations: %d", localContext.fEvaluations);
+            printf("\nfevaluations: %d\n", localContext.fEvaluations);
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
         }

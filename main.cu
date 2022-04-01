@@ -79,7 +79,7 @@
 //}
 
 void generateInitialPopulation(double *x, unsigned xSize) {
-    std::uniform_real_distribution<double> unif(-1000, 1000);
+    std::uniform_real_distribution<double> unif(-10000, 10000);
     std::default_random_engine re(time(NULL));
     for (int i = 0; i < xSize; i++) {
         x[i] = unif(re);

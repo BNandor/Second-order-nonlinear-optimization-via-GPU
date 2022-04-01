@@ -117,3 +117,67 @@ class Generate2DStructuredProblem1:
         [outfile.write(line) for line in problem]
         outfile.close()  
         return len(problem)
+
+class Generate3DRandomProblem1:
+    def __init__(self,nodecount,outPath,problemName,anchorName) -> None:
+        self.nodecount=nodecount
+        self.outPath=outPath
+        self.problemName=problemName
+        self.anchorName=anchorName
+
+    def modelsize(self):
+        return self.nodecount*3
+
+    def name(self):
+        return "3DRandom1"
+
+    def generateSNLPProblem(self,maxDist):
+        if not os.path.exists(self.outPath):
+            os.makedirs(f"{self.outPath}")
+        n=self.nodecount
+        edgC=5
+        print(f"Writing SNLP problem to {self.outPath}/{self.problemName} with {n} nodes and {maxDist} maxDist")
+        d=maxDist        
+        problem=[]
+        for i in range(n-edgC-1):
+            a=i
+            used=[]
+            for j in range(1+random.randint(0,edgC)):
+                b=random.randint(i,n-1)
+                while a == b or b in used:
+                    b=random.randint(i,n-1)
+                used.append(b)
+                d=random.random()*maxDist
+                problem.append(f"{a} {b} {d}\n")
+        problem[-1]=problem[-1].rstrip()
+        if not os.path.exists(f"{self.outPath}/{self.problemName}"):
+            outfile = open(f"{self.outPath}/{self.problemName}", "w")
+            [outfile.write(line) for line in problem]
+            outfile.close()  
+        return len(problem)
+
+    def generateSNLPProblemAnchors(self,boundingBoxSize):
+        if not os.path.exists(self.outPath):
+            os.makedirs(f"{self.outPath}")
+        n=self.nodecount
+        print(f"Writing SNLP3D anchors to {self.outPath}/{self.anchorName} with {n} nodes and {boundingBoxSize} bounding box")
+        problem=[]
+        minX=-boundingBoxSize/2
+        minY=-boundingBoxSize/2
+        minZ=-boundingBoxSize/2
+        maxX=boundingBoxSize/2
+        maxY=boundingBoxSize/2
+        maxZ=boundingBoxSize/2
+        for i in range(n):
+            x=minX + random.random()*(maxX-minX)
+            y=minY + random.random()*(maxY-minY)
+            z=minZ + random.random()*(maxZ-minZ)
+            i=random.randint(0,n-1)#
+            d=random.random()*boundingBoxSize/10
+            problem.append(f"{x} {y} {z} {i} {d}\n")
+        problem[-1]=problem[-1].rstrip()
+        if not os.path.exists(f"{self.outPath}/{self.anchorName}"):
+            outfile = open(f"{self.outPath}/{self.anchorName}", "w")
+            [outfile.write(line) for line in problem]
+            outfile.close()  
+        return len(problem)

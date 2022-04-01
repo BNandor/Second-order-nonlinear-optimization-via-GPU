@@ -507,7 +507,7 @@ namespace LBFGS {
         SharedContext sharedContext;
 
 //#ifdef GLOBAL_SHARED_MEM
-        sharedContext.globalData = globalSharedContext+sizeof(GlobalData)*blockIdx.x;
+        sharedContext.globalData = &globalSharedContext[blockIdx.x];
 
 //#else
 //        // LOAD MODEL INTO SHARED MEMORY
@@ -606,7 +606,7 @@ namespace LBFGS {
         }
 
         double costDifference = INT_MAX;
-        for (; it < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+        for (; localContext.fEvaluations < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
 
             // reset states
             resetSharedState(&sharedContext, threadIdx.x);
@@ -718,7 +718,7 @@ namespace LBFGS {
             globalF[blockIdx.x] = sharedContext.sharedF;
             printf("\nthreads:%d", blockDim.x);
             printf("\niterations:%d", it);
-            printf("\nfevaluations: %d", localContext.fEvaluations);
+            printf("\nfevaluations: %d\n", localContext.fEvaluations);
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
         }

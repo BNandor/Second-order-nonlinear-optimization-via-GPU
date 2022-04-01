@@ -86,10 +86,10 @@ def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
                         metrics=SNLP.Metrics( path=f"{problemPath}/csv/3D/GD/metrics", options=metricsConfig))
     problems = [problemLBFGS,problemGD]
     [runSNLP(problem=problem, optionalFlags=optionalFlags) for problem in problems]
-    # fvisualizer = visualize.FVisualizer(problems)
-    # fvisualizer.visualize()
-    # xvisualizer = visualize.SNLP3DVisualizer(problems)
-    # xvisualizer.visualize()
+    fvisualizer = visualize.FVisualizer(problems)
+    fvisualizer.visualize()
+    xvisualizer = visualize.SNLP3DVisualizer(problems)
+    xvisualizer.visualize()
 
 def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP", 
@@ -117,19 +117,24 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
     # xvisualizer = visualize.SNLP2DVisualizer(problems)
     # xvisualizer.visualize()
 
-metricOptions="-DGLOBAL_SHARED_MEM"              
+
+
+
+diffEvolutionOptions="-DPOPULATION_SIZE=5 -DDE_ITERATION_COUNT=10"
+iterationOptions="-DITERATION_COUNT=10500"
+metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
 # metricOptions=""
-currentflags=f"-DPRINT {metricOptions}"
+currentflags=f"-DPRINT {metricOptions} "
 # currentflags=f" {metricOptions}"
 
-generator=generate.Generate3DStructuredProblem1(nodecount=100, 
+generator=generate.Generate3DRandomProblem1(nodecount=100, 
                                                 outPath="./SNLP3D/problems/poly100",
-                                                problemName="spiral.snlp",
-                                                anchorName="spiral.snlpa")
+                                                problemName="random8.snlp",
+                                                anchorName="random8.snlpa")
 
 
-problemSize=generator.generateSNLPProblem(100)
-anchorSize=generator.generateSNLPProblemAnchors(1000)
+problemSize=generator.generateSNLPProblem(1000)
+anchorSize=generator.generateSNLPProblemAnchors(10000)
 
 options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
 testCount=1

@@ -50,16 +50,19 @@
 //#define  RESIDUAL_CONSTANTS_COUNT_2 1
 #endif
 
-#define  POPULATION_SIZE 5
+//#define  POPULATION_SIZE 5
 
-#define  DE_ITERATION_COUNT 0
-#define  ITERATION_COUNT 500
+//#define  DE_ITERATION_COUNT 2
+//#define  ITERATION_COUNT 500
 #define  THREADS_PER_BLOCK 128
 #define  THREADS_PER_GRID (THREADS_PER_BLOCK*POPULATION_SIZE)
 
 // Differential Evolution Control parameters
 #define CR 0.99
 #define F 0.2
+
+//#define CR 0.9
+//#define F  0.9
 
 // Stop condition parameters
 #define FEPSILON 1

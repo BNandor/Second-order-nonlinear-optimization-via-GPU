@@ -54,18 +54,29 @@ void differentialEvolutionStep(double *oldX, double *newX, curandState *curandSt
     localB = sharedB;
     localC = sharedC;
     localR = sharedR;
-
+//  1,2,3,4
+//  m[1,2,3,4]
+//  1',2',3',4'
+//  m[1',2',3',4']
+//  min(m[1,2,3,4],m[1',2',3',4'])
+//  epsilon kivétele
     // every thread has the same sharedA, sharedB, sharedC, blockId.x
-    for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-        if (curand_uniform(curandState + idx) < CR || spanningTID == localR) {
-            newX[blockIdx.x * X_DIM + spanningTID] = oldX[localA * X_DIM + spanningTID] + F * (oldX[localB * X_DIM +
-                                                                                                    spanningTID] -
-                                                                                               oldX[localC * X_DIM +
-                                                                                                    spanningTID]);
-        } else {
-            newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
+//    if(blockIdx.x !=0) {
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            if (curand_uniform(curandState + idx) < CR || spanningTID == localR) {
+                newX[blockIdx.x * X_DIM + spanningTID] = oldX[localA * X_DIM + spanningTID] + F * (oldX[localB * X_DIM +
+                                                                                                        spanningTID] -
+                                                                                                   oldX[localC * X_DIM +
+                                                                                                        spanningTID]);
+            } else {
+                newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
+            }
         }
-    }
+//    } else {
+//        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+//            newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
+//        }
+//    }
     // newX is complete in every thread in this block
 }
 
