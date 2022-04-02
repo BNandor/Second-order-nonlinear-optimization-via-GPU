@@ -85,7 +85,22 @@ void generateInitialPopulation(double *x, unsigned xSize) {
         x[i] = unif(re);
     }
 }
-
+void readPopulation(double *x, unsigned xSize, std::string filename) {
+    std::fstream input;
+    input.open(filename.c_str());
+    if (input.is_open()) {
+        unsigned cData = 0;
+        while (input >> x[cData]) {
+            cData++;
+        }
+        std::cout << "read: " << cData << " expected: " << xSize
+                  << std::endl;
+        assert(cData == xSize);
+    } else {
+        std::cerr << "err: could not open " << filename << std::endl;
+        exit(1);
+    }
+}
 
 void generatePlanePoints(double A, double B, double C, double *data, unsigned pointCount) {
     std::uniform_real_distribution<double> unif(0, 1);
@@ -207,7 +222,8 @@ void testPlaneFitting() {
 
     readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
                     PROBLEM_ANCHOR_PATH);
-    generateInitialPopulation(x, xSize);
+//    generateInitialPopulation(x, xSize);
+    readPopulation(x, xSize,PROBLEM_INPUT_POPULATION_PATH);
 #endif
     // COPY TO DEVICE
     cudaEventRecord(startCopy);

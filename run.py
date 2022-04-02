@@ -65,11 +65,12 @@ def runSNLP(problem:SNLP.OptProblem,optionalFlags):
                      SNLP.FHIST)                  
     appendMetrics(logs,currentProblem.optproblem.metrics ,SNLP.METRICS)
 
-def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
+def runSNLP3D(problemPath,problemName,anchorName,populationName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP3D", 
                         optimizer="LBFGS", 
                         inputPaths=[f"{problemPath}/{problemName}", 
-                                    f"{problemPath}/{anchorName}"],
+                                    f"{problemPath}/{anchorName}",
+                                    f"{problemPath}/{populationName}"],
                         outputPath=f"{problemPath}/csv/3D/LBFGS",
                         constantsSizes=residualSizes,
                         modelsize=modelsize,
@@ -78,7 +79,8 @@ def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
     problemGD = SNLP.OptProblem(name="PROBLEM_SNLP3D", 
                         optimizer="GD", 
                         inputPaths=[f"{problemPath}/{problemName}", 
-                                    f"{problemPath}/{anchorName}"],
+                                    f"{problemPath}/{anchorName}",
+                                    f"{problemPath}/{populationName}"],
                         outputPath=f"{problemPath}/csv/3D/GD",
                         constantsSizes=residualSizes,
                         modelsize=modelsize,
@@ -91,11 +93,12 @@ def runSNLP3D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
     xvisualizer = visualize.SNLP3DVisualizer(problems)
     xvisualizer.visualize()
 
-def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
+def runSNLP2D(problemPath,problemName,anchorName,populationName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP", 
                         optimizer="LBFGS", 
                         inputPaths=[f"{problemPath}/{problemName}", 
-                                    f"{problemPath}/{anchorName}"],
+                                    f"{problemPath}/{anchorName}",
+                                    f"{problemPath}/{populationName}"],
                         outputPath=f"{problemPath}/csv/2D/LBFGS",
                         constantsSizes=residualSizes,
                         modelsize=modelsize,
@@ -104,7 +107,8 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
     problemGD = SNLP.OptProblem(name="PROBLEM_SNLP", 
                         optimizer="GD", 
                         inputPaths=[f"{problemPath}/{problemName}", 
-                                    f"{problemPath}/{anchorName}"],
+                                    f"{problemPath}/{anchorName}",
+                                    f"{problemPath}/{populationName}"],
                         outputPath=f"{problemPath}/csv/2D/GD",
                         constantsSizes=residualSizes,
                         modelsize=modelsize,
@@ -119,14 +123,13 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
 
 
 
-
-diffEvolutionOptions="-DPOPULATION_SIZE=20 -DDE_ITERATION_COUNT=1 -DOPTIMIZER_MIN_DE"
+populationSize=20
+diffEvolutionOptions=f"-DPOPULATION_SIZE={populationSize} -DDE_ITERATION_COUNT=1 -DOPTIMIZER_MIN_DE"
 iterationOptions="-DITERATION_COUNT=10500"
 metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
 # metricOptions=""
 currentflags=f"-DPRINT {metricOptions} "
 # currentflags=f" {metricOptions}"
-
 generator=generate.Generate3DRandomProblem1(nodecount=100, 
                                                 outPath="./SNLP3D/problems/poly100",
                                                 problemName="random5.snlp",
@@ -136,6 +139,8 @@ generator=generate.Generate3DRandomProblem1(nodecount=100,
 problemSize=890#generator.generateSNLPProblem(100)
 anchorSize=1000#generator.generateSNLPProblemAnchors(1000)
 
+populationGenerator = generate.PopulationGenerator(populationSize,generator.modelsize(),generator.outPath,"random5.pop",boundingBox=20000)
+populationGenerator.generate()
 options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
 testCount=1
 for testCase in range(testCount):
@@ -143,6 +148,7 @@ for testCase in range(testCount):
     runSNLP3D(generator.outPath,
           generator.problemName,
           generator.anchorName,
+          populationGenerator.outName,
           [problemSize,
           anchorSize],
           generator.modelsize(),
@@ -159,6 +165,7 @@ for testCase in range(testCount):
 # runSNLP2D(generator.outPath,
 #           generator.problemName,
 #           generator.anchorName,
+#           populationGenerator.outName,
 #           [problemSize,
 #           anchorSize],
 #           generator.modelsize(),

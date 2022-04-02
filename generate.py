@@ -1,6 +1,28 @@
 import os
 import random
+from functools import reduce
 
+class PopulationGenerator():
+    def __init__(self, populationsize, modelsize, outPath,outName, boundingBox) -> None:
+        self.populationsize = populationsize
+        self.modelsize = modelsize
+        self.outPath = outPath
+        self.outName = outName
+        self.boundingBox = boundingBox
+
+    def generate(self):
+        if not os.path.exists(self.outPath):
+            os.makedirs(f"{self.outPath}")
+        population=[]
+        for i in range(self.populationsize):# n-1 edges
+            randomModel=[str(-self.boundingBox/2 + random.random()*self.boundingBox) for i in range(self.modelsize)]
+            line=reduce(lambda a, b: a +" "+ b+" ",randomModel,"")
+            population.append(f"{line}\n")
+        if not os.path.exists(f"{self.outPath}/{self.outName}"):
+            outfile = open(f"{self.outPath}/{self.outName}", "w")
+            [outfile.write(line) for line in population]
+            outfile.close()  
+        
 class Generate3DStructuredProblem1:
     def __init__(self,nodecount,outPath,problemName,anchorName) -> None:
         self.nodecount=nodecount
