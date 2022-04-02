@@ -180,7 +180,7 @@ namespace LBFGS {
     }
 
     __device__
-    void lineSearch(LocalContext *localContext,
+    int lineSearch(LocalContext *localContext,
                     SharedContext *sharedContext,
                     double *DX,
                     double currentF) {
@@ -233,7 +233,8 @@ namespace LBFGS {
 #endif
             atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
-        } while (sharedContext->sharedF > currentF);
+        } while (sharedContext->sharedF > currentF && localContext->alpha!=0.0);
+        return localContext->alpha!=0.0;
     }
 
     __device__
@@ -627,12 +628,16 @@ namespace LBFGS {
 
             if(LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
                                               sharedContext.globalData->lbfgsR,
-                                              sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent)!=0){
-                if(threadIdx.x == 0){
-                    sharedContext.sharedF=fCurrent;
+                                              sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent)!=0) {
+                if(!lineSearch(&localContext, &sharedContext, sharedContext.globalData->sharedDX, fCurrent)){
+                    // sharedContext.xNext contains the model for the next iteration, sharedContext.sharedDX is for sharedContext.xCurrent model
+                    // sharedContext.sharedF is set for xNext
+                    if(threadIdx.x == 0){
+                        sharedContext.sharedF=fCurrent;
+                    }
+                    __syncthreads();
+                    break;
                 }
-                __syncthreads();
-                break;
             }
             // sharedContext.globalData->lbfgsQueueY[yQueue.back], sharedContext.sharedF =f(xNext), xNext set
             __syncthreads();// TODO check if necessary

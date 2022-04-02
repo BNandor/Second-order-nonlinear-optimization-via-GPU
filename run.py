@@ -120,7 +120,7 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
 
 
 
-diffEvolutionOptions="-DPOPULATION_SIZE=20 -DDE_ITERATION_COUNT=10000 -DOPTIMIZER_MIN_INIT_DE"
+diffEvolutionOptions="-DPOPULATION_SIZE=20 -DDE_ITERATION_COUNT=1 -DOPTIMIZER_MIN_DE"
 iterationOptions="-DITERATION_COUNT=10500"
 metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
 # metricOptions=""
