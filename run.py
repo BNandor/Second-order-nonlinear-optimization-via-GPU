@@ -120,7 +120,7 @@ def runSNLP2D(problemPath,problemName,anchorName,residualSizes,modelsize,framesi
 
 
 
-diffEvolutionOptions="-DPOPULATION_SIZE=5 -DDE_ITERATION_COUNT=10"
+diffEvolutionOptions="-DPOPULATION_SIZE=20 -DDE_ITERATION_COUNT=10000 -DOPTIMIZER_MIN_INIT_DE"
 iterationOptions="-DITERATION_COUNT=10500"
 metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
 # metricOptions=""
@@ -129,12 +129,12 @@ currentflags=f"-DPRINT {metricOptions} "
 
 generator=generate.Generate3DRandomProblem1(nodecount=100, 
                                                 outPath="./SNLP3D/problems/poly100",
-                                                problemName="random8.snlp",
-                                                anchorName="random8.snlpa")
+                                                problemName="random5.snlp",
+                                                anchorName="random5.snlpa")
 
 
-problemSize=generator.generateSNLPProblem(1000)
-anchorSize=generator.generateSNLPProblemAnchors(10000)
+problemSize=890#generator.generateSNLPProblem(100)
+anchorSize=1000#generator.generateSNLPProblemAnchors(1000)
 
 options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
 testCount=1

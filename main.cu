@@ -224,21 +224,25 @@ void testPlaneFitting() {
     dev_F1 = dev_F;
     dev_F2 = dev_FDE;
 
-    OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data,
-            dev_F1
-//#ifdef GLOBAL_SHARED_MEM
-            , dev_globalContext
-//#endif
-    );
+#if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_MIN_DE)
+    OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data,dev_F1, dev_globalContext);
+#endif
+
+#ifdef OPTIMIZER_SIMPLE_DE
+    OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, dev_globalContext);
+#endif
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
         //dev_x2 is the differential model
-        OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2
-//#ifdef GLOBAL_SHARED_MEM
-                , dev_globalContext
-//#endif
-        );
+#if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
+        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, dev_globalContext);
+#elif defined(OPTIMIZER_MIN_DE)
+        OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, dev_globalContext);
+#elif
+        std::cerr<<"Incorrect optimizer configuration"<<std::endl;
+        exit(1);
+#endif
         //evaluated differential model into F2
         selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
         //select the best models from current and differential models

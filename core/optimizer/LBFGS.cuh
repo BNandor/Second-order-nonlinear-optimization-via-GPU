@@ -301,7 +301,7 @@ namespace LBFGS {
     }
 
     __device__
-    void zoom(LocalContext
+    int zoom(LocalContext
               *localContext, SharedContext *sharedContext, double alpha0, double alpha1, double *r,
               double *DXNext, double currentF, double JdotR) {
 //        printf("zoom  %f to %f\n", alpha0, alpha1);
@@ -359,7 +359,7 @@ namespace LBFGS {
                         }
                         __syncthreads();
                         // DXNext, sharedF =  f(x + alphaMid.r),xNext = x + alphaMid*r
-                        return;
+                        return 0;
                     }
                     if (gradientAlphaMid * (alphaHigh - alphaLow) >= 0) {
                         alphaHigh = alphaLow;
@@ -370,10 +370,11 @@ namespace LBFGS {
             __syncthreads();
         } while (alphaLow != alphaHigh);
         printf("Error, could not zoom!\n");
+        return -1;
     }
 
     __device__
-    void LBFGSlineSearchWolfeConditions(LocalContext
+    int LBFGSlineSearchWolfeConditions(LocalContext
                                         *localContext,
                                         SharedContext *sharedContext,
                                         double *J,
@@ -413,7 +414,7 @@ namespace LBFGS {
             }
             gradientAlpha1 = dot(DXNext, r, X_DIM, *sharedContext);
             if (abs(gradientAlpha1) <= -LBFGS_LINESEARCH_C2 * JdotR) {
-                return;
+                return 0;
             }
             if (gradientAlpha1 >= 0) {
                 return zoom(localContext, sharedContext, alpha1, alpha0, r, DXNext, currentF, JdotR);
@@ -424,6 +425,7 @@ namespace LBFGS {
             i += 1;
         } while (alpha1 < alphaMax);
         printf("error: reached max bracket in linesearch");
+        return -2;
     }
 
     __device__
@@ -604,15 +606,14 @@ namespace LBFGS {
                 printf("f: %f\n", fCurrent);
             }
         }
-
         double costDifference = INT_MAX;
-        for (; localContext.fEvaluations < ITERATION_COUNT && costDifference > epsilon && sharedContext.sharedDXNorm > epsilon; it++) {
+        for (; localContext.fEvaluations < ITERATION_COUNT; it++) {
 
             // reset states
             resetSharedState(&sharedContext, threadIdx.x);
-            if (threadIdx.x == 0) {
-                sharedContext.sharedDXNorm = 0;
-            }
+//            if (threadIdx.x == 0) {
+//                sharedContext.sharedDXNorm = 0;
+//            }
             __syncthreads();// sharedContext.sharedF is cleared
             reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
             atomicAdd(&sharedContext.sharedF,
@@ -623,9 +624,16 @@ namespace LBFGS {
             // sharedContext.globalData->lbfgsR is set / threads
             fCurrent = sharedContext.sharedF;
             __syncthreads();
-            LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
-                                           sharedContext.globalData->lbfgsR,
-                                           sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent);
+
+            if(LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
+                                              sharedContext.globalData->lbfgsR,
+                                              sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent)!=0){
+                if(threadIdx.x == 0){
+                    sharedContext.sharedF=fCurrent;
+                }
+                __syncthreads();
+                break;
+            }
             // sharedContext.globalData->lbfgsQueueY[yQueue.back], sharedContext.sharedF =f(xNext), xNext set
             __syncthreads();// TODO check if necessary
             // sharedContext.globalData->lbfgsR is set for all threads
@@ -651,23 +659,23 @@ namespace LBFGS {
             }
             // xCurrent<->xNext
             // Stopping criteria
-            double localDXNorm = 0;
-            for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-                localDXNorm += std::pow(sharedContext.globalData->sharedDX[spanningTID], 2);
-                // TODO reduce over threads, not using atomicAdd
-            }
-            sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;
-            __syncthreads();
-
-            if (threadIdx.x == 0) {
-                double localDXNormFinal = 0;
-                for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
-                    localDXNormFinal += sharedContext.sharedScratchPad[itdxnorm];
-                }
-                sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
-            }
-
-            costDifference = std::abs(fCurrent - sharedContext.sharedF);
+//            double localDXNorm = 0;
+//            for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+//                localDXNorm += std::pow(sharedContext.globalData->sharedDX[spanningTID], 2);
+//                // TODO reduce over threads, not using atomicAdd
+//            }
+//            sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;
+//            __syncthreads();
+//
+//            if (threadIdx.x == 0) {
+//                double localDXNormFinal = 0;
+//                for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
+//                    localDXNormFinal += sharedContext.sharedScratchPad[itdxnorm];
+//                }
+//                sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
+//            }
+//
+//            costDifference = std::abs(fCurrent - sharedContext.sharedF);
 #ifdef PRINT
             if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
 //                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
@@ -723,6 +731,103 @@ namespace LBFGS {
 //                   sharedContext.sharedF);
         }
     }
+    __global__ void
+    evaluateF(double *globalX, double *globalData,
+             double *globalF
+//#ifdef GLOBAL_SHARED_MEM
+            , GlobalData *globalSharedContext
+//#endif
+    ) { // use shared memory instead of global memory
+#ifdef PROBLEM_PLANEFITTING
+        PlaneFitting f1 = PlaneFitting();
+#endif
+#ifdef PROBLEM_ROSENBROCK2D
+        Rosenbrock2D f1 = Rosenbrock2D();
+#endif
+#ifdef PROBLEM_SNLP
+        SNLP f1 = SNLP();
+        SNLPAnchor f2 = SNLPAnchor();
+#endif
 
+#ifdef PROBLEM_SNLP3D
+        SNLP3D f1 = SNLP3D();
+        SNLP3DAnchor f2 = SNLP3DAnchor();
+#endif
+        // every thread has a local observation loaded into local memory
+        FIFOQueue sQueue = FIFOQueue();
+        FIFOQueue yQueue = FIFOQueue();
+        __shared__
+        SharedContext sharedContext;
+
+//#ifdef GLOBAL_SHARED_MEM
+        sharedContext.globalData = &globalSharedContext[blockIdx.x];
+
+//#else
+//        // LOAD MODEL INTO SHARED MEMORY
+//        __shared__
+//        SharedContext sharedContext;
+//#endif
+
+        const unsigned modelStartingIndex = X_DIM * blockIdx.x;
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            sharedContext.globalData->sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
+        }
+        __syncthreads();
+        // every thread can access the model in shared memory
+
+        // INITIALIZE LOCAL MODEL
+        LocalContext localContext;
+
+        if (threadIdx.x == 0) {
+            sharedContext.xCurrent = sharedContext.globalData->sharedX1;
+            sharedContext.xNext = sharedContext.globalData->sharedX2;
+        }
+
+        localContext.alpha = ALPHA;
+        localContext.fEvaluations = 0;
+        localContext.residualProblems[0] = &f1;
+        localContext.residualConstants[0] = globalData;
+#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
+        localContext.residualProblems[1] = &f2;
+        localContext.residualConstants[1] =
+                localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
+#endif
+        double fCurrent;
+        // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
+
+
+        const double epsilon = FEPSILON;
+        sharedContext.sharedDXNorm = epsilon + 1;
+        int it;
+        resetSharedState(&sharedContext, threadIdx.x);
+
+        __syncthreads();
+        // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
+        reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
+        // localContext.threadF are calculated
+        atomicAdd(&sharedContext.sharedF,
+                      localContext.threadF);
+        // TODO reduce over threads, not using atomicAd
+        __syncthreads();
+
+
+        if (threadIdx.x == 0 && blockIdx.x == 0) {
+            printf("xCurrent ");
+            for (unsigned j = 0; j < X_DIM - 1; j++) {
+                printf("%f,", sharedContext.xCurrent[j]);
+            }
+            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+        }
+
+        if (threadIdx.x == 0) {
+            globalF[blockIdx.x] = sharedContext.sharedF;
+//            printf("\nthreads:%d", blockDim.x);
+//            printf("\niterations:%d", it);
+//            printf("\nfevaluations: %d\n", localContext.fEvaluations);
+            printf("f: %f\n", sharedContext.sharedF);
+//            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
+//                   sharedContext.sharedF);
+        }
+    }
 }
 #endif //PARALLELLBFGS_LBFGS_CUH
