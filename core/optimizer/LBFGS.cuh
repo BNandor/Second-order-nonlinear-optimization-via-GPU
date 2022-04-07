@@ -370,7 +370,10 @@ namespace LBFGS {
             }
             __syncthreads();
         } while (alphaLow != alphaHigh);
+#ifdef PRINT
         printf("Error, could not zoom!\n");
+#endif
+
         return -1;
     }
 
@@ -425,7 +428,9 @@ namespace LBFGS {
             alpha1 = alpha1 * 2;
             i += 1;
         } while (alpha1 < alphaMax);
+#ifdef PRINT
         printf("error: reached max bracket in linesearch");
+#endif
         return -2;
     }
 
@@ -599,11 +604,13 @@ namespace LBFGS {
             __syncthreads();
             //xCurrent,xNext is set for all threads
             if (threadIdx.x == 0 && blockIdx.x == 0) {
+#ifdef PRINT
                 printf("xCurrent ");
                 for (unsigned j = 0; j < X_DIM - 1; j++) {
                     printf("%f,", sharedContext.xCurrent[j]);
                 }
                 printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+#endif
                 printf("f: %f\n", fCurrent);
             }
         }
@@ -723,11 +730,13 @@ namespace LBFGS {
 
         if (threadIdx.x == 0) {
             // print Queues after GD
+#ifdef PRINT
             printf("\nxCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
                 printf("%f,", sharedContext.xCurrent[j]);
             }
             printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+#endif
             globalF[blockIdx.x] = sharedContext.sharedF;
             printf("\nthreads:%d", blockDim.x);
             printf("\niterations:%d", it);
@@ -815,7 +824,7 @@ namespace LBFGS {
         // TODO reduce over threads, not using atomicAd
         __syncthreads();
 
-
+#ifdef PRINT
         if (threadIdx.x == 0 && blockIdx.x == 0) {
             printf("xCurrent ");
             for (unsigned j = 0; j < X_DIM - 1; j++) {
@@ -823,6 +832,7 @@ namespace LBFGS {
             }
             printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
         }
+#endif
 
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;

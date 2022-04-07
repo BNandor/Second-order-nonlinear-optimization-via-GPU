@@ -176,7 +176,10 @@ class Generate3DRandomProblem1:
             outfile = open(f"{self.outPath}/{self.problemName}", "w")
             [outfile.write(line) for line in problem]
             outfile.close()  
-        return len(problem)
+            return len(problem)
+        else: 
+            return sum(1 for line in open(f"{self.outPath}/{self.problemName}", "r"))
+
 
     def generateSNLPProblemAnchors(self,boundingBoxSize):
         if not os.path.exists(self.outPath):
@@ -202,4 +205,6 @@ class Generate3DRandomProblem1:
             outfile = open(f"{self.outPath}/{self.anchorName}", "w")
             [outfile.write(line) for line in problem]
             outfile.close()  
-        return len(problem)
+            return len(problem)
+        else: 
+            return sum(1 for line in open(f"{self.outPath}/{self.anchorName}", "r"))
