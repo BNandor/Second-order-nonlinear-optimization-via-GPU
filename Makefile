@@ -5,4 +5,7 @@ buildAndRun:
 
 test:
 	python3 run.py
+
+analyze:
+	python3 analysis.py
 	

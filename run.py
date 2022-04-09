@@ -8,7 +8,7 @@ import os
 import generate
 import csv
 import json
-import analysis
+import testlogs
 
 
 def runOptimizerWith(flags):
@@ -124,7 +124,7 @@ def runSNLP2D(problemPath,problemName,anchorName,populationName,residualSizes,mo
     # xvisualizer.visualize()
  
 populationSizes=[1,5,20]
-DEiterations=[0,1,4,19]
+DEiterations=[0,4,19]
 minimizerIterations=[100,1000,5000,50000]
 nodecounts=[10,100,1000]
 solvermethods=["OPTIMIZER_MIN_DE"]
@@ -133,7 +133,7 @@ testCount=5
 ANCHOR_BOUNDING_BOX=1000
 INITIAL_POP_BOUNDING_BOX=20*ANCHOR_BOUNDING_BOX
 
-GDCases=analysis.cases("/home/spaceman/dissertation/finmat/ParallelLBFGS/SNLP3D/problems/gridtest/csv/3D/GD/metrics/metrics-3D-random-problem-1-sample2.csv")
+GDCases=testlogs.readCases("/home/spaceman/dissertation/finmat/ParallelLBFGS/SNLP3D/problems/gridtest/csv/3D/GD/metrics/metrics-3D-random-problem-1-sample2.csv")
 
 for nodecount in nodecounts:
     for populationSize in populationSizes:
@@ -173,7 +173,7 @@ for nodecount in nodecounts:
                                         "deIteration":DEiteration,
                                         "distFraction":maxDistFraction,
                                         "testcase":testCase}
-                            if(analysis.caseIdentifier(testconfig) in GDCases):
+                            if(testlogs.caseIdentifier(testconfig) in GDCases):
                                 print(f"skipping {testconfig}")
                                 continue
                             print(testconfig)
