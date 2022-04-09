@@ -8,7 +8,7 @@ import os
 import generate
 import csv
 import json
-
+import analysis
 
 
 def runOptimizerWith(flags):
@@ -129,9 +129,11 @@ minimizerIterations=[100,1000,5000,50000]
 nodecounts=[10,100,1000]
 solvermethods=["OPTIMIZER_MIN_DE"]
 maxDistanceAsBoxFractions=[0.1,0.5]
-testCount=2
+testCount=5
 ANCHOR_BOUNDING_BOX=1000
 INITIAL_POP_BOUNDING_BOX=20*ANCHOR_BOUNDING_BOX
+
+GDCases=analysis.cases("/home/spaceman/dissertation/finmat/ParallelLBFGS/SNLP3D/problems/gridtest/csv/3D/GD/metrics/metrics-3D-random-problem-1-sample2.csv")
 
 for nodecount in nodecounts:
     for populationSize in populationSizes:
@@ -161,7 +163,19 @@ for nodecount in nodecounts:
                             print(f"testcase {testCase}\n")
                             populationGenerator = generate.PopulationGenerator(populationSize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDistFraction}-{populationSize}-{testCase}.pop",boundingBox=INITIAL_POP_BOUNDING_BOX)
                             populationGenerator.generate()
-                            testconfig={"solver":solver,"problem":generator.name(),"nodecount":nodecount,"edges":problemSize,"anchors":anchorSize,"totaliterations":totalIterations, "population":populationSize, "deIteration":DEiteration,"distFraction":maxDistFraction}
+                            testconfig={"solver":solver,
+                                        "problem":generator.name(),
+                                        "nodecount":nodecount,
+                                        "edges":problemSize,
+                                        "anchors":anchorSize,
+                                        "totaliterations":totalIterations,
+                                        "population":populationSize,
+                                        "deIteration":DEiteration,
+                                        "distFraction":maxDistFraction,
+                                        "testcase":testCase}
+                            if(analysis.caseIdentifier(testconfig) in GDCases):
+                                print(f"skipping {testconfig}")
+                                continue
                             print(testconfig)
                             runSNLP3D(generator.outPath,
                                 generator.problemName,
