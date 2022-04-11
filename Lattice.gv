@@ -1,0 +1,21 @@
+// <Lattice object of 2 atoms 5 concepts 2 coatoms at 0x7f639f6b0a30>
+digraph Lattice {
+	node [label="" shape=circle style=filled width=.25]
+	edge [dir=none labeldistance=1.5 minlen=2]
+	c0
+	c1
+	c1 -> c1 [color=transparent headlabel="King Arthur" labelangle=270]
+	c1 -> c1 [color=transparent labelangle=90 taillabel=king]
+	c1 -> c0
+	c2
+	c2 -> c2 [color=transparent headlabel="holy grail" labelangle=270]
+	c2 -> c2 [color=transparent labelangle=90 taillabel=mysterious]
+	c2 -> c0
+	c3
+	c3 -> c3 [color=transparent headlabel="Sir Robin" labelangle=270]
+	c3 -> c3 [color=transparent labelangle=90 taillabel="human knight"]
+	c3 -> c1
+	c4
+	c4 -> c2
+	c4 -> c3
+}
