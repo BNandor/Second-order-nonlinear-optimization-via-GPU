@@ -1,7 +1,7 @@
 import json
 
 def caseIdentifier(log):
-    return f"{log['nodecount'] } { log['edges']} {log['anchors']} {log['totaliterations']} {log['population']} {log['deIteration']} {log['distFraction']} {log['testcase']}"
+    return f"{log['solver']} {log['nodecount'] } { log['edges']} {log['anchors']} {log['totaliterations']} {log['population']} {log['deIteration']} {log['distFraction']} {log['testcase']}"
     
 
 def readCases(path):
