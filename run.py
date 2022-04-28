@@ -127,7 +127,7 @@ populationSizes=[1,5,20]
 DEiterations=[0,4,19]
 minimizerIterations=[100,1000,5000,50000]
 nodecounts=[10,100,1000]
-solvermethods=["OPTIMIZER_MIN_DE","OPTIMIZER_SIMPLE_DE"]
+solvermethods=["OPTIMIZER_MIN_DE","OPTIMIZER_SIMPLE_DE","OPTIMIZER_MIN_INIT_DE"]
 maxDistanceAsBoxFractions=[0.1,0.5]
 testCount=10
 ANCHOR_BOUNDING_BOX=1000
@@ -144,13 +144,19 @@ for nodecount in nodecounts:
                         DEiteration=deIteration
                         if populationSize <4:
                             DEiteration=0
-                        if solver == "OPTIMIZER_SIMPLE_DE":
+                        if solver == "OPTIMIZER_MIN_INIT_DE":
                             if populationSize <4:
-                                continue
-                            DEiteration=totalIterations
-                            iterations=0
+                                    continue
+                            DEiteration=totalIterations//10 *9
+                            iterations=totalIterations//10
                         else:
-                            iterations=totalIterations/(deIteration+1)
+                            if solver == "OPTIMIZER_SIMPLE_DE":
+                                if populationSize <4:
+                                    continue
+                                DEiteration=totalIterations
+                                iterations=0
+                            else:
+                                iterations=totalIterations/(deIteration+1)
                         diffEvolutionOptions=f"-DPOPULATION_SIZE={populationSize} -DDE_ITERATION_COUNT={DEiteration} -D{solver}"
                         iterationOptions=f"-DITERATION_COUNT={iterations}"
                         metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              

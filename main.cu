@@ -266,9 +266,9 @@ void testPlaneFitting() {
         std::swap(dev_F1, dev_F2);
         // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
-#ifdef OPTIMIZER_SIMPLE_DE
-        printf("\nthreads:%d", THREADS_PER_BLOCK);
-        printf("\niterations:%d", DE_ITERATION_COUNT);
+#if defined(OPTIMIZER_SIMPLE_DE) || defined(OPTIMIZER_MIN_INIT_DE)
+        printf("\nthreads:%d\n", THREADS_PER_BLOCK);
+        printf("\niterations:%d\n", DE_ITERATION_COUNT);
         printf("\nfevaluations: %d\n", DE_ITERATION_COUNT);
 #endif
     printBestF<<<1,1>>>(dev_F1,POPULATION_SIZE);
