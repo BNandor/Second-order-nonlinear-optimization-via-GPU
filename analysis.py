@@ -6,27 +6,29 @@ import concepts
 
 # {'objects': ['King Arthur', 'Sir Robin', 'holy grail'], 'properties': ['human', 'knight', 'king', 'mysterious'], 'context': [[0, 1, 2], [0, 1], [3]]}
 
-def saveContext(joinedlogs):
+def saveContext(joinedlogs,contextName):
     resultContext=joinedlogs.copy()
     resultContext.reset_index(inplace=True)
     resultContext=resultContext.to_dict('index')
     ctx=mapToFormalConcept(resultContext)
     # ctx.lattice.graphviz(view=True)
-    ctx.tofile('bigcontext.cxt')
+    ctx.tofile(contextName)
 
 def mapToFormalConcept(resultsDic):
     populationSizes={1:"singlePop",5:"mediumPop",20:"maxPop"}
-    DEiterations={0:"noDE",1:"smallDE",4:"mediumDE",19:"bigDE"}
+    DEiterations={0:"noDE",1:"smallDE",4:"mediumDE",19:"bigDE",100:"DE_APPROACH"}
     minimizerIterations={100:"smallestIteration",1000:"smallIteration",5000:"mediumIteration",50000:"maxIteration"}
     nodecounts={10:"smallModel",100:"mediumModel",1000:"largeModel"}
-    solvermethods=["OPTIMIZER_MIN_DE","OPTIMIZER_SIMPLE_DE"]
+    solvermethods=["OPTIMIZER_MIN_DE","OPTIMIZER_SIMPLE_DE","OPTIMIZER_MIN_INIT_DE"]
     maxDistanceAsBoxFractions={0.1:'smallEdges',0.5:'bigEdges'}
     testCount=5
     # if row["final f: _gd"] > row["final f: _lbfgs"]:
     #     return ['lbfgsbetter']
     # else:
     #     return ['gd']
-    properties=['OPTIMIZER_MIN_DE',
+    properties=[solvermethods[0],
+                solvermethods[1],
+                solvermethods[2],
                 '3DRandom1',
                 nodecounts[10],
                 nodecounts[100],
@@ -42,18 +44,19 @@ def mapToFormalConcept(resultsDic):
                 DEiterations[1],
                 DEiterations[4],
                 DEiterations[19],
+                DEiterations[100],
                 maxDistanceAsBoxFractions[0.1],
                 maxDistanceAsBoxFractions[0.5],
                 "LBFGSWin",
                 "GDWin"]
-
+    
     propertiesInverse={
         "solver":lambda solver:properties.index(solver),
         "problem":lambda problem:properties.index(problem),
         "nodecount":lambda modelsize:properties.index(nodecounts[modelsize]),
         "totaliterations":lambda it:properties.index(minimizerIterations[it]),
         "population":lambda pop:properties.index(populationSizes[pop]),
-        "deIteration":lambda it:properties.index(DEiterations[it]),
+        "deIteration":lambda it:  properties.index(DEiterations[it]) if it < 20  else properties.index(DEiterations[100]),
         "distFraction":lambda frac:properties.index(maxDistanceAsBoxFractions[frac]),
         "optimizer":lambda row:properties.index("LBFGSWin") if row["final f: _gd"] > row["final f: _lbfgs"] else properties.index("GDWin")
     }
@@ -102,4 +105,5 @@ print(joinedlogs)
 
 minimumsPerProblem=joinedlogs.loc[joinedlogs.groupby(["nodecount","distFraction"])["final f: _lbfgs"].idxmin()]
 # minimumsPerProblemJoined=minimumsPerProblem.join(joinedlogs)
-print(minimumsPerProblem.to_csv('minLBFGS10.csv'))
+print(minimumsPerProblem.to_csv('minLBFGS10-MIN_INIT_DE.csv'))
+saveContext(joinedlogs,"biggestContext.ctx")
