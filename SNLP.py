@@ -8,7 +8,7 @@ Metrics= namedtuple("Metrics","path options")
 
 XHIST="xhistory.csv"
 FHIST="fhistory.csv"
-METRICS="metrics-3D-random-problem-1-sample2.csv"
+METRICS="metrics-3D-random-problem-visualizing.csv"
 
 class SNLP:
     def __init__(self,optproblem:OptProblem) -> None:

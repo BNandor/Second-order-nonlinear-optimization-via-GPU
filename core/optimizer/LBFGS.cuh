@@ -622,10 +622,12 @@ namespace LBFGS {
 //            if (threadIdx.x == 0) {
 //                sharedContext.sharedDXNorm = 0;
 //            }
+
             __syncthreads();// sharedContext.sharedF is cleared
             reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
             atomicAdd(&sharedContext.sharedF,
                       localContext.threadF); // TODO reduce over threads, not using atomicAdd
+
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             approximateImplicitHessian(sharedContext.globalData->sharedDX, it, &sQueue, &yQueue, &sharedContext);
@@ -646,6 +648,7 @@ namespace LBFGS {
                     break;
                 }
             }
+
             // sharedContext.globalData->lbfgsQueueY[yQueue.back], sharedContext.sharedF =f(xNext), xNext set
             __syncthreads();// TODO check if necessary
             // sharedContext.globalData->lbfgsR is set for all threads
@@ -654,9 +657,9 @@ namespace LBFGS {
                         X_DIM);
             // sharedContext.globalData->lbfgsQueueS[queue.back] = xNext - xCurrent
             __syncthreads();
+
             // DX[xNext] in sharedContext.globalData->lbfgsQueueY[queue.back]
             // DX[xCurrent] in sharedContext.sharedDX
-            __syncthreads();// remove this
             minusNoSync(sharedContext.globalData->lbfgsQueueY[yQueue.back], sharedContext.globalData->sharedDX,
                         sharedContext.globalData->lbfgsQueueY[yQueue.back], X_DIM);
             // sharedContext.globalData->lbfgsQueueY[queue.back]: DX[xNext] - DX[xCurrent]
@@ -669,6 +672,7 @@ namespace LBFGS {
                 // sharedContext.xNext contains the model for the next iteration
                 swapModels(&sharedContext);
             }
+
             // xCurrent<->xNext
             // Stopping criteria
 //            double localDXNorm = 0;

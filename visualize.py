@@ -12,7 +12,7 @@ SNLPVisualizerData = namedtuple("SNLPVisualizerData", "edges xs anchors")
 class SNLP3DVisualizer:
     def __init__(self, problems:List[SNLP.OptProblem]) -> None:
         self.problems=problems
-
+        self.fviz=FVisualizer(problems=problems)
     def getProblemData(self,problem:SNLP.OptProblem)->SNLPVisualizerData:
         historypath=f"{problem.outputPath}/{SNLP.XHIST}"
         problempath=f"{problem.inputPaths[0]}"
@@ -34,10 +34,16 @@ class SNLP3DVisualizer:
     def setAxTitles(self,ax,problem):
         ax.set_title(problem.optimizer)
 
+    def frameColor(self,i,problemId):
+        currentF=self.fviz.fs[problemId][i]
+        green=1-(currentF-self.fviz.minf)/(self.fviz.maxf-self.fviz.minf)
+        return min(max(green,0),1)
+
     def visualize(self):
         fig, axs = plt.subplots(1, len(self.problems),figsize=(15,15),subplot_kw=dict(projection='3d'))
         [self.setAx(ax) for ax in axs]
         data:List[SNLPVisualizerData]=[self.getProblemData(problem=problem) for problem in self.problems]
+        
         for i in range(max(d.xs.size for d in data)):
             [self.setAxTitles(ax,problem) for ax,problem in zip(axs,self.problems)]
             for j in range(len(self.problems)):
@@ -46,7 +52,8 @@ class SNLP3DVisualizer:
                 currentAnchors=data[j].anchors
                 currentAx=axs[j]
                 edgeLines=np.array([ [[currentX[0::3][int(edge[0])],currentX[1::3][int(edge[0])],currentX[2::3][int(edge[0])]],[currentX[0::3][int(edge[1])],currentX[1::3][int(edge[1])],currentX[2::3][int(edge[1])]]] for edge in currentEdges])
-                colors = np.array([[0,1.0/(1.0001**(abs(np.sum((currentX[0]-currentX[1])**2)-edge[2]))),0] for line,edge in zip(edgeLines,currentEdges)])
+                green=self.frameColor(i,j)
+                colors = np.array([[0,green,0] for line,edge in zip(edgeLines,currentEdges)])
                 colors[:,0]=1-colors[:,1]
                 line_segments = Line3DCollection(edgeLines, colors=colors,linestyle='solid',linewidth=1)
                 currentAx.add_collection(line_segments)
@@ -90,10 +97,13 @@ class SNLP2DVisualizer:
         fig, axs = plt.subplots(1, len(self.problems),figsize=(15,15))
         [self.setAx(ax) for ax in axs]
         data:List[SNLPVisualizerData]=[self.getProblemData(problem=problem) for problem in self.problems]
-        for i in range(max(d.xs.size for d in data)):
+        ldata=[len(d.xs) for d in data]
+        for i in range(max(len(d.xs) for d in data)):
             [self.setAxTitles(ax,problem) for ax,problem in zip(axs,self.problems)]
             for j in range(len(self.problems)):
-                currentX=data[j].xs[min(i,data[j].xs.size)]
+                if i >= len(data[j].xs):
+                    continue
+                currentX=data[j].xs[min(i,ldata[j]-1)]
                 currentEdges=data[j].edges
                 currentAnchors=data[j].anchors
                 currentAx=axs[j]
@@ -115,15 +125,38 @@ class SNLP2DVisualizer:
 class FVisualizer:
     def __init__(self,problems:List[SNLP.OptProblem]) -> None:
         self.problems=problems
-        self.skipfirst=100//problems[0].framesize
+        self.skipfirst=30//problems[0].framesize
+        self.fs=self.fvals()
+        (minf,maxf)=self.minMaxF()
+        self.minf =minf
+        self.maxf =maxf
+    def framesize(self):
+        return self.problems[0].framesize
 
-    def visualize(self):
+    def fvals(self):
         fhistories=[f"{problem.outputPath}/{SNLP.FHIST}" for problem in self.problems]
         fvalues=[]
         for fhistory in fhistories:
-            with open(fhistory, 'r') as flines:            
+            with open(fhistory, 'r') as flines:
                 fvalues.append(np.array([float(fline.rstrip())  for fline in flines]))
+        return fvalues
 
+    def minMaxF(self):
+        fvalues=self.fvals()
+        minf=fvalues[0][self.skipfirst]
+        maxf=fvalues[0][self.skipfirst]
+        for fs in fvalues:
+            for f in fs[self.skipfirst:]:
+                if minf >f:
+                    minf=f
+                if maxf <f:
+                    maxf=f
+        print(f"minF:{minf}")
+        print(f"maxF:{maxf}")
+        return (minf,maxf)
+
+    def visualize(self):
+        fvalues=self.fvals()
         fig = plt.figure(figsize=(12,7))
         ax = fig.add_subplot()
         ax.set_xlabel('iterations')

@@ -90,10 +90,10 @@ def runSNLP3D(problemPath,problemName,anchorName,populationName,residualSizes,mo
                         metrics=SNLP.Metrics( path=f"{problemPath}/csv/3D/GD/metrics", options=metricsConfig))
     problems = [problemLBFGS,problemGD]
     [runSNLP(problem=problem, optionalFlags=optionalFlags) for problem in problems]
-    # fvisualizer = visualize.FVisualizer(problems)
-    # fvisualizer.visualize()
-    # xvisualizer = visualize.SNLP3DVisualizer(problems)
-    # xvisualizer.visualize()
+    fvisualizer = visualize.FVisualizer(problems)
+    fvisualizer.visualize()
+    xvisualizer = visualize.SNLP3DVisualizer(problems)
+    xvisualizer.visualize()
 
 def runSNLP2D(problemPath,problemName,anchorName,populationName,residualSizes,modelsize,framesize,optionalFlags,metricsConfig):
     problemLBFGS = SNLP.OptProblem(name="PROBLEM_SNLP", 
@@ -118,100 +118,125 @@ def runSNLP2D(problemPath,problemName,anchorName,populationName,residualSizes,mo
                         metrics=SNLP.Metrics( path=f"{problemPath}/csv/2D/GD/metrics", options=metricsConfig))
     problems = [problemLBFGS,problemGD]
     [runSNLP(problem=problem,optionalFlags=optionalFlags) for problem in problems]
-    # fvisualizer = visualize.FVisualizer(problems)
-    # fvisualizer.visualize()
-    # xvisualizer = visualize.SNLP2DVisualizer(problems)
-    # xvisualizer.visualize()
+    fvisualizer = visualize.FVisualizer(problems)
+    fvisualizer.visualize()
+    xvisualizer = visualize.SNLP2DVisualizer(problems)
+    xvisualizer.visualize()
  
 populationSizes=[1,5,20]
 DEiterations=[0,4,19]
-minimizerIterations=[100,1000,5000,50000]
-nodecounts=[10,100,1000]
+minimizerIterations=[5000,100,10,5000,50000]
+nodecounts=[100,100,1000]
 solvermethods=["OPTIMIZER_MIN_DE","OPTIMIZER_SIMPLE_DE","OPTIMIZER_MIN_INIT_DE"]
 maxDistanceAsBoxFractions=[0.1,0.5]
-testCount=10
-ANCHOR_BOUNDING_BOX=1000
+testCount=1
+framesize=1
+ANCHOR_BOUNDING_BOX=5000
 INITIAL_POP_BOUNDING_BOX=20*ANCHOR_BOUNDING_BOX
 
-GDCases=testlogs.readCases("/home/spaceman/dissertation/finmat/ParallelLBFGS/SNLP3D/problems/gridtest/csv/3D/GD/metrics/metrics-3D-random-problem-1-sample2.csv")
+# GDCases=testlogs.readCases("/home/spaceman/dissertation/finmat/ParallelLBFGS/SNLP3D/problems/gridtest/csv/3D/GD/metrics/metrics-3D-random-problem-1-sample2.csv")
 
-for nodecount in nodecounts:
-    for populationSize in populationSizes:
-        for totalIterations in minimizerIterations:
-            for deIteration in DEiterations:
-                for solver in solvermethods:
-                    for maxDistFraction in maxDistanceAsBoxFractions:
-                        DEiteration=deIteration
-                        if populationSize <4:
-                            DEiteration=0
-                        if solver == "OPTIMIZER_MIN_INIT_DE":
-                            if populationSize <4:
-                                    continue
-                            DEiteration=totalIterations//10 *9
-                            iterations=totalIterations//10
-                        else:
-                            if solver == "OPTIMIZER_SIMPLE_DE":
-                                if populationSize <4:
-                                    continue
-                                DEiteration=totalIterations
-                                iterations=0
-                            else:
-                                iterations=totalIterations/(deIteration+1)
-                        diffEvolutionOptions=f"-DPOPULATION_SIZE={populationSize} -DDE_ITERATION_COUNT={DEiteration} -D{solver}"
-                        iterationOptions=f"-DITERATION_COUNT={iterations}"
-                        metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
-                        currentflags=f" {metricOptions} "
+# for nodecount in nodecounts:
+#         for totalIterations in minimizerIterations:
+#             for deIteration in DEiterations:
+#                 for solver in solvermethods:
+#                     for maxDistFraction in maxDistanceAsBoxFractions:
+#                       for populationSize in populationSizes:
+#                         DEiteration=deIteration
+#                         if populationSize <4:
+#                             DEiteration=0
+#                         if solver == "OPTIMIZER_MIN_INIT_DE":
+#                             if populationSize <4:
+#                                     continue
+#                             DEiteration=totalIterations//10 *9
+#                             iterations=totalIterations//10
+#                         else:
+#                             if solver == "OPTIMIZER_SIMPLE_DE":
+#                                 if populationSize <4:
+#                                     continue
+#                                 DEiteration=totalIterations
+#                                 iterations=0
+#                             else:
+#                                 iterations=totalIterations/(deIteration+1)
+#                         diffEvolutionOptions=f"-DPOPULATION_SIZE={populationSize} -DDE_ITERATION_COUNT={DEiteration} -D{solver}"
+#                         iterationOptions=f"-DITERATION_COUNT={iterations}"
+#                         metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
+#                         currentflags=f" {metricOptions} -DPRINT"
 
-                        generator=generate.Generate3DRandomProblem1(nodecount=nodecount, 
-                                                                        outPath="./SNLP3D/problems/gridtest",
-                                                                        problemName=f"random2{nodecount}-{maxDistFraction}.snlp",
-                                                                        anchorName=f"random2{nodecount}-{maxDistFraction}.snlpa")
+#                         generator=generate.Generate3DStructuredProblem1(nodecount=nodecount, 
+#                                                                         outPath="./SNLP3D/problems/gridtest",
+#                                                                         problemName=f"structured1-{nodecount}-{maxDistFraction}.snlp",
+#                                                                         anchorName=f"structured1-{nodecount}-{maxDistFraction}.snlpa")
 
 
-                        problemSize=generator.generateSNLPProblem(int(ANCHOR_BOUNDING_BOX*maxDistFraction))
-                        anchorSize=generator.generateSNLPProblemAnchors(ANCHOR_BOUNDING_BOX)
+#                         problemSize=generator.generateSNLPProblem(int(ANCHOR_BOUNDING_BOX*maxDistFraction))
+#                         anchorSize=generator.generateSNLPProblemAnchors(ANCHOR_BOUNDING_BOX)
 
-                        for testCase in range(testCount):
-                            print(f"testcase {testCase}\n")
-                            populationGenerator = generate.PopulationGenerator(populationSize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDistFraction}-{populationSize}-{testCase}.pop",boundingBox=INITIAL_POP_BOUNDING_BOX)
-                            populationGenerator.generate()
-                            testconfig={"solver":solver,
+#                         for testCase in range(testCount):
+#                             print(f"testcase {testCase}\n")
+#                             populationGenerator = generate.PopulationGenerator(populationSize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDistFraction}-{populationSize}-{testCase}.pop",boundingBox=INITIAL_POP_BOUNDING_BOX)
+#                             populationGenerator.generate()
+#                             testconfig={"solver":solver,
+#                                         "problem":generator.name(),
+#                                         "nodecount":nodecount,
+#                                         "edges":problemSize,
+#                                         "anchors":anchorSize,
+#                                         "totaliterations":totalIterations,
+#                                         "population":populationSize,
+#                                         "deIteration":DEiteration,
+#                                         "distFraction":maxDistFraction,
+#                                         "testcase":testCase}
+#                             # if(testlogs.caseIdentifier(testconfig) in GDCases):
+#                             #     print(f"skipping {testconfig}")
+#                             #     continue
+#                             print(testconfig)
+#                             runSNLP3D(generator.outPath,
+#                                 generator.problemName,
+#                                 generator.anchorName,
+#                                 populationGenerator.outName,
+#                                 [problemSize,
+#                                 anchorSize],
+#                                 generator.modelsize(),
+#                                 framesize,currentflags,testconfig)
+#                             quit()
+popsize=1
+DEGen=0
+totalIterations=1000
+iterations=totalIterations//(DEGen+1)
+nodecount=200
+maxDist=400
+box=1000
+solver="OPTIMIZER_MIN_DE"
+generator=generate.Generate2DStructuredProblem1(nodecount=nodecount, 
+                                                outPath="./SNLP2D/problems/gridtest",
+                                                problemName="spiral.snlp",                     
+                                                anchorName="spiral.snlpa")
+populationGenerator = generate.PopulationGenerator(popsize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDist}-{popsize}.pop",boundingBox=box)
+populationGenerator.generate()
+problemSize=generator.generateSNLPProblem(maxDist)
+
+anchorSize=generator.generateSNLPProblemAnchors(box)
+diffEvolutionOptions=f"-DPOPULATION_SIZE={popsize} -DDE_ITERATION_COUNT={DEGen} -D{solver}"
+iterationOptions=f"-DITERATION_COUNT={iterations}"
+metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
+currentflags=f" {metricOptions} -DPRINT"
+options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
+testconfig={"solver":solver,
                                         "problem":generator.name(),
                                         "nodecount":nodecount,
                                         "edges":problemSize,
                                         "anchors":anchorSize,
                                         "totaliterations":totalIterations,
-                                        "population":populationSize,
-                                        "deIteration":DEiteration,
-                                        "distFraction":maxDistFraction,
-                                        "testcase":testCase}
-                            if(testlogs.caseIdentifier(testconfig) in GDCases):
-                                print(f"skipping {testconfig}")
-                                continue
-                            print(testconfig)
-                            runSNLP3D(generator.outPath,
-                                generator.problemName,
-                                generator.anchorName,
-                                populationGenerator.outName,
-                                [problemSize,
-                                anchorSize],
-                                generator.modelsize(),
-                                100,currentflags,testconfig)
-
-                        # generator=generate.Generate2DStructuredProblem1(nodecount=20, 
-                        #                                                 outPath="./SNLP2D/problems/gridtest",
-                        #                                                 problemName="spiral.snlp",                     
-                        #                                                 anchorName="spiral.snlpa")
-
-                        # problemSize=generator.generateSNLPProblem(400)
-                        # anchorSize=generator.generateSNLPProblemAnchors(1000)
-                        # options=[generator.name(),generator.modelsize(),problemSize,anchorSize,metricOptions]
-                        # runSNLP2D(generator.outPath,
-                        #           generator.problemName,
-                        #           generator.anchorName,
-                        #           populationGenerator.outName,
-                        #           [problemSize,
-                        #           anchorSize],
-                        #           generator.modelsize(),
-                        #           5,
-                        #           currentflags,options)
+                                        "population":popsize,
+                                        "deIteration":DEGen,
+                                        "distFraction":maxDist/box,
+                                        "testcase":1}
+runSNLP2D(generator.outPath,
+                                  generator.problemName,
+                                  generator.anchorName,
+                                  populationGenerator.outName,
+                                  [problemSize,
+                                  anchorSize],
+                                  generator.modelsize(),
+                                  framesize,
+                                  currentflags,testconfig)

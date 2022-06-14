@@ -439,7 +439,7 @@ namespace GD {
         const double epsilon = FEPSILON;
         sharedContext.sharedDXNorm = epsilon + 1;
         unsigned it;
-
+//        for (it = 0; it < ITERATION_COUNT; it++) {
         for (it = 0; localContext.fEvaluations < ITERATION_COUNT; it++) {
 
             resetSharedState(&sharedContext, threadIdx.x);

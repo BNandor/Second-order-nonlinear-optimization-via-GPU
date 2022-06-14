@@ -71,12 +71,13 @@ class Generate3DStructuredProblem1:
         minX = -boundingBoxSize/2
         maxX = boundingBoxSize/2
         minY = -boundingBoxSize/2
-        maxY = boundingBoxSize/2
+        maxY = boundingBoxSize/2                
         minZ = -boundingBoxSize/2
         maxZ = boundingBoxSize/2
         problem=[]
         problem.append(f"{minX} {minY} {minZ} {0} {0}\n")
         problem.append(f"{maxX} {maxY} {maxZ} {n-1} {0}\n")
+        problem.append(f"{minX} {minY} {maxZ} {n/2} {0}\n")
         problem[-1]=problem[-1].rstrip()
         [outfile.write(line) for line in problem]
         outfile.close()  
