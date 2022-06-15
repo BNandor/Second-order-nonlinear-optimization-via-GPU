@@ -201,20 +201,25 @@ INITIAL_POP_BOUNDING_BOX=20*ANCHOR_BOUNDING_BOX
 #                             quit()
 popsize=1
 DEGen=0
-totalIterations=1000
+totalIterations=1
 iterations=totalIterations//(DEGen+1)
-nodecount=200
+nodecount=27
 maxDist=400
-box=1000
+box=100
 solver="OPTIMIZER_MIN_DE"
-generator=generate.Generate2DStructuredProblem1(nodecount=nodecount, 
-                                                outPath="./SNLP2D/problems/gridtest",
-                                                problemName="spiral.snlp",                     
-                                                anchorName="spiral.snlpa")
-populationGenerator = generate.PopulationGenerator(popsize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDist}-{popsize}.pop",boundingBox=box)
+# generator=generate.Generate2DStructuredProblem1(nodecount=nodecount, 
+#                                                 outPath="./SNLP2D/problems/gridtest",
+#                                                 problemName="spiral.snlp",                     
+#                                                 anchorName="spiral.snlpa")
+
+generator=generate.Generate2DDVHopBench(nodecount=nodecount, 
+                                                outPath="./SNLP2D/problems/dvhopbench",
+                                                problemName="exported.snlp",                     
+                                                anchorName="exported.snlpa")
+# populationGenerator = generate.PopulationGenerator(popsize,generator.modelsize(),generator.outPath,f"random2{nodecount}-{maxDist}-{popsize}.pop",boundingBox=box)
+populationGenerator = generate.PopulationGenerator(popsize,generator.modelsize(),generator.outPath,f"dvhopfinal.pop",boundingBox=box)
 populationGenerator.generate()
 problemSize=generator.generateSNLPProblem(maxDist)
-
 anchorSize=generator.generateSNLPProblemAnchors(box)
 diffEvolutionOptions=f"-DPOPULATION_SIZE={popsize} -DDE_ITERATION_COUNT={DEGen} -D{solver}"
 iterationOptions=f"-DITERATION_COUNT={iterations}"

@@ -576,6 +576,16 @@ namespace LBFGS {
 //            }
 
             __syncthreads();
+            if (threadIdx.x == 0 && blockIdx.x == 0) {
+#ifdef PRINT
+                printf("xCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%f,", sharedContext.xCurrent[j]);
+                }
+                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+#endif
+                printf("f: %f\n", fCurrent);
+            }
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             lineSearch(&localContext, &sharedContext, sharedContext.globalData->sharedDX, fCurrent);
 
@@ -603,16 +613,6 @@ namespace LBFGS {
             }
             __syncthreads();
             //xCurrent,xNext is set for all threads
-            if (threadIdx.x == 0 && blockIdx.x == 0) {
-#ifdef PRINT
-                printf("xCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-#endif
-                printf("f: %f\n", fCurrent);
-            }
         }
         double costDifference = INT_MAX;
         for (; localContext.fEvaluations < ITERATION_COUNT; it++) {
@@ -634,6 +634,42 @@ namespace LBFGS {
             // sharedContext.globalData->lbfgsR is set / threads
             fCurrent = sharedContext.sharedF;
             __syncthreads();
+#ifdef PRINT
+            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+//                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
+//                printf("S: ");
+//                unsigned sIterator = sQueue.getIterator();
+//                while (sQueue.hasNext(sIterator)) {
+//                    double *s = sQueue.next(sIterator);
+//                    for (int i = 0; i < X_DIM; i++) {
+//                        printf("%.16f ", s[i]);
+//                    }
+//                    printf(",");
+//                }
+//
+//                printf("\nY: ");
+//                unsigned yIterator = yQueue.getIterator();
+//                while (yQueue.hasNext(yIterator)) {
+//                    double *y = yQueue.next(yIterator);
+//                    for (int i = 0; i < X_DIM; i++) {
+//                        printf("%.16f ", y[i]);
+//                    }
+//                    printf(",");
+//                }
+//
+//                printf("\nR:");
+//                for (int i = 0; i < X_DIM; i++) {
+//                    printf("%.16f ", sharedContext.globalData->lbfgsR[i]);
+//                }
+
+                printf("\nxCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%.16f,", sharedContext.xCurrent[j]);
+                }
+                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("f: %f\n", fCurrent);
+            }
+#endif
 
             if(LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
                                               sharedContext.globalData->lbfgsR,
@@ -692,42 +728,7 @@ namespace LBFGS {
 //            }
 //
 //            costDifference = std::abs(fCurrent - sharedContext.sharedF);
-#ifdef PRINT
-            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
-//                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
-//                printf("S: ");
-//                unsigned sIterator = sQueue.getIterator();
-//                while (sQueue.hasNext(sIterator)) {
-//                    double *s = sQueue.next(sIterator);
-//                    for (int i = 0; i < X_DIM; i++) {
-//                        printf("%.16f ", s[i]);
-//                    }
-//                    printf(",");
-//                }
-//
-//                printf("\nY: ");
-//                unsigned yIterator = yQueue.getIterator();
-//                while (yQueue.hasNext(yIterator)) {
-//                    double *y = yQueue.next(yIterator);
-//                    for (int i = 0; i < X_DIM; i++) {
-//                        printf("%.16f ", y[i]);
-//                    }
-//                    printf(",");
-//                }
-//
-//                printf("\nR:");
-//                for (int i = 0; i < X_DIM; i++) {
-//                    printf("%.16f ", sharedContext.globalData->lbfgsR[i]);
-//                }
 
-                printf("\nxCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%.16f,", sharedContext.xCurrent[j]);
-                }
-                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
-                printf("f: %f\n", fCurrent);
-            }
-#endif
 
             __syncthreads();
         }

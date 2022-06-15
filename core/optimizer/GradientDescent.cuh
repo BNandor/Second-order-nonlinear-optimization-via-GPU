@@ -455,6 +455,16 @@ namespace GD {
 //                sharedContext.sharedDXNorm = 0;
 //            }
             __syncthreads();
+#ifdef PRINT
+            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+                printf("xCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%f,", sharedContext.xCurrent[j]);
+                }
+                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("f: %f\n", fCurrent);
+            }
+#endif
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             ;
             if(!lineSearch(&localContext, &sharedContext, fCurrent)){
@@ -488,16 +498,7 @@ namespace GD {
 //            costDifference = std::abs(fCurrent - sharedContext.sharedF);
             __syncthreads();
             //xCurrent,xNext is set for all threads
-#ifdef PRINT
-            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
-                printf("xCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-                printf("f: %f\n", fCurrent);
-            }
-#endif
+
         }
 
 #ifdef PRINT

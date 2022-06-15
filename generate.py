@@ -1,6 +1,7 @@
 import os
 import random
 from functools import reduce
+import pandas as pd
 
 class PopulationGenerator():
     def __init__(self, populationsize, modelsize, outPath,outName, boundingBox) -> None:
@@ -140,6 +141,26 @@ class Generate2DStructuredProblem1:
         [outfile.write(line) for line in problem]
         outfile.close()  
         return len(problem)
+
+class Generate2DDVHopBench:
+    def __init__(self,nodecount,outPath,problemName,anchorName) -> None:
+        self.nodecount=nodecount
+        self.outPath=outPath
+        self.problemName=problemName
+        self.anchorName=anchorName
+
+    def modelsize(self):
+        return self.nodecount*2
+
+    def name(self):
+        return "DVHopBench"
+
+
+    def generateSNLPProblem(self,maxDist):
+        return len(pd.read_csv(f"{self.outPath}/{self.problemName}",header=None,delimiter=" ")[0])
+
+    def generateSNLPProblemAnchors(self,boundingBoxSize):
+        return len(pd.read_csv(f"{self.outPath}/{self.anchorName}",header=None,delimiter=" ")[0])
 
 class Generate3DRandomProblem1:
     def __init__(self,nodecount,outPath,problemName,anchorName) -> None:
