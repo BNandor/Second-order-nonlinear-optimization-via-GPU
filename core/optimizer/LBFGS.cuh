@@ -25,7 +25,7 @@
 
 
 namespace LBFGS {
-
+    std::string name="LBFGS";
 #define LBFGS_M 5
 #define LBFGS_LINESEARCH_C1 0.0001
 #define LBFGS_LINESEARCH_C2 0.9
@@ -732,22 +732,28 @@ namespace LBFGS {
 
             __syncthreads();
         }
-
+#ifdef PRINT
+        if (threadIdx.x == 0 && blockIdx.x == 0) {
+                printf("\nxCurrent ");
+                for (unsigned j = 0; j < X_DIM - 1; j++) {
+                    printf("%f,", sharedContext.xCurrent[j]);
+                }
+                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+                printf("\nthreads:%d", blockDim.x);
+                printf("\niterations:%d", it);
+                printf("\nfevaluations: %d\n", localContext.fEvaluations);
+            }
+#endif
         if (threadIdx.x == 0) {
             // print Queues after GD
-#ifdef PRINT
-            printf("\nxCurrent ");
-            for (unsigned j = 0; j < X_DIM - 1; j++) {
-                printf("%f,", sharedContext.xCurrent[j]);
-            }
-            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-#endif
+
             globalF[blockIdx.x] = sharedContext.sharedF;
-            printf("\nthreads:%d", blockDim.x);
-            printf("\niterations:%d", it);
-            printf("\nfevaluations: %d\n", localContext.fEvaluations);
+
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
+        }
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            globalX[modelStartingIndex + spanningTID]=sharedContext.xCurrent[spanningTID];
         }
     }
     __global__ void

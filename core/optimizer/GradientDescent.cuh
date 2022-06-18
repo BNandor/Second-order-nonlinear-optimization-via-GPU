@@ -227,6 +227,7 @@
 //}
 
 namespace GD {
+    std::string name="GD";
     struct GlobalData {
         double sharedX1[X_DIM];
         double sharedX2[X_DIM];
@@ -509,16 +510,21 @@ namespace GD {
                 printf("%f,", sharedContext.xCurrent[j]);
             }
             printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+            printf("\nthreads:%d", blockDim.x);
+            printf("\niterations:%d", it);
+            printf("\nfevaluations: %d\n", localContext.fEvaluations);
         }
+
 #endif
 
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
-            printf("\nthreads:%d", blockDim.x);
-            printf("\niterations:%d", it);
-            printf("\nfevaluations: %d\n", localContext.fEvaluations);
+
 //            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
 //                   sharedContext.sharedF);
+        }
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            globalX[modelStartingIndex + spanningTID]=sharedContext.xCurrent[spanningTID];
         }
     }
 

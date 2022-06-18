@@ -7,12 +7,13 @@ def dropRowColumnByFlag(flags,df):
     varyingNeighborsData.columns = range(varyingNeighborsData.columns.size)
     return varyingNeighborsData
 
-def getSNLP(anchorFlagsData,neighborData,distancesData,outPath):
+def getSNLP(anchorFlagsData,neighborData,distancesData,outPath,verbose=False):
     varyingNeighborsData=dropRowColumnByFlag(anchorFlagsData,neighborData)
     varyingNeighborsDistanceData=dropRowColumnByFlag(anchorFlagsData,distancesData)
     n=varyingNeighborsDistanceData.shape[0]
-    print(varyingNeighborsData)
-    print(varyingNeighborsDistanceData)
+    if verbose:
+        print(varyingNeighborsData)
+        print(varyingNeighborsDistanceData)
     outfile = open(outPath, "w")
     for i in range(n):
         for j in range(n):
@@ -30,21 +31,18 @@ def getSNLPA(anchorData,anchorFlagsData,neighborData,distancesData,outPath):
                     outfile.write(f"{anchorData[0][i]} {anchorData[1][i]} {j-sum(anchorFlagsData[0][0:j])} {distancesData[i][j]}\n")
 
         i+=1
-    outfile.close()            
-    
-anchorCsv='anchors.csv'
-anchorFlagsCsv='anchorflags.csv'
-neighborsCsv='neighbors.csv'
-distancesCsv='distances.csv'
-anchorData = pd.read_csv(anchorCsv,header=None,delimiter=" ")
-anchorFlagsData = pd.read_csv(anchorFlagsCsv,header=None,delimiter=" ")
-neighborData = pd.read_csv(neighborsCsv,header=None,delimiter=" ")
-distancesData = pd.read_csv(distancesCsv,header=None,delimiter=" ")
+    outfile.close()
 
-print(anchorData)
-print(neighborData)
-print(distancesData)
-print(anchorFlagsData)
+def convertCSVtoSNLP(anchorCsv,anchorFlagsCsv,neighborsCsv,distancesCsv, outPath,verbose=False):
+    anchorData = pd.read_csv(anchorCsv,header=None,delimiter=",")
+    anchorFlagsData = pd.read_csv(anchorFlagsCsv,header=None,delimiter=",")
+    neighborData = pd.read_csv(neighborsCsv,header=None,delimiter=",")
+    distancesData = pd.read_csv(distancesCsv,header=None,delimiter=",")
+    if verbose:
+        print(anchorData)
+        print(neighborData)
+        print(distancesData)
+        print(anchorFlagsData)
 
-getSNLP(anchorFlagsData,neighborData,distancesData,"exported.snlp")
-getSNLPA(anchorData,anchorFlagsData,neighborData,distancesData,"exported.snlpa")
+    getSNLP(anchorFlagsData,neighborData,distancesData,f"{outPath}/exportedDVHop.snlp",verbose)
+    getSNLPA(anchorData,anchorFlagsData,neighborData,distancesData,f"{outPath}/exportedDVHop.snlpa")

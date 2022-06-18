@@ -60,7 +60,7 @@
 
 // Differential Evolution Control parameters
 #define CR 0.99
-#define F 0.2
+#define F 0.6
 
 //#define CR 0.9
 //#define F  0.9

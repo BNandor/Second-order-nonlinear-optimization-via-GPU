@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <iomanip>
 //#define SAFE
 //#define PRINT
 
@@ -152,6 +152,19 @@ void readSNLPAnchors(double *data, std::string filename) {
 }
 
 #endif
+void persistBestSNLPModel(double *x, int modelSize, std::string filename) {
+    std::ofstream output;
+    output.open(filename.c_str());
+    if (output.is_open()) {
+        for (int i=0;i<modelSize;i++){
+            output<<std::setprecision(17)<<x[i]<<std::endl;
+        }
+        output.close();
+    } else {
+        std::cout << "err: could not open " << filename << std::endl;
+        exit(1);
+    }
+}
 
 void testPlaneFitting() {
 
@@ -199,6 +212,8 @@ void testPlaneFitting() {
 
     // GENERATE PROBLEM
     double x[xSize] = {};
+    double solution[xSize] = {};
+    double finalFs[POPULATION_SIZE] = {};
     double data[dataSize] = {};
 
 #ifdef PROBLEM_PLANEFITTING
@@ -272,7 +287,22 @@ void testPlaneFitting() {
         printf("\nfevaluations: %d\n", DE_ITERATION_COUNT);
 #endif
     printBestF<<<1,1>>>(dev_F1,POPULATION_SIZE);
-    //dev_x2 contains the best models
+
+    cudaMemcpy(&finalFs, dev_F1, POPULATION_SIZE * sizeof(double), cudaMemcpyDeviceToHost);
+    int min=0;
+    for(int ff=1;ff<POPULATION_SIZE;ff++){
+        if(finalFs[min]>finalFs[ff]){
+            min=ff;
+        }
+    }
+    cudaMemcpy(&solution, dev_x1, xSize * sizeof(double), cudaMemcpyDeviceToHost);
+    printf("\nsolf: %f and solution: ",finalFs[min]);
+    for(int ff=X_DIM*min;ff<X_DIM*(min+1)-1;ff++) {
+        printf("%f,",solution[ff]);
+    }
+    printf("%f\n",solution[X_DIM*(min+1)-1]);
+    persistBestSNLPModel(&solution[X_DIM*min],X_DIM, std::string("finalModel")+std::string(OPTIMIZER::name)+std::string(".csv"));
+
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
