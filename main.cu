@@ -14,6 +14,7 @@
 #include "core/optimizer/LBFGS.cuh"
 #include "core/optimizer/GradientDescent.cuh"
 #include "core/optimizer/DifferentialEvolution.cuh"
+#include "core/common/Random.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -166,9 +167,9 @@ void persistBestSNLPModel(double *x, int modelSize, std::string filename) {
     }
 }
 
-void testPlaneFitting() {
-
-    curandState *dev_curandState;
+void testOptimizer() {
+    Random cudaRandom=Random();
+    OptimizerContext optimizerContext=OptimizerContext();
     cudaEvent_t start, stop, startCopy, stopCopy;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
@@ -200,15 +201,13 @@ void testPlaneFitting() {
     double *dev_F1;
     double *dev_F2;
 
-
-
     // ALLOCATE DEVICE MEMORY
     cudaMalloc((void **) &dev_x, xSize * sizeof(double));
     cudaMalloc((void **) &dev_xDE, xSize * sizeof(double));
     cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
     cudaMalloc((void **) &dev_F, POPULATION_SIZE * sizeof(double));
     cudaMalloc((void **) &dev_FDE, POPULATION_SIZE * sizeof(double));
-    cudaMalloc(&dev_curandState, THREADS_PER_GRID * sizeof(curandState));
+
 
     // GENERATE PROBLEM
     double x[xSize] = {};
@@ -246,10 +245,8 @@ void testPlaneFitting() {
     cudaMemcpy(dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
     cudaEventRecord(stopCopy);
     cudaEventRecord(start);
-
+    cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext);
     // EXECUTE KERNEL
-    // initialize curand
-    setupCurand<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_curandState);
     dev_x1 = dev_x;
     dev_x2 = dev_xDE;
     dev_F1 = dev_F;
@@ -264,7 +261,7 @@ void testPlaneFitting() {
 #endif
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
-        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_curandState);
+        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, cudaRandom.dev_curandState);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
         OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, dev_globalContext);
@@ -326,19 +323,6 @@ void testPlaneFitting() {
 }
 
 int main() {
-//    testDFloat();
-//    testDFuncBFS();
-//    testF1();
-
-    testPlaneFitting();
-//    testQueue();
-//    testDot();
+    testOptimizer();
     return 0;
 }
-
-// Create the Function concept: ([DDouble a])-> compute parameter index order once (BFS), and propagate derivatives that way
-// will have: orderArray[operatorTreeSize] - container indices of parameter in order
-//            parameters[maxIndex]-contains references of DDouble parameters
-// calculate local stack size limit,
-// keep a min heap of size operatorTreeSize and a statistical vector to check for duplicates.
-// OPT: keep the orderArray in shared memory, to reduce

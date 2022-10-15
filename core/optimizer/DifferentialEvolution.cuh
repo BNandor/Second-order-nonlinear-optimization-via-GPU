@@ -10,11 +10,7 @@
 #include "../common/Constants.cuh"
 #include <assert.h>
 
-__global__
-void setupCurand(curandState *state) {
-    int idx = threadIdx.x + blockDim.x * blockIdx.x;
-    curand_init(1234, idx, 0, &state[idx]);
-}
+
 
 __global__
 void differentialEvolutionStep(double *oldX, double *newX, curandState *curandState) {
