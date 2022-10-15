@@ -6,38 +6,85 @@
 #define PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 
 
-class DEContext {
+
+#include "../optimizer/perturb/DE/DEContext.h"
+#include "../optimizer/perturb/Perturbator.h"
+
+class Model {
 public:
-    double crossoverRate=CR;
-    double force=F;
+    int modelSize;
+    int modelPopulationSize;
+
+    Model()=default;
+    Model(Perturbator& perturbator) {
+        modelSize=X_DIM;
+        modelPopulationSize=perturbator.populationSize*modelSize;
+    }
+};
+
+struct CUDAConfig {
+    int threadsPerBlock=THREADS_PER_BLOCK;
+    int blocksPerGrid;
+    CUDAConfig()=default;
+    CUDAConfig(Perturbator& perturbator){
+        blocksPerGrid=perturbator.populationSize;
+    }
 };
 
 class OptimizerContext{
+
 private:
-    int threadsPerBlock=THREADS_PER_BLOCK;
-    int populationSize=POPULATION_SIZE;
-    int blocksPerGrid=populationSize;
-    DEContext differentialEvolutionContext=DEContext();
+    CUDAConfig cudaConfig;
+    DEContext differentialEvolutionContext;
+    Perturbator* currentPerturbator;
+    Model model;
 
 public:
-    int getThreadsPerBlock() const {
-        return threadsPerBlock;
+
+    explicit OptimizerContext(DEContext &deContext) {
+        // Configure perturbators
+        differentialEvolutionContext=deContext;
+
+        // Select currentPerturbator
+        currentPerturbator = &differentialEvolutionContext;
+
+        model=Model(*currentPerturbator);
+        cudaConfig=CUDAConfig(*currentPerturbator);
     }
 
-    int getPopulationSize() const {
-        return populationSize;
+    int getThreadsPerBlock() const {
+#ifdef SAFE
+        assert(cudaConfig.threadsPerBlock>0);
+#endif
+        return cudaConfig.threadsPerBlock;
     }
 
     int getBlocksPerGrid() const {
-        return blocksPerGrid;
+#ifdef SAFE
+        assert(cudaConfig.blocksPerGrid>0);
+#endif
+        return cudaConfig.blocksPerGrid;
     }
 
-    const DEContext &getDifferentialEvolutionContext() const {
-        return differentialEvolutionContext;
+    int getThreadsInGrid() {
+#ifdef SAFE
+        assert(cudaConfig.threadsPerBlock * cudaConfig.blocksPerGrid>0);
+#endif
+        return cudaConfig.threadsPerBlock * cudaConfig.blocksPerGrid;
     }
 
-    int getThreadsInGrid(){
-        return threadsPerBlock * blocksPerGrid;
+    int getPopulationSize() const {
+#ifdef SAFE
+        assert(currentPerturbator->populationSize>0);
+#endif
+        return currentPerturbator->populationSize;
+    }
+
+    int getModelPopulationSize() {
+#ifdef SAFE
+        assert(model.modelPopulationSize>0);
+#endif
+        return model.modelPopulationSize;
     }
 
 };

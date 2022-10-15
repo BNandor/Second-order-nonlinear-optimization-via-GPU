@@ -7,7 +7,7 @@
 
 #include <curand.h>
 #include <curand_kernel.h>
-#include "../common/Constants.cuh"
+#include "../../../common/Constants.cuh"
 #include <assert.h>
 
 

@@ -11,9 +11,9 @@
 //#define GLOBAL_SHARED_MEM
 
 #include "core/common/Constants.cuh"
-#include "core/optimizer/LBFGS.cuh"
-#include "core/optimizer/GradientDescent.cuh"
-#include "core/optimizer/DifferentialEvolution.cuh"
+#include "core/optimizer/refine/LBFGS.cuh"
+#include "core/optimizer/refine/GradientDescent.cuh"
+#include "core/optimizer/perturb/DE/DifferentialEvolution.cuh"
 #include "core/common/Random.cuh"
 #include "core/common/Metrics.cuh"
 #include <curand.h>
@@ -170,11 +170,13 @@ void persistBestSNLPModel(double *x, int modelSize, std::string filename) {
 
 void testOptimizer() {
     Random cudaRandom=Random();
-    OptimizerContext optimizerContext=OptimizerContext();
     Metrics metrics = Metrics();
     metrics.initialize();
+    DEContext deContext=DEContext();
+    OptimizerContext optimizerContext=OptimizerContext(deContext);
 
-    const unsigned xSize = X_DIM * POPULATION_SIZE;
+
+    const unsigned xSize = optimizerContext.getModelPopulationSize();
 
 #if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
     const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
