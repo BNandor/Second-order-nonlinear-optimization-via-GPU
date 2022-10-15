@@ -1,7 +1,7 @@
 import runConfig
-popsize=10
-DEGen=1
-totalIterations=100
+popsize=100
+DEGen=50
+totalIterations=100000
 iterations=totalIterations//(DEGen+1)
 nodecount=27
 maxDist=400

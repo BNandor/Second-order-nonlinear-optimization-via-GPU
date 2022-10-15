@@ -15,6 +15,7 @@
 #include "core/optimizer/GradientDescent.cuh"
 #include "core/optimizer/DifferentialEvolution.cuh"
 #include "core/common/Random.cuh"
+#include "core/common/Metrics.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -170,12 +171,8 @@ void persistBestSNLPModel(double *x, int modelSize, std::string filename) {
 void testOptimizer() {
     Random cudaRandom=Random();
     OptimizerContext optimizerContext=OptimizerContext();
-    cudaEvent_t start, stop, startCopy, stopCopy;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
-    cudaEventCreate(&startCopy);
-    cudaEventCreate(&stopCopy);
-
+    Metrics metrics = Metrics();
+    metrics.initialize();
 
     const unsigned xSize = X_DIM * POPULATION_SIZE;
 
@@ -240,11 +237,11 @@ void testOptimizer() {
     readPopulation(x, xSize,PROBLEM_INPUT_POPULATION_PATH);
 #endif
     // COPY TO DEVICE
-    cudaEventRecord(startCopy);
+    metrics.getCudaEventMetrics().recordStartCopy();
     cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
-    cudaEventRecord(stopCopy);
-    cudaEventRecord(start);
+    metrics.getCudaEventMetrics().recordStopCopy();
+    metrics.getCudaEventMetrics().recordStartCompute();
     cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext);
     // EXECUTE KERNEL
     dev_x1 = dev_x;
@@ -300,15 +297,11 @@ void testOptimizer() {
     printf("%f\n",solution[X_DIM*(min+1)-1]);
     persistBestSNLPModel(&solution[X_DIM*min],X_DIM, std::string("finalModel")+std::string(OPTIMIZER::name)+std::string(".csv"));
 
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
+    metrics.getCudaEventMetrics().recordStopCompute();
 
-    float memcpyMilli = 0;
-    cudaEventElapsedTime(&memcpyMilli, startCopy, stopCopy);
-    float kernelMilli = 0;
-    cudaEventElapsedTime(&kernelMilli, start, stop);
+
 //    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
-    printf("\ntime ms : %f\n", kernelMilli);
+    printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
 
 
     cudaFree(dev_x);
