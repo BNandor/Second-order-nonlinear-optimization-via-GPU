@@ -185,12 +185,7 @@ void testOptimizer() {
 //#endif
 
     const unsigned dataSize = optimizerContext.getResidualDataSize();
-    printf("final dataSize %u",dataSize);
-//#ifdef GLOBAL_SHARED_MEM
-    OPTIMIZER::GlobalData *dev_globalContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
-    cudaMalloc(&dev_globalContext, sizeof(OPTIMIZER::GlobalData)*POPULATION_SIZE/* TODO here have POPULATION_SIZE of these*/);
-    printf("Allocating %lu global memory\n",sizeof(OPTIMIZER::GlobalData)*POPULATION_SIZE);
-//#endif
+    optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize());
 
     double *dev_x;
     double *dev_xDE;
@@ -254,20 +249,20 @@ void testOptimizer() {
     dev_F2 = dev_FDE;
 
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_MIN_DE)
-    OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data,dev_F1, dev_globalContext);
+    optimizerContext.getCurrentLocalSearch()->optimize(dev_x1, dev_data,dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
 #endif
 
 #ifdef OPTIMIZER_SIMPLE_DE
-    OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, dev_globalContext);
+    OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #endif
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
         differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, cudaRandom.dev_curandState);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
-        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, dev_globalContext);
+        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #elif defined(OPTIMIZER_MIN_DE)
-        OPTIMIZER::optimize<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, dev_globalContext);
+        optimizerContext.getCurrentLocalSearch()->optimize(dev_x2, dev_data, dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
 #elif
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);
@@ -307,16 +302,11 @@ void testOptimizer() {
 //    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
     printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
 
-
     cudaFree(dev_x);
     cudaFree(dev_xDE);
     cudaFree(dev_data);
     cudaFree(dev_F);
     cudaFree(dev_FDE);
-
-#ifdef GLOBAL_SHARED_MEM
-    cudaFree(dev_globalContext);
-#endif
 }
 
 int main() {

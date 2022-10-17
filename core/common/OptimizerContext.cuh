@@ -9,6 +9,9 @@
 
 #include "../optimizer/perturb/DE/DEContext.h"
 #include "../optimizer/perturb/Perturbator.h"
+#include "../optimizer/refine/LocalSearch.cuh"
+#include "config/CUDAConfig.cuh"
+#include <cstring>
 
 class Residual {
 public:
@@ -74,14 +77,6 @@ public:
     }
 };
 
-struct CUDAConfig {
-    int threadsPerBlock=THREADS_PER_BLOCK;
-    int blocksPerGrid;
-    CUDAConfig()=default;
-    CUDAConfig(Perturbator& perturbator) {
-        blocksPerGrid=perturbator.populationSize;
-    }
-};
 
 class OptimizerContext {
 
@@ -89,7 +84,9 @@ private:
     CUDAConfig cudaConfig;
     DEContext differentialEvolutionContext;
     Perturbator* currentPerturbator;
-
+    GDLocalSearch gdLocalSearch;
+    LBFGSLocalSearch lbfgsLocalSearch;
+    LocalSearch* currentLocalSearch;
 
 public:
     SNLPModel model;
@@ -99,7 +96,28 @@ public:
 
         // Select currentPerturbator
         currentPerturbator = &differentialEvolutionContext;
+
+        //Configure Local Searches
+        gdLocalSearch=GDLocalSearch();
+        lbfgsLocalSearch=LBFGSLocalSearch();
+
+        //Select currentLocalsearch
+        if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {
+            printf("localSearch is GD\n");
+            currentLocalSearch=&gdLocalSearch;
+        }
+
+        if (strcmp(OPTIMIZER::name.c_str(),"LBFGS" ) == 0) {
+            printf("localSearch is LBFGS\n");
+            currentLocalSearch = &lbfgsLocalSearch;
+        }
+
+#ifdef SAFE
+        assert(currentLocalSearch!=0);
+#endif
+
         cudaConfig=CUDAConfig(*currentPerturbator);
+
     }
 
     int getThreadsPerBlock() const {
@@ -139,6 +157,14 @@ public:
 
     int getResidualDataSize() {
         return model.residuals.residualDataSize();
+    }
+
+    LocalSearch* getCurrentLocalSearch(){
+        return currentLocalSearch;
+    }
+
+    CUDAConfig getCUDAConfig(){
+        return  cudaConfig;
     }
 };
 #endif //PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
