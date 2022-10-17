@@ -174,16 +174,18 @@ void testOptimizer() {
     metrics.initialize();
     DEContext deContext=DEContext();
     OptimizerContext optimizerContext=OptimizerContext(deContext);
-
-
+    optimizerContext.model=SNLPModel(deContext);
     const unsigned xSize = optimizerContext.getModelPopulationSize();
 
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
-                              RESIDUAL_CONSTANTS_DIM_2 * RESIDUAL_CONSTANTS_COUNT_2;
-#else
-    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
-#endif
+//#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
+//    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
+//                              RESIDUAL_CONSTANTS_DIM_2 * RESIDUAL_CONSTANTS_COUNT_2;
+//#else
+//    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
+//#endif
+
+    const unsigned dataSize = optimizerContext.getResidualDataSize();
+    printf("final dataSize %u",dataSize);
 //#ifdef GLOBAL_SHARED_MEM
     OPTIMIZER::GlobalData *dev_globalContext;// TODO POPULATION_SIZE number of shared contexts must be created (indexed by blockIndex)
     cudaMalloc(&dev_globalContext, sizeof(OPTIMIZER::GlobalData)*POPULATION_SIZE/* TODO here have POPULATION_SIZE of these*/);
