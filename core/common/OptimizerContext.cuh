@@ -48,16 +48,20 @@ public:
     }
 };
 
+
+
 class Model {
 public:
     int modelSize;
     int modelPopulationSize;
+    int populationSize;
     Residuals residuals;
 
     Model()=default;
     Model(Perturbator& perturbator) {
         modelSize=X_DIM;
         modelPopulationSize=perturbator.populationSize*modelSize;
+        populationSize=perturbator.populationSize;
     }
 };
 
@@ -77,6 +81,28 @@ public:
     }
 };
 
+class CUDAMemoryModel{
+public:
+    double *dev_x;
+    double *dev_xDE;
+    double *dev_x1;
+    double *dev_x2;
+    double *dev_data;
+    double *dev_F;
+    double *dev_FDE;
+    double *dev_F1;
+    double *dev_F2;
+
+    void allocateFor(Model &model) {
+        cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
+        cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
+        cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
+        cudaMalloc((void **) &dev_F, model.populationSize * sizeof(double));
+        cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
+    }
+
+};
+
 
 class OptimizerContext {
 
@@ -87,9 +113,10 @@ private:
     GDLocalSearch gdLocalSearch;
     LBFGSLocalSearch lbfgsLocalSearch;
     LocalSearch* currentLocalSearch;
-
 public:
+    CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
+
     explicit OptimizerContext(DEContext &deContext) {
         // Configure perturbators
         differentialEvolutionContext=deContext;
@@ -117,7 +144,7 @@ public:
 #endif
 
         cudaConfig=CUDAConfig(*currentPerturbator);
-
+        cudaMemoryModel=CUDAMemoryModel();
     }
 
     int getThreadsPerBlock() const {
@@ -159,7 +186,7 @@ public:
         return model.residuals.residualDataSize();
     }
 
-    LocalSearch* getCurrentLocalSearch(){
+    LocalSearch* getCurrentLocalSearch() {
         return currentLocalSearch;
     }
 

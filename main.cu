@@ -175,7 +175,7 @@ void testOptimizer() {
     DEContext deContext=DEContext();
     OptimizerContext optimizerContext=OptimizerContext(deContext);
     optimizerContext.model=SNLPModel(deContext);
-    const unsigned xSize = optimizerContext.getModelPopulationSize();
+
 
 //#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
 //    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1 +
@@ -187,36 +187,21 @@ void testOptimizer() {
     const unsigned dataSize = optimizerContext.getResidualDataSize();
     optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize());
 
-    double *dev_x;
-    double *dev_xDE;
-    double *dev_x1;
-    double *dev_x2;
-    double *dev_data;
-    double *dev_F;
-    double *dev_FDE;
-    double *dev_F1;
-    double *dev_F2;
-
     // ALLOCATE DEVICE MEMORY
-    cudaMalloc((void **) &dev_x, xSize * sizeof(double));
-    cudaMalloc((void **) &dev_xDE, xSize * sizeof(double));
-    cudaMalloc((void **) &dev_data, dataSize * sizeof(double));
-    cudaMalloc((void **) &dev_F, POPULATION_SIZE * sizeof(double));
-    cudaMalloc((void **) &dev_FDE, POPULATION_SIZE * sizeof(double));
-
+    optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model);
 
     // GENERATE PROBLEM
-    double x[xSize] = {};
-    double solution[xSize] = {};
-    double finalFs[POPULATION_SIZE] = {};
-    double data[dataSize] = {};
+    double x[optimizerContext.model.modelPopulationSize]={};
+    double solution[optimizerContext.model.modelPopulationSize]={};
+    double finalFs[optimizerContext.model.modelPopulationSize]={};
+    double data[optimizerContext.model.modelPopulationSize]={};
 
 #ifdef PROBLEM_PLANEFITTING
     double A = -5.5;
     double B = 99;
     double C = -1;
     generatePlanePoints(A, B, C, data, RESIDUAL_CONSTANTS_COUNT_1);
-    generateInitialPopulation(x, xSize);
+    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
 #endif
 
 #ifdef PROBLEM_ROSENBROCK2D
@@ -224,7 +209,7 @@ void testOptimizer() {
     data[1] = 100.0;
     x[0] = 100.0;
     x[1] = 2.0;
-//    generateInitialPopulation(x, xSize);
+//    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
 #endif
 
 #if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
@@ -232,24 +217,24 @@ void testOptimizer() {
 
     readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
                     PROBLEM_ANCHOR_PATH);
-//    generateInitialPopulation(x, xSize);
-    readPopulation(x, xSize,PROBLEM_INPUT_POPULATION_PATH);
+//    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
+    readPopulation(x, optimizerContext.model.modelPopulationSize,PROBLEM_INPUT_POPULATION_PATH);
 #endif
     // COPY TO DEVICE
     metrics.getCudaEventMetrics().recordStartCopy();
-    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(optimizerContext.cudaMemoryModel.dev_x, &x, optimizerContext.model.modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(optimizerContext.cudaMemoryModel.dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
     metrics.getCudaEventMetrics().recordStopCopy();
     metrics.getCudaEventMetrics().recordStartCompute();
     cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext);
     // EXECUTE KERNEL
-    dev_x1 = dev_x;
-    dev_x2 = dev_xDE;
-    dev_F1 = dev_F;
-    dev_F2 = dev_FDE;
+    optimizerContext.cudaMemoryModel.dev_x1 = optimizerContext.cudaMemoryModel.dev_x;
+    optimizerContext.cudaMemoryModel.dev_x2 = optimizerContext.cudaMemoryModel.dev_xDE;
+    optimizerContext.cudaMemoryModel.dev_F1 = optimizerContext.cudaMemoryModel.dev_F;
+    optimizerContext.cudaMemoryModel.dev_F2 = optimizerContext.cudaMemoryModel.dev_FDE;
 
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_MIN_DE)
-    optimizerContext.getCurrentLocalSearch()->optimize(dev_x1, dev_data,dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
+    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
 #endif
 
 #ifdef OPTIMIZER_SIMPLE_DE
@@ -257,21 +242,21 @@ void testOptimizer() {
 #endif
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
-        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, cudaRandom.dev_curandState);
+        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, cudaRandom.dev_curandState);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
-        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x2, dev_data, dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
+        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #elif defined(OPTIMIZER_MIN_DE)
-        optimizerContext.getCurrentLocalSearch()->optimize(dev_x2, dev_data, dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
+        optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
 #elif
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);
 #endif
         //evaluated differential model into F2
-        selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_x2, dev_F1, dev_F2, i);
+        selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
         //select the best models from current and differential models
-        std::swap(dev_x1, dev_x2);
-        std::swap(dev_F1, dev_F2);
+        std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
+        std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);
         // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
 #if defined(OPTIMIZER_SIMPLE_DE) || defined(OPTIMIZER_MIN_INIT_DE)
@@ -279,16 +264,16 @@ void testOptimizer() {
         printf("\niterations:%d\n", DE_ITERATION_COUNT);
         printf("\nfevaluations: %d\n", DE_ITERATION_COUNT);
 #endif
-    printBestF<<<1,1>>>(dev_F1,POPULATION_SIZE);
+    printBestF<<<1,1>>>(optimizerContext.cudaMemoryModel.dev_F1,POPULATION_SIZE);
 
-    cudaMemcpy(&finalFs, dev_F1, POPULATION_SIZE * sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(&finalFs, optimizerContext.cudaMemoryModel.dev_F1, POPULATION_SIZE * sizeof(double), cudaMemcpyDeviceToHost);
     int min=0;
     for(int ff=1;ff<POPULATION_SIZE;ff++){
         if(finalFs[min]>finalFs[ff]){
             min=ff;
         }
     }
-    cudaMemcpy(&solution, dev_x1, xSize * sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(&solution, optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.model.modelPopulationSize * sizeof(double), cudaMemcpyDeviceToHost);
     printf("\nsolf: %f and solution: ",finalFs[min]);
     for(int ff=X_DIM*min;ff<X_DIM*(min+1)-1;ff++) {
         printf("%f,",solution[ff]);
@@ -302,11 +287,11 @@ void testOptimizer() {
 //    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
     printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
 
-    cudaFree(dev_x);
-    cudaFree(dev_xDE);
-    cudaFree(dev_data);
-    cudaFree(dev_F);
-    cudaFree(dev_FDE);
+    cudaFree(optimizerContext.cudaMemoryModel.dev_x);
+    cudaFree(optimizerContext.cudaMemoryModel.dev_xDE);
+    cudaFree(optimizerContext.cudaMemoryModel.dev_data);
+    cudaFree(optimizerContext.cudaMemoryModel.dev_F);
+    cudaFree(optimizerContext.cudaMemoryModel.dev_FDE);
 }
 
 int main() {
