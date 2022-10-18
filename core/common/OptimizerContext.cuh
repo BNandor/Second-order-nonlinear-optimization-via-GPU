@@ -11,13 +11,19 @@
 #include "../optimizer/perturb/Perturbator.h"
 #include "../optimizer/refine/LocalSearch.cuh"
 #include "config/CUDAConfig.cuh"
+#include "Metrics.cuh"
 #include <cstring>
+#include <fstream>
 
 class Residual {
 public:
     int parametersDim;
     int constantsDim;
     int constantsCount;
+
+    int getConstantsDim(){
+        return constantsDim*constantsCount;
+    }
 };
 
 class Residuals {
@@ -47,9 +53,6 @@ public:
         return size;
     }
 };
-
-
-
 class Model {
 public:
     int modelSize;
@@ -63,6 +66,26 @@ public:
         modelPopulationSize=perturbator.populationSize*modelSize;
         populationSize=perturbator.populationSize;
     }
+
+    virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;
+
+    void readPopulation(double *x, unsigned xSize, std::string filename) {
+        std::fstream input;
+        input.open(filename.c_str());
+        if (input.is_open()) {
+            unsigned cData = 0;
+            while (input >> x[cData]) {
+                cData++;
+            }
+            std::cout << "read: " << cData << " expected: " << xSize
+                      << std::endl;
+            assert(cData == xSize);
+        } else {
+            std::cerr << "err: could not open " << filename << std::endl;
+            exit(1);
+        }
+    }
+
 };
 
 class SNLPModel: public Model {
@@ -78,6 +101,56 @@ public:
         SNLPResidual[1].constantsDim=RESIDUAL_CONSTANTS_DIM_2;
         SNLPResidual[1].parametersDim=RESIDUAL_PARAMETERS_DIM_2;
         residuals.residual= reinterpret_cast<Residual *>(&SNLPResidual[0]);
+    }
+
+    void loadModel(void* dev_x,void* dev_constantData, Metrics &metrics ) override {
+        const int constantDataSize=residuals.residualDataSize();
+        double x[modelPopulationSize]={};
+        double data[constantDataSize]={};
+
+        readSNLPProblem(data, PROBLEM_PATH);
+        readSNLPAnchors(data + residuals.residual[0].getConstantsDim(),
+                        PROBLEM_ANCHOR_PATH);
+        readPopulation(x, modelPopulationSize,PROBLEM_INPUT_POPULATION_PATH);
+
+        metrics.getCudaEventMetrics().recordStartCopy();
+        cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_constantData, &data, constantDataSize * sizeof(double), cudaMemcpyHostToDevice);
+        metrics.getCudaEventMetrics().recordStopCopy();
+    }
+
+    void readSNLPProblem(double *data, std::string filename) {
+        std::fstream input;
+        input.open(filename.c_str());
+        if (input.is_open()) {
+            unsigned cData = 0;
+            while (input >> data[cData]) {
+                cData++;
+            }
+            std::cout << "read: " << cData << " expected: " << residuals.residual[0].getConstantsDim()
+                      << std::endl;
+            assert(cData == residuals.residual[0].getConstantsDim());
+        } else {
+            std::cerr << "err: could not open " << filename << std::endl;
+            exit(1);
+        }
+    }
+
+    void readSNLPAnchors(double *data, std::string filename) {
+        std::fstream input;
+        input.open(filename.c_str());
+        if (input.is_open()) {
+            unsigned cData = 0;
+            while (input >> data[cData]) {
+                cData++;
+            }
+            std::cout << "read: " << cData << " expected: " << residuals.residual[1].getConstantsDim()
+                      << std::endl;
+            assert(cData == residuals.residual[1].getConstantsDim());
+        } else {
+            std::cerr << "err: could not open " << filename << std::endl;
+            exit(1);
+        }
     }
 };
 
@@ -101,6 +174,36 @@ public:
         cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
     }
 
+    ~CUDAMemoryModel(){
+
+        if(dev_x!=nullptr){
+            cudaFree(dev_x);
+        }
+        if(dev_xDE!=nullptr){
+            cudaFree(dev_xDE);
+        }
+        if(dev_x1!=nullptr){
+            cudaFree(dev_x1);
+        }
+        if(dev_x2!=nullptr){
+            cudaFree(dev_x2);
+        }
+        if(dev_data!=nullptr){
+            cudaFree(dev_data);
+        }
+        if(dev_F!=nullptr){
+            cudaFree(dev_F);
+        }
+        if(dev_FDE!=nullptr){
+            cudaFree(dev_FDE);
+        }
+        if(dev_F1!=nullptr){
+            cudaFree(dev_F1);
+        }
+        if(dev_F2!=nullptr){
+            cudaFree(dev_F2);
+        }
+    }
 };
 
 

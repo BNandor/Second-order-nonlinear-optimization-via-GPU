@@ -87,22 +87,7 @@ void generateInitialPopulation(double *x, unsigned xSize) {
         x[i] = unif(re);
     }
 }
-void readPopulation(double *x, unsigned xSize, std::string filename) {
-    std::fstream input;
-    input.open(filename.c_str());
-    if (input.is_open()) {
-        unsigned cData = 0;
-        while (input >> x[cData]) {
-            cData++;
-        }
-        std::cout << "read: " << cData << " expected: " << xSize
-                  << std::endl;
-        assert(cData == xSize);
-    } else {
-        std::cerr << "err: could not open " << filename << std::endl;
-        exit(1);
-    }
-}
+
 
 void generatePlanePoints(double A, double B, double C, double *data, unsigned pointCount) {
     std::uniform_real_distribution<double> unif(0, 1);
@@ -117,43 +102,6 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
     }
 }
 
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-
-void readSNLPProblem(double *data, std::string filename) {
-    std::fstream input;
-    input.open(filename.c_str());
-    if (input.is_open()) {
-        unsigned cData = 0;
-        while (input >> data[cData]) {
-            cData++;
-        }
-        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1
-                  << std::endl;
-        assert(cData == RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1);
-    } else {
-        std::cerr << "err: could not open " << filename << std::endl;
-        exit(1);
-    }
-}
-
-void readSNLPAnchors(double *data, std::string filename) {
-    std::fstream input;
-    input.open(filename.c_str());
-    if (input.is_open()) {
-        unsigned cData = 0;
-        while (input >> data[cData]) {
-            cData++;
-        }
-        std::cout << "read: " << cData << " expected: " << RESIDUAL_CONSTANTS_COUNT_2 * RESIDUAL_CONSTANTS_DIM_2
-                  << std::endl;
-        assert(cData == RESIDUAL_CONSTANTS_COUNT_2 * RESIDUAL_CONSTANTS_DIM_2);
-    } else {
-        std::cerr << "err: could not open " << filename << std::endl;
-        exit(1);
-    }
-}
-
-#endif
 void persistBestSNLPModel(double *x, int modelSize, std::string filename) {
     std::ofstream output;
     output.open(filename.c_str());
@@ -184,17 +132,16 @@ void testOptimizer() {
 //    const unsigned dataSize = RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1;
 //#endif
 
-    const unsigned dataSize = optimizerContext.getResidualDataSize();
     optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize());
 
     // ALLOCATE DEVICE MEMORY
     optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model);
 
     // GENERATE PROBLEM
-    double x[optimizerContext.model.modelPopulationSize]={};
+//    double x[optimizerContext.model.modelPopulationSize]={};
     double solution[optimizerContext.model.modelPopulationSize]={};
-    double finalFs[optimizerContext.model.modelPopulationSize]={};
-    double data[optimizerContext.model.modelPopulationSize]={};
+    double finalFs[optimizerContext.model.populationSize]={};
+//    double data[optimizerContext.model.modelPopulationSize]={};
 
 #ifdef PROBLEM_PLANEFITTING
     double A = -5.5;
@@ -212,19 +159,11 @@ void testOptimizer() {
 //    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
 #endif
 
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-    readSNLPProblem(data, PROBLEM_PATH);
 
-    readSNLPAnchors(data + RESIDUAL_CONSTANTS_DIM_1 * RESIDUAL_CONSTANTS_COUNT_1,
-                    PROBLEM_ANCHOR_PATH);
-//    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
-    readPopulation(x, optimizerContext.model.modelPopulationSize,PROBLEM_INPUT_POPULATION_PATH);
-#endif
+    optimizerContext.model.loadModel(optimizerContext.cudaMemoryModel.dev_x,optimizerContext.cudaMemoryModel.dev_data,metrics);
+
     // COPY TO DEVICE
-    metrics.getCudaEventMetrics().recordStartCopy();
-    cudaMemcpy(optimizerContext.cudaMemoryModel.dev_x, &x, optimizerContext.model.modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(optimizerContext.cudaMemoryModel.dev_data, &data, dataSize * sizeof(double), cudaMemcpyHostToDevice);
-    metrics.getCudaEventMetrics().recordStopCopy();
+
     metrics.getCudaEventMetrics().recordStartCompute();
     cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext);
     // EXECUTE KERNEL
@@ -242,7 +181,7 @@ void testOptimizer() {
 #endif
 
     for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
-        differentialEvolutionStep<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, cudaRandom.dev_curandState);
+        differentialEvolutionStep<<<optimizerContext.getCUDAConfig().blocksPerGrid, optimizerContext.getCUDAConfig().threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, cudaRandom.dev_curandState);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
         OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
@@ -253,7 +192,7 @@ void testOptimizer() {
         exit(1);
 #endif
         //evaluated differential model into F2
-        selectBestModels<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
+        selectBestModels<<<optimizerContext.getCUDAConfig().blocksPerGrid, optimizerContext.getCUDAConfig().threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
         //select the best models from current and differential models
         std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
         std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);
@@ -283,15 +222,8 @@ void testOptimizer() {
 
     metrics.getCudaEventMetrics().recordStopCompute();
 
-
 //    printf("Memcpy,kernel elapsed time (ms): %f,%f\n", memcpyMilli, kernelMilli);
     printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
-
-    cudaFree(optimizerContext.cudaMemoryModel.dev_x);
-    cudaFree(optimizerContext.cudaMemoryModel.dev_xDE);
-    cudaFree(optimizerContext.cudaMemoryModel.dev_data);
-    cudaFree(optimizerContext.cudaMemoryModel.dev_F);
-    cudaFree(optimizerContext.cudaMemoryModel.dev_FDE);
 }
 
 int main() {
