@@ -11,21 +11,6 @@
 #include <assert.h>
 
 __global__
-void selectBestModels(const double *oldX, double *newX, const double *oldF, double *newF, unsigned generation) {
-    if (oldF[blockIdx.x] < newF[blockIdx.x]) {
-        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-            newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
-        }
-        if (threadIdx.x == 0) {
-            newF[blockIdx.x] = oldF[blockIdx.x];
-        }
-    }
-    if (threadIdx.x == 0) {
-        printf("Gen %u block %d f: %.10f\n", generation, blockIdx.x, newF[blockIdx.x]);
-    }
-}
-
-__global__
 void printBestF(double *fs,unsigned size) {
     if (threadIdx.x == 0 ) {
         double min = fs[0];

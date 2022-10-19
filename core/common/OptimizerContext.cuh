@@ -12,6 +12,8 @@
 #include "../optimizer/refine/LocalSearch.cuh"
 #include "config/CUDAConfig.cuh"
 #include "Metrics.cuh"
+#include "../optimizer/select/best/BestSelector.cuh"
+#include "../optimizer/select/Selector.cuh"
 #include <cstring>
 #include <fstream>
 
@@ -210,10 +212,20 @@ public:
 class OptimizerContext {
 
 private:
+    // Perturbators
     DEContext differentialEvolutionContext;
+
     Perturbator* currentPerturbator;
+
+    // Selectors
+    BestSelector bestSelector;
+
+    Selector* currentSelector;
+
+    // Local searches
     GDLocalSearch gdLocalSearch;
     LBFGSLocalSearch lbfgsLocalSearch;
+
     LocalSearch* currentLocalSearch;
 
 public:
@@ -228,6 +240,12 @@ public:
 
         // Select currentPerturbator
         currentPerturbator = &differentialEvolutionContext;
+
+        //Configure Selectors
+        bestSelector=BestSelector();
+
+        // Select currentSelector
+        currentSelector=&bestSelector;
 
         //Configure Local Searches
         gdLocalSearch=GDLocalSearch();
@@ -293,6 +311,10 @@ public:
 
     Perturbator *getCurrentPerturbator() const {
         return currentPerturbator;
+    }
+
+    Selector *getCurrentSelector() const {
+        return currentSelector;
     }
 
     LocalSearch* getCurrentLocalSearch() {

@@ -193,9 +193,11 @@ void testOptimizer() {
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);
 #endif
+
         //evaluated differential model into F2
-        selectBestModels<<<optimizerContext.cudaConfig.blocksPerGrid, optimizerContext.cudaConfig.threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
         //select the best models from current and differential models
+        optimizerContext.getCurrentSelector()->select(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
+
         std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
         std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);
         // dev_x1 contains the next models, dev_F1 contains the associated costs
