@@ -16,6 +16,8 @@
 #include "core/optimizer/perturb/DE/DifferentialEvolution.cuh"
 #include "core/common/Random.cuh"
 #include "core/common/Metrics.cuh"
+#include "core/optimizer/perturb/DE/DEContext.h"
+#include "core/common/OptimizerContext.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -165,7 +167,7 @@ void testOptimizer() {
     // COPY TO DEVICE
 
     metrics.getCudaEventMetrics().recordStartCompute();
-    cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext);
+    cudaRandom.initialize(optimizerContext.getThreadsInGrid(),optimizerContext.getBlocksPerGrid(),optimizerContext.getThreadsPerBlock());
     // EXECUTE KERNEL
     optimizerContext.cudaMemoryModel.dev_x1 = optimizerContext.cudaMemoryModel.dev_x;
     optimizerContext.cudaMemoryModel.dev_x2 = optimizerContext.cudaMemoryModel.dev_xDE;
@@ -173,26 +175,26 @@ void testOptimizer() {
     optimizerContext.cudaMemoryModel.dev_F2 = optimizerContext.cudaMemoryModel.dev_FDE;
 
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_MIN_DE)
-    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
+    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaConfig);
 #endif
 
 #ifdef OPTIMIZER_SIMPLE_DE
     OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #endif
 
-    for (unsigned i = 0; i < DE_ITERATION_COUNT; i++) {
-        differentialEvolutionStep<<<optimizerContext.getCUDAConfig().blocksPerGrid, optimizerContext.getCUDAConfig().threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, cudaRandom.dev_curandState);
+    for (unsigned i = 0; i < optimizerContext.totalIterations; i++) {
+        optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_x1,optimizerContext.cudaMemoryModel.dev_x2,&cudaRandom);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
         OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #elif defined(OPTIMIZER_MIN_DE)
-        optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.getCUDAConfig());
+        optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaConfig);
 #elif
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);
 #endif
         //evaluated differential model into F2
-        selectBestModels<<<optimizerContext.getCUDAConfig().blocksPerGrid, optimizerContext.getCUDAConfig().threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
+        selectBestModels<<<optimizerContext.cudaConfig.blocksPerGrid, optimizerContext.cudaConfig.threadsPerBlock>>>(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2, i);
         //select the best models from current and differential models
         std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
         std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);

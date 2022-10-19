@@ -210,15 +210,17 @@ public:
 class OptimizerContext {
 
 private:
-    CUDAConfig cudaConfig;
     DEContext differentialEvolutionContext;
     Perturbator* currentPerturbator;
     GDLocalSearch gdLocalSearch;
     LBFGSLocalSearch lbfgsLocalSearch;
     LocalSearch* currentLocalSearch;
+
 public:
+    CUDAConfig cudaConfig;
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
+    int totalIterations=DE_ITERATION_COUNT;
 
     explicit OptimizerContext(DEContext &deContext) {
         // Configure perturbators
@@ -246,7 +248,7 @@ public:
         assert(currentLocalSearch!=0);
 #endif
 
-        cudaConfig=CUDAConfig(*currentPerturbator);
+        cudaConfig=CUDAConfig(currentPerturbator->populationSize);
         cudaMemoryModel=CUDAMemoryModel();
     }
 
@@ -289,12 +291,12 @@ public:
         return model.residuals.residualDataSize();
     }
 
-    LocalSearch* getCurrentLocalSearch() {
-        return currentLocalSearch;
+    Perturbator *getCurrentPerturbator() const {
+        return currentPerturbator;
     }
 
-    CUDAConfig getCUDAConfig(){
-        return  cudaConfig;
+    LocalSearch* getCurrentLocalSearch() {
+        return currentLocalSearch;
     }
 };
 #endif //PARALLELLBFGS_OPTIMIZERCONTEXT_CUH

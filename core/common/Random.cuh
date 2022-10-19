@@ -5,7 +5,6 @@
 #ifndef PARALLELLBFGS_RANDOM_CUH
 #define PARALLELLBFGS_RANDOM_CUH
 
-#include "OptimizerContext.cuh"
 
 __global__
 void setupCurandState(curandState *state, int size) {
@@ -25,17 +24,17 @@ public:
         }
     }
 
-    void initialize( int size, OptimizerContext &optimizerContext) {
+    void initialize( int size, int blocksPerGrid, int threadsPerBlock) {
 
 #ifdef SAFE
-        assert(optimizerContext.getThreadsPerBlock()>0);
-        assert(optimizerContext.getBlocksPerGrid()>0);
+        assert(threadsPerBlock>0);
+        assert(blocksPerGrid>0);
         assert(size>0);
         assert(dev_curandState==0);
-        assert(size<=(optimizerContext.getBlocksPerGrid() * optimizerContext.getThreadsPerBlock()));
+        assert(size<=(threadsPerBlock * blocksPerGrid));
 #endif
         cudaMalloc(&dev_curandState,size * sizeof(curandState) );
-        setupCurandState<<<optimizerContext.getBlocksPerGrid(), optimizerContext.getThreadsPerBlock()>>>(
+        setupCurandState<<<blocksPerGrid, threadsPerBlock>>>(
                 dev_curandState, size);
     }
 };
