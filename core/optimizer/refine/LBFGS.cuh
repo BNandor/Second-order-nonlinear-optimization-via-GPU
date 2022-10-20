@@ -21,6 +21,7 @@
 #include "../../problem/SNLP/SNLP3D.cuh"
 #include "../../problem/SNLP/SNLP3DAnchor.cuh"
 #include "../../common/FIFOQueue.cuh"
+#include "GradientDescent.cuh"
 #include <stdio.h>
 
 
@@ -490,7 +491,8 @@ namespace LBFGS {
     optimize(double *globalX, double *globalData,
              double *globalF
 //#ifdef GLOBAL_SHARED_MEM
-            , GlobalData *globalSharedContext
+            , GlobalData *globalSharedContext,
+            void * model
 //#endif
     ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING

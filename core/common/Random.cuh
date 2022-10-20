@@ -6,6 +6,8 @@
 #define PARALLELLBFGS_RANDOM_CUH
 
 
+#include <curand_kernel.h>
+
 __global__
 void setupCurandState(curandState *state, int size) {
     int idx = threadIdx.x + blockDim.x * blockIdx.x;

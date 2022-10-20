@@ -14,87 +14,82 @@
 #include "Metrics.cuh"
 #include "../optimizer/select/best/BestSelector.cuh"
 #include "../optimizer/select/Selector.cuh"
+#include "model/Model.cuh"
 #include <cstring>
 #include <fstream>
 
-class Residual {
-public:
-    int parametersDim;
-    int constantsDim;
-    int constantsCount;
 
-    int getConstantsDim(){
-        return constantsDim*constantsCount;
+class CUDAMemoryModel{
+public:
+    double *dev_x;
+    double *dev_xDE;
+    double *dev_x1;
+    double *dev_x2;
+    double *dev_data;
+    double *dev_F;
+    double *dev_FDE;
+    double *dev_F1;
+    double *dev_F2;
+    Model* dev_Model;
+
+    void allocateFor(Model &model) {
+        cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
+        cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
+        cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
+        cudaMalloc((void **) &dev_F, model.populationSize * sizeof(double));
+        cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
+        cudaMalloc((void **) &dev_Model, sizeof(Model));
     }
-};
 
-class Residuals {
-public:
+    void copyModelToDevice(Model &model) {
+        Residual* modelResiduals=model.residuals.residual;
+        cudaMalloc((void **) &model.residuals.residual, sizeof(Residual) * model.residuals.residualCount);
+        cudaMemcpy(model.residuals.residual, modelResiduals, sizeof(Residual) * model.residuals.residualCount, cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_Model, &model, sizeof(Model), cudaMemcpyHostToDevice);
+        model.residuals.residual=modelResiduals;
+    }
 
-    int residualCount;
-    Residual *residual;
+    ~CUDAMemoryModel(){
 
-    int residualDataSize() const {
-        int size=0;
-#ifdef SAFE
-        assert(residualCount>0);
-        assert(residual!=0);
-#endif
-        printf("pointer %p\n",residual);
-        Residual* it=residual;
-        for(int i=0;i<residualCount;i++) {
-            size+=(it->constantsCount)*(it->constantsDim);
-            it++;
-            printf("count %i\n",it->constantsCount);
-            printf("dim %i\n",it->constantsDim);
+        if(dev_x!=nullptr){
+            cudaFree(dev_x);
         }
-
-#ifdef SAFE
-        assert(size>0);
-#endif
-        return size;
-    }
-};
-class Model {
-public:
-    int modelSize;
-    int modelPopulationSize;
-    int populationSize;
-    Residuals residuals;
-
-    Model()=default;
-    Model(Perturbator& perturbator) {
-        modelSize=X_DIM;
-        modelPopulationSize=perturbator.populationSize*modelSize;
-        populationSize=perturbator.populationSize;
-    }
-
-    virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;
-
-    void readPopulation(double *x, unsigned xSize, std::string filename) {
-        std::fstream input;
-        input.open(filename.c_str());
-        if (input.is_open()) {
-            unsigned cData = 0;
-            while (input >> x[cData]) {
-                cData++;
-            }
-            std::cout << "read: " << cData << " expected: " << xSize
-                      << std::endl;
-            assert(cData == xSize);
-        } else {
-            std::cerr << "err: could not open " << filename << std::endl;
-            exit(1);
+        if(dev_xDE!=nullptr){
+            cudaFree(dev_xDE);
         }
+        if(dev_x1!=nullptr){
+            cudaFree(dev_x1);
+        }
+        if(dev_x2!=nullptr){
+            cudaFree(dev_x2);
+        }
+        if(dev_data!=nullptr){
+            cudaFree(dev_data);
+        }
+        if(dev_F!=nullptr){
+            cudaFree(dev_F);
+        }
+        if(dev_FDE!=nullptr){
+            cudaFree(dev_FDE);
+        }
+        if(dev_F1!=nullptr){
+            cudaFree(dev_F1);
+        }
+        if(dev_F2!=nullptr){
+            cudaFree(dev_F2);
+        }
+//        if(dev_Model!= nullptr) {
+//
+//        }
     }
-
 };
 
 class SNLPModel: public Model {
     Residual SNLPResidual[2]{};
 public:
+
     SNLPModel():Model(){};
-    explicit SNLPModel(Perturbator& perturbator) :Model(perturbator) {
+    explicit SNLPModel(Perturbator& perturbator,int localIterations) : Model(perturbator,localIterations) {
         residuals.residualCount=2;
         SNLPResidual[0].constantsCount=RESIDUAL_CONSTANTS_COUNT_1;
         SNLPResidual[0].constantsDim=RESIDUAL_CONSTANTS_DIM_1;
@@ -152,58 +147,6 @@ public:
         } else {
             std::cerr << "err: could not open " << filename << std::endl;
             exit(1);
-        }
-    }
-};
-
-class CUDAMemoryModel{
-public:
-    double *dev_x;
-    double *dev_xDE;
-    double *dev_x1;
-    double *dev_x2;
-    double *dev_data;
-    double *dev_F;
-    double *dev_FDE;
-    double *dev_F1;
-    double *dev_F2;
-
-    void allocateFor(Model &model) {
-        cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
-        cudaMalloc((void **) &dev_F, model.populationSize * sizeof(double));
-        cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
-    }
-
-    ~CUDAMemoryModel(){
-
-        if(dev_x!=nullptr){
-            cudaFree(dev_x);
-        }
-        if(dev_xDE!=nullptr){
-            cudaFree(dev_xDE);
-        }
-        if(dev_x1!=nullptr){
-            cudaFree(dev_x1);
-        }
-        if(dev_x2!=nullptr){
-            cudaFree(dev_x2);
-        }
-        if(dev_data!=nullptr){
-            cudaFree(dev_data);
-        }
-        if(dev_F!=nullptr){
-            cudaFree(dev_F);
-        }
-        if(dev_FDE!=nullptr){
-            cudaFree(dev_FDE);
-        }
-        if(dev_F1!=nullptr){
-            cudaFree(dev_F1);
-        }
-        if(dev_F2!=nullptr){
-            cudaFree(dev_F2);
         }
     }
 };

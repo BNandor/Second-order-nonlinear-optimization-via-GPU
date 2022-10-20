@@ -21,6 +21,7 @@
 #include "../../common/FIFOQueue.cuh"
 #include "../../problem/SNLP/SNLP3D.cuh"
 #include "../../problem/SNLP/SNLP3DAnchor.cuh"
+#include "../../common/model/Model.cuh"
 #include <stdio.h>
 
 //__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
@@ -382,7 +383,8 @@ namespace GD {
     optimize(double *globalX, double *globalData,
              double *globalF
 //#ifdef GLOBAL_SHARED_MEM
-            , GlobalData *globalSharedContext
+            , GlobalData *globalSharedContext,
+            void * model
 //#endif
     ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
@@ -399,6 +401,19 @@ namespace GD {
         SNLP3D f1 = SNLP3D();
         SNLP3DAnchor f2 = SNLP3DAnchor();
 #endif
+        if(blockIdx.x ==0 && threadIdx.x ==0) {
+            Model *model1 = (Model *) model;
+            printf("GD iterations: %d\n", model1->localIterations);
+            printf("residuals: %d\n", model1->residuals.residualCount);
+
+            for (int residualIndex = 0; residualIndex < model1->residuals.residualCount; residualIndex++) {
+                printf("constants: %d\n", model1->residuals.residual[residualIndex].constantsCount);
+                printf("constants dim: %d\n", model1->residuals.residual[residualIndex].constantsDim);
+                printf("parameters: %d\n", model1->residuals.residual[residualIndex].parametersDim);
+            }
+        }
+
+
         // every thread has a local observation loaded into local memory
         __shared__
         SharedContext sharedContext;

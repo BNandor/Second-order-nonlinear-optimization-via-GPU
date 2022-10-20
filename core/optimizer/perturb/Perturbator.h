@@ -5,7 +5,6 @@
 #ifndef PARALLELLBFGS_PERTURBATOR_H
 #define PARALLELLBFGS_PERTURBATOR_H
 
-#include "DE/DEContext.h"
 #include "../../common/config/CUDAConfig.cuh"
 #include "../../common/Random.cuh"
 

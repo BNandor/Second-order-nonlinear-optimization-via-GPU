@@ -124,7 +124,7 @@ void testOptimizer() {
     metrics.initialize();
     DEContext deContext=DEContext();
     OptimizerContext optimizerContext=OptimizerContext(deContext);
-    optimizerContext.model=SNLPModel(deContext);
+    optimizerContext.model=SNLPModel(deContext,ITERATION_COUNT);
 
 
 //#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
@@ -138,6 +138,7 @@ void testOptimizer() {
 
     // ALLOCATE DEVICE MEMORY
     optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model);
+    optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model);
 
     // GENERATE PROBLEM
 //    double x[optimizerContext.model.modelPopulationSize]={};
@@ -161,7 +162,6 @@ void testOptimizer() {
 //    generateInitialPopulation(x, optimizerContext.model.modelPopulationSize);
 #endif
 
-
     optimizerContext.model.loadModel(optimizerContext.cudaMemoryModel.dev_x,optimizerContext.cudaMemoryModel.dev_data,metrics);
 
     // COPY TO DEVICE
@@ -175,7 +175,7 @@ void testOptimizer() {
     optimizerContext.cudaMemoryModel.dev_F2 = optimizerContext.cudaMemoryModel.dev_FDE;
 
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_MIN_DE)
-    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaConfig);
+    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
 #endif
 
 #ifdef OPTIMIZER_SIMPLE_DE
@@ -188,7 +188,7 @@ void testOptimizer() {
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
         OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #elif defined(OPTIMIZER_MIN_DE)
-        optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaConfig);
+        optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
 #elif
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);

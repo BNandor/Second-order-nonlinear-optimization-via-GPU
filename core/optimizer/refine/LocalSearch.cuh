@@ -6,6 +6,8 @@
 #define PARALLELLBFGS_LOCALSEARCH_CUH
 
 #include "../../common/config/CUDAConfig.cuh"
+#include "GradientDescent.cuh"
+#include "LBFGS.cuh"
 
 class LocalSearch {
 protected:
@@ -14,7 +16,7 @@ public:
     virtual  void
     optimize(double *globalX, double *globalData,
              double *globalF
-            , void *globalSharedContext,
+            , void *globalSharedContext, void * model,
              CUDAConfig cudaConfig
     )=0;
 
@@ -36,10 +38,10 @@ class GDLocalSearch: public LocalSearch {
     void
     optimize(double *globalX, double *globalData,
              double *globalF
-            , void *globalSharedContext,
+            , void *globalSharedContext,void* model,
             CUDAConfig cudaConfig
     ) override{
-        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext);
+        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model);
     };
 
      void setupGlobalData(int populationSize) {
@@ -55,10 +57,10 @@ class LBFGSLocalSearch: public LocalSearch {
     void
     optimize(double *globalX, double *globalData,
              double *globalF
-            , void *globalSharedContext,
+            , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig
     ) override {
-        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext);
+        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model);
     };
 
     void setupGlobalData(int populationSize) {
