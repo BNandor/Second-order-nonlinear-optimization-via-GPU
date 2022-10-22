@@ -13,11 +13,11 @@
 #include "core/common/Constants.cuh"
 #include "core/optimizer/refine/LBFGS.cuh"
 #include "core/optimizer/refine/GradientDescent.cuh"
-#include "core/optimizer/perturb/DE/DifferentialEvolution.cuh"
 #include "core/common/Random.cuh"
 #include "core/common/Metrics.cuh"
 #include "core/optimizer/perturb/DE/DEContext.h"
 #include "core/common/OptimizerContext.cuh"
+#include "core/optimizer/perturb/GA/GeneticAlgorithm.cu"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -80,9 +80,9 @@
 //    cudaMemcpy(dev_x, &x, xSize * sizeof(double), cudaMemcpyHostToDevice);
 //    testDot<<<1, THREADS_PER_BLOCK>>>(dev_x);
 //    cudaFree(dev_x);
-//}
+//}/
 
-void generateInitialPopulation(double *x, unsigned xSize) {
+ void generateInitialPopulation(double *x, unsigned xSize) {
     std::uniform_real_distribution<double> unif(-10000, 10000);
     std::default_random_engine re(time(NULL));
     for (int i = 0; i < xSize; i++) {
@@ -179,17 +179,17 @@ void testOptimizer() {
 #endif
 
 #ifdef OPTIMIZER_SIMPLE_DE
-    OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
+    OPTIMIZER::evaluateF<<<POPULATION_DIM, THREADS_PER_BLOCK>>>(dev_x1, dev_data, dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #endif
 
     for (unsigned i = 0; i < optimizerContext.totalIterations; i++) {
         optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_x1,optimizerContext.cudaMemoryModel.dev_x2,&cudaRandom);
         //dev_x2 is the differential model
 #if  defined(OPTIMIZER_MIN_INIT_DE) || defined(OPTIMIZER_SIMPLE_DE)
-        OPTIMIZER::evaluateF<<<POPULATION_SIZE, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
+        OPTIMIZER::evaluateF<<<POPULATION_DIM, THREADS_PER_BLOCK>>>(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext());
 #elif defined(OPTIMIZER_MIN_DE)
         optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x2, optimizerContext.cudaMemoryModel.dev_data, optimizerContext.cudaMemoryModel.dev_F2, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
-#elif
+#else
         std::cerr<<"Incorrect optimizer configuration"<<std::endl;
         exit(1);
 #endif
@@ -207,11 +207,11 @@ void testOptimizer() {
         printf("\niterations:%d\n", DE_ITERATION_COUNT);
         printf("\nfevaluations: %d\n", DE_ITERATION_COUNT);
 #endif
-    printBestF<<<1,1>>>(optimizerContext.cudaMemoryModel.dev_F1,POPULATION_SIZE);
+    printBestF<<<1,1>>>(optimizerContext.cudaMemoryModel.dev_F1, POPULATION_SIZE);
 
     cudaMemcpy(&finalFs, optimizerContext.cudaMemoryModel.dev_F1, POPULATION_SIZE * sizeof(double), cudaMemcpyDeviceToHost);
     int min=0;
-    for(int ff=1;ff<POPULATION_SIZE;ff++){
+    for(int ff=1; ff < POPULATION_SIZE; ff++){
         if(finalFs[min]>finalFs[ff]){
             min=ff;
         }
@@ -230,7 +230,7 @@ void testOptimizer() {
     printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
 }
 
-int main() {
+int main(int argc, char** argv) {
     testOptimizer();
     return 0;
 }

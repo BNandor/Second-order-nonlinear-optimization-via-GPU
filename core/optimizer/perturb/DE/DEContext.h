@@ -10,6 +10,10 @@
 #include "../../../common/Random.cuh"
 #include "../Perturbator.h"
 
+// Differential Evolution Control parameters
+#define DE_CR 0.99
+#define DE_FORCE 0.6
+
 __global__
 void differentialEvolutionStep(double *oldX, double *newX, curandState *curandState) {
 #ifdef SAFE
@@ -57,10 +61,10 @@ void differentialEvolutionStep(double *oldX, double *newX, curandState *curandSt
     // every thread has the same sharedA, sharedB, sharedC, blockId.x
 //    if(blockIdx.x !=0) {
     for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-        if (curand_uniform(curandState + idx) < CR || spanningTID == localR) {
-            newX[blockIdx.x * X_DIM + spanningTID] = oldX[localA * X_DIM + spanningTID] + F * (oldX[localB * X_DIM +
-                                                                                                    spanningTID] -
-                                                                                               oldX[localC * X_DIM +
+        if (curand_uniform(curandState + idx) < DE_CR || spanningTID == localR) {
+            newX[blockIdx.x * X_DIM + spanningTID] = oldX[localA * X_DIM + spanningTID] + DE_FORCE * (oldX[localB * X_DIM +
+                                                                                                           spanningTID] -
+                                                                                                      oldX[localC * X_DIM +
                                                                                                     spanningTID]);
         } else {
             newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
@@ -82,8 +86,8 @@ public:
     void perturb(CUDAConfig &cudaConfig,double * dev_x1, double * dev_x2,Random* cudaRandom ) {
         differentialEvolutionStep<<<populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, cudaRandom->dev_curandState);
     }
-    double crossoverRate=CR;
-    double force=F;
+    double crossoverRate=DE_CR;
+    double force=DE_FORCE;
 };
 
 #endif //PARALLELLBFGS_DECONTEXT_H

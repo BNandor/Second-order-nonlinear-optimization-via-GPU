@@ -49,7 +49,7 @@ public:
 
 class Model {
 public:
-
+//    N_PARAMETERS = X_DIM
     int modelSize;
     int modelPopulationSize;
     int populationSize;
