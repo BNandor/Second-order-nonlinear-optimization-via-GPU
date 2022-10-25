@@ -5,8 +5,6 @@
 #ifndef PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 #define PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 
-
-
 #include "../optimizer/perturb/DE/DEContext.h"
 #include "../optimizer/perturb/Perturbator.h"
 #include "../optimizer/refine/LocalSearch.cuh"
@@ -18,140 +16,8 @@
 #include "../optimizer/perturb/GA/GAContext.cuh"
 #include <cstring>
 #include <fstream>
-
-
-class CUDAMemoryModel{
-public:
-    double *dev_x;
-    double *dev_xDE;
-    double *dev_x1;
-    double *dev_x2;
-    double *dev_data;
-    double *dev_F;
-    double *dev_FDE;
-    double *dev_F1;
-    double *dev_F2;
-    Model* dev_Model;
-
-    void allocateFor(Model &model) {
-        cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
-        cudaMalloc((void **) &dev_F, model.populationSize * sizeof(double));
-        cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
-        cudaMalloc((void **) &dev_Model, sizeof(Model));
-    }
-
-    void copyModelToDevice(Model &model) {
-        Residual* modelResiduals=model.residuals.residual;
-        cudaMalloc((void **) &model.residuals.residual, sizeof(Residual) * model.residuals.residualCount);
-        cudaMemcpy(model.residuals.residual, modelResiduals, sizeof(Residual) * model.residuals.residualCount, cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_Model, &model, sizeof(Model), cudaMemcpyHostToDevice);
-        model.residuals.residual=modelResiduals;
-    }
-
-    ~CUDAMemoryModel(){
-
-        if(dev_x!=nullptr){
-            cudaFree(dev_x);
-        }
-        if(dev_xDE!=nullptr){
-            cudaFree(dev_xDE);
-        }
-        if(dev_x1!=nullptr){
-            cudaFree(dev_x1);
-        }
-        if(dev_x2!=nullptr){
-            cudaFree(dev_x2);
-        }
-        if(dev_data!=nullptr){
-            cudaFree(dev_data);
-        }
-        if(dev_F!=nullptr){
-            cudaFree(dev_F);
-        }
-        if(dev_FDE!=nullptr){
-            cudaFree(dev_FDE);
-        }
-        if(dev_F1!=nullptr){
-            cudaFree(dev_F1);
-        }
-        if(dev_F2!=nullptr){
-            cudaFree(dev_F2);
-        }
-//        if(dev_Model!= nullptr) {
-//
-//        }
-    }
-};
-
-class SNLPModel: public Model {
-    Residual SNLPResidual[2]{};
-public:
-
-    SNLPModel():Model(){};
-    explicit SNLPModel(Perturbator& perturbator,int localIterations) : Model(perturbator,localIterations) {
-        residuals.residualCount=2;
-        SNLPResidual[0].constantsCount=RESIDUAL_CONSTANTS_COUNT_1;
-        SNLPResidual[0].constantsDim=RESIDUAL_CONSTANTS_DIM_1;
-        SNLPResidual[0].parametersDim=RESIDUAL_PARAMETERS_DIM_1;
-        SNLPResidual[1].constantsCount=RESIDUAL_CONSTANTS_COUNT_2;
-        SNLPResidual[1].constantsDim=RESIDUAL_CONSTANTS_DIM_2;
-        SNLPResidual[1].parametersDim=RESIDUAL_PARAMETERS_DIM_2;
-        residuals.residual= reinterpret_cast<Residual *>(&SNLPResidual[0]);
-    }
-
-    void loadModel(void* dev_x,void* dev_constantData, Metrics &metrics ) override {
-        const int constantDataSize=residuals.residualDataSize();
-        double x[modelPopulationSize]={};
-        double data[constantDataSize]={};
-
-        readSNLPProblem(data, PROBLEM_PATH);
-        readSNLPAnchors(data + residuals.residual[0].getConstantsDim(),
-                        PROBLEM_ANCHOR_PATH);
-        readPopulation(x, modelPopulationSize,PROBLEM_INPUT_POPULATION_PATH);
-
-        metrics.getCudaEventMetrics().recordStartCopy();
-        cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_constantData, &data, constantDataSize * sizeof(double), cudaMemcpyHostToDevice);
-        metrics.getCudaEventMetrics().recordStopCopy();
-    }
-
-    void readSNLPProblem(double *data, std::string filename) {
-        std::fstream input;
-        input.open(filename.c_str());
-        if (input.is_open()) {
-            unsigned cData = 0;
-            while (input >> data[cData]) {
-                cData++;
-            }
-            std::cout << "read: " << cData << " expected: " << residuals.residual[0].getConstantsDim()
-                      << std::endl;
-            assert(cData == residuals.residual[0].getConstantsDim());
-        } else {
-            std::cerr << "err: could not open " << filename << std::endl;
-            exit(1);
-        }
-    }
-
-    void readSNLPAnchors(double *data, std::string filename) {
-        std::fstream input;
-        input.open(filename.c_str());
-        if (input.is_open()) {
-            unsigned cData = 0;
-            while (input >> data[cData]) {
-                cData++;
-            }
-            std::cout << "read: " << cData << " expected: " << residuals.residual[1].getConstantsDim()
-                      << std::endl;
-            assert(cData == residuals.residual[1].getConstantsDim());
-        } else {
-            std::cerr << "err: could not open " << filename << std::endl;
-            exit(1);
-        }
-    }
-};
-
+#include "./model/CudaMemoryModel.cuh"
+#include "../problem/SNLP/SNLPModel.cuh"
 
 class OptimizerContext {
 

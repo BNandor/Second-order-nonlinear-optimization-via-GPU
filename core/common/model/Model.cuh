@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include "../../optimizer/perturb/Perturbator.h"
-#include "../Metrics.cuh"
+
 class Residual {
 public:
     int parametersDim;
@@ -46,7 +46,7 @@ public:
         return size;
     }
 };
-
+class Metrics;
 class Model {
 public:
 //    N_PARAMETERS = X_DIM

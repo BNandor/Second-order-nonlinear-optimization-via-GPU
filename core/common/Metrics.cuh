@@ -5,11 +5,14 @@
 #ifndef PARALLELLBFGS_METRICS_CUH
 #define PARALLELLBFGS_METRICS_CUH
 
+#include "ModelMetrics.cuh"
+#include "./model/Model.cuh"
+
 class CudaEventMetrics {
 private:
     cudaEvent_t start, stop, startCopy, stopCopy;
 public:
-    void initialize() {
+    void initializeEvents() {
         cudaEventCreate(&start);
         cudaEventCreate(&stop);
         cudaEventCreate(&startCopy);
@@ -47,12 +50,14 @@ public:
 };
 
 class Metrics {
-    CudaEventMetrics cudaEventMetrics=CudaEventMetrics();
-
 public:
-    void initialize() {
-        cudaEventMetrics.initialize();
+    CudaEventMetrics cudaEventMetrics;
+    ModelMetrics modelPerformanceMetrics;
+
+    Metrics(Model& model): cudaEventMetrics(CudaEventMetrics()),modelPerformanceMetrics(ModelMetrics(model.modelPopulationSize,model.populationSize)){
+        cudaEventMetrics.initializeEvents();
     }
+
     CudaEventMetrics& getCudaEventMetrics(){
         return cudaEventMetrics;
     }
