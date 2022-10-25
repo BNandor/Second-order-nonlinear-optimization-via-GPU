@@ -12,7 +12,7 @@ __global__
 void setupCurandState(curandState *state, int size) {
     int idx = threadIdx.x + blockDim.x * blockIdx.x;
     if(idx<size) {
-        curand_init(1234, idx, 0, &state[idx]);
+        curand_init(986096, idx, 0, &state[idx]);
     }
 }
 

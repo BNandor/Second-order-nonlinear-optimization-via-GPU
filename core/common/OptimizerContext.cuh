@@ -15,6 +15,7 @@
 #include "../optimizer/select/best/BestSelector.cuh"
 #include "../optimizer/select/Selector.cuh"
 #include "model/Model.cuh"
+#include "../optimizer/perturb/GA/GAContext.cuh"
 #include <cstring>
 #include <fstream>
 
@@ -157,7 +158,7 @@ class OptimizerContext {
 private:
     // Perturbators
     DEContext differentialEvolutionContext;
-
+    GAContext geneticAlgorithmContext;
     Perturbator* currentPerturbator;
 
     // Selectors
@@ -177,12 +178,13 @@ public:
     SNLPModel model;
     int totalIterations=DE_ITERATION_COUNT;
 
-    explicit OptimizerContext(DEContext &deContext) {
+    explicit OptimizerContext(DEContext &deContext,GAContext &gaContext) {
         // Configure perturbators
         differentialEvolutionContext=deContext;
-
+        geneticAlgorithmContext=gaContext;
         // Select currentPerturbator
         currentPerturbator = &differentialEvolutionContext;
+//        currentPerturbator = &geneticAlgorithmContext;
 
         //Configure Selectors
         bestSelector=BestSelector();

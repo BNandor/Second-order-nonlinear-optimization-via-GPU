@@ -15,7 +15,7 @@
 #define DE_FORCE 0.6
 
 __global__
-void differentialEvolutionStep(double *oldX, double *newX, curandState *curandState) {
+void differentialEvolutionStep(double *oldX, double *newX, Model*model,curandState *curandState) {
 #ifdef SAFE
     assert(blockDim.x >= 4);
 #endif
@@ -83,8 +83,9 @@ public:
     DEContext() {
         populationSize=POPULATION_SIZE;
     }
-    void perturb(CUDAConfig &cudaConfig,double * dev_x1, double * dev_x2,Random* cudaRandom ) {
-        differentialEvolutionStep<<<populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, cudaRandom->dev_curandState);
+
+    void perturb(CUDAConfig &cudaConfig,Model *model,double * dev_x1, double * dev_x2,double* oldCosts,Random* cudaRandom ) override {
+        differentialEvolutionStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, model, cudaRandom->dev_curandState);
     }
     double crossoverRate=DE_CR;
     double force=DE_FORCE;
