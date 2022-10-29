@@ -271,64 +271,7 @@ namespace GD {
         ++localContext->fEvaluations;
         localContext->threadF = 0;
         Model *model = (Model *) modelP;
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D *f1 = ((Rosenbrock2D *) localContext->residualProblems[0]);
-#endif
-#ifdef PROBLEM_SNLP
-        SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
-#endif
-#ifdef PROBLEM_SNLP3D
-        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
-#endif
-
-//        for (int currentResidual= 0; currentResidual < model->residuals.residualCount; currentResidual++) {
-//            for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[currentResidual].constantsCount; spanningTID += blockDim.x) {
-//                f1->setConstants(&(localContext->residualConstants[0][model->residuals.residual[currentResidual].constantsDim * spanningTID]),
-//                                 model->residuals.residual[currentResidual].constantsDim);
-//                localContext->threadF += f1->eval(sharedContext->xCurrent,
-//                                                  model->modelSize)->value;
-//                f1->evalJacobian();
-//                for (unsigned j = 0; j < model->residuals.residual[currentResidual].parametersDim; j++) {
-//                    atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]],
-//                              f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
-//                }
-//            }
-//        }
-
-        for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
-            f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
-                             RESIDUAL_CONSTANTS_DIM_1);
-            localContext->threadF += f1->eval(sharedContext->xCurrent,
-                                              X_DIM)->value;
-            f1->evalJacobian();
-            for (unsigned j = 0; j < RESIDUAL_PARAMETERS_DIM_1; j++) {
-                atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]],
-                          f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
-            }
-        }
-#ifdef PROBLEM_SNLP
-        SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
-#endif
-#ifdef PROBLEM_SNLP3D
-        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
-#endif
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-
-        for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
-            f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
-                             RESIDUAL_CONSTANTS_DIM_2);
-            localContext->threadF += f2->eval(sharedContext->xCurrent,
-                                              X_DIM)->value;
-            f2->evalJacobian();
-            for (unsigned j = 0; j < RESIDUAL_PARAMETERS_DIM_2; j++) {
-                atomicAdd(&sharedContext->globalData->sharedDX[f2->ThisJacobianIndices[j]],
-                          f2->operatorTree[f2->constantSize + j].derivative);
-            }
-        }
-#endif
+        COMPUTE_RESIDUALS()
     }
 
     __device__ void lineStep(double *x, double *xNext, unsigned xSize, double *jacobian, double alpha) {
