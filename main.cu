@@ -123,9 +123,7 @@ void testOptimizer() {
                           optimizerContext.getThreadsPerBlock());
     // EXECUTE KERNEL
     optimizerContext.cudaMemoryModel.initLoopPointers();
-
     optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
-
     for (unsigned i = 0; i < optimizerContext.totalIterations; i++) {
         optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,&optimizerContext.model,
                                                           optimizerContext.cudaMemoryModel.dev_x1,
@@ -157,3 +155,6 @@ int main(int argc, char** argv) {
     testOptimizer();
     return 0;
 }
+// TODO add Simulated Annealing to hyper level
+// TODO as a first step, skip mutating the operator parameters
+// TODO add arithmetic operators to GA
