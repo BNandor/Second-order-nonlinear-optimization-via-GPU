@@ -64,8 +64,8 @@ namespace GD {
 
     __device__
     void reduceObservations(LocalContext *localContext,
-                            SharedContext *sharedContext,
-                            double *globalData) {
+                            double *x,
+                            double *dx) {
         ++localContext->fEvaluations;
         localContext->threadF = 0;
         Model *model = (Model *) localContext->modelP;
@@ -171,7 +171,7 @@ namespace GD {
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
             // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-            reduceObservations(&localContext, &sharedContext, globalData);
+            reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
             // localContext.threadF are calculated
             atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
@@ -267,7 +267,7 @@ namespace GD {
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, &sharedContext, globalData);
+        reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
         // localContext.threadF are calculated
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         __syncthreads();

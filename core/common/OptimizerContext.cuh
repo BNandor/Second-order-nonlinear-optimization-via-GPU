@@ -60,7 +60,7 @@ public:
 
         //Configure Local Searches
         gdLocalSearch=GDLocalSearch(ALPHA,ITERATION_COUNT);
-        lbfgsLocalSearch=LBFGSLocalSearch(ITERATION_COUNT);
+        lbfgsLocalSearch=LBFGSLocalSearch(ALPHA,ITERATION_COUNT);
 
         //Select currentLocalsearch
         if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {

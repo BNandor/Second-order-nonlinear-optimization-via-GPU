@@ -70,9 +70,10 @@ public:
 
 class LBFGSLocalSearch: public LocalSearch {
 public:
+    double alpha;
     LBFGSLocalSearch(){}
-    LBFGSLocalSearch(int iterations):LocalSearch(iterations){
-
+    LBFGSLocalSearch(double alpha,int iterations):LocalSearch(iterations){
+        this->alpha=alpha;
     }
     void
     optimize(double *globalX, double *globalData,

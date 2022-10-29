@@ -94,18 +94,18 @@ public:
 #define COMPUTE_RESIDUALS() \
         for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[0].constantsCount; spanningTID += blockDim.x) { \
             f1->setConstants(&(model->residuals.residual[0].constants[model->residuals.residual[0].constantsDim * spanningTID]), model->residuals.residual[0].constantsDim); \
-            localContext->threadF += f1->eval(sharedContext->xCurrent, X_DIM)->value; \
+            localContext->threadF += f1->eval(x, X_DIM)->value; \
             f1->evalJacobian(); \
             for (unsigned j = 0; j < model->residuals.residual[0].parametersDim; j++) { \
-                atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]], f1->operatorTree[f1->constantSize + j].derivative); } \
+                atomicAdd(&dx[f1->ThisJacobianIndices[j]], f1->operatorTree[f1->constantSize + j].derivative); } \
         } \
         for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[1].constantsCount; spanningTID += blockDim.x) { \
             f2->setConstants(&(model->residuals.residual[1].constants [model->residuals.residual[1].constantsDim * spanningTID]), \
                              model->residuals.residual[1].constantsDim); \
-            localContext->threadF += f2->eval(sharedContext->xCurrent,X_DIM)->value; \
+            localContext->threadF += f2->eval(x,X_DIM)->value; \
             f2->evalJacobian(); \
             for (unsigned j = 0; j < model->residuals.residual[1].parametersDim; j++) { \
-                atomicAdd(&sharedContext->globalData->sharedDX[f2->ThisJacobianIndices[j]], \
+                atomicAdd(&dx[f2->ThisJacobianIndices[j]], \
                           f2->operatorTree[f2->constantSize + j].derivative); \
             } \
         }
