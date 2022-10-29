@@ -59,7 +59,7 @@ public:
         currentSelector=&bestSelector;
 
         //Configure Local Searches
-        gdLocalSearch=GDLocalSearch(ITERATION_COUNT);
+        gdLocalSearch=GDLocalSearch(ALPHA,ITERATION_COUNT);
         lbfgsLocalSearch=LBFGSLocalSearch(ITERATION_COUNT);
 
         //Select currentLocalsearch

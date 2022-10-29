@@ -44,9 +44,10 @@ public:
 
 class GDLocalSearch: public LocalSearch {
 public:
+    double alpha;
     GDLocalSearch(){}
-    GDLocalSearch(int iterations):LocalSearch(iterations){
-
+    GDLocalSearch(double alpha,int iterations):LocalSearch(iterations){
+        this->alpha=alpha;
     }
 
     void
@@ -55,7 +56,7 @@ public:
             , void *globalSharedContext,void* model,
             CUDAConfig cudaConfig
     ) override{
-        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,iterations);
+        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,iterations,alpha);
     };
 
      void setupGlobalData(int populationSize) override {
