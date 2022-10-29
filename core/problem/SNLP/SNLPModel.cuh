@@ -13,7 +13,7 @@ class SNLPModel: public Model {
 public:
 
     SNLPModel():Model(){};
-    explicit SNLPModel(Perturbator& perturbator,int localIterations) : Model(perturbator,localIterations) {
+    explicit SNLPModel(Perturbator& perturbator) : Model(perturbator) {
         residuals.residualCount=2;
         SNLPResidual[0].constantsCount=RESIDUAL_CONSTANTS_COUNT_1;
         SNLPResidual[0].constantsDim=RESIDUAL_CONSTANTS_DIM_1;
@@ -75,5 +75,51 @@ public:
     }
 };
 
+#ifdef PROBLEM_SNLP
+
+#define DEFINE_RESIDUAL_FUNCTIONS() \
+        SNLP f1 = SNLP(); \
+        SNLPAnchor f2 = SNLPAnchor(); \
+
+#define INJECT_RESIDUAL_FUNCTIONS() \
+        ((Model*)localContext.modelP)->residuals.residual[0].residualProblem=&f1; \
+        ((Model*)localContext.modelP)->residuals.residual[0].constants = globalData; \
+        ((Model*)localContext.modelP)->residuals.residual[1].residualProblem= &f2; \
+        ((Model*)localContext.modelP)->residuals.residual[1].constants = ((Model*)localContext.modelP)->residuals.residual[0].constants  + ((Model*)localContext.modelP)->residuals.residual[0].getConstantsDim();
+
+#define CAST_RESIDUAL_FUNCTIONS() \
+        SNLP *f1 = ((SNLP *) model->residuals.residual[0].residualProblem); \
+        SNLPAnchor *f2 = ((SNLPAnchor *) model->residuals.residual[1].residualProblem);
+
+#define COMPUTE_RESIDUALS() \
+        for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[0].constantsCount; spanningTID += blockDim.x) { \
+            f1->setConstants(&(model->residuals.residual[0].constants[model->residuals.residual[0].constantsDim * spanningTID]), model->residuals.residual[0].constantsDim); \
+            localContext->threadF += f1->eval(sharedContext->xCurrent, X_DIM)->value; \
+            f1->evalJacobian(); \
+            for (unsigned j = 0; j < model->residuals.residual[0].parametersDim; j++) { \
+                atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]], f1->operatorTree[f1->constantSize + j].derivative); } \
+        } \
+        for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[1].constantsCount; spanningTID += blockDim.x) { \
+            f2->setConstants(&(model->residuals.residual[1].constants [model->residuals.residual[1].constantsDim * spanningTID]), \
+                             model->residuals.residual[1].constantsDim); \
+            localContext->threadF += f2->eval(sharedContext->xCurrent,X_DIM)->value; \
+            f2->evalJacobian(); \
+            for (unsigned j = 0; j < model->residuals.residual[1].parametersDim; j++) { \
+                atomicAdd(&sharedContext->globalData->sharedDX[f2->ThisJacobianIndices[j]], \
+                          f2->operatorTree[f2->constantSize + j].derivative); \
+            } \
+        }
+
+#define COMPUTE_LINESEARCH() \
+        for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[0].constantsCount; spanningTID += blockDim.x) {  \
+            f1->setConstants(&(model->residuals.residual[0].constants[model->residuals.residual[0].constantsDim * spanningTID]), model->residuals.residual[0].constantsDim); \
+            fNext += f1->eval(sharedContext->xNext, X_DIM)->value; \
+        }\
+        for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[1].constantsCount; spanningTID += blockDim.x) { \
+            f2->setConstants(&(model->residuals.residual[1].constants[model->residuals.residual[1].constantsDim * spanningTID]), model->residuals.residual[1].constantsDim); \
+            fNext += f2->eval(sharedContext->xNext,X_DIM)->value; \
+        }
+
+#endif
 
 #endif //PARALLELLBFGS_SNLPMODEL_CUH

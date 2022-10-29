@@ -22,6 +22,7 @@
 #include "../../problem/SNLP/SNLP3D.cuh"
 #include "../../problem/SNLP/SNLP3DAnchor.cuh"
 #include "../../common/model/Model.cuh"
+#include "../../problem/SNLP/SNLPModel.cuh"
 #include <stdio.h>
 
 //__global__ void testDFloatKernel(DDouble *c, unsigned *globalIndex) {
@@ -248,8 +249,7 @@ namespace GD {
     struct LocalContext {
         double threadF;
         double alpha;
-        void *residualProblems[RESIDUAL_COUNT];
-        double *residualConstants[RESIDUAL_COUNT];
+        void* modelP;
         unsigned fEvaluations;
     };
 
@@ -267,10 +267,11 @@ namespace GD {
     __device__
     void reduceObservations(LocalContext *localContext,
                             SharedContext *sharedContext,
-                            double *globalData,void* modelP) {
+                            double *globalData) {
         ++localContext->fEvaluations;
         localContext->threadF = 0;
-        Model *model = (Model *) modelP;
+        Model *model = (Model *) localContext->modelP;
+        CAST_RESIDUAL_FUNCTIONS()
         COMPUTE_RESIDUALS()
     }
 
@@ -286,20 +287,8 @@ namespace GD {
                     double currentF) {
         double fNext;
         localContext->alpha = ALPHA;
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D *f1 = ((Rosenbrock2D *) localContext->residualProblems[0]);
-#endif
-#ifdef PROBLEM_SNLP
-        SNLP *f1 = ((SNLP *) localContext->residualProblems[0]);
-        SNLPAnchor *f2 = ((SNLPAnchor *) localContext->residualProblems[1]);
-#endif
-#ifdef PROBLEM_SNLP3D
-        SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
-        SNLP3DAnchor *f2 = ((SNLP3DAnchor *) localContext->residualProblems[1]);
-#endif
+        Model *model = (Model *) localContext->modelP;
+        CAST_RESIDUAL_FUNCTIONS()
         do {
             ++localContext->fEvaluations;
             lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->globalData->sharedDX,
@@ -310,21 +299,7 @@ namespace GD {
             fNext = 0;
             localContext->alpha = localContext->alpha / 2;
             __syncthreads();// sharedContext.sharedF is cleared
-            for (unsigned spanningTID = threadIdx.x;
-                 spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
-                f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
-                                 RESIDUAL_CONSTANTS_DIM_1);
-                fNext += f1->eval(sharedContext->xNext, X_DIM)->value;// TODO set xNext only once
-            }
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-            for (unsigned spanningTID = threadIdx.x;
-                 spanningTID < RESIDUAL_CONSTANTS_COUNT_2; spanningTID += blockDim.x) {
-                f2->setConstants(&(localContext->residualConstants[1][RESIDUAL_CONSTANTS_DIM_2 * spanningTID]),
-                                 RESIDUAL_CONSTANTS_DIM_2);
-                fNext += f2->eval(sharedContext->xNext,
-                                  X_DIM)->value;
-            }
-#endif
+            COMPUTE_LINESEARCH()
             atomicAdd(&sharedContext->sharedF, fNext); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
         } while (sharedContext->sharedF > currentF && localContext->alpha!=0.0);
@@ -337,32 +312,19 @@ namespace GD {
         sharedContext->xCurrent = sharedContext->xNext;
         sharedContext->xNext = tmp;
     }
+
     __global__ void
     optimize(double *globalX, double *globalData,
-             double *globalF
-//#ifdef GLOBAL_SHARED_MEM
-            , GlobalData *globalSharedContext,
-            void * model,
-int iterations
-//#endif
-    ) { // use shared memory instead of global memory
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting f1 = PlaneFitting();
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D f1 = Rosenbrock2D();
-#endif
-#ifdef PROBLEM_SNLP
-        SNLP f1 = SNLP();
-        SNLPAnchor f2 = SNLPAnchor();
-#endif
-#ifdef PROBLEM_SNLP3D
-        SNLP3D f1 = SNLP3D();
-        SNLP3DAnchor f2 = SNLP3DAnchor();
-#endif
+             double *globalF,
+             GlobalData *globalSharedContext,
+             void * model,
+             int localIterations)
+             {
+
+        DEFINE_RESIDUAL_FUNCTIONS()
         if(blockIdx.x ==0 && threadIdx.x ==0) {
             Model *model1 = (Model *) model;
-            printf("GD iterations: %d\n", model1->localIterations);
+            printf("GD iterations: %d\n", localIterations);
             printf("residuals: %d\n", model1->residuals.residualCount);
 
             for (int residualIndex = 0; residualIndex < model1->residuals.residualCount; residualIndex++) {
@@ -372,18 +334,11 @@ int iterations
             }
         }
 
-
         // every thread has a local observation loaded into local memory
         __shared__
         SharedContext sharedContext;
-//#ifdef GLOBAL_SHARED_MEM
         sharedContext.globalData = &globalSharedContext[blockIdx.x];
 
-//#else
-        // LOAD MODEL INTO SHARED MEMORY
-//        __shared__
-//        SharedContext sharedContext;
-//#endif
         const unsigned modelStartingIndex = X_DIM * blockIdx.x;
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             sharedContext.globalData->sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
@@ -398,15 +353,12 @@ int iterations
             sharedContext.xCurrent = sharedContext.globalData->sharedX1;
             sharedContext.xNext = sharedContext.globalData->sharedX2;
         }
+
         localContext.fEvaluations = 0;
         localContext.alpha = ALPHA;
-        localContext.residualProblems[0] = &f1;
-        localContext.residualConstants[0] = globalData;
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-        localContext.residualProblems[1] = &f2;
-        localContext.residualConstants[1] =
-                localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
-#endif
+        localContext.modelP=model;
+        INJECT_RESIDUAL_FUNCTIONS()
+
         double fCurrent;
         // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
         double costDifference = INT_MAX;
@@ -415,20 +367,16 @@ int iterations
         sharedContext.sharedDXNorm = epsilon + 1;
         unsigned it;
 //        for (it = 0; it < ITERATION_COUNT; it++) {
-        for (it = 0; localContext.fEvaluations < iterations; it++) {
+        for (it = 0; localContext.fEvaluations < localIterations; it++) {
 
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
             // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-            reduceObservations(&localContext, &sharedContext, globalData,model);
+            reduceObservations(&localContext, &sharedContext, globalData);
             // localContext.threadF are calculated
             atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
-            // sharedContext.sharedF, sharedContext-globalData->sharedDXis complete for all threads
             fCurrent = sharedContext.sharedF;
-//            if (threadIdx.x == 0) {
-//                sharedContext.sharedDXNorm = 0;
-//            }
             __syncthreads();
 #ifdef PRINT
             if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
@@ -454,26 +402,8 @@ int iterations
                 swapModels(&sharedContext);
             }
 
-//            double localDXNorm = 0;
-//            for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-//                localDXNorm += std::pow(sharedContext.globalData->sharedDX[spanningTID], 2);
-//                // TODO reduce over threads, not using atomicAdd
-//            }
-//            sharedContext.sharedScratchPad[threadIdx.x] = localDXNorm;
-//            __syncthreads();
-//
-//            if (threadIdx.x == 0) {
-//                double localDXNormFinal = 0;
-//                for (unsigned itdxnorm = 0; itdxnorm < THREADS_PER_BLOCK; itdxnorm++) {
-//                    localDXNormFinal += sharedContext.sharedScratchPad[itdxnorm];
-//                }
-//                sharedContext.sharedDXNorm = std::sqrt(localDXNormFinal);
-//            }
-//
-//            costDifference = std::abs(fCurrent - sharedContext.sharedF);
             __syncthreads();
             //xCurrent,xNext is set for all threads
-
         }
 
 #ifdef PRINT
@@ -493,9 +423,6 @@ int iterations
 
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
-
-//            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
-//                   sharedContext.sharedF);
         }
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             globalX[modelStartingIndex + spanningTID]=sharedContext.xCurrent[spanningTID];
@@ -504,34 +431,15 @@ int iterations
 
     __global__ void
     evaluateF(double *globalX, double *globalData,
-             double *globalF, GlobalData *globalSharedContext,void*model
+             double *globalF, GlobalData *globalSharedContext,
+             void*model
     ) {
-// use shared memory instead of global memory
-#ifdef PROBLEM_PLANEFITTING
-        PlaneFitting f1 = PlaneFitting();
-#endif
-#ifdef PROBLEM_ROSENBROCK2D
-        Rosenbrock2D f1 = Rosenbrock2D();
-#endif
-#ifdef PROBLEM_SNLP
-        SNLP f1 = SNLP();
-        SNLPAnchor f2 = SNLPAnchor();
-#endif
-#ifdef PROBLEM_SNLP3D
-        SNLP3D f1 = SNLP3D();
-        SNLP3DAnchor f2 = SNLP3DAnchor();
-#endif
+        DEFINE_RESIDUAL_FUNCTIONS()
         // every thread has a local observation loaded into local memory
         __shared__
         SharedContext sharedContext;
-//#ifdef GLOBAL_SHARED_MEM
         sharedContext.globalData = &globalSharedContext[blockIdx.x];
 
-//#else
-        // LOAD MODEL INTO SHARED MEMORY
-//        __shared__
-//        SharedContext sharedContext;
-//#endif
         const unsigned modelStartingIndex = X_DIM * blockIdx.x;
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             sharedContext.globalData->sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
@@ -548,13 +456,8 @@ int iterations
         }
         localContext.fEvaluations = 0;
         localContext.alpha = ALPHA;
-        localContext.residualProblems[0] = &f1;
-        localContext.residualConstants[0] = globalData;
-#if defined(PROBLEM_SNLP) || defined(PROBLEM_SNLP3D)
-        localContext.residualProblems[1] = &f2;
-        localContext.residualConstants[1] =
-                localContext.residualConstants[0] + RESIDUAL_CONSTANTS_COUNT_1 * RESIDUAL_CONSTANTS_DIM_1;
-#endif
+        localContext.modelP= model;
+        INJECT_RESIDUAL_FUNCTIONS()
         double fCurrent;
         // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
         double costDifference = INT_MAX;
@@ -566,7 +469,7 @@ int iterations
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, &sharedContext, globalData,model);
+        reduceObservations(&localContext, &sharedContext, globalData);
         // localContext.threadF are calculated
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         __syncthreads();
@@ -582,12 +485,7 @@ int iterations
 
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
-//            printf("\nthreads:%d", blockDim.x);
-//            printf("\niterations:%d", it);
-//            printf("\nfevaluations: %d\n", localContext.fEvaluations);
             printf("f: %f\n", sharedContext.sharedF);
-//            printf("\nWith: %d threads in block %d after it: %d f: %.10f\n", blockDim.x, blockIdx.x, it,
-//                   sharedContext.sharedF);
         }
     }
 }

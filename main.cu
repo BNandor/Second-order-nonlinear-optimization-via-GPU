@@ -110,7 +110,7 @@ void testOptimizer() {
     DEContext deContext = DEContext();
     GAContext gaContext = GAContext();
     OptimizerContext optimizerContext = OptimizerContext(deContext,gaContext);
-    optimizerContext.model = SNLPModel(deContext, ITERATION_COUNT);
+    optimizerContext.model = SNLPModel(deContext);
     Metrics metrics = Metrics(optimizerContext.model);
     optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize());
 

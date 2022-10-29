@@ -13,7 +13,10 @@ public:
     int parametersDim;
     int constantsDim;
     int constantsCount;
+    double* constants;
+    void* residualProblem;
 
+    __device__ __host__
     int getConstantsDim(){
         return constantsDim*constantsCount;
     }
@@ -54,14 +57,12 @@ public:
     int modelPopulationSize;
     int populationSize;
     Residuals residuals;
-    int localIterations;
 
     Model()=default;
-    Model(Perturbator& perturbator,int localIterations) {
+    Model(Perturbator& perturbator) {
         modelSize=X_DIM;
         modelPopulationSize=perturbator.populationSize*modelSize;
         populationSize=perturbator.populationSize;
-        this->localIterations=localIterations;
     }
 
     virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;
