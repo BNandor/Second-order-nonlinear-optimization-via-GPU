@@ -12,7 +12,15 @@
 class LocalSearch {
 protected:
     void* dev_globalContext;
+    int iterations;
+
 public:
+    LocalSearch(){
+
+    }
+    LocalSearch(int iterations):iterations(iterations) {
+
+    }
     virtual  void
     optimize(double *globalX, double *globalData,
              double *globalF
@@ -35,16 +43,22 @@ public:
 };
 
 class GDLocalSearch: public LocalSearch {
+public:
+    GDLocalSearch(){}
+    GDLocalSearch(int iterations):LocalSearch(iterations){
+
+    }
+
     void
     optimize(double *globalX, double *globalData,
              double *globalF
             , void *globalSharedContext,void* model,
             CUDAConfig cudaConfig
     ) override{
-        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model);
+        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,iterations);
     };
 
-     void setupGlobalData(int populationSize) {
+     void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }
@@ -54,16 +68,21 @@ class GDLocalSearch: public LocalSearch {
 };
 
 class LBFGSLocalSearch: public LocalSearch {
+public:
+    LBFGSLocalSearch(){}
+    LBFGSLocalSearch(int iterations):LocalSearch(iterations){
+
+    }
     void
     optimize(double *globalX, double *globalData,
              double *globalF
             , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig
     ) override {
-        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model);
+        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model,iterations);
     };
 
-    void setupGlobalData(int populationSize) {
+    void setupGlobalData(int populationSize) override{
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }

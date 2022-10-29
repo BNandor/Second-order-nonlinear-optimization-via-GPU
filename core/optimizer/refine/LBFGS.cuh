@@ -492,7 +492,7 @@ namespace LBFGS {
              double *globalF
 //#ifdef GLOBAL_SHARED_MEM
             , GlobalData *globalSharedContext,
-            void * model
+            void * model,int iterations
 //#endif
     ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
@@ -617,7 +617,7 @@ namespace LBFGS {
             //xCurrent,xNext is set for all threads
         }
         double costDifference = INT_MAX;
-        for (; localContext.fEvaluations < ITERATION_COUNT; it++) {
+        for (; localContext.fEvaluations < iterations; it++) {
 
             // reset states
             resetSharedState(&sharedContext, threadIdx.x);

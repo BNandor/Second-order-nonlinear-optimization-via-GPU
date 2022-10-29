@@ -96,7 +96,6 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
             }else{
                 newX[blockIdx.x * X_DIM + spanningTID] =alpha * oldX[localB * X_DIM + spanningTID] + (1.0 - alpha)*oldX[localA * X_DIM + spanningTID];
             }
-//            newX[blockIdx.x * X_DIM + spanningTID] =oldX[localA * X_DIM + spanningTID] ;
             if(curand_uniform(curandState + idx) < mutationRate) {
                 newX[blockIdx.x * X_DIM + spanningTID]+=curand_normal(curandState + idx)*mutationSize;
             }

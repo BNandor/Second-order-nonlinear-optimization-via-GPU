@@ -59,8 +59,8 @@ public:
         currentSelector=&bestSelector;
 
         //Configure Local Searches
-        gdLocalSearch=GDLocalSearch();
-        lbfgsLocalSearch=LBFGSLocalSearch();
+        gdLocalSearch=GDLocalSearch(ITERATION_COUNT);
+        lbfgsLocalSearch=LBFGSLocalSearch(ITERATION_COUNT);
 
         //Select currentLocalsearch
         if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {

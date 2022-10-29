@@ -267,10 +267,10 @@ namespace GD {
     __device__
     void reduceObservations(LocalContext *localContext,
                             SharedContext *sharedContext,
-                            double *globalData) {
+                            double *globalData,void* modelP) {
         ++localContext->fEvaluations;
         localContext->threadF = 0;
-
+        Model *model = (Model *) modelP;
 #ifdef PROBLEM_PLANEFITTING
         PlaneFitting *f1 = ((PlaneFitting *) localContext->residualProblems[0]);
 #endif
@@ -283,6 +283,21 @@ namespace GD {
 #ifdef PROBLEM_SNLP3D
         SNLP3D *f1 = ((SNLP3D *) localContext->residualProblems[0]);
 #endif
+
+//        for (int currentResidual= 0; currentResidual < model->residuals.residualCount; currentResidual++) {
+//            for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[currentResidual].constantsCount; spanningTID += blockDim.x) {
+//                f1->setConstants(&(localContext->residualConstants[0][model->residuals.residual[currentResidual].constantsDim * spanningTID]),
+//                                 model->residuals.residual[currentResidual].constantsDim);
+//                localContext->threadF += f1->eval(sharedContext->xCurrent,
+//                                                  model->modelSize)->value;
+//                f1->evalJacobian();
+//                for (unsigned j = 0; j < model->residuals.residual[currentResidual].parametersDim; j++) {
+//                    atomicAdd(&sharedContext->globalData->sharedDX[f1->ThisJacobianIndices[j]],
+//                              f1->operatorTree[f1->constantSize + j].derivative);// TODO add jacobian variable indexing
+//                }
+//            }
+//        }
+
         for (unsigned spanningTID = threadIdx.x; spanningTID < RESIDUAL_CONSTANTS_COUNT_1; spanningTID += blockDim.x) {
             f1->setConstants(&(localContext->residualConstants[0][RESIDUAL_CONSTANTS_DIM_1 * spanningTID]),
                              RESIDUAL_CONSTANTS_DIM_1);
@@ -384,7 +399,8 @@ namespace GD {
              double *globalF
 //#ifdef GLOBAL_SHARED_MEM
             , GlobalData *globalSharedContext,
-            void * model
+            void * model,
+int iterations
 //#endif
     ) { // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
@@ -456,12 +472,12 @@ namespace GD {
         sharedContext.sharedDXNorm = epsilon + 1;
         unsigned it;
 //        for (it = 0; it < ITERATION_COUNT; it++) {
-        for (it = 0; localContext.fEvaluations < ITERATION_COUNT; it++) {
+        for (it = 0; localContext.fEvaluations < iterations; it++) {
 
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
             // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-            reduceObservations(&localContext, &sharedContext, globalData);
+            reduceObservations(&localContext, &sharedContext, globalData,model);
             // localContext.threadF are calculated
             atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
             __syncthreads();
@@ -545,7 +561,7 @@ namespace GD {
 
     __global__ void
     evaluateF(double *globalX, double *globalData,
-             double *globalF, GlobalData *globalSharedContext
+             double *globalF, GlobalData *globalSharedContext,void*model
     ) {
 // use shared memory instead of global memory
 #ifdef PROBLEM_PLANEFITTING
@@ -607,7 +623,7 @@ namespace GD {
         resetSharedState(&sharedContext, threadIdx.x);
         __syncthreads();
         // sharedContext.sharedF, sharedContext.globalData->sharedX2, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, &sharedContext, globalData);
+        reduceObservations(&localContext, &sharedContext, globalData,model);
         // localContext.threadF are calculated
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         __syncthreads();
