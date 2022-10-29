@@ -81,7 +81,7 @@ public:
             , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig
     ) override {
-        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model,iterations);
+        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model,iterations,alpha);
     };
 
     void setupGlobalData(int populationSize) override{
