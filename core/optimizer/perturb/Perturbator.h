@@ -7,12 +7,14 @@
 
 #include "../../common/config/CUDAConfig.cuh"
 #include "../../common/Random.cuh"
+#include "../../common/model/BoundedParameter.cuh"
 
 class Model;
 class Perturbator {
 
 public:
     int populationSize;
-    virtual void perturb(CUDAConfig &cudaConfig, Model* model, double * dev_x1, double * dev_x2,double* oldCosts, Random* cudaRandom)=0;
+    OperatorParameters parameters;
+    virtual void perturb(CUDAConfig &cudaConfig,Model* model, Model * dev_model,double * dev_x1, double * dev_x2,double* oldCosts, Random* cudaRandom)=0;
 };
 #endif //PARALLELLBFGS_PERTURBATOR_H

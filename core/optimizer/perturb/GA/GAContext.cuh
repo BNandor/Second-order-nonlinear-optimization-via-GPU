@@ -113,8 +113,10 @@ public:
         populationSize=POPULATION_SIZE;
     }
 
-    void perturb(CUDAConfig &cudaConfig, Model *model,double * dev_x1, double * dev_x2,double * currentCosts, Random* cudaRandom ) override {
-        geneticAlgorithmStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, model, currentCosts,
+    void perturb(CUDAConfig &cudaConfig, Model *model,Model * dev_model,double * dev_x1, double * dev_x2,double * currentCosts, Random* cudaRandom ) override {
+        geneticAlgorithmStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2,
+                                                                                    dev_model,
+                                                                                    currentCosts,
                                                                                     crossoverRate,
                                                                                     crossoverPoint,
                                                                                     mutationRate,
@@ -123,7 +125,7 @@ public:
                                                                                     alpha,
                                                                                     cudaRandom->dev_curandState);
     }
-    double force=DE_FORCE;
+
     double crossoverRate=0.9;
     double crossoverPoint=0.5;
     double mutationRate=0.5; // decrease

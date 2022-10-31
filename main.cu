@@ -17,6 +17,7 @@
 #include "core/common/Metrics.cuh"
 #include "core/optimizer/perturb/DE/DEContext.h"
 #include "core/common/OptimizerContext.cuh"
+#include "core/common/model/BoundedParameter.cuh"
 //#include "core/optimizer/perturb/GA/GeneticAlgorithm.cu"
 #include <curand.h>
 #include <curand_kernel.h>
@@ -125,7 +126,9 @@ void testOptimizer() {
     optimizerContext.cudaMemoryModel.initLoopPointers();
     optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
     for (unsigned i = 0; i < optimizerContext.totalIterations; i++) {
-        optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,&optimizerContext.model,
+        optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,
+                                                          &optimizerContext.model,
+                                                          optimizerContext.cudaMemoryModel.dev_Model,
                                                           optimizerContext.cudaMemoryModel.dev_x1,
                                                           optimizerContext.cudaMemoryModel.dev_x2,
                                                           optimizerContext.cudaMemoryModel.dev_F1, &cudaRandom);
@@ -152,6 +155,9 @@ void testOptimizer() {
 }
 
 int main(int argc, char** argv) {
+//    BoundedParameter param(0,0,1);
+//    param.setRandom();
+//    std::cout<<param.value;
     testOptimizer();
     return 0;
 }
