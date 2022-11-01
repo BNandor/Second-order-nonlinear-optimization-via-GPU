@@ -88,7 +88,6 @@ public:
         std::unordered_map<std::string,BoundedParameter> deParams=std::unordered_map<std::string,BoundedParameter>();
         deParams["DE_CR"]=BoundedParameter(0.99,0.0,1.0);
         deParams["DE_FORCE"]=BoundedParameter(0.6,0.0,1.0);
-        deParams["DE_FORCE"].setRandomUniform(parameters.generator);
         parameters=OperatorParameters(deParams);
     }
 

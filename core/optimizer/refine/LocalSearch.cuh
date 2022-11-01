@@ -39,7 +39,6 @@ public:
     void *getDevGlobalContext() const {
         return dev_globalContext;
     }
-
 };
 
 class GDLocalSearch: public LocalSearch {
