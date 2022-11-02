@@ -28,8 +28,6 @@
 namespace LBFGS {
     std::string name="LBFGS";
 #define LBFGS_M 5
-#define LBFGS_LINESEARCH_C1 0.0001
-#define LBFGS_LINESEARCH_C2 0.9
 
     struct GlobalData {
         double sharedX1[X_DIM];
@@ -198,16 +196,15 @@ namespace LBFGS {
     __device__
     int zoom(LocalContext
               *localContext, SharedContext *sharedContext, double alpha0, double alpha1, double *r,
-              double *DXNext, double currentF, double JdotR) {
-//        printf("zoom  %f to %f\n", alpha0, alpha1);
+              double *DXNext, double currentF, double JdotR,double c1,double c2) {
+
         double alphaLow = alpha0;
         double alphaHigh = alpha1;
         double alphaMid;
         double fAlphaMid;
         double gradientAlphaMid;
         do {
-//      println("alphaLow "+alphaLow)
-//      println("alphaHigh "+alphaHigh)
+
             alphaMid = (alphaLow + alphaHigh) / 2.0;
             aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
             // xNext = x + alphaMid*r
@@ -224,7 +221,7 @@ namespace LBFGS {
             // DXNext, sharedF =  f(x + alphaMid.r),xNext = x + alphaMid*r
             fAlphaMid = sharedContext->sharedF;
 
-            if (fAlphaMid > currentF + LBFGS_LINESEARCH_C1 * alphaMid * JdotR) {
+            if (fAlphaMid > currentF + c1 * alphaMid * JdotR) {
                 alphaHigh = alphaMid;
             } else {
                 aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaLow, r, sharedContext->xNext, X_DIM);
@@ -245,7 +242,7 @@ namespace LBFGS {
                     alphaHigh = alphaMid;
                 } else {
                     gradientAlphaMid = dot(DXNext, r, X_DIM, *sharedContext);
-                    if (abs(gradientAlphaMid) <= -LBFGS_LINESEARCH_C2 * JdotR) {
+                    if (abs(gradientAlphaMid) <= -c2 * JdotR) {
 //                    return alphaMid
                         aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
                         __syncthreads();
@@ -278,9 +275,8 @@ namespace LBFGS {
                                         double *J,
                                         double *r,
                                         double *DXNext,
-                                        double currentF
+                                        double currentF,double c1,double c2
     ) {
-//        LBFGS_LINESEARCH_C2
         double alphaMax = 10000;
         double alpha0 = 0.0;
         double alpha1 = 1.0;
@@ -306,16 +302,16 @@ namespace LBFGS {
             // DXNext, sharedF =  f(x + alpha1.r),xNext = x + alpha1*r
             falpha1 = sharedContext->sharedF;
 
-            if (falpha1 > currentF + alpha1 * LBFGS_LINESEARCH_C1 * JdotR ||
+            if (falpha1 > currentF + alpha1 * c1 * JdotR ||
                 (i > 1 && falpha1 >= falpha0)) {
-                return zoom(localContext, sharedContext, alpha0, alpha1, r, DXNext, currentF, JdotR);
+                return zoom(localContext, sharedContext, alpha0, alpha1, r, DXNext, currentF, JdotR,c1,c2);
             }
             gradientAlpha1 = dot(DXNext, r, X_DIM, *sharedContext);
-            if (abs(gradientAlpha1) <= -LBFGS_LINESEARCH_C2 * JdotR) {
+            if (abs(gradientAlpha1) <= -c2 * JdotR) {
                 return 0;
             }
             if (gradientAlpha1 >= 0) {
-                return zoom(localContext, sharedContext, alpha1, alpha0, r, DXNext, currentF, JdotR);
+                return zoom(localContext, sharedContext, alpha1, alpha0, r, DXNext, currentF, JdotR,c1,c2);
             }
             alpha0 = alpha1;
             falpha0 = falpha1;
@@ -384,7 +380,7 @@ namespace LBFGS {
     optimize(double *globalX, double *globalData,
              double *globalF
             , GlobalData *globalSharedContext,
-            void * model,int iterations,double alpha
+            void * model,int iterations,double alpha, double c1, double c2
     ) {
         DEFINE_RESIDUAL_FUNCTIONS()
         // every thread has a local observation loaded into local memory
@@ -524,7 +520,7 @@ namespace LBFGS {
 
             if(LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
                                               sharedContext.globalData->lbfgsR,
-                                              sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent)!=0) {
+                                              sharedContext.globalData->lbfgsQueueY[yQueue.back], fCurrent,c1,c2)!=0) {
                 if(!lineSearch(&localContext, &sharedContext, sharedContext.globalData->sharedDX, fCurrent)){
                     // sharedContext.xNext contains the model for the next iteration, sharedContext.sharedDX is for sharedContext.xCurrent model
                     // sharedContext.sharedF is set for xNext

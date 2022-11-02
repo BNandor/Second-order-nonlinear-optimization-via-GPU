@@ -6,6 +6,7 @@
 #define PARALLELLBFGS_LOCALSEARCH_CUH
 
 #include "../../common/config/CUDAConfig.cuh"
+#include "../../common/model/BoundedParameter.cuh"
 #include "GradientDescent.cuh"
 #include "LBFGS.cuh"
 
@@ -15,6 +16,7 @@ protected:
     int iterations;
 
 public:
+    OperatorParameters parameters;
     LocalSearch(){
 
     }
@@ -43,10 +45,12 @@ public:
 
 class GDLocalSearch: public LocalSearch {
 public:
-    double alpha;
     GDLocalSearch(){}
-    GDLocalSearch(double alpha,int iterations):LocalSearch(iterations){
-        this->alpha=alpha;
+    GDLocalSearch(double alpha,int iterations):LocalSearch(iterations) {
+        std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
+        gdParams["GD_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
+        gdParams["GD_ITERATIONS"]=BoundedParameter(iterations, 0, 10000);
+        parameters=OperatorParameters(gdParams);
     }
 
     void
@@ -55,7 +59,9 @@ public:
             , void *globalSharedContext,void* model,
             CUDAConfig cudaConfig
     ) override{
-        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,iterations,alpha);
+        GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,
+                                                                               parameters.values["GD_ITERATIONS"].value,
+                                                                               parameters.values["GD_ALPHA"].value);
     };
 
      void setupGlobalData(int populationSize) override {
@@ -69,10 +75,14 @@ public:
 
 class LBFGSLocalSearch: public LocalSearch {
 public:
-    double alpha;
     LBFGSLocalSearch(){}
-    LBFGSLocalSearch(double alpha,int iterations):LocalSearch(iterations){
-        this->alpha=alpha;
+    LBFGSLocalSearch(double alpha,int iterations):LocalSearch(iterations) {
+        std::unordered_map<std::string,BoundedParameter> lbfgsParams=std::unordered_map<std::string,BoundedParameter>();
+        lbfgsParams["LBFGS_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
+        lbfgsParams["LBFGS_ITERATIONS"]=BoundedParameter(iterations, 0, 10000);
+        lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 1.0);
+        lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
+        parameters=OperatorParameters(lbfgsParams);
     }
     void
     optimize(double *globalX, double *globalData,
@@ -80,7 +90,11 @@ public:
             , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig
     ) override {
-        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext,model,iterations,alpha);
+        LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext, model,
+                                                                                    parameters.values["LBFGS_ITERATIONS"].value,
+                                                                                    parameters.values["LBFGS_ALPHA"].value,
+                                                                                    parameters.values["LBFGS_C1"].value,
+                                                                                    parameters.values["LBFGS_C2"].value);
     };
 
     void setupGlobalData(int populationSize) override{
