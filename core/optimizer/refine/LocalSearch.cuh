@@ -9,18 +9,18 @@
 #include "../../common/model/BoundedParameter.cuh"
 #include "GradientDescent.cuh"
 #include "LBFGS.cuh"
+#include "../Operator.h"
 
-class LocalSearch {
+class LocalSearch : public Operator{
 protected:
     void* dev_globalContext;
-    int iterations;
-
 public:
-    OperatorParameters parameters;
-    LocalSearch(){
+    int functionEvaluations;
 
+    LocalSearch() {
     }
-    LocalSearch(int iterations):iterations(iterations) {
+
+    LocalSearch(int iterations): functionEvaluations(iterations) {
 
     }
     virtual  void
@@ -29,6 +29,10 @@ public:
             , void *globalSharedContext, void * model,
              CUDAConfig cudaConfig
     )=0;
+
+    int fEvaluationCount() {
+        return functionEvaluations;
+    }
 
     ~LocalSearch() {
         if(dev_globalContext!= nullptr) {
@@ -46,10 +50,10 @@ public:
 class GDLocalSearch: public LocalSearch {
 public:
     GDLocalSearch(){}
-    GDLocalSearch(double alpha,int iterations):LocalSearch(iterations) {
+    GDLocalSearch(double alpha,int fevaluations):LocalSearch(fevaluations) {
         std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
         gdParams["GD_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
-        gdParams["GD_ITERATIONS"]=BoundedParameter(iterations, 0, 10000);
+        gdParams["GD_ITERATIONS"]=BoundedParameter(fevaluations, 0, 10000);
         parameters=OperatorParameters(gdParams);
     }
 
@@ -76,10 +80,10 @@ public:
 class LBFGSLocalSearch: public LocalSearch {
 public:
     LBFGSLocalSearch(){}
-    LBFGSLocalSearch(double alpha,int iterations):LocalSearch(iterations) {
+    LBFGSLocalSearch(double alpha,int fevaluations):LocalSearch(fevaluations) {
         std::unordered_map<std::string,BoundedParameter> lbfgsParams=std::unordered_map<std::string,BoundedParameter>();
         lbfgsParams["LBFGS_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
-        lbfgsParams["LBFGS_ITERATIONS"]=BoundedParameter(iterations, 0, 10000);
+        lbfgsParams["LBFGS_ITERATIONS"]=BoundedParameter(fevaluations, 0, 10000);
         lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 1.0);
         lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
         parameters=OperatorParameters(lbfgsParams);

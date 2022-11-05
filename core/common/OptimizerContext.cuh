@@ -18,6 +18,7 @@
 #include <fstream>
 #include "./model/CudaMemoryModel.cuh"
 #include "../problem/SNLP/SNLPModel.cuh"
+#include <list>
 
 class OptimizerContext {
 
@@ -38,16 +39,18 @@ private:
 
     LocalSearch* currentLocalSearch;
 
+    std::list<Operator*> currentOperatorList;
 public:
     CUDAConfig cudaConfig;
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
-    int totalIterations=DE_ITERATION_COUNT;
+    int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
 
     explicit OptimizerContext(DEContext &deContext,GAContext &gaContext) {
         // Configure perturbators
         differentialEvolutionContext=deContext;
         geneticAlgorithmContext=gaContext;
+
         // Select currentPerturbator
 //        currentPerturbator = &differentialEvolutionContext;
         currentPerturbator = &geneticAlgorithmContext;
@@ -61,6 +64,7 @@ public:
         //Configure Local Searches
         gdLocalSearch=GDLocalSearch(ALPHA,ITERATION_COUNT);
         lbfgsLocalSearch=LBFGSLocalSearch(ALPHA,ITERATION_COUNT);
+        
 
         //Select currentLocalsearch
         if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {
@@ -73,6 +77,8 @@ public:
             currentLocalSearch = &lbfgsLocalSearch;
         }
 
+        // Selected  operators
+        currentOperatorList={currentPerturbator,currentSelector,currentLocalSearch};
 #ifdef SAFE
         assert(currentLocalSearch!=0);
 #endif
@@ -130,6 +136,10 @@ public:
 
     LocalSearch* getCurrentLocalSearch() {
         return currentLocalSearch;
+    }
+
+    std::list<Operator*>& getCurrentOperators() {
+        return currentOperatorList;
     }
 };
 #endif //PARALLELLBFGS_OPTIMIZERCONTEXT_CUH

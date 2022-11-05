@@ -35,6 +35,9 @@ public:
         assert(dev_curandState==0);
         assert(size<=(threadsPerBlock * blocksPerGrid));
 #endif
+        if(dev_curandState!= nullptr){
+            cudaFree(dev_curandState);
+        }
         cudaMalloc(&dev_curandState,size * sizeof(curandState) );
         setupCurandState<<<blocksPerGrid, threadsPerBlock>>>(
                 dev_curandState, size);

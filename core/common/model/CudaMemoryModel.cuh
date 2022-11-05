@@ -22,6 +22,7 @@ public:
     Model* model;
 
     void allocateFor(Model &model) {
+        freeIfPresent();
         cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
         cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
         cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
@@ -53,7 +54,17 @@ public:
         dev_F2 = dev_FDE;
     }
 
-    ~CUDAMemoryModel(){
+    void freeModelIfPresent() {
+        if(dev_Model!= nullptr) {
+            Model* host_dev_Model=(Model*)malloc(sizeof(Model));
+            cudaMemcpy(host_dev_Model, dev_Model, sizeof(Model),
+                       cudaMemcpyDeviceToHost);
+            cudaFree(host_dev_Model->residuals.residual);
+            cudaFree(dev_Model);
+            free(host_dev_Model);
+        }
+    }
+    void freeIfPresent() {
 
         if(dev_x!=nullptr){
             cudaFree(dev_x);
@@ -76,12 +87,16 @@ public:
         if(dev_FDE!=nullptr){
             cudaFree(dev_FDE);
         }
-        if(dev_F1!=nullptr){
+        if(dev_F1!=nullptr) {
             cudaFree(dev_F1);
         }
-        if(dev_F2!=nullptr){
+        if(dev_F2!=nullptr) {
             cudaFree(dev_F2);
         }
+        freeModelIfPresent();
+    }
+    ~CUDAMemoryModel(){
+        freeIfPresent();
 //        if(dev_Model!= nullptr) {
 //
 //        }

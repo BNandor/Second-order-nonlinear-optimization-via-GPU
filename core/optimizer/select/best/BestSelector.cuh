@@ -7,7 +7,14 @@
 #include "../Selector.cuh"
 
 __global__
-void selectBestModels(const double *oldX, double *newX, const double *oldF, double *newF, unsigned generation) {
+void printGenerationalCosts( double *newF, unsigned generation) {
+    if (threadIdx.x == 0) {
+        printf("Gen %u block %d f: %.10f\n", generation, blockIdx.x, newF[blockIdx.x]);
+    }
+}
+
+__global__
+void selectBestModels(const double *oldX, double *newX, const double *oldF, double *newF) {
     if (oldF[blockIdx.x] < newF[blockIdx.x]) {
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
@@ -16,15 +23,26 @@ void selectBestModels(const double *oldX, double *newX, const double *oldF, doub
             newF[blockIdx.x] = oldF[blockIdx.x];
         }
     }
-    if (threadIdx.x == 0) {
-        printf("Gen %u block %d f: %.10f\n", generation, blockIdx.x, newF[blockIdx.x]);
-    }
 }
 
 class BestSelector : public Selector {
 public:
-    void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF, unsigned generation) {
-        selectBestModels<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(oldX,newX,oldF,newF,generation);
+
+    BestSelector() {
+        std::unordered_map<std::string,BoundedParameter> bestSelectorParams=std::unordered_map<std::string,BoundedParameter>();
+        parameters=OperatorParameters(bestSelectorParams);
+    }
+
+    void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
+        selectBestModels<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(oldX,newX,oldF,newF);
+    }
+
+    void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *newF, unsigned generation) {
+        printGenerationalCosts<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(newF,generation);
+    }
+
+    int fEvaluationCount() {
+        return 0;
     }
 };
 

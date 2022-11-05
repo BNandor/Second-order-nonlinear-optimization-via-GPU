@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 //#define SAFE
 //#define PRINT
 
@@ -107,25 +108,32 @@ void generatePlanePoints(double A, double B, double C, double *data, unsigned po
 
 void testOptimizer() {
     Random cudaRandom = Random();
-
     DEContext deContext = DEContext();
     GAContext gaContext = GAContext();
-    OptimizerContext optimizerContext = OptimizerContext(deContext,gaContext);
-    optimizerContext.model = SNLPModel(deContext);
-    Metrics metrics = Metrics(optimizerContext.model);
-    optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize());
 
-    optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model);
-    optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model);
+    OptimizerContext optimizerContext = OptimizerContext(deContext,gaContext);
+    // Set f
+    optimizerContext.model = SNLPModel(deContext);
+
+    Metrics metrics = Metrics(optimizerContext.model); //idempotent
+    optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize()); //idempotent
+
+    optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model); // idempotent
+    optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model); // idempotent
+
     optimizerContext.model.loadModel(optimizerContext.cudaMemoryModel.dev_x, optimizerContext.cudaMemoryModel.dev_data,
-                                     metrics);
-    metrics.getCudaEventMetrics().recordStartCompute();
+                                     metrics); // idempotent
+    metrics.getCudaEventMetrics().recordStartCompute(); // idempotent
     cudaRandom.initialize(optimizerContext.getThreadsInGrid(), optimizerContext.getBlocksPerGrid(),
-                          optimizerContext.getThreadsPerBlock());
+                          optimizerContext.getThreadsPerBlock()); // idempotent
     // EXECUTE KERNEL
     optimizerContext.cudaMemoryModel.initLoopPointers();
     optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
-    for (unsigned i = 0; i < optimizerContext.totalIterations; i++) {
+
+    unsigned currentFEvaluations=0;
+    unsigned currentGeneration=0;
+    while(currentFEvaluations < optimizerContext.totalFunctionEvaluations) {
+
         optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,
                                                           &optimizerContext.model,
                                                           optimizerContext.cudaMemoryModel.dev_Model,
@@ -140,10 +148,17 @@ void testOptimizer() {
                                                       optimizerContext.cudaMemoryModel.dev_x1,
                                                       optimizerContext.cudaMemoryModel.dev_x2,
                                                       optimizerContext.cudaMemoryModel.dev_F1,
-                                                      optimizerContext.cudaMemoryModel.dev_F2, i);
+                                                      optimizerContext.cudaMemoryModel.dev_F2);
+        optimizerContext.getCurrentSelector()->printPopulationCostAtGeneration(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_F2,currentGeneration);
 
         std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
         std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);
+
+        std::for_each(optimizerContext.getCurrentOperators().begin(),optimizerContext.getCurrentOperators().end(),[&currentFEvaluations](auto op){
+                currentFEvaluations+=op->fEvaluationCount();
+        });
+
+        ++currentGeneration;
         // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
 
@@ -155,12 +170,12 @@ void testOptimizer() {
 }
 
 int main(int argc, char** argv) {
-//    BoundedParameter param(0,0,1);
-//    param.setRandom();
-//    std::cout<<param.value;
     testOptimizer();
     return 0;
 }
+
+// TODO make x1,x2,F1,F2 consistent in every operator (i.e evaluate F2 after every perturbation)
+
 // TODO add Simulated Annealing to hyper level
 // TODO as a first step, skip mutating the operator parameters
-// TODO add arithmetic operators to GA
+

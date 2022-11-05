@@ -111,6 +111,12 @@ namespace GD {
         sharedContext->xNext = tmp;
     }
 
+    __device__ void
+    evaluateF(double *globalX, double *globalData,
+              double *globalF, GlobalData *globalSharedContext,
+              void *model
+    );
+
     __global__ void
     optimize(double *globalX, double *globalData,
              double *globalF,
@@ -118,6 +124,13 @@ namespace GD {
              void * model,
              int localIterations, double  alpha)
              {
+
+        if( localIterations == 0 ) {
+            evaluateF(globalX, globalData,
+                      globalF, globalSharedContext, model
+            );
+            return;
+        }
 
         DEFINE_RESIDUAL_FUNCTIONS()
         if(blockIdx.x ==0 && threadIdx.x ==0) {
@@ -228,7 +241,7 @@ namespace GD {
         }
     }
 
-    __global__ void
+    __device__ void
     evaluateF(double *globalX, double *globalData,
              double *globalF, GlobalData *globalSharedContext,
              void*model

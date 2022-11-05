@@ -8,13 +8,17 @@
 #include "../../common/config/CUDAConfig.cuh"
 #include "../../common/Random.cuh"
 #include "../../common/model/BoundedParameter.cuh"
+#include "../Operator.h"
 
 class Model;
-class Perturbator {
+class Perturbator : public Operator {
 
 public:
     int populationSize;
-    OperatorParameters parameters;
     virtual void perturb(CUDAConfig &cudaConfig,Model* model, Model * dev_model,double * dev_x1, double * dev_x2,double* oldCosts, Random* cudaRandom)=0;
+
+    int fEvaluationCount() {
+        return 1;
+    }
 };
 #endif //PARALLELLBFGS_PERTURBATOR_H

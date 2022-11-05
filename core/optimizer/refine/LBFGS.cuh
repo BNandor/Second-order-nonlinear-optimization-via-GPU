@@ -262,9 +262,10 @@ namespace LBFGS {
             __syncthreads();
         } while (alphaLow != alphaHigh);
 #ifdef PRINT
-        printf("Error, could not zoom!\n");
+        if (threadIdx.x == 0) {
+            printf("Error, could not zoom!\n");
+        }
 #endif
-
         return -1;
     }
 
@@ -319,7 +320,9 @@ namespace LBFGS {
             i += 1;
         } while (alpha1 < alphaMax);
 #ifdef PRINT
-        printf("error: reached max bracket in linesearch");
+        if (threadIdx.x == 0) {
+            printf("error: reached max bracket in linesearch");
+        }
 #endif
         return -2;
     }
@@ -375,6 +378,11 @@ namespace LBFGS {
         }
         mulNoSync(sharedContext->globalData->lbfgsR, -1, sharedContext->globalData->lbfgsR, X_DIM);
     }
+    __device__ void
+    evaluateF(double *globalX, double *globalData,
+              double *globalF
+            , GlobalData *globalSharedContext,void*model
+    );
 
     __global__ void
     optimize(double *globalX, double *globalData,
@@ -382,6 +390,12 @@ namespace LBFGS {
             , GlobalData *globalSharedContext,
             void * model,int iterations,double alpha, double c1, double c2
     ) {
+        if( iterations == 0 ) {
+            evaluateF(globalX, globalData,
+                      globalF, globalSharedContext, model
+            );
+            return;
+        }
         DEFINE_RESIDUAL_FUNCTIONS()
         // every thread has a local observation loaded into local memory
         FIFOQueue sQueue = FIFOQueue();
@@ -582,7 +596,7 @@ namespace LBFGS {
         }
     }
 
-    __global__ void
+   __device__ void
     evaluateF(double *globalX, double *globalData,
              double *globalF
             , GlobalData *globalSharedContext,void*model
