@@ -5,6 +5,8 @@
 #ifndef PARALLELLBFGS_GACONTEXT_CUH
 #define PARALLELLBFGS_GACONTEXT_CUH
 #include "../Perturbator.h"
+#include "../../refine/FunctionEvaluation.cuh"
+
 __device__
 int minIndex(int a, int b){
     if(a <b){
@@ -108,6 +110,14 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
 
 
 class GAContext : public Perturbator {
+    void* dev_globalContext;
+    void setupGlobalData(int populationSize) {
+        if(dev_globalContext!= nullptr) {
+            cudaFree(dev_globalContext);
+        }
+        cudaMalloc(&dev_globalContext, sizeof(FuncEval::GlobalData)*populationSize);
+        printf("Allocating %lu global memory\n",sizeof(FuncEval::GlobalData)*populationSize);
+    }
 public:
     GAContext() {
         populationSize=POPULATION_SIZE;
@@ -119,9 +129,16 @@ public:
         gaParams["GA_PARENTPOOL_RATIO"]=BoundedParameter(0.3, 0.0, 1.0);
         gaParams["GA_ALPHA"]=BoundedParameter(0.2, 0.0, 1.0);
         parameters=OperatorParameters(gaParams);
+        setupGlobalData(populationSize);
     }
 
-    void perturb(CUDAConfig &cudaConfig, Model *model,Model * dev_model,double * dev_x1, double * dev_x2,double * currentCosts, Random* cudaRandom ) override {
+    ~GAContext() {
+        if(dev_globalContext!= nullptr) {
+            cudaFree(dev_globalContext);
+        }
+    }
+
+    void perturb(CUDAConfig &cudaConfig, Model *model,Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data,double * currentCosts, double* newCosts, Random* cudaRandom ) override {
         geneticAlgorithmStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2,
                                                                                     dev_model,
                                                                                     currentCosts,
@@ -132,6 +149,7 @@ public:
                                                                                     parameters.values["GA_PARENTPOOL_RATIO"].value,
                                                                                     parameters.values["GA_ALPHA"].value,
                                                                                     cudaRandom->dev_curandState);
+        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x2,dev_data,newCosts,(FuncEval::GlobalData*)dev_globalContext,dev_model);
     }
 
     double crossoverRate=0.9;

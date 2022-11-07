@@ -101,7 +101,7 @@ public:
                                                                                     parameters.values["LBFGS_C2"].value);
     };
 
-    void setupGlobalData(int populationSize) override{
+    void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }

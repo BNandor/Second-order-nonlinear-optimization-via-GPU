@@ -11,7 +11,7 @@
 #include "../Perturbator.h"
 #include "../../../common/model/BoundedParameter.cuh"
 #include "../../select/Selector.cuh"
-
+#include "../../refine/FunctionEvaluation.cuh"
 // Differential Evolution Control parameters
 
 
@@ -82,20 +82,38 @@ void differentialEvolutionStep(double *oldX, double *newX, Model*model,double CR
 }
 
 class DEContext : public Perturbator {
+    void* dev_globalContext;
+    void setupGlobalData(int populationSize) {
+        if(dev_globalContext!= nullptr) {
+            cudaFree(dev_globalContext);
+        }
+        cudaMalloc(&dev_globalContext, sizeof(FuncEval::GlobalData)*populationSize);
+        printf("Allocating %lu global memory\n",sizeof(FuncEval::GlobalData)*populationSize);
+    }
+
 public:
+
     DEContext() {
         populationSize=POPULATION_SIZE;
         std::unordered_map<std::string,BoundedParameter> deParams=std::unordered_map<std::string,BoundedParameter>();
         deParams["DE_CR"]=BoundedParameter(0.99,0.0,1.0);
         deParams["DE_FORCE"]=BoundedParameter(0.6,0.0,1.0);
         parameters=OperatorParameters(deParams);
+        setupGlobalData(populationSize);
     }
 
-    void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* oldCosts,Random* cudaRandom ) override {
+    ~DEContext() {
+        if(dev_globalContext!= nullptr) {
+            cudaFree(dev_globalContext);
+        }
+    }
+
+    void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data, double* oldCosts, double* newCosts, Random* cudaRandom ) override {
         differentialEvolutionStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, dev_model,
                                                                                          parameters.values["DE_CR"].value,
                                                                                          parameters.values["DE_FORCE"].value,
                                                                                          cudaRandom->dev_curandState);
+        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x2,dev_data,newCosts,(FuncEval::GlobalData*)dev_globalContext,dev_model);
     }
 };
 

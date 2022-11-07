@@ -390,12 +390,12 @@ namespace LBFGS {
             , GlobalData *globalSharedContext,
             void * model,int iterations,double alpha, double c1, double c2
     ) {
-        if( iterations == 0 ) {
-            evaluateF(globalX, globalData,
-                      globalF, globalSharedContext, model
-            );
-            return;
-        }
+//        if( iterations == 0 ) {
+//            evaluateF(globalX, globalData,
+//                      globalF, globalSharedContext, model
+//            );
+//            return;
+//        }
         DEFINE_RESIDUAL_FUNCTIONS()
         // every thread has a local observation loaded into local memory
         FIFOQueue sQueue = FIFOQueue();
@@ -593,59 +593,6 @@ namespace LBFGS {
         }
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             globalX[modelStartingIndex + spanningTID]=sharedContext.xCurrent[spanningTID];
-        }
-    }
-
-   __device__ void
-    evaluateF(double *globalX, double *globalData,
-             double *globalF
-            , GlobalData *globalSharedContext,void*model
-    ) {
-        DEFINE_RESIDUAL_FUNCTIONS()
-        __shared__
-        SharedContext sharedContext;
-        sharedContext.globalData = &globalSharedContext[blockIdx.x];
-        const unsigned modelStartingIndex = X_DIM * blockIdx.x;
-        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
-            sharedContext.globalData->sharedX1[spanningTID] = globalX[modelStartingIndex + spanningTID];
-        }
-        __syncthreads();
-        // every thread can access the model in shared memory
-
-        // INITIALIZE LOCAL MODEL
-        LocalContext localContext;
-
-        if (threadIdx.x == 0) {
-            sharedContext.xCurrent = sharedContext.globalData->sharedX1;
-            sharedContext.xNext = sharedContext.globalData->sharedX2;
-        }
-        localContext.fEvaluations = 0;
-        localContext.modelP= model;
-        INJECT_RESIDUAL_FUNCTIONS()
-        double fCurrent;
-        // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
-        resetSharedState(&sharedContext, threadIdx.x);
-        __syncthreads();
-        // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf
-        reduceObservations(&localContext, sharedContext.xCurrent, sharedContext.globalData->sharedDX);
-        // localContext.threadF are calculated
-        atomicAdd(&sharedContext.sharedF,
-                      localContext.threadF);
-        // TODO reduce over threads, not using atomicAd
-        __syncthreads();
-#ifdef PRINT
-        if (threadIdx.x == 0 && blockIdx.x == 0) {
-            printf("xCurrent ");
-            for (unsigned j = 0; j < X_DIM - 1; j++) {
-                printf("%f,", sharedContext.xCurrent[j]);
-            }
-            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-        }
-#endif
-
-        if (threadIdx.x == 0) {
-            globalF[blockIdx.x] = sharedContext.sharedF;
-            printf("f: %f\n", sharedContext.sharedF);
         }
     }
 }
