@@ -54,6 +54,12 @@ public:
         dev_F2 = dev_FDE;
     }
 
+    void swapModels() {
+        std::swap(dev_x1, dev_x2);
+        std::swap(dev_F1, dev_F2);
+    }
+
+
     void freeModelIfPresent() {
         if(dev_Model!= nullptr) {
             Model* host_dev_Model=(Model*)malloc(sizeof(Model));

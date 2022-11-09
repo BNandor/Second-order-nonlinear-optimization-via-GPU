@@ -16,7 +16,7 @@ class Perturbator : public Operator {
 public:
     int populationSize;
     virtual void perturb(CUDAConfig &cudaConfig,Model* model, Model * dev_model,double * dev_x1, double * dev_x2,double* dev_data,double* oldCosts,double* newCosts, Random* cudaRandom)=0;
-
+    virtual void evaluateF(CUDAConfig &cudaConfig,Model * dev_model,double * dev_x,double* dev_data,double* costs)=0;
     int fEvaluationCount() {
         return 1;
     }

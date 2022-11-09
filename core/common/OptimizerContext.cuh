@@ -52,8 +52,8 @@ public:
         geneticAlgorithmContext=gaContext;
 
         // Select currentPerturbator
-        currentPerturbator = &differentialEvolutionContext;
-//        currentPerturbator = &geneticAlgorithmContext;
+//        currentPerturbator = &differentialEvolutionContext;
+        currentPerturbator = &geneticAlgorithmContext;
 
         //Configure Selectors
         bestSelector=BestSelector();

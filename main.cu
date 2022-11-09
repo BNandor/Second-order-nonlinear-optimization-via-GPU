@@ -47,11 +47,15 @@ void testOptimizer() {
 
     // EXECUTE KERNEL
     optimizerContext.cudaMemoryModel.initLoopPointers();
-    optimizerContext.getCurrentLocalSearch()->optimize(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_data,optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.getCurrentLocalSearch()->getDevGlobalContext(),optimizerContext.cudaMemoryModel.dev_Model,optimizerContext.cudaConfig);
-
-    unsigned currentFEvaluations=0;
+    optimizerContext.getCurrentPerturbator()->evaluateF(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_Model,
+                                                        optimizerContext.cudaMemoryModel.dev_x1,
+                                                        optimizerContext.cudaMemoryModel.dev_data,
+                                                        optimizerContext.cudaMemoryModel.dev_F1);
+    unsigned currentFEvaluations=1;
     unsigned currentGeneration=0;
     while(currentFEvaluations < optimizerContext.totalFunctionEvaluations) {
+        //dev_F1 contains the costs of the current model
+        //dev_x1 is the current model
         optimizerContext.getCurrentPerturbator()->perturb(optimizerContext.cudaConfig,
                                                           &optimizerContext.model,
                                                           optimizerContext.cudaMemoryModel.dev_Model,
@@ -74,9 +78,7 @@ void testOptimizer() {
                                                       optimizerContext.cudaMemoryModel.dev_F2);
         optimizerContext.getCurrentSelector()->printPopulationCostAtGeneration(optimizerContext.cudaConfig,optimizerContext.cudaMemoryModel.dev_F2,currentGeneration);
 
-        std::swap(optimizerContext.cudaMemoryModel.dev_x1, optimizerContext.cudaMemoryModel.dev_x2);
-        std::swap(optimizerContext.cudaMemoryModel.dev_F1, optimizerContext.cudaMemoryModel.dev_F2);
-
+        optimizerContext.cudaMemoryModel.swapModels();
         std::for_each(optimizerContext.getCurrentOperators().begin(),optimizerContext.getCurrentOperators().end(),[&currentFEvaluations](auto op){
                 currentFEvaluations+=op->fEvaluationCount();
         });
@@ -97,7 +99,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-// TODO make x1,x2,F1,F2 consistent in every operator (i.e evaluate F2 after every perturbation)
+// TODO make x1,x2,F1,F2 consistent in every operator (i.e evaluate F2 after every perturbation) DONE
 
 // TODO add Simulated Annealing to hyper level
 // TODO as a first step, skip mutating the operator parameters

@@ -113,7 +113,11 @@ public:
                                                                                          parameters.values["DE_CR"].value,
                                                                                          parameters.values["DE_FORCE"].value,
                                                                                          cudaRandom->dev_curandState);
-        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x2,dev_data,newCosts,(FuncEval::GlobalData*)dev_globalContext,dev_model);
+        evaluateF(cudaConfig,dev_model,dev_x2,dev_data,newCosts);
+    }
+
+    void evaluateF(CUDAConfig &cudaConfig,Model * dev_model,double * dev_x,double* dev_data,double* costs) {
+        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x,dev_data,costs,(FuncEval::GlobalData*)dev_globalContext,dev_model);
     }
 };
 

@@ -149,7 +149,11 @@ public:
                                                                                     parameters.values["GA_PARENTPOOL_RATIO"].value,
                                                                                     parameters.values["GA_ALPHA"].value,
                                                                                     cudaRandom->dev_curandState);
-        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x2,dev_data,newCosts,(FuncEval::GlobalData*)dev_globalContext,dev_model);
+        evaluateF(cudaConfig,dev_model,dev_x2,dev_data,newCosts);
+    }
+
+    void evaluateF(CUDAConfig &cudaConfig,Model * dev_model,double * dev_x,double* dev_data,double* costs) {
+        FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x,dev_data,costs,(FuncEval::GlobalData*)dev_globalContext,dev_model);
     }
 
     double crossoverRate=0.9;
