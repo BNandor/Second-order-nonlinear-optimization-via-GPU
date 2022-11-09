@@ -55,7 +55,9 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
             double minA=INT_MAX;
             double minB=INT_MAX;
             while(parentA == -1) {
+#ifdef SAFE
                 printf("Selecting parentA for %d\n",blockIdx.x);
+#endif
                 for (int i = 0; i < gridDim.x; i++) {
                     if (curand_uniform(curandState + idx) < parentPoolRatio && blockIdx.x != i) {
                         if (parentA == -1 || currentCosts[i] < minA) {
@@ -66,7 +68,9 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
                 }
             }
             while(parentB == -1) {
+#ifdef SAFE
                 printf("Selecting parentB for %d\n",blockIdx.x);
+#endif
                 for (int i = 0; i < gridDim.x; i++) {
                     if (curand_uniform(curandState + idx) < parentPoolRatio && blockIdx.x != i && i != parentA) {
                         if (parentB == -1 || currentCosts[i] < minB) {
@@ -136,6 +140,18 @@ public:
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }
+    }
+
+    void operate(CUDAMemoryModel* cudaMemoryModel) override{
+        perturb(cudaMemoryModel->cudaConfig,
+                cudaMemoryModel->model,
+                cudaMemoryModel->dev_Model,
+                cudaMemoryModel->dev_x1,
+                cudaMemoryModel->dev_x2,
+                cudaMemoryModel->dev_data,
+                cudaMemoryModel->dev_F1,
+                cudaMemoryModel->dev_F2,
+                &cudaMemoryModel->cudaRandom);
     }
 
     void perturb(CUDAConfig &cudaConfig, Model *model,Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data,double * currentCosts, double* newCosts, Random* cudaRandom ) override {

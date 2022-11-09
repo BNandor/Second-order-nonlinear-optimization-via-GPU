@@ -33,6 +33,14 @@ public:
         parameters=OperatorParameters(bestSelectorParams);
     }
 
+    void operate(CUDAMemoryModel* cudaMemoryModel) override {
+        select(cudaMemoryModel->cudaConfig,
+               cudaMemoryModel->dev_x1,
+               cudaMemoryModel->dev_x2,
+               cudaMemoryModel->dev_F1,
+               cudaMemoryModel->dev_F2);
+    }
+
     void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
         selectBestModels<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(oldX,newX,oldF,newF);
     }

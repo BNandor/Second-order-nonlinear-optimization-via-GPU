@@ -12,6 +12,7 @@
 #include "../../../common/model/BoundedParameter.cuh"
 #include "../../select/Selector.cuh"
 #include "../../refine/FunctionEvaluation.cuh"
+
 // Differential Evolution Control parameters
 
 
@@ -106,6 +107,18 @@ public:
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }
+    }
+
+    void operate(CUDAMemoryModel* cudaMemoryModel) override{
+        perturb(cudaMemoryModel->cudaConfig,
+                cudaMemoryModel->model,
+                cudaMemoryModel->dev_Model,
+                cudaMemoryModel->dev_x1,
+                cudaMemoryModel->dev_x2,
+                cudaMemoryModel->dev_data,
+                cudaMemoryModel->dev_F1,
+                cudaMemoryModel->dev_F2,
+                &cudaMemoryModel->cudaRandom);
     }
 
     void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data, double* oldCosts, double* newCosts, Random* cudaRandom ) override {

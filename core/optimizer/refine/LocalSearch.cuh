@@ -57,6 +57,16 @@ public:
         parameters=OperatorParameters(gdParams);
     }
 
+    void operate(CUDAMemoryModel* cudaMemoryModel) override {
+        // TODO add switch for dev_x1
+        optimize(cudaMemoryModel->dev_x2,
+                 cudaMemoryModel->dev_data,
+                 cudaMemoryModel->dev_F2,
+                 dev_globalContext,
+                 cudaMemoryModel->dev_Model,
+                 cudaMemoryModel->cudaConfig);
+    }
+
     void
     optimize(double *globalX, double *globalData,
              double *globalF
@@ -88,8 +98,18 @@ public:
         lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
         parameters=OperatorParameters(lbfgsParams);
     }
-    void
-    optimize(double *globalX, double *globalData,
+
+    void operate(CUDAMemoryModel* cudaMemoryModel) override {
+        // TODO add switch for dev_x1
+        optimize(cudaMemoryModel->dev_x2,
+                 cudaMemoryModel->dev_data,
+                 cudaMemoryModel->dev_F2,
+                 dev_globalContext,
+                 cudaMemoryModel->dev_Model,
+                 cudaMemoryModel->cudaConfig);
+    }
+
+    void optimize(double *globalX, double *globalData,
              double *globalF
             , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig

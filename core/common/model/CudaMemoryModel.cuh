@@ -9,6 +9,8 @@
 
 class CUDAMemoryModel{
 public:
+    Random cudaRandom = Random();
+    CUDAConfig cudaConfig;
     double *dev_x;
     double *dev_xDE;
     double *dev_x1;

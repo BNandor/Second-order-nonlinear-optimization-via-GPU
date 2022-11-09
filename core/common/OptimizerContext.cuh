@@ -41,7 +41,7 @@ private:
 
     std::list<Operator*> currentOperatorList;
 public:
-    CUDAConfig cudaConfig;
+
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
     int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
@@ -52,8 +52,8 @@ public:
         geneticAlgorithmContext=gaContext;
 
         // Select currentPerturbator
-//        currentPerturbator = &differentialEvolutionContext;
-        currentPerturbator = &geneticAlgorithmContext;
+        currentPerturbator = &differentialEvolutionContext;
+//        currentPerturbator = &geneticAlgorithmContext;
 
         //Configure Selectors
         bestSelector=BestSelector();
@@ -83,29 +83,29 @@ public:
         assert(currentLocalSearch!=0);
 #endif
 
-        cudaConfig=CUDAConfig(currentPerturbator->populationSize);
         cudaMemoryModel=CUDAMemoryModel();
+        cudaMemoryModel.cudaConfig=CUDAConfig(currentPerturbator->populationSize);
     }
 
     int getThreadsPerBlock() const {
 #ifdef SAFE
-        assert(cudaConfig.threadsPerBlock>0);
+        assert(cudaMemoryModel.cudaConfig.threadsPerBlock>0);
 #endif
-        return cudaConfig.threadsPerBlock;
+        return cudaMemoryModel.cudaConfig.threadsPerBlock;
     }
 
     int getBlocksPerGrid() const {
 #ifdef SAFE
-        assert(cudaConfig.blocksPerGrid>0);
+        assert(cudaMemoryModel.cudaConfig.blocksPerGrid>0);
 #endif
-        return cudaConfig.blocksPerGrid;
+        return cudaMemoryModel.cudaConfig.blocksPerGrid;
     }
 
     int getThreadsInGrid() {
 #ifdef SAFE
-        assert(cudaConfig.threadsPerBlock * cudaConfig.blocksPerGrid>0);
+        assert(cudaMemoryModel.cudaConfig.threadsPerBlock * cudaMemoryModel.cudaConfig.blocksPerGrid>0);
 #endif
-        return cudaConfig.threadsPerBlock * cudaConfig.blocksPerGrid;
+        return cudaMemoryModel.cudaConfig.threadsPerBlock * cudaMemoryModel.cudaConfig.blocksPerGrid;
     }
 
     int getPopulationSize() const {
