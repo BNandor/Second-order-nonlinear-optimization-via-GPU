@@ -41,7 +41,6 @@ public:
     std::mt19937 generator=std::mt19937(std::random_device()());
     std::unordered_map<std::string, BoundedParameter> values;
     OperatorParameters() {
-
     }
 
     OperatorParameters(std::unordered_map<std::string, BoundedParameter> parameters):values(std::move(parameters)){

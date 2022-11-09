@@ -18,11 +18,16 @@
 #include <fstream>
 #include "./model/CudaMemoryModel.cuh"
 #include "../problem/SNLP/SNLPModel.cuh"
+#include "../optimizer/initialize/Initializer.cuh"
 #include <list>
 
 class OptimizerContext {
 
 private:
+    // Initializer
+    Initializer initializer;
+    Initializer* currentInitializer;
+
     // Perturbators
     DEContext differentialEvolutionContext;
     GAContext geneticAlgorithmContext;
@@ -47,13 +52,17 @@ public:
     int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
 
     explicit OptimizerContext(DEContext &deContext,GAContext &gaContext) {
+        // Initializers
+        initializer=Initializer();
+        currentInitializer=&initializer;
+
         // Configure perturbators
         differentialEvolutionContext=deContext;
         geneticAlgorithmContext=gaContext;
 
         // Select currentPerturbator
-        currentPerturbator = &differentialEvolutionContext;
-//        currentPerturbator = &geneticAlgorithmContext;
+//        currentPerturbator = &differentialEvolutionContext;
+        currentPerturbator = &geneticAlgorithmContext;
 
         //Configure Selectors
         bestSelector=BestSelector();
@@ -78,7 +87,7 @@ public:
         }
 
         // Selected  operators
-        currentOperatorList={currentPerturbator,currentSelector,currentLocalSearch};
+        currentOperatorList={currentInitializer,currentPerturbator,currentSelector,currentLocalSearch};
 #ifdef SAFE
         assert(currentLocalSearch!=0);
 #endif
@@ -124,6 +133,10 @@ public:
 
     int getResidualDataSize() {
         return model.residuals.residualDataSize();
+    }
+
+    Initializer *getCurrentInitializer() const {
+        return currentInitializer;
     }
 
     Perturbator *getCurrentPerturbator() const {

@@ -7,10 +7,26 @@
 #include "../Selector.cuh"
 
 __global__
+void printPopulation( double *xCurrent) {
+#ifdef PRINT
+    if (threadIdx.x == 0 && blockIdx.x == 0) {
+        printf("xCurrent ");
+        for (unsigned j = 0; j < X_DIM - 1; j++) {
+            printf("%f,", xCurrent[j]);
+        }
+        printf("%f\n", xCurrent[X_DIM - 1]);
+    }
+#endif
+}
+
+__global__
 void printGenerationalCosts( double *newF, unsigned generation) {
+#ifdef PRINT
     if (threadIdx.x == 0) {
         printf("Gen %u block %d f: %.10f\n", generation, blockIdx.x, newF[blockIdx.x]);
+        printf("f: %f\n", newF[blockIdx.x]);
     }
+#endif
 }
 
 __global__
@@ -19,6 +35,7 @@ void selectBestModels(const double *oldX, double *newX, const double *oldF, doub
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
         }
+        __syncthreads();
         if (threadIdx.x == 0) {
             newF[blockIdx.x] = oldF[blockIdx.x];
         }
@@ -26,6 +43,7 @@ void selectBestModels(const double *oldX, double *newX, const double *oldF, doub
 }
 
 class BestSelector : public Selector {
+    unsigned selections=0;
 public:
 
     BestSelector() {
@@ -35,10 +53,12 @@ public:
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
         select(cudaMemoryModel->cudaConfig,
-               cudaMemoryModel->dev_x1,
                cudaMemoryModel->dev_x2,
-               cudaMemoryModel->dev_F1,
-               cudaMemoryModel->dev_F2);
+               cudaMemoryModel->dev_x1,
+               cudaMemoryModel->dev_F2,
+               cudaMemoryModel->dev_F1);
+        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_F1,++selections);
+        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_x1);
     }
 
     void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
@@ -47,6 +67,10 @@ public:
 
     void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *newF, unsigned generation) {
         printGenerationalCosts<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(newF,generation);
+    }
+
+    void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *xCurrent) {
+        printPopulation<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(xCurrent);
     }
 
     int fEvaluationCount() {

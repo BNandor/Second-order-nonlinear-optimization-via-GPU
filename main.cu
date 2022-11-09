@@ -1,15 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-//#define SAFE
-//#define PRINT
-
-//#define PROBLEM_ROSENBROCK2D
-//#define PROBLEM_PLANEFITTING
-//#define PROBLEM_SNLP
-//#define PROBLEM_SNLP3D
-
-//#define GLOBAL_SHARED_MEM
 
 #include "core/common/Constants.cuh"
 #include "core/optimizer/refine/LBFGS.cuh"
@@ -19,7 +10,8 @@
 #include "core/optimizer/perturb/DE/DEContext.h"
 #include "core/common/OptimizerContext.cuh"
 #include "core/common/model/BoundedParameter.cuh"
-//#include "core/optimizer/perturb/GA/GeneticAlgorithm.cu"
+#include "core/optimizer/markov/OperatorMarkovChain.cuh"
+
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -54,23 +46,10 @@ void testOptimizer() {
                                                         optimizerContext.cudaMemoryModel.dev_F1);
     unsigned currentFEvaluations=1;
     unsigned currentGeneration=0;
+    OperatorMarkovChain markovChain=OperatorMarkovChain(&optimizerContext);
     while(currentFEvaluations < optimizerContext.totalFunctionEvaluations) {
-        //dev_F1 contains the costs of the current model
-        //dev_x1 is the current model
-        optimizerContext.getCurrentPerturbator()->operate(&optimizerContext.cudaMemoryModel);
-
-        //dev_F2 contains the costs of the differential model
-        //dev_x2 is the differential model
-        optimizerContext.getCurrentLocalSearch()->operate(&optimizerContext.cudaMemoryModel);
-        //evaluated differential model into F2
-        //select the best models from current and differential models
-        optimizerContext.getCurrentSelector()->operate(&optimizerContext.cudaMemoryModel);
-        optimizerContext.getCurrentSelector()->printPopulationCostAtGeneration(optimizerContext.cudaMemoryModel.cudaConfig,optimizerContext.cudaMemoryModel.dev_F2,currentGeneration);
-
-        optimizerContext.cudaMemoryModel.swapModels();
-        std::for_each(optimizerContext.getCurrentOperators().begin(),optimizerContext.getCurrentOperators().end(),[&currentFEvaluations](auto op){
-                currentFEvaluations+=op->fEvaluationCount();
-        });
+        currentFEvaluations+=markovChain.operate();
+        markovChain.hopToNext();
         ++currentGeneration;
         // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
@@ -80,6 +59,9 @@ void testOptimizer() {
     metrics.modelPerformanceMetrics.printBestModel(&optimizerContext.model);
     metrics.modelPerformanceMetrics.persistBestModelTo(&optimizerContext.model,std::string("finalModel") + std::string(OPTIMIZER::name) + std::string(".csv"));
     printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
+    printf("\nthreads:%d", optimizerContext.cudaMemoryModel.cudaConfig.threadsPerBlock);
+    printf("\niterations:%d", currentGeneration);
+    printf("\nfevaluations: %d\n", currentFEvaluations);
 }
 
 int main(int argc, char** argv) {

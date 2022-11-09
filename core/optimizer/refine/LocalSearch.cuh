@@ -58,13 +58,13 @@ public:
     }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
-        // TODO add switch for dev_x1
         optimize(cudaMemoryModel->dev_x2,
                  cudaMemoryModel->dev_data,
                  cudaMemoryModel->dev_F2,
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
                  cudaMemoryModel->cudaConfig);
+        cudaMemoryModel->swapModels();
     }
 
     void
@@ -107,6 +107,7 @@ public:
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
                  cudaMemoryModel->cudaConfig);
+        cudaMemoryModel->swapModels();
     }
 
     void optimize(double *globalX, double *globalData,
