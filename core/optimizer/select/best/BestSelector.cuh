@@ -7,7 +7,7 @@
 #include "../Selector.cuh"
 
 __global__
-void printPopulation( double *xCurrent) {
+void printFirstModel(double *xCurrent) {
 #ifdef PRINT
     if (threadIdx.x == 0 && blockIdx.x == 0) {
         printf("xCurrent ");
@@ -23,8 +23,7 @@ __global__
 void printGenerationalCosts( double *newF, unsigned generation) {
 #ifdef PRINT
     if (threadIdx.x == 0) {
-        printf("Gen %u block %d f: %.10f\n", generation, blockIdx.x, newF[blockIdx.x]);
-        printf("f: %f\n", newF[blockIdx.x]);
+        printf("f: %f gen %u block %u \n",newF[blockIdx.x], generation, blockIdx.x);
     }
 #endif
 }
@@ -58,7 +57,6 @@ public:
                cudaMemoryModel->dev_F2,
                cudaMemoryModel->dev_F1);
         printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_F1,++selections);
-        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_x1);
     }
 
     void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
@@ -70,7 +68,7 @@ public:
     }
 
     void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *xCurrent) {
-        printPopulation<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(xCurrent);
+        printFirstModel<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(xCurrent);
     }
 
     int fEvaluationCount() {

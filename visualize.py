@@ -138,7 +138,7 @@ class FVisualizer:
         fvalues=[]
         for fhistory in fhistories:
             with open(fhistory, 'r') as flines:
-                fvalues.append(np.array([float(fline.rstrip())  for fline in flines]))
+                fvalues.append(np.array([float(fline.rstrip().split()[0])  for fline in flines]))
         return fvalues
 
     def minMaxF(self):

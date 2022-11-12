@@ -101,18 +101,17 @@ namespace FuncEval {
         atomicAdd(&sharedContext.sharedF, localContext.threadF); // TODO reduce over threads, not using atomicAdd
         __syncthreads();
 #ifdef PRINT
-        if (threadIdx.x == 0 && blockIdx.x == 0) {
-            printf("xCurrent ");
-            for (unsigned j = 0; j < X_DIM - 1; j++) {
-                printf("%f,", sharedContext.xCurrent[j]);
-            }
-            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-        }
+//        if (threadIdx.x == 0 && blockIdx.x == 0) {
+//            printf("xCurrent ");
+//            for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                printf("%f,", sharedContext.xCurrent[j]);
+//            }
+//            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//        }
 #endif
 
         if (threadIdx.x == 0) {
             globalF[blockIdx.x] = sharedContext.sharedF;
-            printf("evaluate f: %f in %d\n", sharedContext.sharedF,blockIdx.x);
         }
     }
 }

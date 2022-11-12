@@ -185,14 +185,14 @@ namespace GD {
             fCurrent = sharedContext.sharedF;
             __syncthreads();
 #ifdef PRINT
-            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
-                printf("xCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-                printf("f: %f\n", fCurrent);
-            }
+//            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+//                printf("xCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//                printf("f: %f\n", fCurrent);
+//            }
 #endif
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             ;
@@ -213,17 +213,17 @@ namespace GD {
         }
 
 #ifdef PRINT
-        if (threadIdx.x == 0 && blockIdx.x == 0) {
-
-            printf("xCurrent ");
-            for (unsigned j = 0; j < X_DIM - 1; j++) {
-                printf("%f,", sharedContext.xCurrent[j]);
-            }
-            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-            printf("\nthreads:%d", blockDim.x);
-            printf("\niterations:%d", it);
-            printf("\nfevaluations: %d\n", localContext.fEvaluations);
-        }
+//        if (threadIdx.x == 0 && blockIdx.x == 0) {
+//
+//            printf("xCurrent ");
+//            for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                printf("%f,", sharedContext.xCurrent[j]);
+//            }
+//            printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//            printf("\nthreads:%d", blockDim.x);
+//            printf("\niterations:%d", it);
+//            printf("\nfevaluations: %d\n", localContext.fEvaluations);
+//        }
 
 #endif
 

@@ -15,9 +15,10 @@ class OperatorMarkovChain {
     std::unordered_map<std::string,MarkovNode*> nodes;
     MarkovNode* currentNode;
     CUDAMemoryModel* cudaMemoryModel;
+    Metrics* metrics;
 public:
 
-    OperatorMarkovChain(OptimizerContext* optimizerContext):cudaMemoryModel(&optimizerContext->cudaMemoryModel) {
+    OperatorMarkovChain(OptimizerContext* optimizerContext,Metrics* metrics):cudaMemoryModel(&optimizerContext->cudaMemoryModel) {
         nodes=std::unordered_map<std::string,MarkovNode*>();
         nodes["initializer"]=new MarkovNode(optimizerContext->getCurrentInitializer(),std::string("initializer").c_str());
         nodes["perturbator"]=new MarkovNode(optimizerContext->getCurrentPerturbator(),std::string("perturbator").c_str());
@@ -25,19 +26,22 @@ public:
         nodes["selector"]=new MarkovNode(optimizerContext->getCurrentSelector(),std::string("refiner").c_str());
         buildChain();
         currentNode=nodes["initializer"];
+        this->metrics=metrics;
     }
+
     ~OperatorMarkovChain(){
         std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
     }
 
     void hopToNext() {
         currentNode=currentNode->getNext(generator);
+        metrics->modelPerformanceMetrics.markovIterations++;
     }
 
-    int operate() {
+    void operate() {
 //        std::cout<<"operating: "<<currentNode->name<<std::endl;
         currentNode->operate(cudaMemoryModel);
-        return currentNode->fEvals();
+        metrics->modelPerformanceMetrics.fEvaluations+=currentNode->fEvals();
     }
 
     void buildChain() {

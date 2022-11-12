@@ -26,7 +26,7 @@ void testOptimizer() {
     // Set f
     optimizerContext.model = SNLPModel(deContext);
 
-    Metrics metrics = Metrics(optimizerContext.model); //idempotent
+    Metrics metrics = Metrics(optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig); //idempotent
     optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize()); //idempotent
     optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model); // idempotent
     optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model); // idempotent
@@ -44,24 +44,19 @@ void testOptimizer() {
                                                         optimizerContext.cudaMemoryModel.dev_x1,
                                                         optimizerContext.cudaMemoryModel.dev_data,
                                                         optimizerContext.cudaMemoryModel.dev_F1);
-    unsigned currentFEvaluations=1;
-    unsigned currentGeneration=0;
-    OperatorMarkovChain markovChain=OperatorMarkovChain(&optimizerContext);
-    while(currentFEvaluations < optimizerContext.totalFunctionEvaluations) {
-        currentFEvaluations+=markovChain.operate();
+    metrics.modelPerformanceMetrics.fEvaluations=1;
+    metrics.modelPerformanceMetrics.markovIterations=0;
+    OperatorMarkovChain markovChain=OperatorMarkovChain(&optimizerContext,&metrics);
+    while(metrics.modelPerformanceMetrics.fEvaluations < optimizerContext.totalFunctionEvaluations) {
+        markovChain.operate();
         markovChain.hopToNext();
-        ++currentGeneration;
-        // dev_x1 contains the next models, dev_F1 contains the associated costs
     }
 
     metrics.getCudaEventMetrics().recordStopCompute();
     optimizerContext.cudaMemoryModel.copyModelsFromDevice(metrics.modelPerformanceMetrics);
     metrics.modelPerformanceMetrics.printBestModel(&optimizerContext.model);
     metrics.modelPerformanceMetrics.persistBestModelTo(&optimizerContext.model,std::string("finalModel") + std::string(OPTIMIZER::name) + std::string(".csv"));
-    printf("\ntime ms : %f\n", metrics.getCudaEventMetrics().getElapsedKernelMilliSec());
-    printf("\nthreads:%d", optimizerContext.cudaMemoryModel.cudaConfig.threadsPerBlock);
-    printf("\niterations:%d", currentGeneration);
-    printf("\nfevaluations: %d\n", currentFEvaluations);
+    metrics.printFinalMetrics();
 }
 
 int main(int argc, char** argv) {

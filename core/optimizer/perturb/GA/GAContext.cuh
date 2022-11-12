@@ -82,7 +82,7 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
             }
             sharedA = parentA;
             sharedB = parentB;
-            printf("DE: a:%d,b:%d,x:%d \n", sharedA, sharedB, blockIdx.x);
+//            printf("GA: a:%d,b:%d,x:%d \n", sharedA, sharedB, blockIdx.x);
         }
     }
     __syncthreads();

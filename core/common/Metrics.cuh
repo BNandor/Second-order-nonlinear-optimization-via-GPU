@@ -11,6 +11,7 @@
 class CudaEventMetrics {
 private:
     cudaEvent_t start, stop, startCopy, stopCopy;
+
 public:
     void initializeEvents() {
         cudaEventCreate(&start);
@@ -36,7 +37,7 @@ public:
         cudaEventSynchronize(stop);
     }
 
-    float getElapsedCopyMilliSec(){
+    float getElapsedCopyMilliSec() {
         float memcpyMilli = 0;
         cudaEventElapsedTime(&memcpyMilli, startCopy, stopCopy);
         return memcpyMilli;
@@ -53,13 +54,23 @@ class Metrics {
 public:
     CudaEventMetrics cudaEventMetrics;
     ModelMetrics modelPerformanceMetrics;
+    CUDAConfig *cudaConfig;
 
-    Metrics(Model& model): cudaEventMetrics(CudaEventMetrics()),modelPerformanceMetrics(ModelMetrics(model.modelPopulationSize,model.populationSize)){
+    Metrics(Model& model,CUDAConfig *cudaConfig): cudaEventMetrics(CudaEventMetrics()),modelPerformanceMetrics(ModelMetrics(model.modelPopulationSize,model.populationSize)){
         cudaEventMetrics.initializeEvents();
+        this->cudaConfig=cudaConfig;
     }
 
-    CudaEventMetrics& getCudaEventMetrics(){
+    CudaEventMetrics& getCudaEventMetrics() {
         return cudaEventMetrics;
+    }
+
+    void printFinalMetrics() {
+        printf("printing metrics\n");
+        printf("\ntime ms : %f\n", cudaEventMetrics.getElapsedKernelMilliSec());
+        printf("\nthreads:%d", cudaConfig->threadsPerBlock);
+        printf("\niterations:%d", modelPerformanceMetrics.markovIterations);
+        printf("\nfevaluations: %d\n", modelPerformanceMetrics.fEvaluations);
     }
 };
 

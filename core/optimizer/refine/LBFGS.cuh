@@ -262,9 +262,9 @@ namespace LBFGS {
             __syncthreads();
         } while (alphaLow != alphaHigh);
 #ifdef PRINT
-        if (threadIdx.x == 0) {
-            printf("Error, could not zoom!\n");
-        }
+//        if (threadIdx.x == 0) {
+//            printf("Error, could not zoom!\n");
+//        }
 #endif
         return -1;
     }
@@ -320,9 +320,9 @@ namespace LBFGS {
             i += 1;
         } while (alpha1 < alphaMax);
 #ifdef PRINT
-        if (threadIdx.x == 0) {
-            printf("error: reached max bracket in linesearch");
-        }
+//        if (threadIdx.x == 0) {
+//            printf("error: reached max bracket in linesearch");
+//        }
 #endif
         return -2;
     }
@@ -440,16 +440,16 @@ namespace LBFGS {
             // sharedContext.sharedF, sharedContext.sharedDX is complete for all threads
             fCurrent = sharedContext.sharedF;
             __syncthreads();
-            if (threadIdx.x == 0 && blockIdx.x == 0) {
-#ifdef PRINT
-                printf("xCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-#endif
-                printf("f: %f\n", fCurrent);
-            }
+//            if (threadIdx.x == 0 && blockIdx.x == 0) {
+//#ifdef PRINT
+//                printf("xCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//#endif
+//                printf("f: %f\n", fCurrent);
+//            }
             // fCurrent is set, sharedDXNorm is cleared for all threads,
             lineSearch(&localContext, &sharedContext, sharedContext.globalData->sharedDX, fCurrent);
 
@@ -496,7 +496,7 @@ namespace LBFGS {
             fCurrent = sharedContext.sharedF;
             __syncthreads();
 #ifdef PRINT
-            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
+//            if (it % FRAMESIZE == 0 && threadIdx.x == 0 && blockIdx.x == 0) {
 //                printf("\n %d f: %.16f , f - fPrev: %f\n", it, sharedContext.sharedF, costDifference);
 //                printf("S: ");
 //                unsigned sIterator = sQueue.getIterator();
@@ -523,13 +523,13 @@ namespace LBFGS {
 //                    printf("%.16f ", sharedContext.globalData->lbfgsR[i]);
 //                }
 
-                printf("\nxCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%.16f,", sharedContext.xCurrent[j]);
-                }
-                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
-                printf("f: %f\n", fCurrent);
-            }
+//                printf("\nxCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%.16f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%.16f\n", sharedContext.xCurrent[X_DIM - 1]);
+//                printf("f: %f\n", fCurrent);
+//            }
 #endif
 
             if(LBFGSlineSearchWolfeConditions(&localContext, &sharedContext, sharedContext.globalData->sharedDX,
@@ -576,16 +576,16 @@ namespace LBFGS {
             __syncthreads();
         }
 #ifdef PRINT
-        if (threadIdx.x == 0 && blockIdx.x == 0) {
-                printf("\nxCurrent ");
-                for (unsigned j = 0; j < X_DIM - 1; j++) {
-                    printf("%f,", sharedContext.xCurrent[j]);
-                }
-                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
-                printf("\nthreads:%d", blockDim.x);
-                printf("\niterations:%d", it);
-                printf("\nfevaluations: %d\n", localContext.fEvaluations);
-            }
+//        if (threadIdx.x == 0 && blockIdx.x == 0) {
+//                printf("\nxCurrent ");
+//                for (unsigned j = 0; j < X_DIM - 1; j++) {
+//                    printf("%f,", sharedContext.xCurrent[j]);
+//                }
+//                printf("%f\n", sharedContext.xCurrent[X_DIM - 1]);
+//                printf("\nthreads:%d", blockDim.x);
+//                printf("\niterations:%d", it);
+//                printf("\nfevaluations: %d\n", localContext.fEvaluations);
+//            }
 #endif
         if (threadIdx.x == 0) {
             // print Queues after GD

@@ -11,6 +11,9 @@ public:
     double *solution;
     double *finalFs;
     int populationSize;
+    int markovIterations;
+    int fEvaluations;
+
     ~ModelMetrics(){
         delete solution;
         delete finalFs;
@@ -33,6 +36,7 @@ public:
     }
 
     void printBestModel(Model*model) {
+        printf(" calculating best model so far\n");
         int min =bestModelIndex();
         printf("\nsolf: %f and solution: ", finalFs[min]);
         for (int ff = model->modelSize * min; ff < model->modelSize * (min + 1) - 1; ff++) {
@@ -43,6 +47,7 @@ public:
     }
 
     void persistBestModelTo(Model*model, std::string filename) {
+        printf(" persisting best model to %s\n",filename.c_str());
         int min =bestModelIndex();
         std::ofstream output;
         output.open(filename.c_str());
