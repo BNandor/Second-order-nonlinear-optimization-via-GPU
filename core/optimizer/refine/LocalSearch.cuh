@@ -30,10 +30,7 @@ public:
              CUDAConfig cudaConfig
     )=0;
 
-    int fEvaluationCount() {
-        // TODO + LBFGS M
-        return functionEvaluations;
-    }
+    virtual int fEvaluationCount() =0;
 
     ~LocalSearch() {
         if(dev_globalContext!= nullptr) {
@@ -78,13 +75,15 @@ public:
                                                                                parameters.values["GD_ITERATIONS"].value,
                                                                                parameters.values["GD_ALPHA"].value);
     };
-
+    int fEvaluationCount() override{
+        return functionEvaluations;
+    }
      void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }
         cudaMalloc(&dev_globalContext, sizeof(GD::GlobalData)*populationSize);
-        printf("Allocating %lu global memory\n",sizeof(GD::GlobalData)*populationSize);
+        printf("Allocating %lu global memory for GD\n",sizeof(GD::GlobalData)*populationSize);
     }
 };
 
@@ -123,12 +122,16 @@ public:
                                                                                     parameters.values["LBFGS_C2"].value);
     };
 
+    int fEvaluationCount() override {
+        return functionEvaluations + LBFGS_M;
+    }
+
     void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
         }
         cudaMalloc(&dev_globalContext, sizeof(LBFGS::GlobalData)*populationSize);
-        printf("Allocating %lu global memory\n",sizeof(LBFGS::GlobalData)*populationSize);
+        printf("Allocating %lu global memory for LBFGS\n",sizeof(LBFGS::GlobalData)*populationSize);
     }
 };
 

@@ -89,7 +89,7 @@ class DEContext : public Perturbator {
             cudaFree(dev_globalContext);
         }
         cudaMalloc(&dev_globalContext, sizeof(FuncEval::GlobalData)*populationSize);
-        printf("Allocating %lu global memory\n",sizeof(FuncEval::GlobalData)*populationSize);
+        printf("Allocating %lu global memory for DE\n",sizeof(FuncEval::GlobalData)*populationSize);
     }
 
 public:

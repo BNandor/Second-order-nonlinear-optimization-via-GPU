@@ -67,10 +67,6 @@ public:
         printGenerationalCosts<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(newF,generation);
     }
 
-    void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *xCurrent) {
-        printFirstModel<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(xCurrent);
-    }
-
     int fEvaluationCount() {
         return 0;
     }

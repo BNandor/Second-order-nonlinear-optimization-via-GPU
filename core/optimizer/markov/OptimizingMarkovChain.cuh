@@ -17,28 +17,29 @@ class OptimizingMarkovChain: public MarkovChain {
 public:
 
     OptimizingMarkovChain(OptimizerContext* optimizerContext, Metrics* metrics): cudaMemoryModel(&optimizerContext->cudaMemoryModel) {
+        this->metrics=metrics;
         nodes=std::unordered_map<std::string,MarkovNode*>();
-        nodes["initializer"]=new OptimizingMarkovNode((Operator**)optimizerContext->getCurrentInitializerAddress(),std::string("initializer").c_str());
-        nodes["perturbator"]=new OptimizingMarkovNode((Operator**)optimizerContext->getCurrentPerturbatorAddress(),std::string("perturbator").c_str());
-        nodes["refiner"]=new OptimizingMarkovNode((Operator**)optimizerContext->getCurrentLocalSearchAdress(),std::string("refiner").c_str());
-        nodes["selector"]=new OptimizingMarkovNode((Operator**)optimizerContext->getCurrentSelectorAddress(),std::string("refiner").c_str());
+        nodes["initializer"]=new OptimizingMarkovNode(buildInitializerChain(),std::string("initializer").c_str());
+        nodes["perturbator"]=new OptimizingMarkovNode(buildPerturbatorChain(optimizerContext),std::string("perturbator").c_str());
+        nodes["refiner"]=new OptimizingMarkovNode(buildRefinerChain(optimizerContext),std::string("refiner").c_str());
+        nodes["selector"]=new OptimizingMarkovNode(buildSelectorChain(optimizerContext),std::string("selector").c_str());
         buildChain();
         currentNode=nodes["initializer"];
-        this->metrics=metrics;
     }
 
     ~OptimizingMarkovChain() {
         std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
     }
 
-    void hopToNext() {
+    void hopToNext() override {
         currentNode=currentNode->getNext(generator);
+        std::cout<<"hopped to "<<currentNode->name<<std::endl;
         metrics->modelPerformanceMetrics.markovIterations++;
     }
 
     void operate() {
 //        std::cout<<"operating: "<<currentNode->name<<std::endl;
-        currentNode->operate(cudaMemoryModel);
+        ((OptimizingMarkovNode*)currentNode)->operate(cudaMemoryModel);
         metrics->modelPerformanceMetrics.fEvaluations+=((OptimizingMarkovNode*)currentNode)->fEvals();
     }
 
@@ -53,6 +54,49 @@ public:
         nodes["refiner"]->addNext(nodes["selector"],1.0);
 
         nodes["selector"]->addNext(nodes["perturbator"],1.0);
+    }
+
+    OperatorMarkovChain *buildInitializerChain() {
+        auto* initializerChain=new std::unordered_map<std::string,MarkovNode*>();
+        (*initializerChain)["initializer"]=new OperatorMarkovNode(new Initializer(),std::string("initializer").c_str());
+        return new OperatorMarkovChain(*initializerChain,metrics);
+    }
+
+    OperatorMarkovChain* buildPerturbatorChain(OptimizerContext* optimizerContext) {
+        auto* perturbatorChain=new std::unordered_map<std::string,MarkovNode*>();
+        (*perturbatorChain)["initializer"]=new OperatorMarkovNode(new Initializer(),std::string("initializer").c_str());
+        (*perturbatorChain)["DE"]=new OperatorMarkovNode(&optimizerContext->differentialEvolutionContext,std::string("DE").c_str());
+        (*perturbatorChain)["GA"]=new OperatorMarkovNode(&optimizerContext->geneticAlgorithmContext,std::string("GA").c_str());
+        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["DE"],0.5);
+        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["GA"],0.5);
+        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["DE"],0.5);
+        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["GA"],0.5);
+        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["DE"],0.5);
+        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["GA"],0.5);
+        return new OperatorMarkovChain(*perturbatorChain,metrics);
+    }
+
+    OperatorMarkovChain* buildRefinerChain(OptimizerContext* optimizerContext) {
+        auto* refinerChain=new std::unordered_map<std::string,MarkovNode*>();
+        (*refinerChain)["initializer"]=new OperatorMarkovNode(new Initializer(), std::string("initializer").c_str());
+        (*refinerChain)["GD"]=new OperatorMarkovNode(&optimizerContext->gdLocalSearch, std::string("GD").c_str());
+        (*refinerChain)["LBFGS"]=new OperatorMarkovNode(&optimizerContext->lbfgsLocalSearch, std::string("LBFGS").c_str());
+        (*refinerChain)["initializer"]->addNext((*refinerChain)["LBFGS"], 0.5);
+        (*refinerChain)["initializer"]->addNext((*refinerChain)["GD"], 0.5);
+        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["LBFGS"], 0.5);
+        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["GD"], 0.5);
+        (*refinerChain)["GD"]->addNext((*refinerChain)["LBFGS"], 0.5);
+        (*refinerChain)["GD"]->addNext((*refinerChain)["GD"], 0.5);
+        return new OperatorMarkovChain(*refinerChain, metrics);
+    }
+
+    OperatorMarkovChain* buildSelectorChain(OptimizerContext* optimizerContext) {
+        auto* selectorChain=new std::unordered_map<std::string,MarkovNode*>();
+        (*selectorChain)["initializer"]=new OperatorMarkovNode(new Initializer(), std::string("initializer").c_str());
+        (*selectorChain)["best"]=new OperatorMarkovNode(&optimizerContext->bestSelector, std::string("best").c_str());
+        (*selectorChain)["initializer"]->addNext((*selectorChain)["best"], 1.0);
+        (*selectorChain)["best"]->addNext((*selectorChain)["best"], 1.0);
+        return new OperatorMarkovChain(*selectorChain, metrics);
     }
 };
 

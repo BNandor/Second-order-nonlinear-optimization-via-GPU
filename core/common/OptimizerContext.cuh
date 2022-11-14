@@ -24,6 +24,11 @@
 class OptimizerContext {
 
 private:
+
+
+    std::list<Operator*> currentOperatorList;
+public:
+
     // Initializer
     Initializer initializer;
     Initializer* currentInitializer;
@@ -43,9 +48,6 @@ private:
     LBFGSLocalSearch lbfgsLocalSearch;
 
     LocalSearch* currentLocalSearch;
-
-    std::list<Operator*> currentOperatorList;
-public:
 
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
@@ -73,7 +75,6 @@ public:
         //Configure Local Searches
         gdLocalSearch=GDLocalSearch(ALPHA,ITERATION_COUNT);
         lbfgsLocalSearch=LBFGSLocalSearch(ALPHA,ITERATION_COUNT);
-        
 
         //Select currentLocalsearch
         if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {
@@ -124,51 +125,8 @@ public:
         return currentPerturbator->populationSize;
     }
 
-    int getModelPopulationSize() {
-#ifdef SAFE
-        assert(model.modelPopulationSize>0);
-#endif
-        return model.modelPopulationSize;
-    }
-
-    int getResidualDataSize() {
-        return model.residuals.residualDataSize();
-    }
-
-    Initializer *getCurrentInitializer() const {
-        return currentInitializer;
-    }
-
-    Initializer **getCurrentInitializerAddress() {
-        return &currentInitializer;
-    }
-
-    Perturbator * getCurrentPerturbator() const{
+    Perturbator * getCurrentPerturbator() const {
         return currentPerturbator;
-    }
-
-    Perturbator **getCurrentPerturbatorAddress() {
-        return &currentPerturbator;
-    }
-
-    Selector *getCurrentSelector() const{
-        return currentSelector;
-    }
-
-    Selector **getCurrentSelectorAddress() {
-        return &currentSelector;
-    }
-
-    LocalSearch** getCurrentLocalSearchAdress() {
-        return &currentLocalSearch;
-    }
-
-    LocalSearch* getCurrentLocalSearch() const {
-        return currentLocalSearch;
-    }
-
-    std::list<Operator*>& getCurrentOperators() {
-        return currentOperatorList;
     }
 };
 #endif //PARALLELLBFGS_OPTIMIZERCONTEXT_CUH

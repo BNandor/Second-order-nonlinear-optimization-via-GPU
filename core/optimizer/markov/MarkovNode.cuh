@@ -13,7 +13,6 @@ class MarkovNode {
     std::vector<MarkovNode*> nextNodes;
     std::vector<double> nextProbabilities;
 
-
 public:
     std::string name;
     explicit MarkovNode(const char* name):name(name) {
@@ -27,8 +26,6 @@ public:
         nextProbabilities.push_back(nextProb);
     }
 
-    virtual void operate(CUDAMemoryModel* cudaMemoryModel) =0;
-
     MarkovNode* getNext( std::mt19937 &generator) {
       double u=std::uniform_real_distribution<double>(0.0, 1.0)(generator);
       double cSum=0;
@@ -38,8 +35,8 @@ public:
             return nextNodes[i];
         }
       }
-      printf("invalid probabilities configured\n");
-      exit(0);
+      printf("cannot get next \n");
+      return this;
     }
 
 };

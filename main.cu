@@ -26,16 +26,17 @@ void testOptimizer() {
     // Set f
     optimizerContext.model = SNLPModel(deContext);
 
-    Metrics metrics = Metrics(optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig); //idempotent
-    optimizerContext.getCurrentLocalSearch()->setupGlobalData(optimizerContext.getModelPopulationSize()); //idempotent
-    optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model); // idempotent
-    optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model); // idempotent
+    Metrics metrics = Metrics(optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig);
+    optimizerContext.lbfgsLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
+    optimizerContext.gdLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
+    optimizerContext.cudaMemoryModel.allocateFor(optimizerContext.model);
+    optimizerContext.cudaMemoryModel.copyModelToDevice(optimizerContext.model);
 
     optimizerContext.model.loadModel(optimizerContext.cudaMemoryModel.dev_x, optimizerContext.cudaMemoryModel.dev_data,
-                                     metrics); // idempotent
-    metrics.getCudaEventMetrics().recordStartCompute(); // idempotent
+                                     metrics);
+    metrics.getCudaEventMetrics().recordStartCompute();
     optimizerContext.cudaMemoryModel.cudaRandom.initialize(optimizerContext.getThreadsInGrid(), optimizerContext.getBlocksPerGrid(),
-                          optimizerContext.getThreadsPerBlock()); // idempotent
+                          optimizerContext.getThreadsPerBlock());
 
     // EXECUTE KERNEL
     optimizerContext.cudaMemoryModel.initLoopPointers();

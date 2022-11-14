@@ -5,20 +5,25 @@
 #ifndef PARALLELLBFGS_OPTIMIZINGMARKOVNODE_CUH
 #define PARALLELLBFGS_OPTIMIZINGMARKOVNODE_CUH
 #include "MarkovNode.cuh"
+#include "OperatorMarkovChain.cuh"
+#include "OperatorMarkovNode.cuh"
 
 class OptimizingMarkovNode: public MarkovNode {
-    Operator** nodeOperator;
+    OperatorMarkovChain* operatorChain;
+
 public:
 
-    OptimizingMarkovNode(Operator** anOperator,const char* name):MarkovNode(name),nodeOperator(anOperator){
+    OptimizingMarkovNode(OperatorMarkovChain* anOperatorMarkovChain, const char* name):MarkovNode(name) {
+        operatorChain=anOperatorMarkovChain;
     }
 
-    void operate(CUDAMemoryModel* cudaMemoryModel) override {
-        (*nodeOperator)->operate(cudaMemoryModel);
+    void operate(CUDAMemoryModel* cudaMemoryModel)  {
+        ((OperatorMarkovNode*)operatorChain->currentNode)->operate(cudaMemoryModel);
+        operatorChain->hopToNext();
     }
 
     int fEvals() {
-        return (*nodeOperator)->fEvaluationCount();
+        return ((OperatorMarkovNode*)(operatorChain->currentNode))->nodeOperator->fEvaluationCount();
     }
 };
 #endif //PARALLELLBFGS_OPTIMIZINGMARKOVNODE_CUH

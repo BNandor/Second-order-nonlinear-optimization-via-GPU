@@ -7,17 +7,14 @@
 #include "MarkovNode.cuh"
 
 class OperatorMarkovNode: public MarkovNode {
-    Operator* nodeOperator;
 public:
+    Operator* nodeOperator;
     OperatorMarkovNode(Operator* anOperator,const char* name):MarkovNode(name),nodeOperator(anOperator){
-
     }
-    void operate(CUDAMemoryModel* cudaMemoryModel) override {
+
+    void operate(CUDAMemoryModel* cudaMemoryModel) const {
         nodeOperator->operate(cudaMemoryModel);
     }
 
-    int fEvals() {
-        return nodeOperator->fEvaluationCount();
-    }
 };
 #endif //PARALLELLBFGS_OPERATORMARKOVNODE_CUH

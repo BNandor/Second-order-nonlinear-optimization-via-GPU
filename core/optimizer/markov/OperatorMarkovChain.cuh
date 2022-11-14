@@ -7,20 +7,20 @@
 
 #include "../../common/OptimizerContext.cuh"
 #include "MarkovChain.cuh"
-#include "MarkovNode.cuh"
 #include <algorithm>
+#include <utility>
 
 class OperatorMarkovChain: public MarkovChain {
     Metrics* metrics;
 
 public:
-    OperatorMarkovChain(OptimizerContext* optimizerContext, Metrics* metrics): cudaMemoryModel(&optimizerContext->cudaMemoryModel) {
-        nodes=std::unordered_map<std::string,MarkovNode*>();
-        nodes["initializer"]=new MarkovNode(optimizerContext->getCurrentInitializer(),std::string("initializer").c_str());
-        nodes["perturbator"]=new MarkovNode(optimizerContext->getCurrentPerturbator(),std::string("perturbator").c_str());
-        nodes["refiner"]=new MarkovNode(optimizerContext->getCurrentLocalSearch(),std::string("refiner").c_str());
-        nodes["selector"]=new MarkovNode(optimizerContext->getCurrentSelector(),std::string("refiner").c_str());
-        buildChain();
+
+    OperatorMarkovChain(std::unordered_map<std::string,MarkovNode*> operatorNodes, Metrics* metrics) {
+        nodes=std::move(operatorNodes);
+        if(nodes.count("initializer") == 0) {
+            std::cerr<<"Invalid markov chain provided, please define the initializer node"<<std::endl;
+            exit(1);
+        }
         currentNode=nodes["initializer"];
         this->metrics=metrics;
     }
@@ -29,29 +29,10 @@ public:
         std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
     }
 
-    void hopToNext() {
+    void hopToNext() override {
         currentNode=currentNode->getNext(generator);
-        metrics->modelPerformanceMetrics.markovIterations++;
+        std::cout<<"hopped to "<<currentNode->name<<std::endl;
     }
-
-    void operate() {
-//        std::cout<<"operating: "<<currentNode->name<<std::endl;
-        currentNode->operate(cudaMemoryModel);
-        metrics->modelPerformanceMetrics.fEvaluations+=currentNode->fEvals();
-    }
-
-    void buildChain() {
-        nodes["initializer"]->addNext(nodes["perturbator"],1.0);
-        nodes["initializer"]->addNext(nodes["refiner"],0.0);
-
-        nodes["perturbator"]->addNext(nodes["selector"],0.2);
-        nodes["perturbator"]->addNext(nodes["refiner"],0.8);
-
-        nodes["refiner"]->addNext(nodes["refiner"],0.0);
-        nodes["refiner"]->addNext(nodes["selector"],1.0);
-
-        nodes["selector"]->addNext(nodes["perturbator"],1.0);
-    }
-}
+};
 
 #endif //PARALLELLBFGS_OPERATORMARKOVCHAIN_CUH

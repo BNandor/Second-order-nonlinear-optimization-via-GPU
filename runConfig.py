@@ -116,9 +116,9 @@ def runSNLP2D(problemPath,problemName,anchorName,populationName,residualSizes,mo
                         modelsize=modelsize,
                         framesize=framesize,
                         metrics=SNLP.Metrics( path=f"{problemPath}/csv/2D/GD/metrics", options=metricsConfig))
-    problems = [problemLBFGS,problemGD]
+    # problems = [problemLBFGS,problemGD]
     # problems = [problemLBFGS]
-    # problems = [problemGD]
+    problems = [problemGD]
     [runSNLP(problem=problem,optionalFlags=optionalFlags) for problem in problems]
     fvisualizer = visualize.FVisualizer(problems)
     # fvisualizer.visualize()
