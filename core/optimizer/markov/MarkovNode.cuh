@@ -4,6 +4,7 @@
 
 #ifndef PARALLELLBFGS_MARKOVNODE_CUH
 #define PARALLELLBFGS_MARKOVNODE_CUH
+
 #include "../Operator.h"
 #include <vector>
 #include <random>
@@ -11,11 +12,11 @@
 class MarkovNode {
     std::vector<MarkovNode*> nextNodes;
     std::vector<double> nextProbabilities;
-    Operator* nodeOperator;
+
 
 public:
     std::string name;
-    explicit MarkovNode(Operator* anOperator,const char* name):nodeOperator(anOperator),name(name) {
+    explicit MarkovNode(const char* name):name(name) {
         nextNodes=std::vector<MarkovNode*>();
         nextProbabilities=std::vector<double>();
     }
@@ -26,9 +27,7 @@ public:
         nextProbabilities.push_back(nextProb);
     }
 
-    void operate(CUDAMemoryModel* cudaMemoryModel) {
-        nodeOperator->operate(cudaMemoryModel);
-    }
+    virtual void operate(CUDAMemoryModel* cudaMemoryModel) =0;
 
     MarkovNode* getNext( std::mt19937 &generator) {
       double u=std::uniform_real_distribution<double>(0.0, 1.0)(generator);
@@ -41,10 +40,6 @@ public:
       }
       printf("invalid probabilities configured\n");
       exit(0);
-    }
-
-    int fEvals() {
-        return nodeOperator->fEvaluationCount();
     }
 
 };

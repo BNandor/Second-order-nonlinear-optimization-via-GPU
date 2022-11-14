@@ -139,15 +139,31 @@ public:
         return currentInitializer;
     }
 
-    Perturbator *getCurrentPerturbator() const {
+    Initializer **getCurrentInitializerAddress() {
+        return &currentInitializer;
+    }
+
+    Perturbator * getCurrentPerturbator() const{
         return currentPerturbator;
     }
 
-    Selector *getCurrentSelector() const {
+    Perturbator **getCurrentPerturbatorAddress() {
+        return &currentPerturbator;
+    }
+
+    Selector *getCurrentSelector() const{
         return currentSelector;
     }
 
-    LocalSearch* getCurrentLocalSearch() {
+    Selector **getCurrentSelectorAddress() {
+        return &currentSelector;
+    }
+
+    LocalSearch** getCurrentLocalSearchAdress() {
+        return &currentLocalSearch;
+    }
+
+    LocalSearch* getCurrentLocalSearch() const {
         return currentLocalSearch;
     }
 

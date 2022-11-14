@@ -10,7 +10,7 @@
 #include "core/optimizer/perturb/DE/DEContext.h"
 #include "core/common/OptimizerContext.cuh"
 #include "core/common/model/BoundedParameter.cuh"
-#include "core/optimizer/markov/OperatorMarkovChain.cuh"
+#include "core/optimizer/markov/OptimizingMarkovChain.cuh"
 
 #include <curand.h>
 #include <curand_kernel.h>
@@ -46,7 +46,7 @@ void testOptimizer() {
                                                         optimizerContext.cudaMemoryModel.dev_F1);
     metrics.modelPerformanceMetrics.fEvaluations=1;
     metrics.modelPerformanceMetrics.markovIterations=0;
-    OperatorMarkovChain markovChain=OperatorMarkovChain(&optimizerContext,&metrics);
+    OptimizingMarkovChain markovChain=OptimizingMarkovChain(&optimizerContext, &metrics);
     while(metrics.modelPerformanceMetrics.fEvaluations < optimizerContext.totalFunctionEvaluations) {
         markovChain.operate();
         markovChain.hopToNext();
