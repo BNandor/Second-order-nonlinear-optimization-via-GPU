@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_SNLPMODEL_CUH
 #define PARALLELLBFGS_SNLPMODEL_CUH
 
-#include "../../optimizer/perturb/Perturbator.h"
+#include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
 
 class SNLPModel: public Model {
@@ -13,7 +13,7 @@ class SNLPModel: public Model {
 public:
 
     SNLPModel():Model(){};
-    explicit SNLPModel(Perturbator& perturbator) : Model(perturbator) {
+    explicit SNLPModel(Perturbator& perturbator) : Model(perturbator.populationSize) {
         residuals.residualCount=2;
         SNLPResidual[0].constantsCount=RESIDUAL_CONSTANTS_COUNT_1;
         SNLPResidual[0].constantsDim=RESIDUAL_CONSTANTS_DIM_1;

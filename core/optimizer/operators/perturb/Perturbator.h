@@ -5,9 +5,9 @@
 #ifndef PARALLELLBFGS_PERTURBATOR_H
 #define PARALLELLBFGS_PERTURBATOR_H
 
-#include "../../common/config/CUDAConfig.cuh"
-#include "../../common/Random.cuh"
-#include "../../common/model/BoundedParameter.cuh"
+#include "../../../common/config/CUDAConfig.cuh"
+#include "../../../common/Random.cuh"
+#include "../../../common/model/BoundedParameter.cuh"
 #include "../Operator.h"
 
 class Model;

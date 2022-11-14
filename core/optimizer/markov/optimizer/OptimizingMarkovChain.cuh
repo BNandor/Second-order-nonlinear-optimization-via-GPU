@@ -5,8 +5,8 @@
 #ifndef PARALLELLBFGS_OPTIMIZINGMARKOVCHAIN_CUH
 #define PARALLELLBFGS_OPTIMIZINGMARKOVCHAIN_CUH
 #include <random>
-#include "../../common/OptimizerContext.cuh"
-#include "MarkovChain.cuh"
+#include "../../../common/OptimizerContext.cuh"
+#include "../MarkovChain.cuh"
 #include "OptimizingMarkovNode.cuh"
 #include <unordered_map>
 #include <algorithm>

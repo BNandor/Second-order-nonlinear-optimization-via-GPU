@@ -5,8 +5,8 @@
 #ifndef PARALLELLBFGS_FUNCTIONEVALUATION_CUH
 #define PARALLELLBFGS_FUNCTIONEVALUATION_CUH
 
-#include "../../common/model/Model.cuh"
-#include "../../common/Constants.cuh"
+#include "../../../common/model/Model.cuh"
+#include "../../../common/Constants.cuh"
 
 struct GlobalData;
 namespace FuncEval {

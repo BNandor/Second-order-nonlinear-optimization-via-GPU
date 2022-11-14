@@ -5,11 +5,11 @@
 #ifndef PARALLELLBFGS_DECONTEXT_H
 #define PARALLELLBFGS_DECONTEXT_H
 
-#include <curand_kernel.h>
-#include "../../../common/config/CUDAConfig.cuh"
-#include "../../../common/Random.cuh"
+#include "../../../../../../../../../../usr/local/cuda-11.4/include/curand_kernel.h"
+#include "../../../../common/config/CUDAConfig.cuh"
+#include "../../../../common/Random.cuh"
 #include "../Perturbator.h"
-#include "../../../common/model/BoundedParameter.cuh"
+#include "../../../../common/model/BoundedParameter.cuh"
 #include "../../select/Selector.cuh"
 #include "../../refine/FunctionEvaluation.cuh"
 

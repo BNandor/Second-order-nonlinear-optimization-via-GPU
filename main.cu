@@ -3,15 +3,16 @@
 #include <algorithm>
 
 #include "core/common/Constants.cuh"
-#include "core/optimizer/refine/LBFGS.cuh"
-#include "core/optimizer/refine/GradientDescent.cuh"
+#include "core/optimizer/operators/refine/LBFGS.cuh"
+#include "core/optimizer/operators/refine/GradientDescent.cuh"
 #include "core/common/Random.cuh"
 #include "core/common/Metrics.cuh"
-#include "core/optimizer/perturb/DE/DEContext.h"
+#include "core/optimizer/operators/perturb/DE/DEContext.h"
+#include "core/optimizer/operators/perturb/GA/GAContext.cuh"
 #include "core/common/OptimizerContext.cuh"
 #include "core/common/model/BoundedParameter.cuh"
-#include "core/optimizer/markov/OptimizingMarkovChain.cuh"
-
+#include "core/optimizer/markov/optimizer/OptimizingMarkovChain.cuh"
+#include "core/problem/SNLP/SNLPModel.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>

@@ -5,9 +5,6 @@
 #ifndef PARALLELLBFGS_CUDACONFIG_CUH
 #define PARALLELLBFGS_CUDACONFIG_CUH
 
-
-#include "../../optimizer/perturb/Perturbator.h"
-
 struct CUDAConfig {
     int threadsPerBlock=THREADS_PER_BLOCK;
     int blocksPerGrid;

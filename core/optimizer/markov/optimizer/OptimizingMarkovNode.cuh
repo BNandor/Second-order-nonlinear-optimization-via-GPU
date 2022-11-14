@@ -4,9 +4,9 @@
 
 #ifndef PARALLELLBFGS_OPTIMIZINGMARKOVNODE_CUH
 #define PARALLELLBFGS_OPTIMIZINGMARKOVNODE_CUH
-#include "MarkovNode.cuh"
-#include "OperatorMarkovChain.cuh"
-#include "OperatorMarkovNode.cuh"
+#include "../MarkovNode.cuh"
+#include "../operator/OperatorMarkovChain.cuh"
+#include "../operator/OperatorMarkovNode.cuh"
 
 class OptimizingMarkovNode: public MarkovNode {
     OperatorMarkovChain* operatorChain;

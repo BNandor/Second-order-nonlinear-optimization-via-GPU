@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_SELECTOR_CUH
 #define PARALLELLBFGS_SELECTOR_CUH
 
-#include "../../common/model/CudaMemoryModel.cuh"
+#include "../../../common/model/CudaMemoryModel.cuh"
 #include "../Operator.h"
 
 class Selector : public Operator{

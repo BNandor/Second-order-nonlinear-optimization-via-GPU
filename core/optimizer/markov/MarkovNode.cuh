@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_MARKOVNODE_CUH
 #define PARALLELLBFGS_MARKOVNODE_CUH
 
-#include "../Operator.h"
+#include "../operators/Operator.h"
 #include <vector>
 #include <random>
 

@@ -4,7 +4,7 @@
 
 #ifndef PARALLELLBFGS_OPERATORMARKOVNODE_CUH
 #define PARALLELLBFGS_OPERATORMARKOVNODE_CUH
-#include "MarkovNode.cuh"
+#include "../MarkovNode.cuh"
 
 class OperatorMarkovNode: public MarkovNode {
 public:

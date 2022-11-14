@@ -6,7 +6,6 @@
 #define PARALLELLBFGS_MODEL_CUH
 
 #include <fstream>
-#include "../../optimizer/perturb/Perturbator.h"
 
 class Residual {
 public:
@@ -59,10 +58,10 @@ public:
     Residuals residuals;
 
     Model()=default;
-    Model(Perturbator& perturbator) {
+    Model(int populationSize) {
         modelSize=X_DIM;
-        modelPopulationSize=perturbator.populationSize*modelSize;
-        populationSize=perturbator.populationSize;
+        modelPopulationSize=populationSize*modelSize;
+        this->populationSize=populationSize;
     }
 
     virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;

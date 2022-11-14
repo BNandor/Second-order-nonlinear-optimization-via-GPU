@@ -5,8 +5,8 @@
 #ifndef PARALLELLBFGS_OPERATORMARKOVCHAIN_CUH
 #define PARALLELLBFGS_OPERATORMARKOVCHAIN_CUH
 
-#include "../../common/OptimizerContext.cuh"
-#include "MarkovChain.cuh"
+#include "../../../common/OptimizerContext.cuh"
+#include "../MarkovChain.cuh"
 #include <algorithm>
 #include <utility>
 

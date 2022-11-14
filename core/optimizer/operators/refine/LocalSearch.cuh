@@ -5,8 +5,8 @@
 #ifndef PARALLELLBFGS_LOCALSEARCH_CUH
 #define PARALLELLBFGS_LOCALSEARCH_CUH
 
-#include "../../common/config/CUDAConfig.cuh"
-#include "../../common/model/BoundedParameter.cuh"
+#include "../../../common/config/CUDAConfig.cuh"
+#include "../../../common/model/BoundedParameter.cuh"
 #include "GradientDescent.cuh"
 #include "LBFGS.cuh"
 #include "../Operator.h"

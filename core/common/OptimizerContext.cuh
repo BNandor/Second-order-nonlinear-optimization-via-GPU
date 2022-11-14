@@ -5,20 +5,20 @@
 #ifndef PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 #define PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 
-#include "../optimizer/perturb/DE/DEContext.h"
-#include "../optimizer/perturb/Perturbator.h"
-#include "../optimizer/refine/LocalSearch.cuh"
+#include "../optimizer/operators/perturb/DE/DEContext.h"
+#include "../optimizer/operators/perturb/Perturbator.h"
+#include "../optimizer/operators/refine/LocalSearch.cuh"
 #include "config/CUDAConfig.cuh"
 #include "Metrics.cuh"
-#include "../optimizer/select/best/BestSelector.cuh"
-#include "../optimizer/select/Selector.cuh"
+#include "../optimizer/operators/select/best/BestSelector.cuh"
+#include "../optimizer/operators/select/Selector.cuh"
 #include "model/Model.cuh"
-#include "../optimizer/perturb/GA/GAContext.cuh"
+#include "../optimizer/operators/perturb/GA/GAContext.cuh"
 #include <cstring>
 #include <fstream>
 #include "./model/CudaMemoryModel.cuh"
 #include "../problem/SNLP/SNLPModel.cuh"
-#include "../optimizer/initialize/Initializer.cuh"
+#include "../optimizer/operators/initialize/Initializer.cuh"
 #include <list>
 
 class OptimizerContext {
