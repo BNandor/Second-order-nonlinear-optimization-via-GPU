@@ -12,9 +12,8 @@
 class MarkovChain {
 protected:
     std::mt19937 generator=std::mt19937(std::random_device()());
-    std::unordered_map<std::string, MarkovNode*> nodes;
 public:
-
+    std::unordered_map<std::string, MarkovNode*> nodes;
     MarkovNode* currentNode;
     virtual void hopToNext()=0;
 };

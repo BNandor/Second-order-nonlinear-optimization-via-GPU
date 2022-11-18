@@ -17,6 +17,11 @@ public:
         operatorChain=anOperatorMarkovChain;
     }
 
+    ~OptimizingMarkovNode(){
+        std::for_each(operatorChain->nodes.begin(),operatorChain->nodes.end(),[](auto node){delete std::get<1>(node);});
+        delete operatorChain;
+    }
+
     void operate(CUDAMemoryModel* cudaMemoryModel)  {
         ((OperatorMarkovNode*)operatorChain->currentNode)->operate(cudaMemoryModel);
         operatorChain->hopToNext();

@@ -45,7 +45,8 @@ public:
 
     OperatorParameters(std::unordered_map<std::string, BoundedParameter> parameters):values(std::move(parameters)){
     }
-
 };
+
+
 
 #endif //PARALLELLBFGS_BOUNDEDPARAMETER_CUH

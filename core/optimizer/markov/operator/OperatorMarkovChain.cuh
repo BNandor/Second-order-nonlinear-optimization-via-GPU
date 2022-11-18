@@ -25,8 +25,9 @@ public:
         this->metrics=metrics;
     }
 
-    ~OperatorMarkovChain(){
+    ~OperatorMarkovChain() {
         std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
+        delete &nodes;
     }
 
     void hopToNext() override {
