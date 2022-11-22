@@ -61,7 +61,7 @@
 //#define CR 0.9
 //#define F  0.9
 
-// Stop condition parameters
+// Stop condition chainParameters
 #define FEPSILON 1
 #define  ALPHA 1
 

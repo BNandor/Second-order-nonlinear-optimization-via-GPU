@@ -35,8 +35,12 @@ public:
         return min;
     }
 
+    double bestModelCost(){
+        return finalFs[bestModelIndex()];
+    }
+
     void printBestModel(Model*model) {
-        printf(" calculating best model so far\n");
+        printf(" \ncalculating best model so far\n");
         int min =bestModelIndex();
         printf("\nsolf: %f and solution: ", finalFs[min]);
         for (int ff = model->modelSize * min; ff < model->modelSize * (min + 1) - 1; ff++) {

@@ -15,14 +15,10 @@ class LocalSearch : public Operator{
 protected:
     void* dev_globalContext;
 public:
-    int functionEvaluations;
 
     LocalSearch() {
     }
 
-    LocalSearch(int iterations): functionEvaluations(iterations) {
-
-    }
     virtual  void
     optimize(double *globalX, double *globalData,
              double *globalF
@@ -48,12 +44,6 @@ public:
 class GDLocalSearch: public LocalSearch {
 public:
     GDLocalSearch(){}
-    GDLocalSearch(double alpha,int fevaluations):LocalSearch(fevaluations) {
-        std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
-        gdParams["GD_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
-        gdParams["GD_ITERATIONS"]=BoundedParameter(fevaluations, 0, 10000);
-        parameters=OperatorParameters(gdParams);
-    }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
         optimize(cudaMemoryModel->dev_x2,
@@ -72,12 +62,14 @@ public:
             CUDAConfig cudaConfig
     ) override{
         GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,
-                                                                               parameters.values["GD_ITERATIONS"].value,
+                                                                               truncf(parameters.values["GD_FEVALS"].value),
                                                                                parameters.values["GD_ALPHA"].value);
     };
-    int fEvaluationCount() override{
-        return functionEvaluations;
+
+    int fEvaluationCount() override {
+        return parameters.values["GD_FEVALS"].value;
     }
+
      void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             cudaFree(dev_globalContext);
@@ -88,16 +80,15 @@ public:
 };
 
 class LBFGSLocalSearch: public LocalSearch {
+private:
+    void setParameterInvariance() {
+        if(parameters.values["LBFGS_C1"].value > parameters.values["LBFGS_C2"].value){
+            std::swap(parameters.values["LBFGS_C1"].value,parameters.values["LBFGS_C2"].value);
+        }
+    }
+
 public:
     LBFGSLocalSearch(){}
-    LBFGSLocalSearch(double alpha,int fevaluations):LocalSearch(fevaluations) {
-        std::unordered_map<std::string,BoundedParameter> lbfgsParams=std::unordered_map<std::string,BoundedParameter>();
-        lbfgsParams["LBFGS_ALPHA"]=BoundedParameter(alpha, 0.5, 100);
-        lbfgsParams["LBFGS_ITERATIONS"]=BoundedParameter(fevaluations, 0, 10000);
-        lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 1.0);
-        lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
-        parameters=OperatorParameters(lbfgsParams);
-    }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
         // TODO add switch for dev_x1
@@ -115,15 +106,16 @@ public:
             , void *globalSharedContext,void* model,
              CUDAConfig cudaConfig
     ) override {
+
         LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext, model,
-                                                                                    parameters.values["LBFGS_ITERATIONS"].value,
+                                                                                    truncf(parameters.values["LBFGS_FEVALS"].value),
                                                                                     parameters.values["LBFGS_ALPHA"].value,
                                                                                     parameters.values["LBFGS_C1"].value,
                                                                                     parameters.values["LBFGS_C2"].value);
     };
 
     int fEvaluationCount() override {
-        return functionEvaluations + LBFGS_M;
+        return parameters.values["LBFGS_FEVALS"].value + LBFGS_M;
     }
 
     void setupGlobalData(int populationSize) override {

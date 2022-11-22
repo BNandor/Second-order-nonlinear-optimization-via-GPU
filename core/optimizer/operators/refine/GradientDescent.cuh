@@ -135,7 +135,7 @@ namespace GD {
             for (int residualIndex = 0; residualIndex < model1->residuals.residualCount; residualIndex++) {
                 printf("constants: %d\n", model1->residuals.residual[residualIndex].constantsCount);
                 printf("constants dim: %d\n", model1->residuals.residual[residualIndex].constantsDim);
-                printf("parameters: %d\n", model1->residuals.residual[residualIndex].parametersDim);
+                printf("chainParameters: %d\n", model1->residuals.residual[residualIndex].parametersDim);
             }
         }
 

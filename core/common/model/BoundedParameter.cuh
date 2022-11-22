@@ -7,6 +7,7 @@
 #include <random>
 #include <unordered_map>
 #include <utility>
+#include <algorithm>
 
 class BoundedParameter {
 public:
@@ -45,6 +46,21 @@ public:
 
     OperatorParameters(std::unordered_map<std::string, BoundedParameter> parameters):values(std::move(parameters)){
     }
+
+    virtual void setRandomUniform() {
+        std::for_each(values.begin(),values.end(),[this](auto& parameter){
+            std::get<1>(parameter).setRandomUniform(this->generator);
+        });
+    }
+
+    virtual void printParameters() {
+        std::cout<<std::endl;
+        std::for_each(values.begin(),values.end(),[this](auto& parameter){
+            std::cout<<std::get<0>(parameter)<<"="<<std::get<1>(parameter).value<<" ";
+        });
+        std::cout<<std::endl;
+    }
+
 };
 
 

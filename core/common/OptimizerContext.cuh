@@ -23,15 +23,10 @@
 
 class OptimizerContext {
 
-private:
-
-
-    std::list<Operator*> currentOperatorList;
 public:
 
     // Initializer
     Initializer initializer;
-    Initializer* currentInitializer;
 
     // Perturbators
     DEContext differentialEvolutionContext;
@@ -41,8 +36,6 @@ public:
     // Selectors
     BestSelector bestSelector;
 
-    Selector* currentSelector;
-
     // Local searches
     GDLocalSearch gdLocalSearch;
     LBFGSLocalSearch lbfgsLocalSearch;
@@ -51,16 +44,14 @@ public:
 
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
-    int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
 
-    explicit OptimizerContext(DEContext &deContext,GAContext &gaContext) {
+    explicit OptimizerContext() {
         // Initializers
         initializer=Initializer();
-        currentInitializer=&initializer;
 
         // Configure perturbators
-        differentialEvolutionContext=deContext;
-        geneticAlgorithmContext=gaContext;
+        differentialEvolutionContext=DEContext();
+        geneticAlgorithmContext=GAContext();
 
         // Select currentPerturbator
 //        currentPerturbator = &differentialEvolutionContext;
@@ -69,29 +60,9 @@ public:
         //Configure Selectors
         bestSelector=BestSelector();
 
-        // Select currentSelector
-        currentSelector=&bestSelector;
-
         //Configure Local Searches
-        gdLocalSearch=GDLocalSearch(ALPHA,ITERATION_COUNT);
-        lbfgsLocalSearch=LBFGSLocalSearch(ALPHA,ITERATION_COUNT);
-
-        //Select currentLocalsearch
-        if (strcmp(OPTIMIZER::name.c_str(),"GD" ) == 0) {
-            printf("localSearch is GD\n");
-            currentLocalSearch=&gdLocalSearch;
-        }
-
-        if (strcmp(OPTIMIZER::name.c_str(),"LBFGS" ) == 0) {
-            printf("localSearch is LBFGS\n");
-            currentLocalSearch = &lbfgsLocalSearch;
-        }
-
-        // Selected  operators
-        currentOperatorList={currentInitializer,currentPerturbator,currentSelector,currentLocalSearch};
-#ifdef SAFE
-        assert(currentLocalSearch!=0);
-#endif
+        gdLocalSearch=GDLocalSearch();
+        lbfgsLocalSearch=LBFGSLocalSearch();
 
         cudaMemoryModel=CUDAMemoryModel();
         cudaMemoryModel.cudaConfig=CUDAConfig(currentPerturbator->populationSize);

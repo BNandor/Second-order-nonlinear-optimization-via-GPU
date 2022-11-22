@@ -125,14 +125,6 @@ class GAContext : public Perturbator {
 public:
     GAContext() {
         populationSize=POPULATION_SIZE;
-        std::unordered_map<std::string,BoundedParameter> gaParams=std::unordered_map<std::string,BoundedParameter>();
-        gaParams["GA_CR"]=BoundedParameter(0.9, 0.0, 1.0);
-        gaParams["GA_CR_POINT"]=BoundedParameter(0.5, 0.0, 1.0);
-        gaParams["GA_MUTATION_RATE"]=BoundedParameter(0.5, 0.0, 1.0);
-        gaParams["GA_MUTATION_SIZE"]=BoundedParameter(50, 0.0, 100000);
-        gaParams["GA_PARENTPOOL_RATIO"]=BoundedParameter(0.3, 0.0, 1.0);
-        gaParams["GA_ALPHA"]=BoundedParameter(0.2, 0.0, 1.0);
-        parameters=OperatorParameters(gaParams);
         setupGlobalData(populationSize);
     }
 

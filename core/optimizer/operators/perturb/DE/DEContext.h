@@ -13,7 +13,7 @@
 #include "../../select/Selector.cuh"
 #include "../../refine/FunctionEvaluation.cuh"
 
-// Differential Evolution Control parameters
+// Differential Evolution Control chainParameters
 
 
 __global__
@@ -96,10 +96,6 @@ public:
 
     DEContext() {
         populationSize=POPULATION_SIZE;
-        std::unordered_map<std::string,BoundedParameter> deParams=std::unordered_map<std::string,BoundedParameter>();
-        deParams["DE_CR"]=BoundedParameter(0.99,0.0,1.0);
-        deParams["DE_FORCE"]=BoundedParameter(0.6,0.0,1.0);
-        parameters=OperatorParameters(deParams);
         setupGlobalData(populationSize);
     }
 
