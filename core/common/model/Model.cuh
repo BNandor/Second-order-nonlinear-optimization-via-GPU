@@ -37,9 +37,9 @@ public:
         Residual* it=residual;
         for(int i=0;i<residualCount;i++) {
             size+=(it->constantsCount)*(it->constantsDim);
+            printf("count %d\n",it->constantsCount);
+            printf("dim %d\n",it->constantsDim);
             it++;
-            printf("count %i\n",it->constantsCount);
-            printf("dim %i\n",it->constantsDim);
         }
 
 #ifdef SAFE

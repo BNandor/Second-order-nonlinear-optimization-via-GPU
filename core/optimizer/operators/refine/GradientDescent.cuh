@@ -127,17 +127,17 @@ namespace GD {
 //        }
 
         DEFINE_RESIDUAL_FUNCTIONS()
-        if(blockIdx.x ==0 && threadIdx.x ==0) {
-            Model *model1 = (Model *) model;
-            printf("GD iterations: %d\n", localIterations);
-            printf("residuals: %d\n", model1->residuals.residualCount);
-
-            for (int residualIndex = 0; residualIndex < model1->residuals.residualCount; residualIndex++) {
-                printf("constants: %d\n", model1->residuals.residual[residualIndex].constantsCount);
-                printf("constants dim: %d\n", model1->residuals.residual[residualIndex].constantsDim);
-                printf("chainParameters: %d\n", model1->residuals.residual[residualIndex].parametersDim);
-            }
-        }
+//        if(blockIdx.x ==0 && threadIdx.x ==0) {
+//            Model *model1 = (Model *) model;
+//            printf("GD iterations: %d\n", localIterations);
+//            printf("residuals: %d\n", model1->residuals.residualCount);
+//
+//            for (int residualIndex = 0; residualIndex < model1->residuals.residualCount; residualIndex++) {
+//                printf("constants: %d\n", model1->residuals.residual[residualIndex].constantsCount);
+//                printf("constants dim: %d\n", model1->residuals.residual[residualIndex].constantsDim);
+//                printf("chainParameters: %d\n", model1->residuals.residual[residualIndex].parametersDim);
+//            }
+//        }
 
         // every thread has a local observation loaded into local memory
         __shared__

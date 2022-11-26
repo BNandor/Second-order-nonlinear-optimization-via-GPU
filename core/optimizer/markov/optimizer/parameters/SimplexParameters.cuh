@@ -52,6 +52,11 @@ public:
         });
         std::cout<<std::endl;
     }
+
+    SimplexParameters* clone() override {
+        SimplexParameters* clonedParameters=new SimplexParameters(values);
+        return clonedParameters;
+    };
 };
 
 #endif //PARALLELLBFGS_SIMPLEXPARAMETERS_CUH

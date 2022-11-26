@@ -7,7 +7,15 @@
 
 
 #include <curand_kernel.h>
-
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+    if (code != cudaSuccess)
+    {
+        fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
 __global__
 void setupCurandState(curandState *state, int size) {
     int idx = threadIdx.x + blockDim.x * blockIdx.x;
@@ -22,7 +30,8 @@ public:
 
     virtual ~Random() {
         if(dev_curandState!= nullptr){
-            cudaFree(dev_curandState);
+            gpuErrchk(cudaFree(dev_curandState));
+            dev_curandState=0;
         }
     }
 
@@ -36,11 +45,14 @@ public:
         assert(size<=(threadsPerBlock * blocksPerGrid));
 #endif
         if(dev_curandState!= nullptr){
-            cudaFree(dev_curandState);
+            gpuErrchk(cudaFree(dev_curandState));
+            dev_curandState=0;
         }
-        cudaMalloc(&dev_curandState,size * sizeof(curandState) );
+        gpuErrchk(cudaMalloc(&dev_curandState,size * sizeof(curandState) ));
         setupCurandState<<<blocksPerGrid, threadsPerBlock>>>(
                 dev_curandState, size);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     }
 };
 

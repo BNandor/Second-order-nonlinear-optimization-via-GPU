@@ -61,6 +61,11 @@ public:
         std::cout<<std::endl;
     }
 
+    virtual OperatorParameters* clone() {
+        OperatorParameters* clonedParameters=new OperatorParameters(values);
+        return clonedParameters;
+    };
+
 };
 
 

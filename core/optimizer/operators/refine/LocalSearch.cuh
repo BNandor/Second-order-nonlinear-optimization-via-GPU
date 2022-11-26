@@ -10,7 +10,17 @@
 #include "GradientDescent.cuh"
 #include "LBFGS.cuh"
 #include "../Operator.h"
-
+#ifndef gpuErrchk
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+    if (code != cudaSuccess)
+    {
+        fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
+#endif
 class LocalSearch : public Operator{
 protected:
     void* dev_globalContext;
@@ -30,7 +40,8 @@ public:
 
     ~LocalSearch() {
         if(dev_globalContext!= nullptr) {
-            cudaFree(dev_globalContext);
+            gpuErrchk(cudaFree(dev_globalContext));
+            dev_globalContext=0;
         }
     }
 
@@ -43,7 +54,9 @@ public:
 
 class GDLocalSearch: public LocalSearch {
 public:
-    GDLocalSearch(){}
+    GDLocalSearch(){
+        dev_globalContext=0;
+    }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
         optimize(cudaMemoryModel->dev_x2,
@@ -64,6 +77,8 @@ public:
         GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,
                                                                                truncf(parameters.values["GD_FEVALS"].value),
                                                                                parameters.values["GD_ALPHA"].value);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     };
 
     int fEvaluationCount() override {
@@ -72,9 +87,10 @@ public:
 
      void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
-            cudaFree(dev_globalContext);
+            gpuErrchk(cudaFree(dev_globalContext));
+            dev_globalContext=0;
         }
-        cudaMalloc(&dev_globalContext, sizeof(GD::GlobalData)*populationSize);
+         gpuErrchk(cudaMalloc(&dev_globalContext, sizeof(GD::GlobalData)*populationSize));
         printf("Allocating %lu global memory for GD\n",sizeof(GD::GlobalData)*populationSize);
     }
 };
@@ -88,7 +104,9 @@ private:
     }
 
 public:
-    LBFGSLocalSearch(){}
+    LBFGSLocalSearch(){
+        dev_globalContext=0;
+    }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override {
         // TODO add switch for dev_x1
@@ -112,6 +130,8 @@ public:
                                                                                     parameters.values["LBFGS_ALPHA"].value,
                                                                                     parameters.values["LBFGS_C1"].value,
                                                                                     parameters.values["LBFGS_C2"].value);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     };
 
     int fEvaluationCount() override {
@@ -120,9 +140,10 @@ public:
 
     void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
-            cudaFree(dev_globalContext);
+            gpuErrchk(cudaFree(dev_globalContext));
+            dev_globalContext=0;
         }
-        cudaMalloc(&dev_globalContext, sizeof(LBFGS::GlobalData)*populationSize);
+        gpuErrchk(cudaMalloc(&dev_globalContext, sizeof(LBFGS::GlobalData)*populationSize));
         printf("Allocating %lu global memory for LBFGS\n",sizeof(LBFGS::GlobalData)*populationSize);
     }
 };

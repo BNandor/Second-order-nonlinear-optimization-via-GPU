@@ -56,6 +56,10 @@ public:
     ModelMetrics modelPerformanceMetrics;
     CUDAConfig *cudaConfig;
 
+    Metrics(){
+
+    }
+
     Metrics(Model& model,CUDAConfig *cudaConfig): cudaEventMetrics(CudaEventMetrics()),modelPerformanceMetrics(ModelMetrics(model.modelPopulationSize,model.populationSize)){
         cudaEventMetrics.initializeEvents();
         this->cudaConfig=cudaConfig;

@@ -6,7 +6,17 @@
 #define PARALLELLBFGS_GACONTEXT_CUH
 #include "../Perturbator.h"
 #include "../../refine/FunctionEvaluation.cuh"
-
+#ifndef gpuErrchk
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+    if (code != cudaSuccess)
+    {
+        fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
+#endif
 __device__
 int minIndex(int a, int b){
     if(a <b){
@@ -117,9 +127,10 @@ class GAContext : public Perturbator {
     void* dev_globalContext;
     void setupGlobalData(int populationSize) {
         if(dev_globalContext!= nullptr) {
-            cudaFree(dev_globalContext);
+            gpuErrchk(cudaFree(dev_globalContext));
+            dev_globalContext=0;
         }
-        cudaMalloc(&dev_globalContext, sizeof(FuncEval::GlobalData)*populationSize);
+        gpuErrchk(cudaMalloc(&dev_globalContext, sizeof(FuncEval::GlobalData)*populationSize));
         printf("Allocating %lu global memory for GA\n",sizeof(FuncEval::GlobalData)*populationSize);
     }
 public:
@@ -130,7 +141,8 @@ public:
 
     ~GAContext() {
         if(dev_globalContext!= nullptr) {
-            cudaFree(dev_globalContext);
+            gpuErrchk(cudaFree(dev_globalContext));
+            dev_globalContext=0;
         }
     }
 
@@ -157,11 +169,15 @@ public:
                                                                                     parameters.values["GA_PARENTPOOL_RATIO"].value,
                                                                                     parameters.values["GA_ALPHA"].value,
                                                                                     cudaRandom->dev_curandState);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
         evaluateF(cudaConfig,dev_model,dev_x2,dev_data,newCosts);
     }
 
     void evaluateF(CUDAConfig &cudaConfig,Model * dev_model,double * dev_x,double* dev_data,double* costs) {
         FuncEval::evaluateF<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(dev_x,dev_data,costs,(FuncEval::GlobalData*)dev_globalContext,dev_model);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     }
 
     double crossoverRate=0.9;

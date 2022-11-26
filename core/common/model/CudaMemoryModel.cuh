@@ -6,7 +6,17 @@
 #define PARALLELLBFGS_CUDAMEMORYMODEL_CUH
 
 #include "Model.cuh"
-
+#ifndef gpuErrchk
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+    if (code != cudaSuccess)
+    {
+        fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
+#endif
 class CUDAMemoryModel{
 public:
     Random cudaRandom = Random();
@@ -23,30 +33,30 @@ public:
     Model* dev_Model;
     Model* model;
 
-    void allocateFor(Model &model) {
+    void allocateFor(Model &theModel) {
         freeIfPresent();
-        cudaMalloc((void **) &dev_x, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_xDE, model.modelPopulationSize * sizeof(double));
-        cudaMalloc((void **) &dev_data, model.residuals.residualDataSize() * sizeof(double));
-        cudaMalloc((void **) &dev_F, model.populationSize * sizeof(double));
-        cudaMalloc((void **) &dev_FDE, model.populationSize * sizeof(double));
-        cudaMalloc((void **) &dev_Model, sizeof(Model));
+        gpuErrchk(cudaMalloc((void **) &dev_x, theModel.modelPopulationSize * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_xDE, theModel.modelPopulationSize * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_data, theModel.residuals.residualDataSize() * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_F, theModel.populationSize * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_FDE, theModel.populationSize * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_Model, sizeof(Model)));
     }
 
     void copyModelToDevice(Model &model) {
         Residual* modelResiduals=model.residuals.residual;
-        cudaMalloc((void **) &model.residuals.residual, sizeof(Residual) * model.residuals.residualCount);
-        cudaMemcpy(model.residuals.residual, modelResiduals, sizeof(Residual) * model.residuals.residualCount, cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_Model, &model, sizeof(Model), cudaMemcpyHostToDevice);
+        gpuErrchk(cudaMalloc((void **) &model.residuals.residual, sizeof(Residual) * model.residuals.residualCount));
+        gpuErrchk(cudaMemcpy(model.residuals.residual, modelResiduals, sizeof(Residual) * model.residuals.residualCount, cudaMemcpyHostToDevice));
+        gpuErrchk(cudaMemcpy(dev_Model, &model, sizeof(Model), cudaMemcpyHostToDevice));
         model.residuals.residual=modelResiduals;
         this->model=&model;
     }
 
     void copyModelsFromDevice(ModelMetrics& modelMetrics) {
-        cudaMemcpy(modelMetrics.finalFs, dev_F1, model->populationSize * sizeof(double),
-                   cudaMemcpyDeviceToHost);
-        cudaMemcpy(modelMetrics.solution, dev_x1,
-                   model->modelPopulationSize * sizeof(double), cudaMemcpyDeviceToHost);
+        gpuErrchk(cudaMemcpy(modelMetrics.finalFs, dev_F1, model->populationSize * sizeof(double),
+                   cudaMemcpyDeviceToHost));
+        gpuErrchk(cudaMemcpy(modelMetrics.solution, dev_x1,
+                   model->modelPopulationSize * sizeof(double), cudaMemcpyDeviceToHost));
     }
 
     void initLoopPointers() {
@@ -65,42 +75,47 @@ public:
     void freeModelIfPresent() {
         if(dev_Model!= nullptr) {
             Model* host_dev_Model=(Model*)malloc(sizeof(Model));
-            cudaMemcpy(host_dev_Model, dev_Model, sizeof(Model),
-                       cudaMemcpyDeviceToHost);
-            cudaFree(host_dev_Model->residuals.residual);
-            cudaFree(dev_Model);
+            gpuErrchk(cudaMemcpy(host_dev_Model, dev_Model, sizeof(Model),
+                       cudaMemcpyDeviceToHost));
+            gpuErrchk(cudaFree(host_dev_Model->residuals.residual));
+            gpuErrchk(cudaFree(dev_Model));
+            dev_Model=0;
             free(host_dev_Model);
         }
     }
     void freeIfPresent() {
-
-        if(dev_x!=nullptr){
-            cudaFree(dev_x);
+        if(dev_x!=nullptr) {
+            gpuErrchk(cudaFree(dev_x));
+            dev_x=0;
         }
         if(dev_xDE!=nullptr){
-            cudaFree(dev_xDE);
+            gpuErrchk(cudaFree(dev_xDE));
+            dev_xDE=0;
         }
-        if(dev_x1!=nullptr){
-            cudaFree(dev_x1);
-        }
-        if(dev_x2!=nullptr){
-            cudaFree(dev_x2);
-        }
+//        if(dev_x1!=nullptr){
+//            gpuErrchk(cudaFree(dev_x1));
+//        }
+//        if(dev_x2!=nullptr){
+//            gpuErrchk(cudaFree(dev_x2));
+//        }
         if(dev_data!=nullptr){
-            cudaFree(dev_data);
+            gpuErrchk(cudaFree(dev_data));
+            dev_data=0;
         }
         if(dev_F!=nullptr){
-            cudaFree(dev_F);
+            gpuErrchk(cudaFree(dev_F));
+            dev_F=0;
         }
         if(dev_FDE!=nullptr){
-            cudaFree(dev_FDE);
+            gpuErrchk(cudaFree(dev_FDE));
+            dev_FDE=0;
         }
-        if(dev_F1!=nullptr) {
-            cudaFree(dev_F1);
-        }
-        if(dev_F2!=nullptr) {
-            cudaFree(dev_F2);
-        }
+//        if(dev_F1!=nullptr) {
+//            gpuErrchk(cudaFree(dev_F1));
+//        }
+//        if(dev_F2!=nullptr) {
+//            gpuErrchk(cudaFree(dev_F2));
+//        }
         freeModelIfPresent();
     }
     ~CUDAMemoryModel(){

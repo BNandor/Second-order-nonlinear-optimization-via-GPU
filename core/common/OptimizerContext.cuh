@@ -44,14 +44,12 @@ public:
 
     CUDAMemoryModel cudaMemoryModel;
     SNLPModel model;
-
     explicit OptimizerContext() {
         // Initializers
         initializer=Initializer();
 
         // Configure perturbators
-        differentialEvolutionContext=DEContext();
-        geneticAlgorithmContext=GAContext();
+
 
         // Select currentPerturbator
 //        currentPerturbator = &differentialEvolutionContext;

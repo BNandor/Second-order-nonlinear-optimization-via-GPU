@@ -16,7 +16,7 @@
 class OptimizingMarkovChain: public MarkovChain {
     CUDAMemoryModel* cudaMemoryModel;
     Metrics* metrics;
-    std::unordered_map<std::string,OperatorParameters*> chainParameters;
+    std::unordered_map<std::string,OperatorParameters*>* chainParameters;
 
     void resetChainBasedOnParameters(OptimizerContext* optimizerContext) {
         deleteCurrentNodes();
@@ -30,16 +30,16 @@ class OptimizingMarkovChain: public MarkovChain {
     }
 
     void buildOptimizerChain() {
-        nodes["initializer"]->addNext(nodes["perturbator"], chainParameters["OptimizerChainInitializerSimplex"]->values["perturbator"].value);
-        nodes["initializer"]->addNext(nodes["refiner"], chainParameters["OptimizerChainInitializerSimplex"]->values["refiner"].value);
+        nodes["initializer"]->addNext(nodes["perturbator"], (*chainParameters)["OptimizerChainInitializerSimplex"]->values["perturbator"].value);
+        nodes["initializer"]->addNext(nodes["refiner"], (*chainParameters)["OptimizerChainInitializerSimplex"]->values["refiner"].value);
 
-        nodes["perturbator"]->addNext(nodes["selector"], chainParameters["OptimizerChainPerturbatorSimplex"]->values["selector"].value);
-        nodes["perturbator"]->addNext(nodes["refiner"], chainParameters["OptimizerChainPerturbatorSimplex"]->values["refiner"].value);
+        nodes["perturbator"]->addNext(nodes["selector"], (*chainParameters)["OptimizerChainPerturbatorSimplex"]->values["selector"].value);
+        nodes["perturbator"]->addNext(nodes["refiner"], (*chainParameters)["OptimizerChainPerturbatorSimplex"]->values["refiner"].value);
 
-        nodes["refiner"]->addNext(nodes["refiner"], chainParameters["OptimizerChainRefinerSimplex"]->values["refiner"].value);
-        nodes["refiner"]->addNext(nodes["selector"], chainParameters["OptimizerChainRefinerSimplex"]->values["selector"].value);
+        nodes["refiner"]->addNext(nodes["refiner"], (*chainParameters)["OptimizerChainRefinerSimplex"]->values["refiner"].value);
+        nodes["refiner"]->addNext(nodes["selector"], (*chainParameters)["OptimizerChainRefinerSimplex"]->values["selector"].value);
 
-        nodes["selector"]->addNext(nodes["perturbator"], chainParameters["OptimizerChainSelectorSimplex"]->values["perturbator"].value);
+        nodes["selector"]->addNext(nodes["perturbator"], (*chainParameters)["OptimizerChainSelectorSimplex"]->values["perturbator"].value);
     }
 
     OperatorMarkovChain *buildInitializerChain() {
@@ -52,15 +52,15 @@ class OptimizingMarkovChain: public MarkovChain {
         auto* perturbatorChain=new std::unordered_map<std::string,MarkovNode*>();
         (*perturbatorChain)["initializer"]=new OperatorMarkovNode(new Initializer(),std::string("initializer").c_str());
         (*perturbatorChain)["DE"]=new OperatorMarkovNode(&optimizerContext->differentialEvolutionContext,std::string("DE").c_str());
-        optimizerContext->differentialEvolutionContext.parameters=*chainParameters["PerturbatorDEOperatorParams"];
+        optimizerContext->differentialEvolutionContext.parameters=*(*chainParameters)["PerturbatorDEOperatorParams"];
         (*perturbatorChain)["GA"]=new OperatorMarkovNode(&optimizerContext->geneticAlgorithmContext,std::string("GA").c_str());
-        optimizerContext->geneticAlgorithmContext.parameters=*chainParameters["PerturbatorGAOperatorParams"];
-        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["DE"], chainParameters["PerturbatorInitializerSimplex"]->values["DE"].value);
-        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["GA"], chainParameters["PerturbatorInitializerSimplex"]->values["GA"].value);
-        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["DE"], chainParameters["PerturbatorDESimplex"]->values["DE"].value);
-        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["GA"], chainParameters["PerturbatorDESimplex"]->values["GA"].value);
-        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["DE"], chainParameters["PerturbatorGASimplex"]->values["DE"].value);
-        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["GA"], chainParameters["PerturbatorGASimplex"]->values["GA"].value);
+        optimizerContext->geneticAlgorithmContext.parameters=*(*chainParameters)["PerturbatorGAOperatorParams"];
+        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorInitializerSimplex"]->values["DE"].value);
+        (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorInitializerSimplex"]->values["GA"].value);
+        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorDESimplex"]->values["DE"].value);
+        (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorDESimplex"]->values["GA"].value);
+        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorGASimplex"]->values["DE"].value);
+        (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorGASimplex"]->values["GA"].value);
         return new OperatorMarkovChain(*perturbatorChain,metrics);
     }
 
@@ -68,15 +68,15 @@ class OptimizingMarkovChain: public MarkovChain {
         auto* refinerChain=new std::unordered_map<std::string,MarkovNode*>();
         (*refinerChain)["initializer"]=new OperatorMarkovNode(new Initializer(), std::string("initializer").c_str());
         (*refinerChain)["GD"]=new OperatorMarkovNode(&optimizerContext->gdLocalSearch, std::string("GD").c_str());
-        optimizerContext->gdLocalSearch.parameters=*chainParameters["RefinerGDOperatorParams"];
+        optimizerContext->gdLocalSearch.parameters=*(*chainParameters)["RefinerGDOperatorParams"];
         (*refinerChain)["LBFGS"]=new OperatorMarkovNode(&optimizerContext->lbfgsLocalSearch, std::string("LBFGS").c_str());
-        optimizerContext->lbfgsLocalSearch.parameters=*chainParameters["RefinerLBFGSOperatorParams"];
-        (*refinerChain)["initializer"]->addNext((*refinerChain)["LBFGS"], chainParameters["RefinerInitializerSimplex"]->values["LBFGS"].value);
-        (*refinerChain)["initializer"]->addNext((*refinerChain)["GD"], chainParameters["RefinerInitializerSimplex"]->values["GD"].value);
-        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["LBFGS"], chainParameters["RefinerLBFGSSimplex"]->values["LBFGS"].value);
-        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["GD"], chainParameters["RefinerLBFGSSimplex"]->values["GD"].value);
-        (*refinerChain)["GD"]->addNext((*refinerChain)["LBFGS"], chainParameters["RefinerGDSimplex"]->values["LBFGS"].value);
-        (*refinerChain)["GD"]->addNext((*refinerChain)["GD"], chainParameters["RefinerGDSimplex"]->values["GD"].value);
+        optimizerContext->lbfgsLocalSearch.parameters=*(*chainParameters)["RefinerLBFGSOperatorParams"];
+        (*refinerChain)["initializer"]->addNext((*refinerChain)["LBFGS"], (*chainParameters)["RefinerInitializerSimplex"]->values["LBFGS"].value);
+        (*refinerChain)["initializer"]->addNext((*refinerChain)["GD"], (*chainParameters)["RefinerInitializerSimplex"]->values["GD"].value);
+        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["LBFGS"], (*chainParameters)["RefinerLBFGSSimplex"]->values["LBFGS"].value);
+        (*refinerChain)["LBFGS"]->addNext((*refinerChain)["GD"], (*chainParameters)["RefinerLBFGSSimplex"]->values["GD"].value);
+        (*refinerChain)["GD"]->addNext((*refinerChain)["LBFGS"], (*chainParameters)["RefinerGDSimplex"]->values["LBFGS"].value);
+        (*refinerChain)["GD"]->addNext((*refinerChain)["GD"], (*chainParameters)["RefinerGDSimplex"]->values["GD"].value);
         return new OperatorMarkovChain(*refinerChain, metrics);
     }
 
@@ -84,8 +84,8 @@ class OptimizingMarkovChain: public MarkovChain {
         auto* selectorChain=new std::unordered_map<std::string,MarkovNode*>();
         (*selectorChain)["initializer"]=new OperatorMarkovNode(new Initializer(), std::string("initializer").c_str());
         (*selectorChain)["best"]=new OperatorMarkovNode(&optimizerContext->bestSelector, std::string("best").c_str());
-        (*selectorChain)["initializer"]->addNext((*selectorChain)["best"], chainParameters["SelectorInitializerSimplex"]->values["best"].value);
-        (*selectorChain)["best"]->addNext((*selectorChain)["best"], chainParameters["SelectorBestSimplex"]->values["best"].value);
+        (*selectorChain)["initializer"]->addNext((*selectorChain)["best"], (*chainParameters)["SelectorInitializerSimplex"]->values["best"].value);
+        (*selectorChain)["best"]->addNext((*selectorChain)["best"], (*chainParameters)["SelectorBestSimplex"]->values["best"].value);
         return new OperatorMarkovChain(*selectorChain, metrics);
     }
 
@@ -104,7 +104,7 @@ public:
 
     void hopToNext() override {
         currentNode=currentNode->getNext(generator);
-        std::cout<<"hopped to "<<currentNode->name<<std::endl;
+//        std::cout<<"hopped to "<<currentNode->name<<std::endl;
         metrics->modelPerformanceMetrics.markovIterations++;
     }
 
@@ -115,14 +115,14 @@ public:
     }
 
     void printParameters() {
-        std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
+        std::for_each(chainParameters->begin(),chainParameters->end(),[](auto& operatorParameter){
             std::cout<<std::get<0>(operatorParameter)<<":"<<std::endl;
             std::get<1>(operatorParameter)->printParameters();
         });
     }
 
-    void setParameters(std::unordered_map<std::string, OperatorParameters *> parameters, OptimizerContext* optimizerContext){
-        this->chainParameters=std::move(parameters);
+    void setParameters(std::unordered_map<std::string, OperatorParameters *>*parameters, OptimizerContext* optimizerContext){
+        this->chainParameters=parameters;
         resetChainBasedOnParameters(optimizerContext);
     }
 };

@@ -56,15 +56,19 @@ public:
                cudaMemoryModel->dev_x1,
                cudaMemoryModel->dev_F2,
                cudaMemoryModel->dev_F1);
-        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_F1,++selections);
+//        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_F1,++selections);
     }
 
     void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
         selectBestModels<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(oldX,newX,oldF,newF);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     }
 
     void printPopulationCostAtGeneration(CUDAConfig& cudaConfig,double *newF, unsigned generation) {
         printGenerationalCosts<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(newF,generation);
+        gpuErrchk( cudaPeekAtLastError() );
+        gpuErrchk( cudaDeviceSynchronize() );
     }
 
     int fEvaluationCount() {
