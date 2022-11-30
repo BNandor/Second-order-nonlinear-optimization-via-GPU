@@ -17,7 +17,6 @@
 #include <cstring>
 #include <fstream>
 #include "./model/CudaMemoryModel.cuh"
-#include "../problem/SNLP/SNLPModel.cuh"
 #include "../optimizer/operators/initialize/Initializer.cuh"
 #include <list>
 
@@ -43,7 +42,7 @@ public:
     LocalSearch* currentLocalSearch;
 
     CUDAMemoryModel cudaMemoryModel;
-    SNLPModel model;
+    Model* model;
     explicit OptimizerContext() {
         // Initializers
         initializer=Initializer();

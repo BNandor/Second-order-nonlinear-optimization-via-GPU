@@ -64,6 +64,9 @@ public:
         this->populationSize=populationSize;
     }
 
+    virtual ~Model(){
+
+    }
     virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;
 
     void readPopulation(double *x, unsigned xSize, std::string filename) {
