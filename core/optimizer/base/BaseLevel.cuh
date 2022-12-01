@@ -41,7 +41,7 @@ public:
         delete optimizerContext.model;
     }
 
-    void loadModel(){
+    void loadInitialModel(){
         optimizerContext.model->loadModel(optimizerContext.cudaMemoryModel.dev_x, optimizerContext.cudaMemoryModel.dev_data,
                                          metrics);
     }

@@ -15,6 +15,12 @@ protected:
         });
     }
 
+    void mutateByEpsilon(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
+        std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
+            std::get<1>(operatorParameter)->mutateByEpsilon();
+        });
+    }
+
     void printParameters(std::unordered_map<std::string,OperatorParameters*> &parameters) {
         std::for_each(parameters.begin(),parameters.end(),[](auto& operatorParameter){
             std::cout<<std::get<0>(operatorParameter)<<":"<<std::endl;
@@ -23,7 +29,10 @@ protected:
     }
 
     void cloneParameters(std::unordered_map<std::string,OperatorParameters*> &from,std::unordered_map<std::string,OperatorParameters*> &to){
-        std::for_each(from.begin(),from.end(),[&to,&from](auto& operatorParameter){
+        std::for_each(from.begin(),from.end(),[&to,&from](auto& operatorParameter) {
+            if(to.count(std::get<0>(operatorParameter))>0) {
+                delete to[std::get<0>(operatorParameter)];
+            }
             to[std::get<0>(operatorParameter)]=std::get<1>(operatorParameter)->clone();
         });
     }

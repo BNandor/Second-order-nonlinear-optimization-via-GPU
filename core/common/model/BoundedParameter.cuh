@@ -27,6 +27,17 @@ public:
     BoundedParameter(double defaultValue,double lowerBound,double upperBound):value(defaultValue),lowerBound(lowerBound),upperBound(upperBound) {
     }
 
+    void mutateByEpsilon(std::mt19937 &generator) {
+        value += std::normal_distribution<double>(0, (upperBound-lowerBound)/20)(generator);
+        if(value<lowerBound){
+            value=lowerBound;
+        }else{
+            if(value>upperBound){
+                value=upperBound;
+            }
+        }
+    }
+
     void setRandomUniform(std::mt19937 &generator) {
         value = std::uniform_real_distribution<double>(lowerBound, upperBound)(generator);
     }
@@ -65,6 +76,12 @@ public:
         OperatorParameters* clonedParameters=new OperatorParameters(values);
         return clonedParameters;
     };
+
+    virtual void mutateByEpsilon() {
+        std::for_each(values.begin(),values.end(),[this](auto& parameter){
+            std::get<1>(parameter).mutateByEpsilon(this->generator);
+        });
+    }
 
 };
 

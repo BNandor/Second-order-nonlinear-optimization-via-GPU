@@ -32,7 +32,7 @@ public:
 
     void hopToNext() override {
         currentNode=currentNode->getNext(generator);
-        std::cout<<"hopped to "<<currentNode->name<<std::endl;
+//        std::cout<<"hopped to "<<currentNode->name<<std::endl;
     }
 };
 

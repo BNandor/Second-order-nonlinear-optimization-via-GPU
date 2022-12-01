@@ -14,13 +14,14 @@ class RandomHyperLevel: public HyperLevel {
          std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
          std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
          cloneParameters(defaultParameters,currentParameters);
+         setRandomUniform(currentParameters);
          baseLevel.init();
-         int trials=10;
+         int trials=2;
          double min=std::numeric_limits<double>::max();
 
          for(int i=0; i < trials; i++) {
              std::cout<<"Starting trial "<<i<<std::endl;
-             baseLevel.loadModel();
+             baseLevel.loadInitialModel();
              double currentF=baseLevel.optimize(&currentParameters,totalEvaluations/trials);
              printf("f: %f trial %u \n",currentF, i);
              if(currentF < min) {

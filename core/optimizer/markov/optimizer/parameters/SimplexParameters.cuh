@@ -5,6 +5,7 @@
 #ifndef PARALLELLBFGS_SIMPLEXPARAMETERS_CUH
 #define PARALLELLBFGS_SIMPLEXPARAMETERS_CUH
 #include <utility>
+#include <iostream>
 #include <limits>
 #include "../../../../common/model/BoundedParameter.cuh"
 #include <algorithm>
@@ -57,6 +58,32 @@ public:
         SimplexParameters* clonedParameters=new SimplexParameters(values);
         return clonedParameters;
     };
+
+    void mutateByEpsilon() override {
+        std::vector<double> simplexSamples;
+        double pSum=0;
+        simplexSamples.push_back(0.0);
+        std::for_each(values.begin(),values.end(),[&pSum,&simplexSamples](auto & parameter) {
+            pSum+=std::get<1>(parameter).value;
+            simplexSamples.push_back(pSum);
+        });
+        for(int i=1; i < simplexSamples.size() - 1 ; i++) {
+            simplexSamples[i] += std::normal_distribution<double>(0, 1/10.0)(generator);
+            if(simplexSamples[i]<0) {
+                simplexSamples[i]=0;
+            } else {
+                if(simplexSamples[i]>1.0) {
+                    simplexSamples[i]=1.0;
+                }
+            }
+        }
+        std::sort(simplexSamples.begin(),simplexSamples.end());
+        int sIndex=0;
+        std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples,this](auto & parameter){
+            std::get<1>(parameter).value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
+            sIndex++;
+        });
+    }
 };
 
 #endif //PARALLELLBFGS_SIMPLEXPARAMETERS_CUH

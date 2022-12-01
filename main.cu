@@ -2,10 +2,12 @@
 #include "core/optimizer/base/BaseLevel.cuh"
 #include "core/optimizer/hyper/HyperLevel.cuh"
 #include "core/optimizer/hyper/RandomHyperLevel.cuh"
+#include "core/optimizer/hyper/SimulatedAnnealingHyperLevel.cuh"
 
 int main(int argc, char** argv) {
     int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
-    HyperLevel* hyperLevel=new RandomHyperLevel();
+//    HyperLevel* hyperLevel=new RandomHyperLevel();
+    HyperLevel* hyperLevel=new SimulatedAnnealingHyperLevel();
     hyperLevel->hyperOptimize(totalFunctionEvaluations);
     delete hyperLevel;
     return 0;
