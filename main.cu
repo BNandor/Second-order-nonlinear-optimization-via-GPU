@@ -3,11 +3,16 @@
 #include "core/optimizer/hyper/HyperLevel.cuh"
 #include "core/optimizer/hyper/RandomHyperLevel.cuh"
 #include "core/optimizer/hyper/SimulatedAnnealingHyperLevel.cuh"
+#include "core/optimizer/hyper/SimpleLocalSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/SimplePerturbHyperLevel.cuh"
 
 int main(int argc, char** argv) {
-    int totalFunctionEvaluations=DE_ITERATION_COUNT*ITERATION_COUNT;
+    int totalFunctionEvaluations=ITERATION_COUNT;
 //    HyperLevel* hyperLevel=new RandomHyperLevel();
+//    HyperLevel* hyperLevel=new SimpleLocalSearchHyperLevel();
+//    HyperLevel* hyperLevel=new SimplePerturbHyperLevel();
     HyperLevel* hyperLevel=new SimulatedAnnealingHyperLevel();
+
     hyperLevel->hyperOptimize(totalFunctionEvaluations);
     delete hyperLevel;
     return 0;

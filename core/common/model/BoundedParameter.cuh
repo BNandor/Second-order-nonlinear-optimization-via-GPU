@@ -21,14 +21,13 @@ public:
     double lowerBound;
     double upperBound;
     BoundedParameter(){
-
     }
 
     BoundedParameter(double defaultValue,double lowerBound,double upperBound):value(defaultValue),lowerBound(lowerBound),upperBound(upperBound) {
     }
 
     void mutateByEpsilon(std::mt19937 &generator) {
-        value += std::normal_distribution<double>(0, (upperBound-lowerBound)/20)(generator);
+        value += std::normal_distribution<double>(0, (upperBound-lowerBound)/3)(generator);
         if(value<lowerBound){
             value=lowerBound;
         }else{

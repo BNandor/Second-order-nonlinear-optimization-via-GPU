@@ -68,7 +68,7 @@ public:
             simplexSamples.push_back(pSum);
         });
         for(int i=1; i < simplexSamples.size() - 1 ; i++) {
-            simplexSamples[i] += std::normal_distribution<double>(0, 1/10.0)(generator);
+            simplexSamples[i] += std::normal_distribution<double>(0, 0.3)(generator);
             if(simplexSamples[i]<0) {
                 simplexSamples[i]=0;
             } else {

@@ -1,22 +1,23 @@
 //
-// Created by spaceman on 2022. 11. 26..
+// Created by spaceman on 2022. 12. 03..
 //
 
-#ifndef PARALLELLBFGS_RANDOMHYPERLEVEL_CUH
-#define PARALLELLBFGS_RANDOMHYPERLEVEL_CUH
+#ifndef PARALLELLBFGS_SIMPLEPERTURBHYPERLEVEL_CUH
+#define PARALLELLBFGS_SIMPLEPERTURBHYPERLEVEL_CUH
+
+
 #include "HyperLevel.cuh"
 #include <limits>
 
-class RandomHyperLevel: public HyperLevel {
+class SimplePerturbHyperLevel: public HyperLevel {
 
     double hyperOptimize(int totalEvaluations) override {
         int trials=1;
         int totalBaseLevelEvaluations=totalEvaluations/trials;
-        std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);
+        std::unordered_map<std::string,OperatorParameters*> defaultParameters=createSimplePerturbOptimizerParameters(totalBaseLevelEvaluations);
         std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);
-        setRandomUniform(currentParameters);
         baseLevel.init();
 
         double min=std::numeric_limits<double>::max();
@@ -30,7 +31,6 @@ class RandomHyperLevel: public HyperLevel {
                 min=currentF;
                 cloneParameters(currentParameters,bestParameters);
             }
-            setRandomUniform(currentParameters);
         }
         printParameters(bestParameters);
         printf("\nfinal f: %.10f", min);
@@ -38,6 +38,7 @@ class RandomHyperLevel: public HyperLevel {
     };
 
 public:
-    ~RandomHyperLevel() override = default;
+    ~SimplePerturbHyperLevel() override = default;
 };
-#endif //PARALLELLBFGS_RANDOMHYPERLEVEL_CUH
+
+#endif //PARALLELLBFGS_SIMPLEPERTURBHYPERLEVEL_CUH

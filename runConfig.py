@@ -203,7 +203,7 @@ INITIAL_POP_BOUNDING_BOX=20*ANCHOR_BOUNDING_BOX
 #                             quit()
 
 
-def hybridDE(popsize,DEGen,totalIterations,iterations,nodecount,maxDist,box,problemPath,snlpName,anchorName,solver="OPTIMIZER_MIN_DE"):
+def hybridDE(popsize,iterations,nodecount,maxDist,box,problemPath,snlpName,anchorName,solver="OPTIMIZER_MIN_DE"):
     # generator=generate.Generate2DStructuredProblem1(nodecount=nodecount, 
     #                                                 outPath="./SNLP2D/problems/gridtest",
     #                                                 problemName="spiral.snlp",                     
@@ -219,7 +219,7 @@ def hybridDE(popsize,DEGen,totalIterations,iterations,nodecount,maxDist,box,prob
     populationGenerator.generate()
     problemSize=generator.generateSNLPProblem(maxDist)
     anchorSize=generator.generateSNLPProblemAnchors(box)
-    diffEvolutionOptions=f"-DPOPULATION_SIZE={popsize} -DDE_ITERATION_COUNT={DEGen} -D{solver}"
+    diffEvolutionOptions=f"-DPOPULATION_SIZE={popsize} -D{solver}"
     iterationOptions=f"-DITERATION_COUNT={iterations}"
     metricOptions=f"-DGLOBAL_SHARED_MEM {iterationOptions} {diffEvolutionOptions}"              
     currentflags=f" {metricOptions} -DPRINT"
@@ -229,9 +229,7 @@ def hybridDE(popsize,DEGen,totalIterations,iterations,nodecount,maxDist,box,prob
                                             "nodecount":nodecount,
                                             "edges":problemSize,
                                             "anchors":anchorSize,
-                                            "totaliterations":totalIterations,
                                             "population":popsize,
-                                            "deIteration":DEGen,
                                             "distFraction":maxDist/box,
                                             "testcase":1}
     runSNLP2D(generator.outPath,

@@ -37,9 +37,8 @@ protected:
         });
     }
 
-    std::unordered_map<std::string,OperatorParameters*> createDefaultOptimizerParameters() {
-        auto chainParameters=std::unordered_map<std::string,OperatorParameters*>();
-        // Optimizer Chain simplex
+    void setDefaultOptimizerChainSimplex(std::unordered_map<std::string,OperatorParameters*>&chainParameters){
+// Optimizer Chain simplex
         chainParameters["OptimizerChainInitializerSimplex"]=new SimplexParameters(
                 {
                         {std::string("perturbator"),BoundedParameter(1.0,0,1)},
@@ -59,7 +58,78 @@ protected:
                 {
                         {std::string("perturbator"),BoundedParameter(1.0,0,1)}
                 });
+    }
+    void setLocalSearchOptimizerChainSimplex(std::unordered_map<std::string,OperatorParameters*>&chainParameters){
+// Optimizer Chain simplex
+        chainParameters["OptimizerChainInitializerSimplex"]=new SimplexParameters(
+                {
+                        {std::string("perturbator"),BoundedParameter(0.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(1.0,0,1)}
+                });
+        chainParameters["OptimizerChainPerturbatorSimplex"]=new SimplexParameters(
+                {
+                        {std::string("selector"),BoundedParameter(0.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(1.0,0,1)}
+                });
+        chainParameters["OptimizerChainRefinerSimplex"]=new SimplexParameters(
+                {
+                        {std::string("selector"),BoundedParameter(0.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(1.0,0,1)}
+                });
+        chainParameters["OptimizerChainSelectorSimplex"]=new SimplexParameters(
+                {
+                        {std::string("perturbator"),BoundedParameter(1.0,0,1)}
+                });
+    }
 
+    void setPerturbOptimizerChainSimplex(std::unordered_map<std::string,OperatorParameters*>&chainParameters){
+// Optimizer Chain simplex
+        chainParameters["OptimizerChainInitializerSimplex"]=new SimplexParameters(
+                {
+                        {std::string("perturbator"),BoundedParameter(1.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(0.0,0,1)}
+                });
+        chainParameters["OptimizerChainPerturbatorSimplex"]=new SimplexParameters(
+                {
+                        {std::string("selector"),BoundedParameter(1.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(0.0,0,1)}
+                });
+        chainParameters["OptimizerChainRefinerSimplex"]=new SimplexParameters(
+                {
+                        {std::string("selector"),BoundedParameter(1.0,0,1)},
+                        {std::string("refiner"),BoundedParameter(0.0,0,1)}
+                });
+        chainParameters["OptimizerChainSelectorSimplex"]=new SimplexParameters(
+                {
+                        {std::string("perturbator"),BoundedParameter(1.0,0,1)}
+                });
+    }
+
+    std::unordered_map<std::string,OperatorParameters*> createDefaultOptimizerParameters(int totalBaseLevelEvaluations) {
+        auto chainParameters=std::unordered_map<std::string,OperatorParameters*>();
+        setDefaultOptimizerChainSimplex(chainParameters);
+        setDefaultOperatorChainSimplex(chainParameters);
+        setDefaultOperatorParameters(chainParameters,totalBaseLevelEvaluations);
+        return chainParameters;
+    }
+
+    std::unordered_map<std::string,OperatorParameters*> createSimpleLocalSearchOptimizerParameters(int totalBaseLevelEvaluations) {
+        auto chainParameters=std::unordered_map<std::string,OperatorParameters*>();
+        setLocalSearchOptimizerChainSimplex(chainParameters);
+        setDefaultOperatorChainSimplex(chainParameters);
+        setDefaultOperatorParameters(chainParameters,totalBaseLevelEvaluations);
+        return chainParameters;
+    }
+
+    std::unordered_map<std::string,OperatorParameters*> createSimplePerturbOptimizerParameters(int totalBaseLevelEvaluations) {
+        auto chainParameters=std::unordered_map<std::string,OperatorParameters*>();
+        setPerturbOptimizerChainSimplex(chainParameters);
+        setDefaultOperatorChainSimplex(chainParameters);
+        setDefaultOperatorParameters(chainParameters,totalBaseLevelEvaluations);
+        return chainParameters;
+    }
+
+    void setDefaultOperatorChainSimplex( std::unordered_map<std::string,OperatorParameters*>&chainParameters) {
         // Operator Chain simplex
         chainParameters["PerturbatorInitializerSimplex"]=new SimplexParameters(
                 {
@@ -100,6 +170,8 @@ protected:
                 {
                         {std::string("best"),BoundedParameter(1.0,0,1)}
                 });
+    }
+    void setDefaultOperatorParameters(std::unordered_map<std::string,OperatorParameters*>&chainParameters,int totalBaseLevelEvaluations){
 
         // Operator parameters
         // Perturbator parameters
@@ -120,14 +192,14 @@ protected:
         // Refiner parameters
         std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
         gdParams["GD_ALPHA"]=BoundedParameter(ALPHA, 0.5, 5);
-        gdParams["GD_FEVALS"]=BoundedParameter(ITERATION_COUNT, 1,ITERATION_COUNT);
+        gdParams["GD_FEVALS"]=BoundedParameter(totalBaseLevelEvaluations/10.0, 1,totalBaseLevelEvaluations);
 //        gdParams["GD_ALPHA"]=BoundedParameter(ALPHA, 0.5, 100);
 //        gdParams["GD_FEVALS"]=BoundedParameter(ITERATION_COUNT, 0, optimizerContext->to
         chainParameters["RefinerGDOperatorParams"]=new OperatorParameters(gdParams);
 
         std::unordered_map<std::string,BoundedParameter> lbfgsParams=std::unordered_map<std::string,BoundedParameter>();
         lbfgsParams["LBFGS_ALPHA"]=BoundedParameter(ALPHA, 0.5, 5);
-        lbfgsParams["LBFGS_FEVALS"]=BoundedParameter(ITERATION_COUNT, 1,ITERATION_COUNT);
+        lbfgsParams["LBFGS_FEVALS"]=BoundedParameter(totalBaseLevelEvaluations/10.0, 1,totalBaseLevelEvaluations);
         lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 0.1);
         lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.8, 1.0);
 
@@ -136,9 +208,7 @@ protected:
 //        lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 1.0);
 //        lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
         chainParameters["RefinerLBFGSOperatorParams"]=new OperatorParameters(lbfgsParams);
-        return chainParameters;
     }
-
 public:
 
     virtual double hyperOptimize(int totalEvaluations)=0;
