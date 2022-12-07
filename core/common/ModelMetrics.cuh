@@ -4,7 +4,7 @@
 
 #ifndef PARALLELLBFGS_MODELMETRICS_CUH
 #define PARALLELLBFGS_MODELMETRICS_CUH
-
+#include "model/Model.cuh"
 
 class ModelMetrics {
 public:
@@ -48,6 +48,7 @@ public:
         }
         printf("%f\n", solution[model->modelSize * (min + 1) - 1]);
         printf("\nfinal f: %.10f", finalFs[min]);
+        printf("\nf: %.10f\n", finalFs[min]);
     }
 
     void persistBestModelTo(Model*model, std::string filename) {

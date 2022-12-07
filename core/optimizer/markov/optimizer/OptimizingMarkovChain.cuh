@@ -17,6 +17,7 @@ class OptimizingMarkovChain: public MarkovChain {
     CUDAMemoryModel* cudaMemoryModel;
     Metrics* metrics;
     std::unordered_map<std::string,OperatorParameters*>* chainParameters;
+    OperatorMarkovNode* bestSelector;
 
     void resetChainBasedOnParameters(OptimizerContext* optimizerContext) {
         deleteCurrentNodes();
@@ -84,6 +85,7 @@ class OptimizingMarkovChain: public MarkovChain {
         auto* selectorChain=new std::unordered_map<std::string,MarkovNode*>();
         (*selectorChain)["initializer"]=new OperatorMarkovNode(new Initializer(), std::string("initializer").c_str());
         (*selectorChain)["best"]=new OperatorMarkovNode(&optimizerContext->bestSelector, std::string("best").c_str());
+        bestSelector=(OperatorMarkovNode*)(*selectorChain)["best"];
         (*selectorChain)["initializer"]->addNext((*selectorChain)["best"], (*chainParameters)["SelectorInitializerSimplex"]->values["best"].value);
         (*selectorChain)["best"]->addNext((*selectorChain)["best"], (*chainParameters)["SelectorBestSimplex"]->values["best"].value);
         return new OperatorMarkovChain(*selectorChain, metrics);
@@ -112,6 +114,10 @@ public:
 //        std::cout<<"operating: "<<currentNode->name<<std::endl;
         ((OptimizingMarkovNode*)currentNode)->operate(cudaMemoryModel);
         metrics->modelPerformanceMetrics.fEvaluations+=((OptimizingMarkovNode*)currentNode)->fEvals();
+    }
+
+    void selectBest(){
+        bestSelector->operate(cudaMemoryModel);
     }
 
     void printParameters() {

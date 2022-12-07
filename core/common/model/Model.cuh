@@ -6,6 +6,7 @@
 #define PARALLELLBFGS_MODEL_CUH
 
 #include <fstream>
+#include <assert.h>     /* assert */
 
 class Residual {
 public:
@@ -58,16 +59,15 @@ public:
     Residuals residuals;
 
     Model()=default;
-    Model(int populationSize) {
-        modelSize=X_DIM;
+    Model(int populationSize,int modelSize) {
+        this->modelSize=modelSize;
         modelPopulationSize=populationSize*modelSize;
         this->populationSize=populationSize;
     }
 
     virtual ~Model(){
-
     }
-    virtual void loadModel(void* dev_x,void* dev_constantData,Metrics &metrics)=0;
+    virtual void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData,Metrics &metrics)=0;
 
     void readPopulation(double *x, unsigned xSize, std::string filename) {
         std::fstream input;

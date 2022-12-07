@@ -6,7 +6,8 @@
 #define PARALLELLBFGS_BASELEVEL_CUH
 #include <iomanip>
 #include <algorithm>
-
+#include "../../problem/SNLP/SNLPModel.cuh"
+#include "../../problem/Rosenbrock/RosenbrockModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -17,7 +18,6 @@
 #include "../../common/OptimizerContext.cuh"
 #include "../../common/model/BoundedParameter.cuh"
 #include "../../optimizer/markov/optimizer/OptimizingMarkovChain.cuh"
-#include "../../problem/SNLP/SNLPModel.cuh"
 #include <curand.h>
 #include <curand_kernel.h>
 #include <random>
@@ -27,14 +27,21 @@
 class BaseLevel {
     OptimizerContext optimizerContext=OptimizerContext();
     Metrics metrics;
+    Metrics globalMetrics;
 public:
     void init() {
+#ifdef PROBLEM_SNLP
         optimizerContext.model =new  SNLPModel(optimizerContext.differentialEvolutionContext);
+#endif
+#ifdef PROBLEM_ROSENBROCK
+        optimizerContext.model =new  RosenbrockModel(optimizerContext.differentialEvolutionContext);
+#endif
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
         optimizerContext.lbfgsLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
         optimizerContext.gdLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
         metrics=*(new Metrics(*optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig));
+        globalMetrics=*(new Metrics(*optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig));
     }
 
     ~BaseLevel(){
@@ -42,7 +49,7 @@ public:
     }
 
     void loadInitialModel(){
-        optimizerContext.model->loadModel(optimizerContext.cudaMemoryModel.dev_x, optimizerContext.cudaMemoryModel.dev_data,
+        optimizerContext.model->loadModel(optimizerContext.cudaMemoryModel.dev_x,optimizerContext.cudaMemoryModel.dev_xDE, optimizerContext.cudaMemoryModel.dev_data,
                                          metrics);
     }
 
@@ -64,13 +71,21 @@ public:
         markovChain.setParameters(optimizerParameters,&optimizerContext);
         while(metrics.modelPerformanceMetrics.fEvaluations < totalFunctionEvaluations) {
             markovChain.operate();
+            cudaDeviceSynchronize();
             markovChain.hopToNext();
         }
+        markovChain.selectBest();
+        cudaDeviceSynchronize();
         metrics.getCudaEventMetrics().recordStopCompute();
         optimizerContext.cudaMemoryModel.copyModelsFromDevice(metrics.modelPerformanceMetrics);
-        metrics.printFinalMetrics();
+//        metrics.printFinalMetrics();
+//        printCurrentBestModel();
         cudaDeviceSynchronize();
         return metrics.modelPerformanceMetrics.bestModelCost();
+    }
+
+    void updateCurrentBestGlobalModel(){
+        optimizerContext.cudaMemoryModel.copyModelsFromDevice(globalMetrics.modelPerformanceMetrics);
     }
 
     void persistCurrentBestModel() {
@@ -79,6 +94,10 @@ public:
 
     void printCurrentBestModel() {
         metrics.modelPerformanceMetrics.printBestModel(optimizerContext.model);
+    }
+
+    void printCurrentBestGlobalModel() {
+        globalMetrics.modelPerformanceMetrics.printBestModel(optimizerContext.model);
     }
 
 

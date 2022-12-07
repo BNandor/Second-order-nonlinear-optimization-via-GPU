@@ -1,6 +1,6 @@
 import runConfig
 popsize=10
-iterations=100000
+iterations=10000
 nodecount=27
 maxDist=400
 box=100

@@ -65,7 +65,7 @@ public:
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
                  cudaMemoryModel->cudaConfig);
-        cudaMemoryModel->swapModels();
+//        cudaMemoryModel->swapModels();
     }
 
     void
@@ -116,7 +116,7 @@ public:
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
                  cudaMemoryModel->cudaConfig);
-        cudaMemoryModel->swapModels();
+//        cudaMemoryModel->swapModels();
     }
 
     void optimize(double *globalX, double *globalData,

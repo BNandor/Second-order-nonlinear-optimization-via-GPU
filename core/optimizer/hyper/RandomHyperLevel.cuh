@@ -12,6 +12,7 @@ class RandomHyperLevel: public HyperLevel {
     double hyperOptimize(int totalEvaluations) override {
         int trials=1;
         int totalBaseLevelEvaluations=totalEvaluations/trials;
+//        int totalBaseLevelEvaluations=totalEvaluations/100;
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);
         std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
@@ -29,11 +30,12 @@ class RandomHyperLevel: public HyperLevel {
             if(currentF < min) {
                 min=currentF;
                 cloneParameters(currentParameters,bestParameters);
+                baseLevel.updateCurrentBestGlobalModel();
             }
             setRandomUniform(currentParameters);
         }
         printParameters(bestParameters);
-        printf("\nfinal f: %.10f", min);
+        baseLevel.printCurrentBestGlobalModel();
         return 0;
     };
 

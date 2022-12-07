@@ -41,3 +41,5 @@ int main(int argc, char** argv) {
 // d) adaptiv approach:
 // refine: 1%
 // pertub: 100%
+
+// https://github.com/jcrvz/customhys TODO check bench functions and compare, look out for iteration vs evaluation

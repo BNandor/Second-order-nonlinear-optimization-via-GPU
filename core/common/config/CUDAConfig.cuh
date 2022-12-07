@@ -4,6 +4,7 @@
 
 #ifndef PARALLELLBFGS_CUDACONFIG_CUH
 #define PARALLELLBFGS_CUDACONFIG_CUH
+#include "../Constants.cuh"
 
 struct CUDAConfig {
     int threadsPerBlock=THREADS_PER_BLOCK;

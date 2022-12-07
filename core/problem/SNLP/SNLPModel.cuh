@@ -8,12 +8,14 @@
 #include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
 
+#ifdef PROBLEM_SNLP
+
 class SNLPModel: public Model {
     Residual SNLPResidual[2]{};
 public:
 
     SNLPModel():Model(){};
-    explicit SNLPModel(Perturbator& perturbator) : Model(perturbator.populationSize) {
+    explicit SNLPModel(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
         residuals.residualCount=2;
         SNLPResidual[0].constantsCount=RESIDUAL_CONSTANTS_COUNT_1;
         SNLPResidual[0].constantsDim=RESIDUAL_CONSTANTS_DIM_1;
@@ -24,7 +26,7 @@ public:
         residuals.residual= reinterpret_cast<Residual *>(&SNLPResidual[0]);
     }
 
-    void loadModel(void* dev_x,void* dev_constantData, Metrics &metrics ) override {
+    void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData, Metrics &metrics ) override {
         const int constantDataSize=residuals.residualDataSize();
         double x[modelPopulationSize]={};
         double data[constantDataSize]={};
@@ -36,6 +38,7 @@ public:
 
         metrics.getCudaEventMetrics().recordStartCopy();
         cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_xDE, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_constantData, &data, constantDataSize * sizeof(double), cudaMemcpyHostToDevice);
         metrics.getCudaEventMetrics().recordStopCopy();
     }
@@ -75,7 +78,7 @@ public:
     }
 };
 
-#ifdef PROBLEM_SNLP
+
 
 #define DEFINE_RESIDUAL_FUNCTIONS() \
         SNLP f1 = SNLP(); \

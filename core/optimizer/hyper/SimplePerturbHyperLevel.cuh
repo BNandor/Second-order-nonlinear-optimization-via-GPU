@@ -30,10 +30,11 @@ class SimplePerturbHyperLevel: public HyperLevel {
             if(currentF < min) {
                 min=currentF;
                 cloneParameters(currentParameters,bestParameters);
+                baseLevel.updateCurrentBestGlobalModel();
             }
         }
         printParameters(bestParameters);
-        printf("\nfinal f: %.10f", min);
+        baseLevel.printCurrentBestGlobalModel();
         return 0;
     };
 
