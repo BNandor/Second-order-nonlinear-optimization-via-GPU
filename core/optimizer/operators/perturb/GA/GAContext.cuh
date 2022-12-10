@@ -65,9 +65,9 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
             double minA=INT_MAX;
             double minB=INT_MAX;
             while(parentA == -1) {
-#ifdef SAFE
-                printf("Selecting parentA for %d\n",blockIdx.x);
-#endif
+//#ifdef SAFE
+//                printf("Selecting parentA for %d\n",blockIdx.x);
+//#endif
                 for (int i = 0; i < gridDim.x; i++) {
                     if (curand_uniform(curandState + idx) < parentPoolRatio && blockIdx.x != i) {
                         if (parentA == -1 || currentCosts[i] < minA) {
@@ -78,9 +78,9 @@ void geneticAlgorithmStep(double *oldX, double *newX,Model *model,
                 }
             }
             while(parentB == -1) {
-#ifdef SAFE
-                printf("Selecting parentB for %d\n",blockIdx.x);
-#endif
+//#ifdef SAFE
+//                printf("Selecting parentB for %d\n",blockIdx.x);
+//#endif
                 for (int i = 0; i < gridDim.x; i++) {
                     if (curand_uniform(curandState + idx) < parentPoolRatio && blockIdx.x != i && i != parentA) {
                         if (parentB == -1 || currentCosts[i] < minB) {

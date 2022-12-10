@@ -11,6 +11,7 @@
 #include "../../problem/StyblinskiTang/StyblinskiTangModel.cuh"
 #include "../../problem/Trid/TridModel.cuh"
 #include "../../problem/Rastrigin/RastriginModel.cuh"
+#include "../../problem/Schwefel/223/Schwefel223Model.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -47,6 +48,9 @@ public:
 #endif
 #ifdef PROBLEM_RASTRIGIN
         optimizerContext.model =new  RastriginModel(optimizerContext.differentialEvolutionContext);
+#endif
+#ifdef PROBLEM_SCHWEFEL223
+        optimizerContext.model =new  Schwefel223Model(optimizerContext.differentialEvolutionContext);
 #endif
 
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
@@ -98,6 +102,7 @@ public:
     }
 
     void updateCurrentBestGlobalModel(){
+        cudaDeviceSynchronize();
         optimizerContext.cudaMemoryModel.copyModelsFromDevice(globalMetrics.modelPerformanceMetrics);
     }
 

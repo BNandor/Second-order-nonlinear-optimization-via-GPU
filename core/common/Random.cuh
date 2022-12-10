@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_RANDOM_CUH
 #define PARALLELLBFGS_RANDOM_CUH
 
-
+#include <assert.h>
 #include <curand_kernel.h>
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -41,7 +41,6 @@ public:
         assert(threadsPerBlock>0);
         assert(blocksPerGrid>0);
         assert(size>0);
-        assert(dev_curandState==0);
         assert(size<=(threadsPerBlock * blocksPerGrid));
 #endif
         if(dev_curandState!= nullptr){

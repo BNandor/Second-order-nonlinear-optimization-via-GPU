@@ -13,7 +13,7 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
 
     // TODO free parameters
     double hyperOptimize(int totalEvaluations) override {
-        int trials=100;
+        int trials=10;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::mt19937 generator=std::mt19937(std::random_device()());
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);
@@ -27,15 +27,18 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         baseLevel.loadInitialModel();
         double currentF=baseLevel.optimize(&currentParameters,totalBaseLevelEvaluations);
         double min=currentF;
-        cloneParameters(currentParameters,bestParameters);
         baseLevel.updateCurrentBestGlobalModel();
+        cloneParameters(currentParameters,bestParameters);
+
 
         double temp0=100;
         double temp=temp0;
         double alpha=0.5;
         int acceptedWorse=0;
         for(int i=0; i < trials-1 || temp < 0; i++) {
+
             printf("f: %f trial %u \n",currentF, i);
+            baseLevel.printCurrentBestGlobalModel();
 //            printParameters(currentParameters);
             cloneParameters(currentParameters,currentMutatedByEpsilonParameters);
             mutateByEpsilon(currentMutatedByEpsilonParameters);

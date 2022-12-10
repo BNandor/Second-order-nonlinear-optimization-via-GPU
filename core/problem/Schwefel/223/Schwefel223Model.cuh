@@ -2,27 +2,28 @@
 // Created by spaceman on 2022. 12. 10..
 //
 
-#ifndef PARALLELLBFGS_RASTRIGINMODEL_CUH
-#define PARALLELLBFGS_RASTRIGINMODEL_CUH
+#ifndef PARALLELLBFGS_SCHWEFEL223MODEL_CUH
+#define PARALLELLBFGS_SCHWEFEL223MODEL_CUH
 
-#include "../../optimizer/operators/perturb/Perturbator.h"
-#include "../../common/Metrics.cuh"
-#include "Rastrigin.cuh"
+
+#include "../../../optimizer/operators/perturb/Perturbator.h"
+#include "../../../common/Metrics.cuh"
+#include "Schwefel223.cuh"
 #include <math.h>
 
-#ifdef PROBLEM_RASTRIGIN
-class RastriginModel: public Model {
+#ifdef PROBLEM_SCHWEFEL223
+class Schwefel223Model: public Model {
     std::mt19937 generator=std::mt19937(std::random_device()());
-    Residual RastriginResidual[1]{};
+    Residual SchwefelResidual[1]{};
 public:
 
-    RastriginModel():Model(){};
-    explicit RastriginModel(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
+    Schwefel223Model():Model(){};
+    explicit Schwefel223Model(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
         residuals.residualCount=1;
-        RastriginResidual[0].constantsCount=X_DIM;
-        RastriginResidual[0].constantsDim=3;
-        RastriginResidual[0].parametersDim=1;
-        residuals.residual= reinterpret_cast<Residual *>(&RastriginResidual[0]);
+        SchwefelResidual[0].constantsCount=X_DIM;
+        SchwefelResidual[0].constantsDim=1;
+        SchwefelResidual[0].parametersDim=1;
+        residuals.residual= reinterpret_cast<Residual *>(&SchwefelResidual[0]);
     }
 
     void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData, Metrics &metrics ) override {
@@ -31,13 +32,11 @@ public:
         double data[constantDataSize]={};
 
         for(int i=0;i<modelPopulationSize;i++) {
-            x[i]=std::uniform_real_distribution<double>(-5.12, 5.12)(generator);
+            x[i]=std::uniform_real_distribution<double>(-100, 100)(generator);
         }
-        //Set Rastrigin residual data
-        for(int i=0; i < RastriginResidual[0].constantsCount; i++) {
-            data[3*i]=i;
-            data[3*i+1]=10.0;
-            data[3*i+2]=2*M_PI;
+        //Set Schwefel223 residual data
+        for(int i=0; i < SchwefelResidual[0].constantsCount; i++) {
+            data[i]=i;
         }
 
 //        std::cout<<"X data:";
@@ -63,14 +62,14 @@ public:
 
 
 #define DEFINE_RESIDUAL_FUNCTIONS() \
-        Rastrigin f1 = Rastrigin();
+        Schwefel223 f1 = Schwefel223();
 
 #define INJECT_RESIDUAL_FUNCTIONS() \
         ((Model*)localContext.modelP)->residuals.residual[0].residualProblem=&f1; \
         ((Model*)localContext.modelP)->residuals.residual[0].constants = globalData;
 
 #define CAST_RESIDUAL_FUNCTIONS() \
-        Rastrigin *f1 = ((Rastrigin *) model->residuals.residual[0].residualProblem);
+        Schwefel223 *f1 = ((Schwefel223 *) model->residuals.residual[0].residualProblem);
 
 #define COMPUTE_RESIDUALS() \
         for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[0].constantsCount; spanningTID += blockDim.x) { \
@@ -87,4 +86,5 @@ public:
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value; \
         }
 #endif
-#endif //PARALLELLBFGS_RASTRIGINMODEL_CUH
+
+#endif //PARALLELLBFGS_SCHWEFEL223MODEL_CUH
