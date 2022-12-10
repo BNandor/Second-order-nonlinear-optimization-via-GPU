@@ -13,7 +13,7 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
 
     // TODO free parameters
     double hyperOptimize(int totalEvaluations) override {
-        int trials=20;
+        int trials=100;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::mt19937 generator=std::mt19937(std::random_device()());
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);

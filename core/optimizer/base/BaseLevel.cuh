@@ -8,6 +8,9 @@
 #include <algorithm>
 #include "../../problem/SNLP/SNLPModel.cuh"
 #include "../../problem/Rosenbrock/RosenbrockModel.cuh"
+#include "../../problem/StyblinskiTang/StyblinskiTangModel.cuh"
+#include "../../problem/Trid/TridModel.cuh"
+#include "../../problem/Rastrigin/RastriginModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -36,6 +39,16 @@ public:
 #ifdef PROBLEM_ROSENBROCK
         optimizerContext.model =new  RosenbrockModel(optimizerContext.differentialEvolutionContext);
 #endif
+#ifdef PROBLEM_STYBLINSKITANG
+        optimizerContext.model =new  StyblinskiTangModel(optimizerContext.differentialEvolutionContext);
+#endif
+#ifdef PROBLEM_TRID
+        optimizerContext.model =new  TridModel(optimizerContext.differentialEvolutionContext);
+#endif
+#ifdef PROBLEM_RASTRIGIN
+        optimizerContext.model =new  RastriginModel(optimizerContext.differentialEvolutionContext);
+#endif
+
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
         optimizerContext.lbfgsLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());

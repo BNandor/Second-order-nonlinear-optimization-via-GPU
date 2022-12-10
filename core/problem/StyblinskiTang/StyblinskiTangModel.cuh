@@ -1,29 +1,28 @@
 //
-// Created by spaceman on 2022. 12. 03..
+// Created by spaceman on 2022. 12. 07..
 //
 
-#ifndef PARALLELLBFGS_ROSENBROCKMODEL_CUH
-#define PARALLELLBFGS_ROSENBROCKMODEL_CUH
-
+#ifndef PARALLELLBFGS_STYBLINSKITANGMODEL_CUH
+#define PARALLELLBFGS_STYBLINSKITANGMODEL_CUH
 
 #include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
-#include "Rosenbrock.cuh"
+#include "StyblinskiTang.cuh"
 #include <random>
 
-#ifdef PROBLEM_ROSENBROCK
-class RosenbrockModel: public Model {
+#ifdef PROBLEM_STYBLINSKITANG
+class StyblinskiTangModel: public Model {
     std::mt19937 generator=std::mt19937(std::random_device()());
-    Residual RosenbrockResidual[1]{};
+    Residual StyblinskiTangResidual[1]{};
 public:
 
-    RosenbrockModel():Model(){};
-    explicit RosenbrockModel(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
+    StyblinskiTangModel():Model(){};
+    explicit StyblinskiTangModel(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
         residuals.residualCount=1;
-        RosenbrockResidual[0].constantsCount= X_DIM - 1;
-        RosenbrockResidual[0].constantsDim=4;
-        RosenbrockResidual[0].parametersDim=2;
-        residuals.residual= reinterpret_cast<Residual *>(&RosenbrockResidual[0]);
+        StyblinskiTangResidual[0].constantsCount= X_DIM;
+        StyblinskiTangResidual[0].constantsDim=4;
+        StyblinskiTangResidual[0].parametersDim=1;
+        residuals.residual= reinterpret_cast<Residual *>(&StyblinskiTangResidual[0]);
     }
 
     void loadModel(void* dev_x, void* dev_xDE, void* dev_constantData, Metrics &metrics ) override {
@@ -34,11 +33,11 @@ public:
         for(int i=0;i<modelPopulationSize;i++) {
             x[i]=std::uniform_real_distribution<double>(-100, 100)(generator);
         }
-        for(int i=0; i < RosenbrockResidual[0].constantsCount; i++) {
+        for(int i=0; i < StyblinskiTangResidual[0].constantsCount; i++) {
             data[4*i]=i;
-            data[4*i+1]=i+1;
-            data[4*i+2]=1.0;
-            data[4*i+3]=100.0;
+            data[4*i+1]=16.0;
+            data[4*i+2]=5.0;
+            data[4*i+3]=0.5;
         }
         metrics.getCudaEventMetrics().recordStartCopy();
         cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
@@ -49,14 +48,14 @@ public:
 
 };
 #define DEFINE_RESIDUAL_FUNCTIONS() \
-        Rosenbrock f1 = Rosenbrock(); \
+        StyblinskiTang f1 = StyblinskiTang(); \
 
 #define INJECT_RESIDUAL_FUNCTIONS() \
         ((Model*)localContext.modelP)->residuals.residual[0].residualProblem=&f1; \
         ((Model*)localContext.modelP)->residuals.residual[0].constants = globalData; \
 
 #define CAST_RESIDUAL_FUNCTIONS() \
-        Rosenbrock *f1 = ((Rosenbrock *) model->residuals.residual[0].residualProblem); \
+        StyblinskiTang *f1 = ((StyblinskiTang *) model->residuals.residual[0].residualProblem); \
 
 #define COMPUTE_RESIDUALS() \
         for (unsigned spanningTID = threadIdx.x; spanningTID < model->residuals.residual[0].constantsCount; spanningTID += blockDim.x) { \
@@ -75,4 +74,4 @@ public:
 
 #endif
 
-#endif //PARALLELLBFGS_ROSENBROCKMODEL_CUH
+#endif //PARALLELLBFGS_STYBLINSKITANGMODEL_CUH
