@@ -209,6 +209,12 @@ protected:
 //        lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.0, 1.0);
         chainParameters["RefinerLBFGSOperatorParams"]=new OperatorParameters(lbfgsParams);
     }
+
+    void freeOperatorParamMap(std::unordered_map<std::string,OperatorParameters*> &parameters){
+        std::for_each(parameters.begin(),parameters.end(),[](auto keyParameter){
+            delete std::get<1>(keyParameter);
+        });
+    }
 public:
 
     virtual double hyperOptimize(int totalEvaluations)=0;

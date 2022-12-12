@@ -70,6 +70,10 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         printParameters(bestParameters);
         baseLevel.printCurrentBestGlobalModel();
         std::cout<<"Accepted worse rate"<<(double)acceptedWorse/(double)trials<<std::endl;
+        freeOperatorParamMap(defaultParameters);
+        freeOperatorParamMap(currentParameters);
+        freeOperatorParamMap(bestParameters);
+        freeOperatorParamMap(currentMutatedByEpsilonParameters);
         return 0;
     };
 

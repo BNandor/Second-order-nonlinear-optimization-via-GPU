@@ -8,6 +8,7 @@
 
 #include "HyperLevel.cuh"
 #include <limits>
+#include <algorithm>
 
 class SimplePerturbHyperLevel: public HyperLevel {
 
@@ -32,9 +33,13 @@ class SimplePerturbHyperLevel: public HyperLevel {
                 cloneParameters(currentParameters,bestParameters);
                 baseLevel.updateCurrentBestGlobalModel();
             }
+            baseLevel.printCurrentBestGlobalModel();
         }
         printParameters(bestParameters);
         baseLevel.printCurrentBestGlobalModel();
+        freeOperatorParamMap(defaultParameters);
+        freeOperatorParamMap(currentParameters);
+        freeOperatorParamMap(bestParameters);
         return 0;
     };
 

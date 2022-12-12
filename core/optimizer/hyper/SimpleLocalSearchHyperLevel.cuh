@@ -34,6 +34,9 @@ class SimpleLocalSearchHyperLevel: public HyperLevel {
         }
         printParameters(bestParameters);
         baseLevel.printCurrentBestGlobalModel();
+        freeOperatorParamMap(defaultParameters);
+        freeOperatorParamMap(currentParameters);
+        freeOperatorParamMap(bestParameters);
         return 0;
     };
 

@@ -12,6 +12,7 @@
 #include "../../problem/Trid/TridModel.cuh"
 #include "../../problem/Rastrigin/RastriginModel.cuh"
 #include "../../problem/Schwefel/223/Schwefel223Model.cuh"
+#include "../../problem/Qing/QingModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -52,7 +53,9 @@ public:
 #ifdef PROBLEM_SCHWEFEL223
         optimizerContext.model =new  Schwefel223Model(optimizerContext.differentialEvolutionContext);
 #endif
-
+#ifdef PROBLEM_QING
+        optimizerContext.model =new  QingModel(optimizerContext.differentialEvolutionContext);
+#endif
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
         optimizerContext.lbfgsLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
@@ -82,7 +85,11 @@ public:
                                                             optimizerContext.cudaMemoryModel.dev_x1,
                                                             optimizerContext.cudaMemoryModel.dev_data,
                                                             optimizerContext.cudaMemoryModel.dev_F1);
-        metrics.modelPerformanceMetrics.fEvaluations=1;
+        optimizerContext.getCurrentPerturbator()->evaluateF(optimizerContext.cudaMemoryModel.cudaConfig,optimizerContext.cudaMemoryModel.dev_Model,
+                                                            optimizerContext.cudaMemoryModel.dev_x2,
+                                                            optimizerContext.cudaMemoryModel.dev_data,
+                                                            optimizerContext.cudaMemoryModel.dev_F2);
+        metrics.modelPerformanceMetrics.fEvaluations=4;
         metrics.modelPerformanceMetrics.markovIterations=0;
         OptimizingMarkovChain markovChain=OptimizingMarkovChain(&optimizerContext, &metrics);
         markovChain.setParameters(optimizerParameters,&optimizerContext);
@@ -91,6 +98,15 @@ public:
             cudaDeviceSynchronize();
             markovChain.hopToNext();
         }
+
+        optimizerContext.getCurrentPerturbator()->evaluateF(optimizerContext.cudaMemoryModel.cudaConfig,optimizerContext.cudaMemoryModel.dev_Model,
+                                                            optimizerContext.cudaMemoryModel.dev_x2,
+                                                            optimizerContext.cudaMemoryModel.dev_data,
+                                                            optimizerContext.cudaMemoryModel.dev_F2);
+        optimizerContext.getCurrentPerturbator()->evaluateF(optimizerContext.cudaMemoryModel.cudaConfig,optimizerContext.cudaMemoryModel.dev_Model,
+                                                            optimizerContext.cudaMemoryModel.dev_x1,
+                                                            optimizerContext.cudaMemoryModel.dev_data,
+                                                            optimizerContext.cudaMemoryModel.dev_F1);
         markovChain.selectBest();
         cudaDeviceSynchronize();
         metrics.getCudaEventMetrics().recordStopCompute();

@@ -27,15 +27,19 @@ public:
 
     int bestModelIndex(){
         int min = 0;
+        std::cout<<"model values:"<<finalFs[0]<<" ";
         for (int ff = 1; ff < populationSize; ff++) {
+            std::cout<<finalFs[ff]<<" ";
             if (finalFs[min] > finalFs[ff]) {
                 min = ff;
             }
         }
+        std::cout<<"\nminIndex="<<min<<std::endl;
         return min;
     }
 
     double bestModelCost(){
+
         return finalFs[bestModelIndex()];
     }
 
