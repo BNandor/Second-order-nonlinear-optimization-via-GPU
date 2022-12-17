@@ -34,12 +34,12 @@ public:
         assert(residualCount>0);
         assert(residual!=0);
 #endif
-        printf("pointer %p\n",residual);
+//        printf("pointer %p\n",residual);
         Residual* it=residual;
         for(int i=0;i<residualCount;i++) {
             size+=(it->constantsCount)*(it->constantsDim);
-            printf("count %d\n",it->constantsCount);
-            printf("dim %d\n",it->constantsDim);
+//            printf("count %d\n",it->constantsCount);
+//            printf("dim %d\n",it->constantsDim);
             it++;
         }
 

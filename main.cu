@@ -5,8 +5,15 @@
 #include "core/optimizer/hyper/SimulatedAnnealingHyperLevel.cuh"
 #include "core/optimizer/hyper/SimpleLocalSearchHyperLevel.cuh"
 #include "core/optimizer/hyper/SimplePerturbHyperLevel.cuh"
+#include "core/common/Statistics.cuh"
+#include <vector>
 
 int main(int argc, char** argv) {
+//    Statistics statistics=Statistics();
+//    std::vector<double> a={5,1,2,0,3,4};
+//    //0,1,2,3,4,5
+//    //0,1,2,3,4,5
+//    std::cout<<statistics.IQR(a);
     int totalFunctionEvaluations=ITERATION_COUNT;
 //    HyperLevel* hyperLevel=new RandomHyperLevel();
 //    HyperLevel* hyperLevel=new SimpleLocalSearchHyperLevel();

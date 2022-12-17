@@ -114,12 +114,18 @@ public:
 //        metrics.printFinalMetrics();
 //        printCurrentBestModel();
         cudaDeviceSynchronize();
-        return metrics.modelPerformanceMetrics.bestModelCost();
+
+        double currentBestF= metrics.modelPerformanceMetrics.updateBestModelCost();
+        if(currentBestF<globalMetrics.modelPerformanceMetrics.minF){
+            updateCurrentBestGlobalModel();
+        }
+        return currentBestF;
     }
 
     void updateCurrentBestGlobalModel(){
         cudaDeviceSynchronize();
         optimizerContext.cudaMemoryModel.copyModelsFromDevice(globalMetrics.modelPerformanceMetrics);
+        globalMetrics.modelPerformanceMetrics.updateBestModelCost();
     }
 
     void persistCurrentBestModel() {
@@ -133,7 +139,5 @@ public:
     void printCurrentBestGlobalModel() {
         globalMetrics.modelPerformanceMetrics.printBestModel(optimizerContext.model);
     }
-
-
 };
 #endif //PARALLELLBFGS_BASELEVEL_CUH

@@ -35,7 +35,7 @@ public:
             return nextNodes[i];
         }
       }
-      printf("cannot get next \n");
+//      printf("cannot get next \n");
       return this;
     }
 

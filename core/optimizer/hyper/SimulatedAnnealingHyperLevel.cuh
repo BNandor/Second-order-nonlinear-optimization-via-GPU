@@ -13,7 +13,7 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
 
     // TODO free parameters
     double hyperOptimize(int totalEvaluations) override {
-        int trials=10;
+        int trials=100;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::mt19937 generator=std::mt19937(std::random_device()());
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);
@@ -25,11 +25,9 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         baseLevel.init();
 
         baseLevel.loadInitialModel();
-        double currentF=baseLevel.optimize(&currentParameters,totalBaseLevelEvaluations);
+        double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
         double min=currentF;
-        baseLevel.updateCurrentBestGlobalModel();
         cloneParameters(currentParameters,bestParameters);
-
 
         double temp0=100;
         double temp=temp0;
@@ -37,32 +35,30 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         int acceptedWorse=0;
         for(int i=0; i < trials-1 || temp < 0; i++) {
 
-            printf("f: %f trial %u \n",currentF, i);
-            baseLevel.printCurrentBestGlobalModel();
+            printf("[med+iqr]f: %f trial %u \n",currentF, i);
+//            baseLevel.printCurrentBestGlobalModel();
 //            printParameters(currentParameters);
             cloneParameters(currentParameters,currentMutatedByEpsilonParameters);
             mutateByEpsilon(currentMutatedByEpsilonParameters);
 
-            baseLevel.loadInitialModel();
-            double currentFPrime=baseLevel.optimize(&currentMutatedByEpsilonParameters,totalBaseLevelEvaluations);
-            printf("f': %f trial %u \n",currentFPrime, i);
+            double currentFPrime=getPerformanceSampleOfSize(baseLevelSampleSize,currentMutatedByEpsilonParameters,totalBaseLevelEvaluations);
+            printf("[med+iqr]f': %f trial %u \n",currentFPrime, i);
 //            printParameters(currentMutatedByEpsilonParameters);
-
             if(currentFPrime < currentF ) {
                 cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
                 currentF=currentFPrime;
             }else{
                 double r= std::uniform_real_distribution<double>(0,1)(generator);
-                if(r<exp((currentF-currentFPrime)/temp)){
+                if(r<exp((currentF-currentFPrime)/temp)) {
                     cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
                     currentF=currentFPrime;
                     acceptedWorse++;
+                    std::cout<<"Accepted worse at "<<i<<"/"<<trials-1<<" at temp: "<<temp<<std::endl;
                 }
             }
             if(currentF < min) {
                 min=currentF;
                 cloneParameters(currentParameters,bestParameters);
-                baseLevel.updateCurrentBestGlobalModel();
             }
             temp=temp0/(1+alpha*i);
         }

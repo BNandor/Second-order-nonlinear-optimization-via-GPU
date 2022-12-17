@@ -5,11 +5,12 @@
 #ifndef PARALLELLBFGS_MODELMETRICS_CUH
 #define PARALLELLBFGS_MODELMETRICS_CUH
 #include "model/Model.cuh"
-
+#include <limits>
 class ModelMetrics {
 public:
     double *solution;
     double *finalFs;
+    double minF=std::numeric_limits<double>::max();
     int populationSize;
     int markovIterations;
     int fEvaluations;
@@ -27,20 +28,20 @@ public:
 
     int bestModelIndex(){
         int min = 0;
-        std::cout<<"model values:"<<finalFs[0]<<" ";
+//        std::cout<<"model values:"<<finalFs[0]<<" ";
         for (int ff = 1; ff < populationSize; ff++) {
-            std::cout<<finalFs[ff]<<" ";
+//            std::cout<<finalFs[ff]<<" ";
             if (finalFs[min] > finalFs[ff]) {
                 min = ff;
             }
         }
-        std::cout<<"\nminIndex="<<min<<std::endl;
+//        std::cout<<"\nminIndex="<<min<<std::endl;
         return min;
     }
 
-    double bestModelCost(){
-
-        return finalFs[bestModelIndex()];
+    double updateBestModelCost() {
+        minF=finalFs[bestModelIndex()];
+        return minF;
     }
 
     void printBestModel(Model*model) {

@@ -5,10 +5,28 @@
 #ifndef PARALLELLBFGS_HYPERLEVEL_CUH
 #define PARALLELLBFGS_HYPERLEVEL_CUH
 #include "../base/BaseLevel.cuh"
+#include "../../common/Statistics.cuh"
 
+#ifndef HYPER_LEVEL_TRIAL_SAMPLE_SIZE
+#define HYPER_LEVEL_TRIAL_SAMPLE_SIZE 30
+#endif
 class HyperLevel {
 protected:
     BaseLevel baseLevel=BaseLevel();
+    Statistics statistics = Statistics();
+    int baseLevelSampleSize=HYPER_LEVEL_TRIAL_SAMPLE_SIZE;
+
+    double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations){
+        std::vector<double> samples;
+        for(int i=0;i<sampleSize;i++){
+            baseLevel.loadInitialModel();
+            double sampleF=baseLevel.optimize(&parameters,totalBaseLevelEvaluations);
+            std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
+            samples.push_back(sampleF);
+        }
+        return statistics.median(samples) + statistics.IQR(samples);
+    }
+
     void setRandomUniform(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
         std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
             std::get<1>(operatorParameter)->setRandomUniform();
