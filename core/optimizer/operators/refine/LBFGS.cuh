@@ -390,12 +390,9 @@ namespace LBFGS {
             , GlobalData *globalSharedContext,
             void * model,int iterations,double alpha, double c1, double c2
     ) {
-//        if( iterations == 0 ) {
-//            evaluateF(globalX, globalData,
-//                      globalF, globalSharedContext, model
-//            );
-//            return;
-//        }
+        if( iterations < LBFGS_M) {
+            return;
+        }
         DEFINE_RESIDUAL_FUNCTIONS()
         // every thread has a local observation loaded into local memory
         FIFOQueue sQueue = FIFOQueue();
@@ -428,7 +425,7 @@ namespace LBFGS {
         // every thread has a copy of the shared model loaded, and an empty localContext.Jacobian
 
         int it;
-        for (it = 1; it <= LBFGS_M;it++) {
+        for (it = 1; it <= LBFGS_M && localContext.fEvaluations < iterations;it++) {
             resetSharedState(&sharedContext, threadIdx.x);
             __syncthreads();
             // sharedContext.sharedF, sharedContext.sharedDX, is cleared // TODO this synchronizes over threads in a block, sync within grid required : https://on-demand.gputechconf.com/gtc/2017/presentation/s7622-Kyrylo-perelygin-robust-and-scalable-cuda.pdf

@@ -10,6 +10,7 @@ class Operator {
 public:
     OperatorParameters parameters;
     virtual int fEvaluationCount()=0;
+    virtual void limitEvaluationsTo(int)=0;
     virtual void operate(CUDAMemoryModel* cudaContext)=0;
 };
 

@@ -8,8 +8,12 @@
 #include "HyperLevel.cuh"
 #include <limits>
 #include <math.h>
+#include <vector>
 
 class SimulatedAnnealingHyperLevel: public HyperLevel {
+public:
+    SimulatedAnnealingHyperLevel():HyperLevel("SA"){
+    }
 
     // TODO free parameters
     double hyperOptimize(int totalEvaluations) override {
@@ -22,7 +26,7 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);
         setRandomUniform(currentParameters);
-        baseLevel.init();
+        baseLevel.init(logJson);
 
         baseLevel.loadInitialModel();
         double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
@@ -36,14 +40,11 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
         for(int i=0; i < trials-1 || temp < 0; i++) {
 
             printf("[med+iqr]f: %f trial %u \n",currentF, i);
-//            baseLevel.printCurrentBestGlobalModel();
-//            printParameters(currentParameters);
             cloneParameters(currentParameters,currentMutatedByEpsilonParameters);
             mutateByEpsilon(currentMutatedByEpsilonParameters);
 
             double currentFPrime=getPerformanceSampleOfSize(baseLevelSampleSize,currentMutatedByEpsilonParameters,totalBaseLevelEvaluations);
             printf("[med+iqr]f': %f trial %u \n",currentFPrime, i);
-//            printParameters(currentMutatedByEpsilonParameters);
             if(currentFPrime < currentF ) {
                 cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
                 currentF=currentFPrime;
@@ -55,10 +56,6 @@ class SimulatedAnnealingHyperLevel: public HyperLevel {
                     acceptedWorse++;
                     std::cout<<"Accepted worse at "<<i<<"/"<<trials-1<<" at temp: "<<temp<<std::endl;
                 }
-            }
-            if(currentF < min) {
-                min=currentF;
-                cloneParameters(currentParameters,bestParameters);
             }
             temp=temp0/(1+alpha*i);
         }

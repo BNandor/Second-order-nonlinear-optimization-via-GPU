@@ -110,14 +110,15 @@ public:
         metrics->modelPerformanceMetrics.markovIterations++;
     }
 
-    void operate() {
-//        std::cout<<"operating: "<<currentNode->name<<std::endl;
-        ((OptimizingMarkovNode*)currentNode)->operate(cudaMemoryModel);
+    void operate(int maxEvaluations) {
+        ((OptimizingMarkovNode*)currentNode)->operate(cudaMemoryModel,maxEvaluations-metrics->modelPerformanceMetrics.fEvaluations);
         metrics->modelPerformanceMetrics.fEvaluations+=((OptimizingMarkovNode*)currentNode)->fEvals();
+        ((OptimizingMarkovNode*)currentNode)->hopToNext();
     }
 
+
     void selectBest(){
-        bestSelector->operate(cudaMemoryModel);
+        bestSelector->operate(cudaMemoryModel,1);
     }
 
     void printParameters() {

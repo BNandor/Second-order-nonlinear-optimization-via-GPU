@@ -33,28 +33,38 @@ class BaseLevel {
     OptimizerContext optimizerContext=OptimizerContext();
     Metrics metrics;
     Metrics globalMetrics;
+
 public:
-    void init() {
+    std::string  problemId;
+    int totalEvaluations;
+    void init(json& HHlogJson) {
 #ifdef PROBLEM_SNLP
         optimizerContext.model =new  SNLPModel(optimizerContext.differentialEvolutionContext);
+        problemId="SNLP";
 #endif
 #ifdef PROBLEM_ROSENBROCK
         optimizerContext.model =new  RosenbrockModel(optimizerContext.differentialEvolutionContext);
+        problemId="ROSENBROCK";
 #endif
 #ifdef PROBLEM_STYBLINSKITANG
         optimizerContext.model =new  StyblinskiTangModel(optimizerContext.differentialEvolutionContext);
+        problemId="STYBLINSKITANG";
 #endif
 #ifdef PROBLEM_TRID
         optimizerContext.model =new  TridModel(optimizerContext.differentialEvolutionContext);
+        problemId="TRID";
 #endif
 #ifdef PROBLEM_RASTRIGIN
         optimizerContext.model =new  RastriginModel(optimizerContext.differentialEvolutionContext);
+        problemId="RASTRIGIN";
 #endif
 #ifdef PROBLEM_SCHWEFEL223
         optimizerContext.model =new  Schwefel223Model(optimizerContext.differentialEvolutionContext);
+        problemId="SCHWEFEL223";
 #endif
 #ifdef PROBLEM_QING
         optimizerContext.model =new  QingModel(optimizerContext.differentialEvolutionContext);
+        problemId="QING";
 #endif
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
@@ -62,8 +72,15 @@ public:
         optimizerContext.gdLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());
         metrics=*(new Metrics(*optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig));
         globalMetrics=*(new Metrics(*optimizerContext.model,&optimizerContext.cudaMemoryModel.cudaConfig));
+        totalEvaluations=0;
+        initHHLogJson(HHlogJson);
     }
 
+    void initHHLogJson(json& logJson){
+        logJson["baseLevel-problemId"]=problemId;
+        logJson["baseLevel-popSize"]=popSize();
+        logJson["baseLevel-xDim"]=xdim();
+    }
     ~BaseLevel(){
         delete optimizerContext.model;
     }
@@ -73,8 +90,10 @@ public:
                                          metrics);
     }
 
-    double optimize(std::unordered_map<std::string,OperatorParameters*>* optimizerParameters,int totalFunctionEvaluations) {
+    double optimize(std::unordered_map<std::string,OperatorParameters*>* optimizerParameters,int maxFunctionEvaluations) {
         //        cudaDeviceReset();
+        std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
+        cloneParameters(*optimizerParameters,currentParameters);
         // Set f
         metrics.getCudaEventMetrics().recordStartCompute();
         optimizerContext.cudaMemoryModel.cudaRandom.initialize(optimizerContext.getThreadsInGrid(), optimizerContext.getBlocksPerGrid(),
@@ -92,13 +111,12 @@ public:
         metrics.modelPerformanceMetrics.fEvaluations=4;
         metrics.modelPerformanceMetrics.markovIterations=0;
         OptimizingMarkovChain markovChain=OptimizingMarkovChain(&optimizerContext, &metrics);
-        markovChain.setParameters(optimizerParameters,&optimizerContext);
-        while(metrics.modelPerformanceMetrics.fEvaluations < totalFunctionEvaluations) {
-            markovChain.operate();
+        markovChain.setParameters(&currentParameters,&optimizerContext);
+        while(metrics.modelPerformanceMetrics.fEvaluations < maxFunctionEvaluations) {
+            markovChain.operate(maxFunctionEvaluations);
             cudaDeviceSynchronize();
             markovChain.hopToNext();
         }
-
         optimizerContext.getCurrentPerturbator()->evaluateF(optimizerContext.cudaMemoryModel.cudaConfig,optimizerContext.cudaMemoryModel.dev_Model,
                                                             optimizerContext.cudaMemoryModel.dev_x2,
                                                             optimizerContext.cudaMemoryModel.dev_data,
@@ -119,7 +137,25 @@ public:
         if(currentBestF<globalMetrics.modelPerformanceMetrics.minF){
             updateCurrentBestGlobalModel();
         }
+        totalEvaluations+=metrics.modelPerformanceMetrics.fEvaluations;
+        freeOperatorParamMap(currentParameters);
         return currentBestF;
+    }
+
+    void cloneParameters(std::unordered_map<std::string,OperatorParameters*> &from,std::unordered_map<std::string,OperatorParameters*> &to){
+        std::for_each(from.begin(),from.end(),[&to,&from](auto& operatorParameter) {
+            if(to.count(std::get<0>(operatorParameter))>0) {
+                delete to[std::get<0>(operatorParameter)];
+            }
+            to[std::get<0>(operatorParameter)]=std::get<1>(operatorParameter)->clone();
+        });
+    }
+
+
+    void freeOperatorParamMap(std::unordered_map<std::string,OperatorParameters*> &parameters){
+        std::for_each(parameters.begin(),parameters.end(),[](auto keyParameter){
+            delete std::get<1>(keyParameter);
+        });
     }
 
     void updateCurrentBestGlobalModel(){
@@ -138,6 +174,14 @@ public:
 
     void printCurrentBestGlobalModel() {
         globalMetrics.modelPerformanceMetrics.printBestModel(optimizerContext.model);
+    }
+
+    int popSize() {
+        return optimizerContext.getPopulationSize();
+    }
+
+    int xdim() const{
+        return optimizerContext.model->modelSize;
     }
 };
 #endif //PARALLELLBFGS_BASELEVEL_CUH

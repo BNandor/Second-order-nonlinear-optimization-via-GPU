@@ -9,27 +9,23 @@
 #include <limits>
 
 class SimpleLocalSearchHyperLevel: public HyperLevel {
+public:
+    SimpleLocalSearchHyperLevel():HyperLevel("LocalSearch"){
+    }
 
     double hyperOptimize(int totalEvaluations) override {
-        int trials=1;
-        int totalBaseLevelEvaluations=totalEvaluations/trials;
+        int trials=100;
+        int totalBaseLevelEvaluations=totalEvaluations;
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createSimpleLocalSearchOptimizerParameters(totalBaseLevelEvaluations);
         std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);
-        baseLevel.init();
-
+        baseLevel.init(logJson);
         double min=std::numeric_limits<double>::max();
-
         for(int i=0; i < trials; i++) {
             std::cout<<"Starting trial "<<i<<std::endl;
-            baseLevel.loadInitialModel();
-            double currentF=baseLevel.optimize(&currentParameters,totalBaseLevelEvaluations);
+            double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
             printf("f: %f trial %u \n",currentF, i);
-            if(currentF < min) {
-                min=currentF;
-                cloneParameters(currentParameters,bestParameters);
-            }
         }
         printParameters(bestParameters);
         baseLevel.printCurrentBestGlobalModel();

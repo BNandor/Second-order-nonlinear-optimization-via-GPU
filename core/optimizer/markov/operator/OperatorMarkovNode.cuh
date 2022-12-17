@@ -12,7 +12,8 @@ public:
     OperatorMarkovNode(Operator* anOperator,const char* name):MarkovNode(name),nodeOperator(anOperator){
     }
 
-    void operate(CUDAMemoryModel* cudaMemoryModel) const {
+    void operate(CUDAMemoryModel* cudaMemoryModel,int remainingEvaluations) const {
+        nodeOperator->limitEvaluationsTo(remainingEvaluations);
         nodeOperator->operate(cudaMemoryModel);
     }
 

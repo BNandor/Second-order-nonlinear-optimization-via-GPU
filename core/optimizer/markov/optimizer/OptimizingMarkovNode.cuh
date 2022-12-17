@@ -22,11 +22,12 @@ public:
         delete operatorChain;
     }
 
-    void operate(CUDAMemoryModel* cudaMemoryModel)  {
-        ((OperatorMarkovNode*)operatorChain->currentNode)->operate(cudaMemoryModel);
+    void operate(CUDAMemoryModel* cudaMemoryModel,int remainingEvaluations)  {
+        ((OperatorMarkovNode*)operatorChain->currentNode)->operate(cudaMemoryModel, remainingEvaluations);
+    }
+    void hopToNext(){
         operatorChain->hopToNext();
     }
-
     int fEvals() {
         return ((OperatorMarkovNode*)(operatorChain->currentNode))->nodeOperator->fEvaluationCount();
     }

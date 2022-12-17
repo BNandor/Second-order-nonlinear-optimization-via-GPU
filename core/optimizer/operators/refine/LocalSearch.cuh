@@ -10,6 +10,7 @@
 #include "GradientDescent.cuh"
 #include "LBFGS.cuh"
 #include "../Operator.h"
+#include <algorithm>
 #ifndef gpuErrchk
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -85,7 +86,11 @@ public:
         return parameters.values["GD_FEVALS"].value;
     }
 
-     void setupGlobalData(int populationSize) override {
+    void limitEvaluationsTo(int remainingEvaluations) override {
+        parameters.values["GD_FEVALS"].value=std::max(std::min(remainingEvaluations,(int)truncf(parameters.values["GD_FEVALS"].value)),0);
+    }
+
+    void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {
             gpuErrchk(cudaFree(dev_globalContext));
             dev_globalContext=0;
@@ -135,8 +140,13 @@ public:
     };
 
     int fEvaluationCount() override {
-        return parameters.values["LBFGS_FEVALS"].value + LBFGS_M;
+        return parameters.values["LBFGS_FEVALS"].value;
     }
+
+    void limitEvaluationsTo(int remainingEvaluations) override {
+        parameters.values["LBFGS_FEVALS"].value=std::max(std::min(remainingEvaluations,(int)truncf(parameters.values["LBFGS_FEVALS"].value)),0);
+    }
+
 
     void setupGlobalData(int populationSize) override {
         if(dev_globalContext!= nullptr) {

@@ -4,27 +4,68 @@
 
 #ifndef PARALLELLBFGS_HYPERLEVEL_CUH
 #define PARALLELLBFGS_HYPERLEVEL_CUH
+
 #include "../base/BaseLevel.cuh"
 #include "../../common/Statistics.cuh"
+#include <json.hpp>
+#include <utility>
+#include <vector>
+
+using json = nlohmann::json;
 
 #ifndef HYPER_LEVEL_TRIAL_SAMPLE_SIZE
 #define HYPER_LEVEL_TRIAL_SAMPLE_SIZE 30
 #endif
 class HyperLevel {
+
 protected:
     BaseLevel baseLevel=BaseLevel();
     Statistics statistics = Statistics();
+    double minBaseLevelStatistic=std::numeric_limits<double>::max();
+    std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
+
+    json logJson;
     int baseLevelSampleSize=HYPER_LEVEL_TRIAL_SAMPLE_SIZE;
+    std::string hyperLevelId;
+
+    HyperLevel(std::string hyperLevelId):hyperLevelId(std::move(hyperLevelId)) {
+        initLogJson();
+    }
+
+    void initLogJson() {
+        logJson["trials"]=std::vector<double>();
+        logJson["baseLevel-sampleSize"]=baseLevelSampleSize;
+        logJson["hyperLevel-id"]=hyperLevelId;
+    }
 
     double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations){
         std::vector<double> samples;
-        for(int i=0;i<sampleSize;i++){
+        for(int i=0;i<sampleSize;i++) {
             baseLevel.loadInitialModel();
             double sampleF=baseLevel.optimize(&parameters,totalBaseLevelEvaluations);
             std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
             samples.push_back(sampleF);
         }
-        return statistics.median(samples) + statistics.IQR(samples);
+        double medIqr=statistics.median(samples) + statistics.IQR(samples);
+        logJson["baseLevelEvals"]=totalBaseLevelEvaluations;
+        logJson["trials"].push_back({{"med_+_iqr",medIqr},{"atEval",baseLevel.totalEvaluations}});
+        if(medIqr < minBaseLevelStatistic) {
+            minBaseLevelStatistic=medIqr;
+            cloneParameters(parameters,bestParameters);
+            logJson["minBaseLevelStatistic"]=minBaseLevelStatistic;
+            logJson["bestParameters"]=getParametersJson(bestParameters);
+        }
+
+        std::cout<<logJson.dump()<<std::endl;
+        return medIqr;
+    }
+
+    json getParametersJson(std::unordered_map<std::string,OperatorParameters*> & parameters){
+        json parametersJson;
+        std::for_each(parameters.begin(),parameters.end(),[&parametersJson](auto& parameter){
+            parametersJson[std::get<0>(parameter)]=std::get<1>(parameter)->getJson();
+        });
+        return parametersJson;
     }
 
     void setRandomUniform(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
@@ -47,12 +88,11 @@ protected:
     }
 
     void cloneParameters(std::unordered_map<std::string,OperatorParameters*> &from,std::unordered_map<std::string,OperatorParameters*> &to){
-        std::for_each(from.begin(),from.end(),[&to,&from](auto& operatorParameter) {
-            if(to.count(std::get<0>(operatorParameter))>0) {
-                delete to[std::get<0>(operatorParameter)];
-            }
-            to[std::get<0>(operatorParameter)]=std::get<1>(operatorParameter)->clone();
-        });
+       baseLevel.cloneParameters(from,to);
+    }
+
+    void freeOperatorParamMap(std::unordered_map<std::string,OperatorParameters*> &parameters){
+     baseLevel.freeOperatorParamMap(parameters);
     }
 
     void setDefaultOptimizerChainSimplex(std::unordered_map<std::string,OperatorParameters*>&chainParameters){
@@ -167,18 +207,18 @@ protected:
 
         chainParameters["RefinerInitializerSimplex"]=new SimplexParameters(
                 {
-                        {std::string("GD"),BoundedParameter(0.5,0,1)},
-                        {std::string("LBFGS"),BoundedParameter(0.5,0,1)}
+                        {std::string("GD"),BoundedParameter(0,0,1)},
+                        {std::string("LBFGS"),BoundedParameter(1.0,0,1)}
                 });
         chainParameters["RefinerGDSimplex"]=new SimplexParameters(
                 {
-                        {std::string("GD"),BoundedParameter(0.5,0,1)},
-                        {std::string("LBFGS"),BoundedParameter(0.5,0,1)}
+                        {std::string("GD"),BoundedParameter(0,0,1)},
+                        {std::string("LBFGS"),BoundedParameter(1.0,0,1)}
                 });
         chainParameters["RefinerLBFGSSimplex"]=new SimplexParameters(
                 {
-                        {std::string("GD"),BoundedParameter(0.5,0,1)},
-                        {std::string("LBFGS"),BoundedParameter(0.5,0,1)}
+                        {std::string("GD"),BoundedParameter(0,0,1)},
+                        {std::string("LBFGS"),BoundedParameter(1.0,0,1)}
                 });
         chainParameters["SelectorInitializerSimplex"]=new SimplexParameters(
                 {
@@ -228,11 +268,6 @@ protected:
         chainParameters["RefinerLBFGSOperatorParams"]=new OperatorParameters(lbfgsParams);
     }
 
-    void freeOperatorParamMap(std::unordered_map<std::string,OperatorParameters*> &parameters){
-        std::for_each(parameters.begin(),parameters.end(),[](auto keyParameter){
-            delete std::get<1>(keyParameter);
-        });
-    }
 public:
 
     virtual double hyperOptimize(int totalEvaluations)=0;

@@ -119,18 +119,21 @@ public:
     }
 
     void operate(CUDAMemoryModel* cudaMemoryModel) override{
-        perturb(cudaMemoryModel->cudaConfig,
-                cudaMemoryModel->model,
-                cudaMemoryModel->dev_Model,
-                cudaMemoryModel->dev_x1,
-                cudaMemoryModel->dev_x2,
-                cudaMemoryModel->dev_data,
-                cudaMemoryModel->dev_F1,
-                cudaMemoryModel->dev_F2,
-                &cudaMemoryModel->cudaRandom);
+        if(fEvals>0) {
+            perturb(cudaMemoryModel->cudaConfig,
+                    cudaMemoryModel->model,
+                    cudaMemoryModel->dev_Model,
+                    cudaMemoryModel->dev_x1,
+                    cudaMemoryModel->dev_x2,
+                    cudaMemoryModel->dev_data,
+                    cudaMemoryModel->dev_F1,
+                    cudaMemoryModel->dev_F2,
+                    &cudaMemoryModel->cudaRandom);
+        }
     }
 
     void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data, double* oldCosts, double* newCosts, Random* cudaRandom ) override {
+
         differentialEvolutionStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, dev_model,
                                                                                          parameters.values["DE_CR"].value,
                                                                                          parameters.values["DE_FORCE"].value,

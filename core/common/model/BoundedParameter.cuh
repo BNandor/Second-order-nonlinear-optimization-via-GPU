@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <utility>
 #include <algorithm>
+#include <json.hpp>
+using json = nlohmann::json;
 
 class BoundedParameter {
 public:
@@ -44,6 +46,14 @@ public:
     bool operator() (const BoundedParameter& lhs, const BoundedParameter& rhs) const
     {
         return lhs.value < rhs.value;
+    }
+
+    json getJson(){
+        json jsonValue;
+        jsonValue["lowerBound"]=lowerBound;
+        jsonValue["upperBound"]=upperBound;
+        jsonValue["value"]=value;
+        return jsonValue;
     }
 };
 
@@ -82,6 +92,13 @@ public:
         });
     }
 
+    virtual json getJson() {
+        json parametersJson;
+        std::for_each(values.begin(),values.end(),[&parametersJson](auto& parameter){
+            parametersJson[std::get<0>(parameter)]=std::get<1>(parameter).getJson();
+        });
+        return parametersJson;
+    }
 };
 
 

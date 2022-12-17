@@ -16,5 +16,9 @@ public:
 
      void operate(CUDAMemoryModel* cudaContext){
      }
+
+     void limitEvaluationsTo(int remainingEvaluations) override{
+
+     }
 };
 #endif //PARALLELLBFGS_INITIALIZER_CUH

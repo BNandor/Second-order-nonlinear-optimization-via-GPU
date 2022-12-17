@@ -74,6 +74,9 @@ public:
     int fEvaluationCount() {
         return 0;
     }
+
+    void limitEvaluationsTo(int remainingEvaluations) override {
+    }
 };
 
 #endif //PARALLELLBFGS_BESTSELECTOR_CUH

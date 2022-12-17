@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <vector>
 #include <tuple>
+#include <json.hpp>
+using json = nlohmann::json;
 
 class SimplexParameters: public OperatorParameters {
 public:
