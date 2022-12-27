@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
     HyperLevel* hyperLevel=new SimulatedAnnealingHyperLevel();
 
     hyperLevel->hyperOptimize(totalFunctionEvaluations);
+    hyperLevel->saveLogs();
 //    cudaDeviceReset();
     delete hyperLevel;
     return 0;

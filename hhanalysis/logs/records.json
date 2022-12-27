@@ -1,0 +1,2632 @@
+{
+    "experiments": {
+        "6b2526bb155a64d9b28c4ab042b7d8397450e0e03a5e8e88f0ec381e1961bcbf": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 188.8722416540004
+            }
+        },
+        "de4283d129216c79134169f5ab505e2d24c7e22a4e24ac3ed935b73798cd8c29": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 67.46955365800022
+            }
+        },
+        "b4a3bcf5174ca2811078df98d580242295012658ad2d2d8bfe51347ea7f11431": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 67.88204252299874
+            }
+        },
+        "967e9e8757963dc1a129d6eee91e7a6eba59bf71848aeba8e6e846a7a1d97410": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 102.37872351900114
+            }
+        },
+        "563240b8170cde065f83d7ba8e51aaaf182b97b847db0af3df61b7e9466b7bd2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 125.60748046200024
+            }
+        },
+        "cf899dae27ff7242a87f5d0479f3066f4313e713edb3e4388115e2f2091e26bf": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 62.0257110120001
+            }
+        },
+        "959045eac5f6117b6ccba4b412288089d75169102e48c64595f4ab9ea637379a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 65.13881445399966
+            }
+        },
+        "1a8e24deb0f057c06f1bcfce16b61874ee44c4ce8956a9fcbb5055b9e4f155a0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 70.37128420600129
+            }
+        },
+        "d2fec1841ed93cc256046a9fa44e824293824995e5aacd5faae08e3262882f83": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 79.91106305100038
+            }
+        },
+        "302112fa85230d32942118b318b8b9e4a1beb96865a8afaa2b184f47d6b736c6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 257.78828369999974
+            }
+        },
+        "1fcbe91324e9feeb2f72918f854e07c65e7f762628922590ad73b559c7333593": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 202.45382253000025
+            }
+        },
+        "677a4860b4dfa12117caf11adc28d78c6fcd0af900969da04ea7c394c2620e1d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 143.22852894399875
+            }
+        },
+        "e1d192b551ed91fb42871937dd14877c053e1fc069f3f8ae9335cf5fbd51eb95": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 133.3561958680002
+            }
+        },
+        "90b6875cc547d84fb2fe8c289f8953775399ec5dacab94e8624795649b3fc789": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 130.52048761900005
+            }
+        },
+        "8f0011149111a3ca72d939cb8da5259b7070229b10cd27107830151ccf9cfd3c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 153.89221885400002
+            }
+        },
+        "acc563876de91802e2270cb87f35746b63e336721ef6d7329d551ea5dfa4c8dc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 181.12936934200116
+            }
+        },
+        "e3f945be4996a690867668374fd70bab78a419932000bc3d3b1e56a3895fb94a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 125.16123521999907
+            }
+        },
+        "481b0deaadf28552e7958e2c61feab8e36456416ec3c3aea512f854970783b22": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 153.60404822599958
+            }
+        },
+        "17b36f2a7030740f48ceb17a87b0cb3992028ce619c770d00c242933b507cfa0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 626.33798819
+            }
+        },
+        "0d843fa45066c19d8f9db395ed3e7be93294ad32b8106fe389dd78757cebebbd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 521.3627545619966
+            }
+        },
+        "7e6ef739e659f7910b7267ba29d793df94643d0a0b534802ee4c631f2a72e876": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 231.16681961699942
+            }
+        },
+        "2c7134c537f62e82c7224637264ed6fb4c83d25589e48724ed38d210b0f9d5bd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 445.82091336400117
+            }
+        },
+        "12cb98e4c2d5446268ad61a91672459f012f69862b3267862138da362b407cdd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 618.2480509920024
+            }
+        },
+        "1b2f4969571c9637e052c3460537a5ad13aa7f64b22f38e8f7e5862d636353b7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 571.9145676980006
+            }
+        },
+        "996169b5f52edffa94342db7827d0bfcfd99272b17e4576751a5444b5d5ad03c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 391.6815159070029
+            }
+        },
+        "8dde0147f5146dec5809cc9acf3127e612fc43d167556a76d5023e729261dfe7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 253.35446236700227
+            }
+        },
+        "747c6398864a0e12917ff9ee9c183ad94e522153263dd0a2dfb094212944289c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 240.1566931169982
+            }
+        },
+        "222c618a077a1305c68632ff7cba303a5a85177beed6a8ff554bc723d348eb66": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 129.88215072499952
+            }
+        },
+        "987039f64a969165c43364214744124d5ed0b31b92f566afd8a474b21d8b90a0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 114.83202988099947
+            }
+        },
+        "a6384783b896784aa9e2bb04068bbcf1befff55e69c8f5ee398c6581b8f375c6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 123.0793492820012
+            }
+        },
+        "73daf1c7a42b1472396ed00d487de3e8ba49066abb0d34b8f9649ce6eb8bdbfc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 64.24402074399768
+            }
+        },
+        "de88d772c2761c066acbd7853c2639ff622dd4167f34ce6ff538e84427762a97": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 73.35949233000065
+            }
+        },
+        "8d2f3639ae3180889696cce82e4ada283055502ec3286123772f3e226841dcc2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 129.50973840400184
+            }
+        },
+        "41d6e620681f453b6a6e930e6884f972c396e18846e6daf6b0842cf7639a5a07": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 160.8033892409985
+            }
+        },
+        "76da3fb3dd4922df0b2d9bc33c3540c1578ae350caf14c94eb63f3bcc4ad70fd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 153.35275082800217
+            }
+        },
+        "07f3ee6b2e946300146962947cf760a126229430d28b0c5894b00317a99b0be2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 66.30506532600339
+            }
+        },
+        "100bfab49fbe8d6200e613f8fab8fd15601a67e08c90daba72d359e34e93fa46": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 283.5915568300006
+            }
+        },
+        "9197398868ed937871e85cc109b398ecb93367056d3ecf66c73cd8419cb0c248": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 267.9322066809982
+            }
+        },
+        "30e978763e4091266b5eb2a927ce8c75e51636f4ef29e24a5105e424d66ac0ed": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 267.12459849899824
+            }
+        },
+        "14f8369e02d26616a73b7d137786ce12dcd2b71bf325775766d9255e4c188bf3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 331.65780814000027
+            }
+        },
+        "5df7a055ec258f95fa9f7c6d27d66c8897489fafeb1abd64d7a25d4ef066ea53": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 339.2540440209996
+            }
+        },
+        "61943b8125e6624642e542c16f23ae800d0e25b592f17830244cf5df643f6276": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 409.7396683709994
+            }
+        },
+        "d90d142e3fdcbe00938dcec7da40485eaf7b2198437db6d936badba5d2c5bfd4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 234.34009199700085
+            }
+        },
+        "018b709fcf41ccc6750dd0b7dffd3eb319093dcad4e00d3ea233b78260b45c77": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 285.6810432589991
+            }
+        },
+        "fa229fb84688dde5cd4721f4fa64de2fec91a2ba82f3e67a9920a71fe0510606": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 208.38840109800003
+            }
+        },
+        "4dcca1c73581c4d68fcba7525fcae27070a11647e9944a60bab159c562e07d7d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 550.4992961690004
+            }
+        },
+        "2d285c1955e9771e78d0e1f29d45490c1a439231ce91a898818bd4439b3018c3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 277.1404103569985
+            }
+        },
+        "17bc4a290accaa8d8412c2d9c2d622dba9314bb507f17962688e73d88c34abe1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 749.5200621090007
+            }
+        },
+        "25d3d174298d9291c84616362b43b5b275a9e7bbe1b4d709cc98a0894041f9a1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 249.85712621999846
+            }
+        },
+        "e445479d3f03f07725fa2ce4c23d7a3e6d8f9fcd88a8f33519528a7c3af6197c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 539.1627428749998
+            }
+        },
+        "8c9ff04a464f7c01e2f183486bdf5c6e68b1ba4169975d2df48a9dc06875c1b1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 569.7344560450001
+            }
+        },
+        "6ad8a8c900a2538c0671f95b2af869b797f19af041c45b506b7fc7965248aa9a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 356.56287279200114
+            }
+        },
+        "aca44036e34c860db05b1da6bea98529d35984d97f4e48f9aa61cd5c6fe25694": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 567.638416785001
+            }
+        },
+        "28c0b3784d4552633902bb5c85cbabaceca62889715a677cbf8c7b9f841fcdc1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 616.5543893029972
+            }
+        },
+        "aa3d13db021115ba52ff4135b0bf902b3845c6103a6d72451d30bdb54ec99533": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 115.70734814900061
+            }
+        },
+        "19af84b8e0c31e7249eb2576528f79fc077e553596bd0bd4ec7dbc8390c5e7d5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 214.20685223599867
+            }
+        },
+        "29d7997918bc45da0fe221921b71606c5390025bcb505e997bcec46b0224a6dc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 129.52652360499997
+            }
+        },
+        "38e0750240d209ac8f680ad82b475676b9ec00c3e28715d5e354b9bc5ee786a5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 172.3397228219983
+            }
+        },
+        "dc977214d03f2d1130b7280fbe7d6d8eb8063e66958c171a83f675f6adf45e48": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 68.90942883699972
+            }
+        },
+        "abab6f19daab66fa2cffb269c244345faa7620690da574e76611a80815b5a98b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 170.7835121140015
+            }
+        },
+        "23d64b4f8b8f542b4f7c8e105a2073206396fc6b1e8baffd50af2797017f06b3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 177.09268812200025
+            }
+        },
+        "7ff61a5711cb92ee4748f655c06a21209c85469cc037af88ef96332f3525df84": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 185.75270025099962
+            }
+        },
+        "c988164cc438fb0bb819992cdc94da5e05f0b22b3ee6f67a271216b66d9b868c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 196.2276091269996
+            }
+        },
+        "9316bd06dc8c6f6f687adecb7dec7527bdd17106c12fc48467312e844af21008": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 341.5071884380013
+            }
+        },
+        "4c008975e105490945ac7a834145454110c0af54e18b6fa9ea9cda8f35d31f57": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 152.40875539400076
+            }
+        },
+        "8ea281d844f5dfa693f4eff679f5823a59251acf3a567535c759c3518e1fe84c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 452.6482605220008
+            }
+        },
+        "553246e54fa59beeda75b60dd5bdec3d30a352bd621fc5cb196647efd44b0e7e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 264.0460034709977
+            }
+        },
+        "cac31c7efd27f325f855664cc9fb305c7b39f46e68c5efd9b6b5d073692ee8e8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 241.80409523300114
+            }
+        },
+        "4b274a3cadb86eda3f17c33ea60f8765d061f38be26a8bdbdab9b245714f789a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 357.32275908799784
+            }
+        },
+        "6581a05e12ee3ca9e62468f8c2c47d1baf72669fe8eb587414b10f0373b6761d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 334.07189290099996
+            }
+        },
+        "6139b3400cd184d6a0d2050b3729965a27656f9fd83958c5f9be1ba3c90fd8d1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 294.2261000159997
+            }
+        },
+        "d1122d6bcc05e3de9df8f25f4a4feed2a63b788a5163a2ed9bb6184aa841b03e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 215.21743643399532
+            }
+        },
+        "cf6cf69484d9061bd6a0c866cf80bd1ccba527d5ea9a419681d44fe6434bfa29": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 743.609507661
+            }
+        },
+        "9222ea41315a98ade100e75a592eea94d747a62d68beb1bbee4044e1e1d34120": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 905.5656243060002
+            }
+        },
+        "0e980b8eb31d28561ebf95046a5aca0016584c300f590abafde540b4692d5531": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 728.7398312559963
+            }
+        },
+        "77d436efa8d5f68b6239fa2f4a4d4e221d7ed2ffa5b8937d71a9173b28137a45": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 600.291740763998
+            }
+        },
+        "10ee67b13ceea1b2a18888246814a0b7c7dbb0e6251a1a0ceeb0807513288875": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 256.1849619419954
+            }
+        },
+        "88652a97690c7dae8aaaab5b00cc7610ee7d3ab54e5953c8173a57f75d1ed722": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 620.8043040990015
+            }
+        },
+        "eeafca5706aa6b2cc276d002a53d93260ed68f3c5db91309f62a34ff91d64d0d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 599.8584885859964
+            }
+        },
+        "8e02ef308810a490646b6acdd212b6a91464927e2b5620b8cb3dd2518b6fd74b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 609.0392024460016
+            }
+        },
+        "5b3e0f40dd424832e5f5992e6551718abfd3d742a56fe76722374b052584922d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 595.820267283998
+            }
+        },
+        "fb2dc736e7eb94e7d24e41e369e15fd807abc896a484005aefb1aa90624872d8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 181.88299679900229
+            }
+        },
+        "5cedeb5949f75ba8992e366ee2f712a4d6bbe6d395ca6988d8790de0d58eb78d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 187.6520893229972
+            }
+        },
+        "940bc208449d83d432d543c040176813a2858fc34f3206ab3c2eb7e9e4a318a0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 180.9961357430002
+            }
+        },
+        "69e51c347a9650e7d13e9bec54e6141f433f5eb469b637abc92d813dbdf5d30f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 184.7328911069999
+            }
+        },
+        "91fe447772f77be27da1282087fdc8a8b28def8e3ad583c83b3bd9d530771e22": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 354.33662617099617
+            }
+        },
+        "548521e9cef1dd3315c846dc217a4fec523eef52e957aa143a74ec22605d4b1b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 325.5318123190009
+            }
+        },
+        "6904d91bdaf28ca99bb83c41ba00eb9587c10a6a955ac13edc697bbd4b7676ed": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 382.5672042330043
+            }
+        },
+        "d892fe50f89dccfb5990a31d61e258e0a6c33efc9dfb03e7d5d0bac6fab3ac50": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 419.8306683519986
+            }
+        },
+        "af2e7ab7e14b6b19a5eadf65398ca2c20a391aa8ff6757dd40d30b09f2993cf2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 179.61851428599766
+            }
+        },
+        "7859f20252229ed9775660c222b232c8766a1662e5e624aea382a55d68b510b0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 768.7152857179972
+            }
+        },
+        "e75cb474012829ee7479fb8d4205942f6df1c6545e48d0a6abbd6e1925c0e626": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 353.6666695890017
+            }
+        },
+        "3357ce9f1eb56c47b733b4f60572bddbf7ed3df2fbb5e1c9c189dfe17e5f07c8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1087.1414828520064
+            }
+        },
+        "753c329c1fe3aba81eca6d39187b599911e5bfb93dab7d13a5daf7f5a9915bd6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 800.8123015540041
+            }
+        },
+        "8d3eb36f4fe989290573737ab7be52b7f292831dc28e18e8e84b6b93768e09c5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 346.5660530210007
+            }
+        },
+        "f35d509142127beb5c3f7076ae582145569ed49c72da2b7da12f0678d22fd303": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 342.3248717969982
+            }
+        },
+        "cf1815644ecddaf17a0604be71f63f44db7c53420e11097633764d57e297f741": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 1202.5902736889984
+            }
+        },
+        "6d8588c769140460d31e349976757753a78478ac26404542fa7e2e53b755f8f2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 1111.488646906997
+            }
+        },
+        "34bca0721e81be7384ccbd2446d7363c19dae6bd3d0fed5de5884985a1055df4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 867.5029051340025
+            }
+        },
+        "aa0d85d5eb4a348dba7ecaca2f5634f6f5793e1158067bb18eb34c79b2889793": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 943.5583912769944
+            }
+        },
+        "35b77377acb7dc85d7b14a97a02b76e160bd6c1e247798a68094f5aecff586f5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 3094.4703796320027
+            }
+        },
+        "ef5da87b8c7ab1bb0bc7659c9f38f778717dae2ccdbf23cf9929eb64b7107ac7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2394.683317794006
+            }
+        },
+        "d5aa193385f1a9a27442f18fca28c34d9eb7d6901010a3e571b1cb6a983d1723": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2733.630894445996
+            }
+        },
+        "3b1727d5fa0660c66c7d5b87c42969b16d0303531c8f8b961ebf3e7652d1d4b3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2073.9518964259987
+            }
+        },
+        "268c493669315df243a1cd70bd243a9c02a86448a47a65f3449fd4a550d980c7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2530.1842655729997
+            }
+        },
+        "a0b81f1df2d1850667e1fb801cbf32df2894f2be1dba0cbc6f640fec2a1d24fa": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2441.4479929689987
+            }
+        },
+        "97759e0a18151d05ba8c138b787c111e62cad1d4e3e27d304d310d987c11bb58": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2358.5979491510006
+            }
+        },
+        "efc19450909315c17919c88440b9d1e88fb3f8a5806faed0bf789db7812eec87": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2270.019188500999
+            }
+        },
+        "bb0028f3aded16319104a41fe16a5d1525cf983b022f8a8eac40ca9488f44101": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 3028.510482497004
+            }
+        },
+        "aec2d40a13e668ff70d9f5aa3f3ef6beec29b7a8f75f4e79044171e33d4a31ad": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 1731.3075611490058
+            }
+        },
+        "3ad2d138da20424aa21aafac4f3c9bccac63be3ac8731c3f32023c0747adc012": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2193.2409988420113
+            }
+        },
+        "7eebcefcc8c5265b6d24c4339ec68bdca123b9abe9aa5150eee86ca1e528977a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 1760.315059806002
+            }
+        },
+        "43e6f70d213d03d68a4b2974c035f64265e1eac91683341b1e50bbdec39f2e7a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2439.9539491930045
+            }
+        },
+        "42aaa981a3817ad82330543164ed847bef7b19cff79c730aa93252ae1161a8bc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1755.7304850530054
+            }
+        },
+        "d6ecb0dd7c1358459734ecd87184f55a8e6be0edc4e688ee87a34c40bd9ff87c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2309.2564045179897
+            }
+        },
+        "daef90ab948e901e835acb5ec609b016281b158ad4027906295eada0da60920f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 2637.4309549090103
+            }
+        },
+        "cb07814a0d357992ee68acc3d92577ec5c8c2a5c0b81c828944d147992edbe57": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 50,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2171.1802583779936
+            }
+        },
+        "aac0567e8b0d3e377eaa902cfbad2cf3954d640025adb8824560e27732cf06c4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 3983.675529516011
+            }
+        },
+        "fe4aade529501cd656c22ef59403ea1a38acfcf4e69096a3915bc44aa45d9314": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 5194.55729346101
+            }
+        },
+        "c802953354d8ea67d841e12bb33212590b1cc31cccda0b9413ab98714e68c390": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 7288.714265146002
+            }
+        },
+        "a38c373ca87e8997d6dd0fcac2c6b4333a298109a580f4822817341c8ba87c00": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 4040.6385729650065
+            }
+        },
+        "1a2e44e69689d0b1ac520a3bc1f8963e2fdd16bfd356f678181b0baa2ab7e1d7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 4335.748240645
+            }
+        },
+        "23bf09219a313fa0ab7ae7c67b3a0b9a916082f656a185eb2bec1c222e4bc952": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 1000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 4497.983493373002
+            }
+        },
+        "bfe9628835a4b9eb9a66b783b0cde40e74daa8ae15c4cdc9799355f84af718d3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 3311.218497605005
+            }
+        },
+        "69397d7eb9b3124745124f6c14355042e19712ccc5b31f3be49cafdbb6c48bbd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 3539.3305130980007
+            }
+        },
+        "9237dd29d94f1752526f0c9f5e732cf910d8cf9c513969ebe428e1d47998cbd8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 5882.964394423005
+            }
+        },
+        "b74b9e07fa576934556454a45c81a870a7d1a86058c20e236dba1a17f9de6e87": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 0.5
+            },
+            "metadata": {
+                "elapsedTimeSec": 8041.231977233998
+            }
+        },
+        "66fee2ba6e335a7d8e7266de7134d04ca2b9db5400916add2b4e391e0f5fe5c5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 200,
+                "HH-SA-temp": 100,
+                "HH-SA-alpha": 5
+            },
+            "metadata": {
+                "elapsedTimeSec": 6743.186401423009
+            }
+        },
+        "65370f827a6a819525fd3ffe2c405052f3563458d8c860dbced9783b6a98c2b2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 4198.583463605999
+            }
+        },
+        "b69453d1063dc4217ec0bbaac9b49ee7f475595af2f92fdbbb53326dfeace989": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 5317.660204401
+            }
+        },
+        "87836642b78c5e6368174d5902faba9e65e768459bc5aac4ca16adab5f4a4ee4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 18053.210087569005
+            }
+        },
+        "c1a6bd3b80aae3ac5c13f5cf395b33e8431c9392f16550efb2da4bfbc7b967e8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 173.9064167969991
+            }
+        },
+        "8e55bbd2ee35d4c06dbf0041680e78401eac89f1819005034e82d1a6e3883ca2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 275.5974356969964
+            }
+        },
+        "42ae962f118ee36f40dede6897cef53f59222570d1954d5ff91689d135f74217": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 140.1793075280002
+            }
+        },
+        "bc59e818764ff7fbc1068ae4e7de590ed60d94d396e26c6794a1dc52ff51347f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 443.63221742200403
+            }
+        },
+        "4f383d326ad4cb45ad2a7326e6c65c649f252efc3f6f9d888b99216a5c5ef3ba": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 5774.488647719998
+            }
+        },
+        "cbe1ee8cb7ad6672e457d89febabecde068d358e14ec0e59ffb6dc762a3a8ae2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 15366.387388241
+            }
+        },
+        "8f0223cdc9f1003efa834b3f72d2c8ddc9265af78c044b897b77048f22259e6a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 4475.710071106001
+            }
+        },
+        "880ba74e47117f912da32fab5be0782e4978a7fd18a2c89baa7636ad0aa35a8b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 14747.393760489998
+            }
+        },
+        "37793ac0c935af6a077ddd14e4e171d224a1db54fc2595bf813aade32f916c4a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 205.93721182499576
+            }
+        },
+        "1b3fba093abd17a744f3b29349ee0a197e065a86362ee9e4fbd4886704c7cb0d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 516.5515301749983
+            }
+        },
+        "dbd3b24ad65e4d790fe6af7dd19bce7161cbd5929438339c39c8996c71dfd8b2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 136.2737866499956
+            }
+        },
+        "2ab24b4e4879cd3ebb271f626cc2b2e695b30a2d5f72c2107af523ba67cc5199": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1385.9857512559975
+            }
+        },
+        "330885fb257f297c1312621f543970edc2d3a548e26eb814199888eb77c6eb25": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 4884.8635861930015
+            }
+        },
+        "09ab891d3d4abdbc658c66d9a02a149e8227ab986aaef95ae37d221e542dbafd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 10788.114237243004
+            }
+        },
+        "d1356f80d44724235aa02d7c03be42062aba8254970c366974686ed3a0fd8ff1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 5000,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 5690.715143772992
+            }
+        }
+    }
+}

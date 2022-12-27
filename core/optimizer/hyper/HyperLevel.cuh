@@ -7,6 +7,7 @@
 
 #include "../base/BaseLevel.cuh"
 #include "../../common/Statistics.cuh"
+#include "../../common/io/Logs.cuh"
 #include <json.hpp>
 #include <utility>
 #include <vector>
@@ -16,6 +17,19 @@ using json = nlohmann::json;
 #ifndef HYPER_LEVEL_TRIAL_SAMPLE_SIZE
 #define HYPER_LEVEL_TRIAL_SAMPLE_SIZE 30
 #endif
+
+#ifndef  LOGS_PATH
+#define LOGS_PATH "hh-logs.json"
+#endif
+
+#ifndef HH_TRIALS
+#define HH_TRIALS 100
+#endif
+
+#ifndef  EXPERIMENT_HASH_SHA256
+#define EXPERIMENT_HASH_SHA256 "no-hash-defined"
+#endif
+
 class HyperLevel {
 
 protected:
@@ -36,6 +50,8 @@ protected:
         logJson["trials"]=std::vector<double>();
         logJson["baseLevel-sampleSize"]=baseLevelSampleSize;
         logJson["hyperLevel-id"]=hyperLevelId;
+        logJson["trialCount"]=HH_TRIALS;
+        logJson["experimentHashSha256"]=EXPERIMENT_HASH_SHA256;
     }
 
     double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations){
@@ -55,8 +71,6 @@ protected:
             logJson["minBaseLevelStatistic"]=minBaseLevelStatistic;
             logJson["bestParameters"]=getParametersJson(bestParameters);
         }
-
-        std::cout<<logJson.dump()<<std::endl;
         return medIqr;
     }
 
@@ -269,7 +283,9 @@ protected:
     }
 
 public:
-
+    void saveLogs(){
+        Logs::appendLogs(logJson,LOGS_PATH);
+    }
     virtual double hyperOptimize(int totalEvaluations)=0;
     virtual ~HyperLevel()= default;
 

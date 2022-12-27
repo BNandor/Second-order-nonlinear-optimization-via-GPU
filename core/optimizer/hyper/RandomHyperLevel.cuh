@@ -12,9 +12,8 @@ public:
     RandomHyperLevel():HyperLevel("random"){
     }
     double hyperOptimize(int totalEvaluations) override {
-        int trials=1;
-        int totalBaseLevelEvaluations=totalEvaluations/trials;
-//        int totalBaseLevelEvaluations=totalEvaluations/100;
+        int trials=HH_TRIALS;
+        int totalBaseLevelEvaluations=totalEvaluations;
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createDefaultOptimizerParameters(totalBaseLevelEvaluations);
         std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);

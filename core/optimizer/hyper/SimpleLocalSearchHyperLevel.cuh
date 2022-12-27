@@ -14,14 +14,13 @@ public:
     }
 
     double hyperOptimize(int totalEvaluations) override {
-        int trials=100;
+        int trials=HH_TRIALS;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createSimpleLocalSearchOptimizerParameters(totalBaseLevelEvaluations);
         std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);
         baseLevel.init(logJson);
-        double min=std::numeric_limits<double>::max();
         for(int i=0; i < trials; i++) {
             std::cout<<"Starting trial "<<i<<std::endl;
             double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
