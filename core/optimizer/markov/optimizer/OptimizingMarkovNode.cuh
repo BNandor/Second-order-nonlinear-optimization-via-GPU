@@ -18,7 +18,7 @@ public:
     }
 
     ~OptimizingMarkovNode(){
-        std::for_each(operatorChain->nodes.begin(),operatorChain->nodes.end(),[](auto node){delete std::get<1>(node);});
+        std::for_each(operatorChain->nodes.begin(),operatorChain->nodes.end(),[](std::pair<std::string,MarkovNode*>  node){delete node.second;});
         delete operatorChain;
     }
 

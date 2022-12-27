@@ -76,28 +76,28 @@ protected:
 
     json getParametersJson(std::unordered_map<std::string,OperatorParameters*> & parameters){
         json parametersJson;
-        std::for_each(parameters.begin(),parameters.end(),[&parametersJson](auto& parameter){
-            parametersJson[std::get<0>(parameter)]=std::get<1>(parameter)->getJson();
+        std::for_each(parameters.begin(),parameters.end(),[&parametersJson](std::pair<const std::string,OperatorParameters*> & parameter){
+            parametersJson[parameter.first]=parameter.second->getJson();
         });
         return parametersJson;
     }
 
     void setRandomUniform(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
-        std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
-            std::get<1>(operatorParameter)->setRandomUniform();
+        std::for_each(chainParameters.begin(),chainParameters.end(),[](std::pair<const std::string,OperatorParameters*>& operatorParameter){
+            operatorParameter.second->setRandomUniform();
         });
     }
 
     void mutateByEpsilon(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
-        std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
-            std::get<1>(operatorParameter)->mutateByEpsilon();
+        std::for_each(chainParameters.begin(),chainParameters.end(),[](std::pair<const std::string,OperatorParameters*>& operatorParameter){
+            operatorParameter.second->mutateByEpsilon();
         });
     }
 
     void printParameters(std::unordered_map<std::string,OperatorParameters*> &parameters) {
-        std::for_each(parameters.begin(),parameters.end(),[](auto& operatorParameter){
+        std::for_each(parameters.begin(),parameters.end(),[](std::pair<const std::string,OperatorParameters*>& operatorParameter){
             std::cout<<std::get<0>(operatorParameter)<<":"<<std::endl;
-            std::get<1>(operatorParameter)->printParameters();
+            operatorParameter.second->printParameters();
         });
     }
 

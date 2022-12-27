@@ -143,18 +143,18 @@ public:
     }
 
     void cloneParameters(std::unordered_map<std::string,OperatorParameters*> &from,std::unordered_map<std::string,OperatorParameters*> &to){
-        std::for_each(from.begin(),from.end(),[&to,&from](auto& operatorParameter) {
-            if(to.count(std::get<0>(operatorParameter))>0) {
-                delete to[std::get<0>(operatorParameter)];
+        std::for_each(from.begin(),from.end(),[&to,&from](std::pair<const std::string,OperatorParameters*> & operatorParameter) {
+            if(to.count(operatorParameter.first)>0) {
+                delete to[operatorParameter.first];
             }
-            to[std::get<0>(operatorParameter)]=std::get<1>(operatorParameter)->clone();
+            to[operatorParameter.first]=operatorParameter.second->clone();
         });
     }
 
 
     void freeOperatorParamMap(std::unordered_map<std::string,OperatorParameters*> &parameters){
-        std::for_each(parameters.begin(),parameters.end(),[](auto keyParameter){
-            delete std::get<1>(keyParameter);
+        std::for_each(parameters.begin(),parameters.end(),[](std::pair<std::string,OperatorParameters*>  keyParameter){
+            delete keyParameter.second;
         });
     }
 

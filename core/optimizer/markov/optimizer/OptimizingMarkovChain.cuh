@@ -92,7 +92,7 @@ class OptimizingMarkovChain: public MarkovChain {
     }
 
     void deleteCurrentNodes(){
-        std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
+        std::for_each(nodes.begin(),nodes.end(),[](std::pair<const std::string, MarkovNode*> node){delete node.second;});
     }
 
 public:
@@ -122,9 +122,9 @@ public:
     }
 
     void printParameters() {
-        std::for_each(chainParameters->begin(),chainParameters->end(),[](auto& operatorParameter){
-            std::cout<<std::get<0>(operatorParameter)<<":"<<std::endl;
-            std::get<1>(operatorParameter)->printParameters();
+        std::for_each(chainParameters->begin(),chainParameters->end(),[](std::pair<const std::string,OperatorParameters*>& operatorParameter){
+            std::cout<<operatorParameter.first<<":"<<std::endl;
+            operatorParameter.second->printParameters();
         });
     }
 

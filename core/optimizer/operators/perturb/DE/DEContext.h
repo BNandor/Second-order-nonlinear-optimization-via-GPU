@@ -5,7 +5,7 @@
 #ifndef PARALLELLBFGS_DECONTEXT_H
 #define PARALLELLBFGS_DECONTEXT_H
 
-#include "../../../../../../../../../../usr/local/cuda-11.4/include/curand_kernel.h"
+#include <curand_kernel.h>
 #include "../../../../common/config/CUDAConfig.cuh"
 #include "../../../../common/Random.cuh"
 #include "../Perturbator.h"

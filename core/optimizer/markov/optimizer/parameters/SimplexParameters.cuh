@@ -18,13 +18,13 @@ class SimplexParameters: public OperatorParameters {
 public:
     explicit SimplexParameters(std::unordered_map<std::string, BoundedParameter> params): OperatorParameters(std::move(params)) {
         double sum=0;
-        std::for_each(values.begin(),values.end(),[&sum](auto &parameter) {
-            sum+=std::get<1>(parameter).value;
+        std::for_each(values.begin(),values.end(),[&sum]( std::pair<const std::string, BoundedParameter> &parameter) {
+            sum+=parameter.second.value;
         });
         if(std::abs(sum - 1.0) >std::numeric_limits<double>::epsilon()) {
             std::cerr<<"invalid simplex chainParameters provided, they add up to "<< sum;
-            std::for_each(values.begin(),values.end(),[](auto &parameter) {
-               std::cerr<<std::get<0>(parameter)<<" "<<std::get<1>(parameter).value<<" ";
+            std::for_each(values.begin(),values.end(),[](std::pair<const std::string, BoundedParameter>  &parameter) {
+               std::cerr<<parameter.first<<" "<<parameter.second.value<<" ";
             });
             std::cerr<<std::endl;
             exit(3);
@@ -41,8 +41,8 @@ public:
         std::sort(simplexSamples.begin(),simplexSamples.end());
         simplexSamples.push_back(1.0);
         int sIndex=0;
-        std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples](auto & parameter){
-            std::get<1>(parameter).value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
+        std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples]( std::pair<const std::string, BoundedParameter> & parameter){
+            parameter.second.value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
             sIndex++;
         });
     }
@@ -50,8 +50,8 @@ public:
     void printParameters() override {
         std::cout<<std::endl;
         std::cout<<"\tsimplex: ";
-        std::for_each(values.begin(),values.end(),[](auto &parameter) {
-            std::cout<<std::get<0>(parameter)<<" "<<std::get<1>(parameter).value<<" ";
+        std::for_each(values.begin(),values.end(),[](std::pair<const std::string, BoundedParameter>  &parameter) {
+            std::cout<<parameter.first<<" "<<parameter.second.value<<" ";
         });
         std::cout<<std::endl;
     }
@@ -65,8 +65,8 @@ public:
         std::vector<double> simplexSamples;
         double pSum=0;
         simplexSamples.push_back(0.0);
-        std::for_each(values.begin(),values.end(),[&pSum,&simplexSamples](auto & parameter) {
-            pSum+=std::get<1>(parameter).value;
+        std::for_each(values.begin(),values.end(),[&pSum,&simplexSamples](const std::pair<std::string, BoundedParameter>  & parameter) {
+            pSum+=parameter.second.value;
             simplexSamples.push_back(pSum);
         });
         for(int i=1; i < simplexSamples.size() - 1 ; i++) {
@@ -81,8 +81,8 @@ public:
         }
         std::sort(simplexSamples.begin(),simplexSamples.end());
         int sIndex=0;
-        std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples,this](auto & parameter){
-            std::get<1>(parameter).value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
+        std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples,this]( std::pair<const std::string, BoundedParameter> & parameter){
+            parameter.second.value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
             sIndex++;
         });
     }

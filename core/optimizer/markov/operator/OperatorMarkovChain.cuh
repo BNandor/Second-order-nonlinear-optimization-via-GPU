@@ -26,7 +26,7 @@ public:
     }
 
     ~OperatorMarkovChain() {
-        std::for_each(nodes.begin(),nodes.end(),[](auto node){delete std::get<1>(node);});
+        std::for_each(nodes.begin(),nodes.end(),[](std::pair<std::string,MarkovNode*>  node){delete node.second;});
         delete &nodes;
     }
 

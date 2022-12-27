@@ -68,14 +68,14 @@ public:
     }
 
     virtual void setRandomUniform() {
-        std::for_each(values.begin(),values.end(),[this](auto& parameter){
-            std::get<1>(parameter).setRandomUniform(this->generator);
+        std::for_each(values.begin(),values.end(),[this](std::pair<const std::string, BoundedParameter>& parameter){
+            parameter.second.setRandomUniform(this->generator);
         });
     }
 
     virtual void printParameters() {
         std::cout<<std::endl;
-        std::for_each(values.begin(),values.end(),[this](auto& parameter){
+        std::for_each(values.begin(),values.end(),[this](std::pair<const std::string, BoundedParameter>& parameter){
             std::cout<<std::get<0>(parameter)<<"="<<std::get<1>(parameter).value<<" ";
         });
         std::cout<<std::endl;
@@ -87,15 +87,15 @@ public:
     };
 
     virtual void mutateByEpsilon() {
-        std::for_each(values.begin(),values.end(),[this](auto& parameter){
-            std::get<1>(parameter).mutateByEpsilon(this->generator);
+        std::for_each(values.begin(),values.end(),[this](std::pair<const std::string, BoundedParameter>& parameter){
+            parameter.second.mutateByEpsilon(this->generator);
         });
     }
 
     virtual json getJson() {
         json parametersJson;
-        std::for_each(values.begin(),values.end(),[&parametersJson](auto& parameter){
-            parametersJson[std::get<0>(parameter)]=std::get<1>(parameter).getJson();
+        std::for_each(values.begin(),values.end(),[&parametersJson](std::pair<const std::string, BoundedParameter>& parameter){
+            parametersJson[parameter.first]=parameter.second.getJson();
         });
         return parametersJson;
     }

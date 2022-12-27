@@ -152,7 +152,7 @@ public:
                 break;
             case SQRT: {
 #ifdef SAFE
-                assert(std::sqrt(parameterList[node.arguments[0]->index].value != 0.0));
+                //assert(std::sqrt(parameterList[node.arguments[0]->index].value != 0.0));
 #endif
                 parameterList[node.arguments[0]->index].derivative +=
                         node.derivative * 0.5 / std::sqrt(parameterList[node.arguments[0]->index].value);
