@@ -57,8 +57,8 @@ experimentColumns=experimentsGroupByColumns(recordsAndMetricsDF=recordsWithMetri
 groupedExperiments=groupByExperiments(recordsAndMetricsDF=recordsWithMetrics,experimentGroupColumns= experimentColumns)
 minMedIqrView=groupedExperiments.agg({'minMedIQR':'min'})
 expandedMinMedIqrView=pd.merge(minMedIqrView,recordsWithMetrics,on=experimentColumns+["minMedIQR"],how='left').dropna(axis='columns')
-expandedMinMedIqrView=expandedMinMedIqrView.drop(["problemPath","problemName"],axis=1)
-print(expandedMinMedIqrView)
+expandedMinMedIqrView=expandedMinMedIqrView.drop(["problemPath"],axis=1)
+print(expandedMinMedIqrView.to_html())
 # print(minMedIqrView.columns)
 
 # print(expandedMinMedIqrView)
