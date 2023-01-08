@@ -131,7 +131,7 @@ def testScalability():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([128,256],"modelSize")
+    params["modelSize"]=zipWithProperty([128,256,512],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([10],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")

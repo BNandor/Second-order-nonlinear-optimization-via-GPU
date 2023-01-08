@@ -112,7 +112,7 @@ def groupByExperimentsAndAggregate(recordsWithMetrics,explanatoryColumns,respons
     }
     return (experimentColumns,aggregation)
 
-def enrichAggregations(recordsAndMetrics,aggregations,joinColumns):
+def mergeOn(recordsAndMetrics,aggregations,joinColumns):
     return pd.merge(aggregations, recordsAndMetrics, on=joinColumns,how='left').dropna(axis='columns')
 
 

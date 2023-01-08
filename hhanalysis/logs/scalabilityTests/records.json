@@ -159,6 +159,86 @@
                 "elapsedTimeSec": 40.00803306200396,
                 "threads": 128
             }
+        },
+        "b458147e823f039738c72fa16ce5495ede20d6822de51c5aff524c983b902435-threads1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/scalabilityTests/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 512,
+                "trialSampleSizes": 30,
+                "trialStepCount": 10,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "PERTURB"
+            },
+            "metadata": {
+                "elapsedTimeSec": 3331.159987104,
+                "threads": 1
+            }
+        },
+        "112ae3e9c23cf4be2c212d60d05ac984989327a976fe92d2bc824ee3cbe35a64-threads1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/scalabilityTests/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 512,
+                "trialSampleSizes": 30,
+                "trialStepCount": 10,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "REFINE"
+            },
+            "metadata": {
+                "elapsedTimeSec": 6020.953662372,
+                "threads": 1
+            }
+        },
+        "b458147e823f039738c72fa16ce5495ede20d6822de51c5aff524c983b902435-threads128": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/scalabilityTests/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 512,
+                "trialSampleSizes": 30,
+                "trialStepCount": 10,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "PERTURB"
+            },
+            "metadata": {
+                "elapsedTimeSec": 58.19382332999885,
+                "threads": 128
+            }
+        },
+        "112ae3e9c23cf4be2c212d60d05ac984989327a976fe92d2bc824ee3cbe35a64-threads128": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/scalabilityTests/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 512,
+                "trialSampleSizes": 30,
+                "trialStepCount": 10,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "REFINE"
+            },
+            "metadata": {
+                "elapsedTimeSec": 75.58008195699949,
+                "threads": 128
+            }
         }
     }
 }
