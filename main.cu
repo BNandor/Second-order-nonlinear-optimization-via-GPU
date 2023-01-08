@@ -7,7 +7,11 @@
 #include "core/optimizer/hyper/SimplePerturbHyperLevel.cuh"
 #include "core/common/Statistics.cuh"
 #include <vector>
-//#include "core/common/io/json.h"
+#include <string.h>
+
+#ifndef HH_METHOD
+#define HH_METHOD "SA"
+#endif
 
 int main(int argc, char** argv) {
 //    Statistics statistics=Statistics();
@@ -16,11 +20,22 @@ int main(int argc, char** argv) {
 //    //0,1,2,3,4,5
 //    std::cout<<statistics.IQR(a);
     int totalFunctionEvaluations=ITERATION_COUNT;
-//    HyperLevel* hyperLevel=new RandomHyperLevel();
-//    HyperLevel* hyperLevel=new SimpleLocalSearchHyperLevel();
-//    HyperLevel* hyperLevel=new SimplePerturbHyperLevel();
-    HyperLevel* hyperLevel=new SimulatedAnnealingHyperLevel();
-
+    HyperLevel *hyperLevel=0;
+    if (STR_EQ(HH_METHOD, "RANDOM")) {
+        hyperLevel=new RandomHyperLevel();
+    }
+    if (STR_EQ(HH_METHOD, "REFINE")) {
+     hyperLevel=new SimpleLocalSearchHyperLevel();
+    }
+    if (STR_EQ(HH_METHOD, "PERTURB")) {
+     hyperLevel=new SimplePerturbHyperLevel();
+    }
+    if (STR_EQ(HH_METHOD, "SA")) {
+        hyperLevel = new SimulatedAnnealingHyperLevel();
+    }
+    if(hyperLevel == 0 ) {
+        std::cerr<<"Hyperlevel not selected, please define HH_METHOD as either SA,PERTURB,REFINE or RANDOM"<<std::endl;
+    }
     hyperLevel->hyperOptimize(totalFunctionEvaluations);
     hyperLevel->saveLogs();
 //    cudaDeviceReset();

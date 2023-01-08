@@ -14,6 +14,7 @@ public:
     }
 
     double hyperOptimize(int totalEvaluations) override {
+        std::cout<<"Running "<<hyperLevelId<<" for "<<totalEvaluations<<" evaluations"<<std::endl;
         int trials=HH_TRIALS;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::unordered_map<std::string,OperatorParameters*> defaultParameters=createSimpleLocalSearchOptimizerParameters(totalBaseLevelEvaluations);

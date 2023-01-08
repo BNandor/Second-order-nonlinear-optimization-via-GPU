@@ -24,6 +24,7 @@ public:
     }
 
     double hyperOptimize(int totalEvaluations) override {
+        std::cout<<"Running "<<hyperLevelId<<" for "<<totalEvaluations<<" evaluations"<<std::endl;
         int trials=HH_TRIALS;
         int totalBaseLevelEvaluations=totalEvaluations;
         std::mt19937 generator=std::mt19937(std::random_device()());

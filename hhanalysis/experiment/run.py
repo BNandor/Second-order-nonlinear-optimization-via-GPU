@@ -3,12 +3,16 @@ import json
 import subprocess
 import itertools
 import os
+import copy
 from dict_hash import sha256
 from timeit import default_timer as timer
 
 backslash="\\"
 dquote='"'
 EXPERIMENT_RECORDS_PATH="../logs/records.json"
+SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
+DEFAULT_THREAD_COUNT=128
+
 
 def runOptimizerWith(flags):
     process = subprocess.Popen(['make', 'buildAndRunExperimentWith', f'NVCCFLAGS={flags}'],
@@ -41,10 +45,10 @@ def emptyExperimentRecords():
 def hashOfExperiment(experiment):
     return sha256(experiment)
 
-def experimented(experiment,experimentRecordsPath):
+def experimented(experimentId,experimentRecordsPath):
     createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
     currentRecords=json.load(open(experimentRecordsPath,'r'))
-    return hashOfExperiment(experiment=experiment) in currentRecords["experiments"].keys()
+    return experimentId in currentRecords["experiments"].keys() 
 
 def mapExperimentListToDict(experiment):
     paramsDict={}
@@ -53,10 +57,10 @@ def mapExperimentListToDict(experiment):
     return json.loads(json.dumps(paramsDict))
 
 
-def recordExperiment(experiment,experimentRecordsPath,metadata):
+def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
     currentRecords=json.load(open(experimentRecordsPath,'r'))
-    currentRecords["experiments"][hashOfExperiment(experiment)]={"experiment":experiment,"metadata":metadata}
+    currentRecords["experiments"][experimentId]={"experiment":experiment,"metadata":metadata}
     writeJsonToFile(experimentRecordsPath,json.dumps(currentRecords, indent = 4))
     print(f"Saved {experiment} to {experimentRecordsPath}")
 
@@ -64,9 +68,13 @@ def zipWithProperty(list,property):
     print([property]*len(list))
     return zip([property]*len(list),list)
 
-def experimentWith(experiment,recordsPath):
+def experimentWith(experiment,recordsPath,experimentId,threads=128):
             problemname=experiment['problems'][0]
             problemLogPath=experiment['problems'][1]
+            if 'hyperLevelMethod' in experiment:
+                hyperLevelMethod=experiment['hyperLevelMethod'] 
+            else: 
+                hyperLevelMethod="SA"
             experimentFlags=f"-D{problemname} \
                             -DHYPER_LEVEL_TRIAL_SAMPLE_SIZE={experiment['trialSampleSizes']} \
                             -DITERATION_COUNT={experiment['baselevelIterations']} \
@@ -76,12 +84,25 @@ def experimentWith(experiment,recordsPath):
                             -DLOGS_PATH={backslash}{dquote}{problemLogPath}{backslash}{dquote} \
                             -DHH_SA_TEMP={experiment['HH-SA-temp']} \
                             -DHH_SA_ALPHA={experiment['HH-SA-alpha']} \
-                            -DEXPERIMENT_HASH_SHA256={backslash}{dquote}{hashOfExperiment(experiment=experiment)}{backslash}{dquote}"
+                            -DEXPERIMENT_HASH_SHA256={backslash}{dquote}{experimentId}{backslash}{dquote},\
+                            -DTHREADS_PER_BLOCK={threads},\
+                            -DHH_METHOD={backslash}{dquote}{hyperLevelMethod}{backslash}{dquote}"
+
             print(f"Running experiment {experimentFlags}")
             start = timer()
             consumeOutput(runOptimizerWith(experimentFlags),lambda line:print(line))
             end = timer()
-            return {"elapsedTimeSec":end-start}
+            return {"elapsedTimeSec":end-start,"threads":threads}
+
+def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threads):
+    for experiment in experimentVariations:
+        experimentDict=mapExperimentListToDict(experiment=experiment)
+        experimentId=experimentIdMapper(experimentDict)
+        if not experimented(experimentId,recordsPath):
+            experimentMetadata=experimentWith(experiment=experimentDict,recordsPath=recordsPath,experimentId=experimentId,threads=threads)
+            recordExperiment(experiment=experimentDict,experimentId=experimentId,experimentRecordsPath=recordsPath,metadata=experimentMetadata)
+        else:
+            print(f"Skipping {experiment}")
 
 def runAllExperiments():
     params={}
@@ -100,13 +121,27 @@ def runAllExperiments():
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
-    for experiment in list(itertools.product(*list(params.values()))):
-        experimentDict=mapExperimentListToDict(experiment=experiment)
-        if not experimented(experimentDict,EXPERIMENT_RECORDS_PATH):
-            experimentMetadata=experimentWith(experiment=experimentDict,recordsPath=EXPERIMENT_RECORDS_PATH)
-            recordExperiment(experiment=experimentDict,experimentRecordsPath=EXPERIMENT_RECORDS_PATH,metadata=experimentMetadata)
-        else:
-            print(f"Skipping {experiment}")
 
-runAllExperiments()
+def testScalability():
+    params={}
+    params["problems"]=zipWithProperty([("PROBLEM_ROSENBROCK","hhanalysis/logs/scalabilityTests/rosenbrock.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([128,256],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([10],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["PERTURB","REFINE"],"hyperLevelMethod")
+    
+    
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads1",SCALABILITY_EXPERIMENT_RECORDS_PATH,1)
+    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+# runAllExperiments()
+testScalability()

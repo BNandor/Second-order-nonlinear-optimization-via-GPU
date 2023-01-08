@@ -12,6 +12,8 @@
 #include <utility>
 #include <vector>
 
+#define STR_EQ(x, y) (strcmp(x, y) == 0)
+
 using json = nlohmann::json;
 
 #ifndef HYPER_LEVEL_TRIAL_SAMPLE_SIZE

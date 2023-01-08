@@ -78,6 +78,7 @@ def mapToFormalConcept(resultsDic):
         ctx['context'].append(attributes)
     print(ctx)
     return concepts.Context.fromdict(ctx)
+    
 testCaseColumns=['solver','problem','nodecount','edges','anchors','totaliterations','population','deIteration','distFraction','testcase']
 combinationCaseColumns=['solver','problem','nodecount','edges','anchors','totaliterations','population','deIteration','distFraction','optimizer']
 
