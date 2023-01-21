@@ -30,3 +30,15 @@ def stepsToResults(steps):
             "minMedIQR":steps[problem][-1]["med_iqr"],
         })
     return results
+
+def onlySteps(steps):
+    results=[]
+    for problem in steps.keys():
+        problemParts=problem.split("-")
+        results.append({
+            "problemName":problemNameMapping[problemParts[0]],
+            "modelSize":int(problemParts[1].replace("D","")),
+            "baselevelIterations":int(re.sub("iterations.*","",problemParts[3])),
+            "steps":json.dumps(steps[problem]),
+        })
+    return results

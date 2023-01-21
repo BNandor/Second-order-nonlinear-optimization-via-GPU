@@ -28,15 +28,20 @@ public:
     BoundedParameter(double defaultValue,double lowerBound,double upperBound):value(defaultValue),lowerBound(lowerBound),upperBound(upperBound) {
     }
 
-    void mutateByEpsilon(std::mt19937 &generator) {
-        value += std::normal_distribution<double>(0, (upperBound-lowerBound)/3)(generator);
-        if(value<lowerBound){
-            value=lowerBound;
+    double clipToBound(double  v){
+        if(v<lowerBound){
+            return lowerBound;
         }else{
-            if(value>upperBound){
-                value=upperBound;
+            if(v>upperBound){
+                return upperBound;
             }
         }
+        return v;
+    }
+
+    void mutateByEpsilon(std::mt19937 &generator) {
+        value += std::normal_distribution<double>(0, (upperBound-lowerBound)/3)(generator);
+        value=clipToBound(value);
     }
 
     void setRandomUniform(std::mt19937 &generator) {
@@ -98,6 +103,15 @@ public:
             parametersJson[std::get<0>(parameter)]=std::get<1>(parameter).getJson();
         });
         return parametersJson;
+    }
+
+    void setParameterValue(std::string& parameter, double value) {
+        if(values.count(parameter)>0) {
+            values[parameter].value=values[parameter].clipToBound(value);
+        }else{
+            std::cerr<<"cannot set value"<<value <<"for parameter"<<parameter<<std::endl;
+            exit(4);
+        }
     }
 };
 

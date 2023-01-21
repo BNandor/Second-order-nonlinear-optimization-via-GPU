@@ -104,7 +104,11 @@ def groupByExperimentsAndAggregate(recordsWithMetrics,explanatoryColumns,respons
                         explanatoryVars=explanatoryColumns,
                         responseVars=responseColumns)
     groupedExperiments=groupByExperiments(recordsAndMetricsDF=recordsWithMetrics,experimentGroupColumns= experimentColumns)
-    aggregation=groupedExperiments.agg(metricsAggregation)
+    if(metricsAggregation != {}):
+        aggregation=groupedExperiments.agg(metricsAggregation)
+    else:
+        aggregation=recordsWithMetrics
+
     {
     # print(f"aggregation{aggregation.columns}")
     # print(aggregation)
@@ -130,3 +134,10 @@ def dropIrrelevantColumns(testGroupDF,controlGroupColumns):
 
 def createComparisonDF(controlDF, testDF, independetColumns):
     return pd.merge(controlDF, testDF, on=independetColumns, how="inner")
+
+def selectAllMatchAtLeastOne(df,matchingList):
+    # identity, nothing special here
+    predicate=df[list(df.columns)[0]] == df[list(df.columns)[0]]
+    for (column,mlist) in matchingList:
+        predicate=predicate & df[column].isin(mlist)
+    return predicate

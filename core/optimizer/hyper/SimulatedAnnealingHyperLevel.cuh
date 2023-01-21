@@ -20,7 +20,7 @@
 
 class SimulatedAnnealingHyperLevel: public HyperLevel {
 public:
-    SimulatedAnnealingHyperLevel():HyperLevel("SA"){
+    SimulatedAnnealingHyperLevel():HyperLevel("SA") {
     }
 
     double hyperOptimize(int totalEvaluations) override {
@@ -34,8 +34,12 @@ public:
         std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
         cloneParameters(defaultParameters,currentParameters);
         setRandomUniform(currentParameters);
-        baseLevel.init(logJson);
 
+        if (STR_EQ(BASE_PARAM_OVERLOAD, "YES")) {
+//            setParametersJson(BASE_PARAM_OVERLOAD_PATH, currentParameters);
+        }
+
+        baseLevel.init(logJson);
         baseLevel.loadInitialModel();
         double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
         double min=currentF;

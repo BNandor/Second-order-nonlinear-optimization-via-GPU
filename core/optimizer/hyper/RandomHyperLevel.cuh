@@ -24,7 +24,7 @@ public:
         for(int i=0; i < trials; i++) {
             std::cout<<"Starting trial "<<i<<std::endl;
             baseLevel.loadInitialModel();
-            double currentF=baseLevel.optimize(&currentParameters,totalBaseLevelEvaluations);
+            double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
             printf("f: %f trial %u \n",currentF, i);
             setRandomUniform(currentParameters);
         }

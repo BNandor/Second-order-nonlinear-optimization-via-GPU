@@ -10,6 +10,7 @@ from timeit import default_timer as timer
 backslash="\\"
 dquote='"'
 EXPERIMENT_RECORDS_PATH="../logs/records.json"
+RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../logs/randomHH/records.json"
 SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
 DEFAULT_THREAD_COUNT=128
 
@@ -68,13 +69,17 @@ def zipWithProperty(list,property):
     print([property]*len(list))
     return zip([property]*len(list),list)
 
+def setOrDefault(experiment,flag,default):
+    if flag in experiment:
+        return experiment[flag]
+    else:
+        return default
 def experimentWith(experiment,recordsPath,experimentId,threads=128):
             problemname=experiment['problems'][0]
             problemLogPath=experiment['problems'][1]
-            if 'hyperLevelMethod' in experiment:
-                hyperLevelMethod=experiment['hyperLevelMethod'] 
-            else: 
-                hyperLevelMethod="SA"
+            hyperLevelMethod=setOrDefault(experiment,'hyperLevelMethod',"SA")
+            baselevelParameterOverride=setOrDefault(experiment,'baselevelParameterOverride',"NO")
+            baselevelParameterOverridePath=setOrDefault(experiment,'baselevelParameterOverridePath',"")
             experimentFlags=f"-D{problemname} \
                             -DHYPER_LEVEL_TRIAL_SAMPLE_SIZE={experiment['trialSampleSizes']} \
                             -DITERATION_COUNT={experiment['baselevelIterations']} \
@@ -86,7 +91,10 @@ def experimentWith(experiment,recordsPath,experimentId,threads=128):
                             -DHH_SA_ALPHA={experiment['HH-SA-alpha']} \
                             -DEXPERIMENT_HASH_SHA256={backslash}{dquote}{experimentId}{backslash}{dquote},\
                             -DTHREADS_PER_BLOCK={threads},\
-                            -DHH_METHOD={backslash}{dquote}{hyperLevelMethod}{backslash}{dquote}"
+                            -DHH_METHOD={backslash}{dquote}{hyperLevelMethod}{backslash}{dquote}, \
+                            -DBASE_PARAM_OVERLOAD={backslash}{dquote}{baselevelParameterOverride}{backslash}{dquote}, \
+                            -DBASE_PARAM_OVERLOAD_PATH={backslash}{dquote}{baselevelParameterOverridePath}{backslash}{dquote} \
+                            "
 
             print(f"Running experiment {experimentFlags}")
             start = timer()
@@ -95,12 +103,18 @@ def experimentWith(experiment,recordsPath,experimentId,threads=128):
             return {"elapsedTimeSec":end-start,"threads":threads}
 
 def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threads):
+    remainingExperimentsToRun=sum([not experimented(experimentIdMapper(mapExperimentListToDict(experiment)),recordsPath) for experiment in experimentVariations])
+    print(f"Total experiments: {len(experimentVariations)}")
+    print(f"Remaining experiments: {remainingExperimentsToRun}")
+    runningId=0
     for experiment in experimentVariations:
         experimentDict=mapExperimentListToDict(experiment=experiment)
         experimentId=experimentIdMapper(experimentDict)
         if not experimented(experimentId,recordsPath):
+            print(f"Running {runningId}/{remainingExperimentsToRun}: {experiment}")
             experimentMetadata=experimentWith(experiment=experimentDict,recordsPath=recordsPath,experimentId=experimentId,threads=threads)
             recordExperiment(experiment=experimentDict,experimentId=experimentId,experimentRecordsPath=recordsPath,metadata=experimentMetadata)
+            runningId+=1
         else:
             print(f"Skipping {experiment}")
 
@@ -124,7 +138,6 @@ def runAllExperiments():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
-
 def testScalability():
     params={}
     params["problems"]=zipWithProperty([("PROBLEM_ROSENBROCK","hhanalysis/logs/scalabilityTests/rosenbrock.json")],"problems")
@@ -143,5 +156,61 @@ def testScalability():
     runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads1",SCALABILITY_EXPERIMENT_RECORDS_PATH,1)
     runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
+def runTemperatureAnalysis():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/rosenbrock.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100,5000],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50,100,500],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([50,100,200],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([1000,10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([5,50],"HH-SA-alpha")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+{
+# INITIALIZER_EXPERIMENT_PATH="../logs/paramInitializerTests/records.json"
+# def runInitAnalysis():
+#     params={}
+#     # BASE_PARAM_OVERLOAD
+#     # BASE_PARAM_OVERLOAD_PATH
+#     params["problems"]=zipWithProperty([
+#               ("PROBLEM_ROSENBROCK","hhanalysis/logs/rosenbrock.json")],"problems")
+    
+#     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+#     params["populationSize"]=zipWithProperty([30],"populationSize")
+#     params["modelSize"]=zipWithProperty([500],"modelSize")
+#     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+#     params["trialStepCount"]=zipWithProperty([1],"trialStepCount")
+#     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+#     params["HH-SA-alpha"]=zipWithProperty([5],"HH-SA-alpha")
+#     params["baselevelParameterOverride"]=zipWithProperty(["YES","NO"],"baselevelParameterOverride")
+#     params["baselevelParameterOverridePath"]=zipWithProperty(["baseLevelParamOverride.json"],"baselevelParameterOverridePath")
+    
+#     variations=list(itertools.product(*list(params.values())))
+#     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),INITIALIZER_EXPERIMENT_PATH,DEFAULT_THREAD_COUNT)
+}
+
+def runRandomHHControlGroupExperiments():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/randomHH/rosenbrock.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["RANDOM"],"hyperLevelMethod")
+    
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 # runAllExperiments()
-testScalability()
+# testScalability()
+# runTemperatureAnalysis()
+runRandomHHControlGroupExperiments()

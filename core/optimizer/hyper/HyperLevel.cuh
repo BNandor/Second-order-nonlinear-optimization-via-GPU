@@ -7,7 +7,7 @@
 
 #include "../base/BaseLevel.cuh"
 #include "../../common/Statistics.cuh"
-#include "../../common/io/Logs.cuh"
+#include "../../common/io/JsonOperations.cuh"
 #include <json.hpp>
 #include <utility>
 #include <vector>
@@ -83,6 +83,17 @@ protected:
         });
         return parametersJson;
     }
+
+//    void setParametersJson(std::string  parametersPath,std::unordered_map<std::string,OperatorParameters*> & parameters)
+//    {
+//        json paramsJson=JsonOperations::loadJsonFrom(parametersPath);
+//        std::for_each(paramsJson.begin(),paramsJson.end(),[&parameters](auto &param) {
+//            std::for_each(param.value().begin(),param.value().end(),[&parameters,&param](auto &v) {
+//                std::cout<<"Setting"<<param.key()<<"-"<<v.key()<<" to "<<v.value()<<std::endl;
+//                parameters[param.key()]->setParameterValue(v.key(),v.value());
+//            });
+//        });
+//    }
 
     void setRandomUniform(std::unordered_map<std::string,OperatorParameters*> &chainParameters) {
         std::for_each(chainParameters.begin(),chainParameters.end(),[](auto& operatorParameter){
@@ -286,7 +297,7 @@ protected:
 
 public:
     void saveLogs(){
-        Logs::appendLogs(logJson,LOGS_PATH);
+        JsonOperations::appendLogs(logJson, LOGS_PATH);
     }
     virtual double hyperOptimize(int totalEvaluations)=0;
     virtual ~HyperLevel()= default;
