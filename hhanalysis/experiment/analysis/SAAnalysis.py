@@ -1,6 +1,7 @@
 from commonAnalysis import *
 from dict_hash import sha256
 from commonPlots import *
+from common import *
 
 def enrichAndFilterSA(recordsWithMetrics,aggregations,experimentColumns):
     HHView=mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
@@ -194,7 +195,7 @@ def fillStepsMinValue(steps,til):
     return filled
         
 RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../../logs/randomHH/records.json"
-def createSAPlots():
+def createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,ids):
     random=createTestGroupView(RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH,
                                     (SAStepsMetric,"hashSHA256"),
                                     recordToExperiment,
@@ -202,9 +203,7 @@ def createSAPlots():
                                     set([]),
                                     {},
                                     justAggregations)
-    # random=random.reset_index(drop=True)
-    random=random.drop(['problemPath'],axis=1)
-    print(random.to_latex())
+    randomSteps=json.loads(random.loc[matchOneIdInIndex(random.index,ids)]['steps'])
     sa=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
                                     (SAStepsMetric,"hashSHA256"),
                                     recordToExperiment,
@@ -212,37 +211,58 @@ def createSAPlots():
                                     set([]),
                                     {},
                                     justAggregations)
+    saSteps=json.loads(sa.loc[matchOneIdInIndex(sa.index,ids)]['steps'])
     customHYS=pd.DataFrame(onlySteps(loadResultsSteps(CustomHYSPath)))
-    rosenbrockCHYSResults=customHYS[(customHYS['problemName'] == 'PROBLEM_ROSENBROCK') & (customHYS['baselevelIterations'] == int(100))]
-
-    RANDOM_5D=list(map(lambda at: at['med_+_iqr'],json.loads(random.loc['e9272933d50d87930781c5afb72b76f472c13d05278107d6181a6b51eeb0eb5b']['steps'])))
-    RANDOM_5D_MIN=fillStepsMinValue(list(zip(range(0,len(RANDOM_5D)),RANDOM_5D)),len(RANDOM_5D))
-    SA_5D=list(map(lambda at: at['med_+_iqr'],json.loads(sa.loc[ '481b0deaadf28552e7958e2c61feab8e36456416ec3c3aea512f854970783b22']['steps'])))
-    SA_5D_MIN=fillStepsMinValue(list(zip(range(0,len(SA_5D)),SA_5D)),len(SA_5D))
-    CUSTOMHYS_5D=fillStepsMinValue(list(map(lambda at: (int(at['step'].split('-')[0]),at['med_iqr']),json.loads(rosenbrockCHYSResults[rosenbrockCHYSResults['modelSize']==5]['steps'].to_list()[0]))),len(RANDOM_5D))
-    data_series_5D = [
-    # (range(0, len(SA_5D)), SA_5D, 'SA'),
-    # (range(0, len(RANDOM_5D)), RANDOM_5D, 'RANDOM'),
-    (range(0, len(RANDOM_5D_MIN)), RANDOM_5D_MIN, 'RANDOM_MIN'),
-    (range(0, len(SA_5D_MIN)), SA_5D_MIN, 'SA_MIN'),
-    (range(0, len(CUSTOMHYS_5D)), CUSTOMHYS_5D, 'CUSTOMHYS'),
+    rosenbrockCHYSResults=customHYS[selectAllMatchAtLeastOne(customHYS,customHYSFilterToOneResult)]
+    RANDOM_STEPS=list(map(lambda at: at['med_+_iqr'],randomSteps))
+    RANDOM_STEPS_MIN=fillStepsMinValue(list(zip(range(0,len(RANDOM_STEPS)),RANDOM_STEPS)),len(RANDOM_STEPS))
+    SA_STEPS=list(map(lambda at: at['med_+_iqr'],saSteps))
+    SA_STEPS_MIN=fillStepsMinValue(list(zip(range(0,len(SA_STEPS)),SA_STEPS)),len(SA_STEPS))
+    CUSTOMHYS_5D=fillStepsMinValue(list(map(lambda at: (int(at['step'].split('-')[0]),at['med_iqr']),json.loads(rosenbrockCHYSResults['steps'].to_list()[0]))),len(RANDOM_STEPS))
+    data_series = [
+    # (range(0, len(SA_STEPS)), SA_STEPS, 'SA'),
+    # (range(0, len(RANDOM_STEPS)), RANDOM_STEPS, 'RANDOM'),
+    (range(0, len(RANDOM_STEPS_MIN)), RANDOM_STEPS_MIN, 'Random NMHH'),
+    (range(0, len(SA_STEPS_MIN)), SA_STEPS_MIN, 'SA-NMHH'),
+    (range(0, len(CUSTOMHYS_5D)), CUSTOMHYS_5D, 'CUSTOMHyS'),
     ]
-    plot_series(data_series_5D, title='5D comparison',scale='log')
+    return data_series
 
-    RANDOM_50D=list(map(lambda at: at['med_+_iqr'],json.loads(random.loc['97142ed9a3d719cb637d12cfc10911779f738eacbe00f93df6269ee331ad408b']['steps'])))
-    RANDOM_50D_MIN=fillStepsMinValue(list(zip(range(0,len(RANDOM_50D)),RANDOM_50D)),len(RANDOM_50D))
-    SA_50D=list(map(lambda at: at['med_+_iqr'],json.loads(sa.loc[ 'fa229fb84688dde5cd4721f4fa64de2fec91a2ba82f3e67a9920a71fe0510606']['steps'])))
-    SA_50D_MIN=fillStepsMinValue(list(zip(range(0,len(SA_50D)),SA_50D)),len(SA_50D))
-    CUSTOMHYS_50D=fillStepsMinValue(list(map(lambda at: (int(at['step'].split('-')[0]),at['med_iqr']),json.loads(rosenbrockCHYSResults[rosenbrockCHYSResults['modelSize']==50]['steps'].to_list()[0]))),len(RANDOM_50D))
-    data_series_50D = [
-    # (range(0, len(SA_50D)), SA_50D, 'SA'),
-    # (range(0, len(RANDOM_50D)), RANDOM_50D, 'RANDOM'),
-    (range(0, len(RANDOM_50D_MIN)), RANDOM_50D_MIN, 'RANDOM_MIN'),
-    (range(0, len(SA_50D_MIN)), SA_50D_MIN, 'SA_MIN'),
-    (range(0, len(CUSTOMHYS_50D)), CUSTOMHYS_50D, 'CUSTOMHYS')]
-    plot_series(data_series_50D, title='50D comparison',scale='log')
+def comparisonSeriesFor(baselevelIterations,modelSize,problemName):
+    params={}
+    params["problems"]=zipWithProperty([
+              (problemName,"hhanalysis/logs/rosenbrock.json"),
+              (problemName,"hhanalysis/logs/randomHH/rosenbrock.json"),
+              (problemName,"hhanalysis/logs/schwefel223.json"),
+              (problemName,"hhanalysis/logs/randomHH/schwefel223.json"),
+              (problemName,"hhanalysis/logs/qing.json"),
+              (problemName,"hhanalysis/logs/randomHH/qing.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([baselevelIterations],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([modelSize],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["RANDOM",None],"hyperLevelMethod")
+    customHYSFilterToOneResult=[("baselevelIterations",[baselevelIterations]),('modelSize',[modelSize]),('problemName',[problemName])]
+    return createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,possibleExperimentIds(experimentParams=params))
+    
+def optimizerMethodsComparisonPlot():
+    performances=[comparisonSeriesFor(100,dim,"PROBLEM_ROSENBROCK") for dim in [5,50,100,500]]
+    titles=[f"Rosenbrock {dim} dimensions" for dim in [5,50,100,500]]
+    plot_series(performances,titles, x_label='steps', y_label=' fitness (log)',scale='log',file_name=f"plots/HH_SA_RAND_CUSTOMHYS_Rosenbrock.svg")
+
+    # performances=[comparisonSeriesFor(100,dim,"PROBLEM_SCHWEFEL223") for dim in [5,50,100,500]]
+    # titles=[f"Schwefel 2.23 {dim} dimensions" for dim in [5,50,100,500]]
+    # plot_series(performances,titles, x_label='steps', y_label='log cost',scale='log',file_name=f"plots/HH_SA_RAND_CUSTOMHYS_Schwefel.svg")
+
+    # performances=[comparisonSeriesFor(100,dim,"PROBLEM_QING") for dim in [5,50,100,500]]
+    # titles=[f"Qing {dim} dimensions" for dim in [5,50,100,500]]
+    # plot_series(performances,titles, x_label='steps', y_label='log cost',scale='log',file_name=f"plots/HH_SA_RAND_CUSTOMHYS_QING.svg")
 
 # SAAnalysis()
 #SATempAnalysis()
 # ScalabilityAnalysis()
-createSAPlots()
+optimizerMethodsComparisonPlot()

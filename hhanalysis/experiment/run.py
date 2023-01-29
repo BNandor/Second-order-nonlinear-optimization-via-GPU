@@ -4,8 +4,8 @@ import subprocess
 import itertools
 import os
 import copy
-from dict_hash import sha256
 from timeit import default_timer as timer
+from analysis.common import *
 
 backslash="\\"
 dquote='"'
@@ -43,20 +43,10 @@ def createIfNotExists(path,content):
 def emptyExperimentRecords():
     return {"experiments":{}}
 
-def hashOfExperiment(experiment):
-    return sha256(experiment)
-
 def experimented(experimentId,experimentRecordsPath):
     createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
     currentRecords=json.load(open(experimentRecordsPath,'r'))
     return experimentId in currentRecords["experiments"].keys() 
-
-def mapExperimentListToDict(experiment):
-    paramsDict={}
-    for param in experiment:
-        paramsDict[param[0]]=param[1]
-    return json.loads(json.dumps(paramsDict))
-
 
 def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
@@ -65,15 +55,14 @@ def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     writeJsonToFile(experimentRecordsPath,json.dumps(currentRecords, indent = 4))
     print(f"Saved {experiment} to {experimentRecordsPath}")
 
-def zipWithProperty(list,property):
-    print([property]*len(list))
-    return zip([property]*len(list),list)
+
 
 def setOrDefault(experiment,flag,default):
     if flag in experiment:
         return experiment[flag]
     else:
         return default
+
 def experimentWith(experiment,recordsPath,experimentId,threads=128):
             problemname=experiment['problems'][0]
             problemLogPath=experiment['problems'][1]
@@ -155,6 +144,7 @@ def testScalability():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads1",SCALABILITY_EXPERIMENT_RECORDS_PATH,1)
     runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+    # runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,256)
 
 def runTemperatureAnalysis():
     params={}
@@ -197,11 +187,13 @@ def runTemperatureAnalysis():
 def runRandomHHControlGroupExperiments():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/randomHH/rosenbrock.json")],"problems")
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/randomHH/rosenbrock.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/randomHH/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/randomHH/qing.json")],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([5,50],"modelSize")
+    params["modelSize"]=zipWithProperty([5,50,100,500],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -211,6 +203,6 @@ def runRandomHHControlGroupExperiments():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 # runAllExperiments()
-# testScalability()
+testScalability()
 # runTemperatureAnalysis()
-runRandomHHControlGroupExperiments()
+# runRandomHHControlGroupExperiments()
