@@ -57,17 +57,8 @@ def groupByExperiments(recordsAndMetricsDF,experimentGroupColumns):
 
 # Loads the records from recordsPath and fetches all the relevant metrics of each record
 # recordsPath -> (experimentId, experimentColumns,metricsColumns)
-def joinRecordsAndMetrics(recordsPath,getMetricsAndId,mapRecordToExperiment):
+def joinRecordsAndMetrics(records,getMetricsAndId):
     _,indexColumn=getMetricsAndId
-
-    # records -> (experimentId, experimentColumns)
-    # recordsPath,experimentId,(record->experiment) -> experimentDF(index: hashSHA256, columns:*experiments( baselevelIterations',... 'problemPath) )
-    records=loadRecordsFrom(recordsPath,indexColumn,mapRecordToExperiment)
-    { 
-    # print(f"Records{records.columns}")
-    # print(records)
-    # print(records[(records['problemName']=="PROBLEM_ROSENBROCK") & (records['trialStepCount']==100) & (records['HH-SA-temp'] == 10000) & (records['HH-SA-alpha'] == 50)])
-    }
     
     # (experimentId, experimentColumns), (allExperimentMetrics -> relevantMetrics,experimentId) 
     # -> (experimentId, metricsColumns)
@@ -120,8 +111,20 @@ def mergeOn(recordsAndMetrics,aggregations,joinColumns):
     return pd.merge(aggregations, recordsAndMetrics, on=joinColumns,how='left').dropna(axis='columns')
 
 
-def createTestGroupView(recordsPath,getMetricsAndId,mapRecordToExperiment,explanatoryColumns,responseColumns,metricsAggregation,enrichAndFilter):
-    recordsWithMetrics=joinRecordsAndMetrics(recordsPath,getMetricsAndId,mapRecordToExperiment)
+def createTestGroupView(recordsPath,getMetricsAndId,mapRecordToExperiment,explanatoryColumns,responseColumns,metricsAggregation,enrichAndFilter,enrichWithMetrics=True):
+    _,indexColumn=getMetricsAndId
+    # records -> (experimentId, experimentColumns)
+    # recordsPath,experimentId,(record->experiment) -> experimentDF(index: hashSHA256, columns:*experiments( baselevelIterations',... 'problemPath) )
+    records=loadRecordsFrom(recordsPath,indexColumn,mapRecordToExperiment)
+    { 
+    # print(f"Records{records.columns}")
+    # print(records)
+    # print(records[(records['problemName']=="PROBLEM_ROSENBROCK") & (records['trialStepCount']==100) & (records['HH-SA-temp'] == 10000) & (records['HH-SA-alpha'] == 50)])
+    }
+    if enrichWithMetrics:
+        recordsWithMetrics=joinRecordsAndMetrics(records,getMetricsAndId)
+    else:
+        recordsWithMetrics=records
     experimentColumns,aggregations=groupByExperimentsAndAggregate(recordsWithMetrics,explanatoryColumns,responseColumns,metricsAggregation)
     testGroupDF=enrichAndFilter(recordsWithMetrics,aggregations,experimentColumns)
     return testGroupDF

@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.font_manager as fm
+import numpy as np
 
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
@@ -36,13 +37,38 @@ def plot_series(series_of_data_series, titles,x_label='X-axis', y_label='Y-axis'
     
     # Show the plot
     plt.show()
-
-# This function takes in a list of data series, each series is a tuple of x values, y values, and a label. It also takes in a title, x label and y label for the plot and a file_name where the plot will be saved.
-# You can call this function like this:
-
-# data_series = [
-#     (range(1, 6), [2, 4, 6, 8, 10], 'Series 1'),
-#     (range(2, 7), [3, 6, 9, 12, 15], 'Series 2'),
-#     (range(3, 8), [3, 1, 9, 4, -5], 'Series 3')
-# ]
-# plot_series(data_series, title='My Plot')
+    
+def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,width_ratios,height_ratios,subfigdim,figsize=(10,10),filename=None):
+    prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')
+    fig = plt.figure(figsize=figsize, constrained_layout=True)
+    subfigs = fig.subfigures(subfigdim[0],subfigdim[1],wspace=0.05 )
+    subplotsInFig=int((rows*columns)/(subfigdim[0]*subfigdim[1]))
+    for k, figrow in enumerate(subfigs):
+        for l, subfig in enumerate(figrow):
+            axs=subfig.subplots(1, subplotsInFig,gridspec_kw={"width_ratios":width_ratios,"height_ratios":height_ratios,'wspace': 0.0})
+            # fig, axs = plt.subplots(rows, columns, figsize=figsize,)
+            for i, ax in enumerate(axs):
+                    im = ax.imshow(np.array(Ps[k][2*l+i]), cmap='Greens',vmin=0,vmax=1)
+                    ax.set_xticks(np.arange(Ps[k][2*l+i].shape[1]))
+                    ax.set_yticks(np.arange(Ps[k][2*l+i].shape[0]))
+                    ax.set_xticklabels(xticks[k][2*l+i],fontproperties=prop)
+                    ax.set_yticklabels(yticks[k][2*l+i],fontproperties=prop,rotation=90)
+                    ax.set_title(titles[k][2*l+i],fontproperties=prop)
+                    ax.tick_params(axis='both', which='both', length=0)
+                    ax.set_xlabel(xlabelTitles[k][2*l+i],fontproperties=prop, va="top")
+                    ax.set_ylabel(ylabelTitles[k][2*l+i],fontproperties=prop, rotation=90, va="bottom")
+                    # ax.spines['top'].set_visible(False)
+                    # ax.spines['right'].set_visible(False)
+                    # ax.spines['bottom'].set_visible(False)
+                    # ax.spines['left'].set_visible(False)
+            subfig.suptitle(figuretitles[k][l],fontproperties=prop,size=14)
+    # Add colorbar
+    # fig.tight_layout()
+    # cbar = fig.colorbar(im, ax=axs.flat, shrink=0.6)
+    # cbar.ax.set_ylabel("Probability", rotation=-90, va="bottom")
+    
+    # plt.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=0, hspace=0)
+    # Show the plot
+    if filename:
+        plt.savefig(filename)
+    plt.show()

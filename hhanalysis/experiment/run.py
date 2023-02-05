@@ -55,8 +55,6 @@ def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     writeJsonToFile(experimentRecordsPath,json.dumps(currentRecords, indent = 4))
     print(f"Saved {experiment} to {experimentRecordsPath}")
 
-
-
 def setOrDefault(experiment,flag,default):
     if flag in experiment:
         return experiment[flag]
@@ -142,9 +140,10 @@ def testScalability():
     
     
     variations=list(itertools.product(*list(params.values())))
-    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads1",SCALABILITY_EXPERIMENT_RECORDS_PATH,1)
-    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
-    # runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,256)
+    # runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads1",SCALABILITY_EXPERIMENT_RECORDS_PATH,1)
+    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{64}",SCALABILITY_EXPERIMENT_RECORDS_PATH,64)
+    # runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{DEFAULT_THREAD_COUNT}",SCALABILITY_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+    runExperimentVariations(variations,lambda exp:f"{hashOfExperiment(exp)}-threads{256}",SCALABILITY_EXPERIMENT_RECORDS_PATH,256)
 
 def runTemperatureAnalysis():
     params={}

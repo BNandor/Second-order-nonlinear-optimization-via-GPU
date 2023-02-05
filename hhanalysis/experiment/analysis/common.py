@@ -40,3 +40,9 @@ def matchOneIdInIndex(index,ids):
     mathcingRandomIs=list(filter(lambda id: id in index,ids))
     assert len(mathcingRandomIs) == 1
     return mathcingRandomIs[0]
+
+def printMinResultEachRow(df,experimentCols,columns):
+    for  index,row in df.iterrows():
+        minResult=min([row[column] for column in columns])
+        methodsHavingMinResult=[column for column in columns if row[column] == minResult]
+        print(f"{[row[column] for column in experimentCols]}{methodsHavingMinResult}->{minResult}")
