@@ -130,7 +130,7 @@ public:
         metrics.getCudaEventMetrics().recordStopCompute();
         optimizerContext.cudaMemoryModel.copyModelsFromDevice(metrics.modelPerformanceMetrics);
 //        metrics.printFinalMetrics();
-//        printCurrentBestModel();
+        printCurrentBestModel();
         cudaDeviceSynchronize();
 
         double currentBestF= metrics.modelPerformanceMetrics.updateBestModelCost();

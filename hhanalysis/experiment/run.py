@@ -201,7 +201,7 @@ def runRandomHHControlGroupExperiments():
     
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
-# runAllExperiments()
-testScalability()
+runAllExperiments()
+# testScalability()
 # runTemperatureAnalysis()
 # runRandomHHControlGroupExperiments()

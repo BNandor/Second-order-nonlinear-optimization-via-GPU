@@ -400,7 +400,7 @@ def createCategoryTransitionHeatMapsAt(path,baselevelIterations=100):
        [0.0,row['refiner->refiner'],row['refiner->selector']],#refine
        [row['selector->perturb'],0.0,0.0],#select
     ]),axis=1)
-    tabloo.show(testGroupDF)
+    # tabloo.show(testGroupDF)
     return testGroupDF 
 def getProbabilityTransitionsMatchOne(df,dim):
     assert(len(df[df['modelSize']==dim]['P'].to_list())==1)
@@ -431,10 +431,10 @@ def createTransitionProbabilityHeatMap():
     xlabelTitles=[]
     ylabelTitles=[]
     dims=[5,50,100,500]
-    problems=['Rastrigin','Rosenbrock','Qing','Trid','Schwefel223','Styblinksi Tang']
-    problemdfs=[rastrigin,rosenbrock,qing,trid,schwefel,styblinskitang]
-    # problems=['Styblinksi Tang','Rosenbrock']
-    # problemdfs=[styblinskitang,rosenbrock]
+    # problems=['Rastrigin','Rosenbrock','Qing','Trid','Schwefel223','Styblinksi Tang']
+    # problemdfs=[rastrigin,rosenbrock,qing,trid,schwefel,styblinskitang]
+    problems=['Styblinksi Tang','Rosenbrock']
+    problemdfs=[styblinskitang,rosenbrock]
     for problem,df in zip(problems,problemdfs):
         plotRow=[]
         rowxTicks=[]

@@ -2358,24 +2358,6 @@
                 "elapsedTimeSec": 18053.210087569005
             }
         },
-        "c1a6bd3b80aae3ac5c13f5cf395b33e8431c9392f16550efb2da4bfbc7b967e8": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_RASTRIGIN",
-                    "hhanalysis/logs/rastrigin.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 5,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50
-            },
-            "metadata": {
-                "elapsedTimeSec": 173.9064167969991
-            }
-        },
         "8e55bbd2ee35d4c06dbf0041680e78401eac89f1819005034e82d1a6e3883ca2": {
             "experiment": {
                 "problems": [
@@ -2536,42 +2518,6 @@
             },
             "metadata": {
                 "elapsedTimeSec": 516.5515301749983
-            }
-        },
-        "dbd3b24ad65e4d790fe6af7dd19bce7161cbd5929438339c39c8996c71dfd8b2": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_STYBLINSKITANG",
-                    "hhanalysis/logs/styblinskitang.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 100,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50
-            },
-            "metadata": {
-                "elapsedTimeSec": 136.2737866499956
-            }
-        },
-        "2ab24b4e4879cd3ebb271f626cc2b2e695b30a2d5f72c2107af523ba67cc5199": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_STYBLINSKITANG",
-                    "hhanalysis/logs/styblinskitang.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 500,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50
-            },
-            "metadata": {
-                "elapsedTimeSec": 1385.9857512559975
             }
         },
         "330885fb257f297c1312621f543970edc2d3a548e26eb814199888eb77c6eb25": {
@@ -3721,6 +3667,63 @@
             },
             "metadata": {
                 "elapsedTimeSec": 59453.278213009995,
+                "threads": 128
+            }
+        },
+        "dbd3b24ad65e4d790fe6af7dd19bce7161cbd5929438339c39c8996c71dfd8b2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 870.6519538110006,
+                "threads": 128
+            }
+        },
+        "2ab24b4e4879cd3ebb271f626cc2b2e695b30a2d5f72c2107af523ba67cc5199": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2679.1216787179983,
+                "threads": 128
+            }
+        },
+        "c1a6bd3b80aae3ac5c13f5cf395b33e8431c9392f16550efb2da4bfbc7b967e8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 230.28093055200043,
                 "threads": 128
             }
         }

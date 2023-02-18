@@ -182,7 +182,7 @@ protected:
         chainParameters["OptimizerChainRefinerSimplex"]=new SimplexParameters(
                 {
                         {std::string("selector"),BoundedParameter(1.0,0,1)},
-                        {std::string("refiner"),BoundedParameter(0.0,0,1)}
+                        {std::string("refiner"),BoundedParameter(0.0,0,0.9)}
                 });
         chainParameters["OptimizerChainSelectorSimplex"]=new SimplexParameters(
                 {
@@ -277,14 +277,14 @@ protected:
         // Refiner parameters
         std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
         gdParams["GD_ALPHA"]=BoundedParameter(ALPHA, 0.5, 5);
-        gdParams["GD_FEVALS"]=BoundedParameter(totalBaseLevelEvaluations/10.0, 1,totalBaseLevelEvaluations);
+        gdParams["GD_FEVALS"]=BoundedParameter(1, 1,3);
 //        gdParams["GD_ALPHA"]=BoundedParameter(ALPHA, 0.5, 100);
 //        gdParams["GD_FEVALS"]=BoundedParameter(ITERATION_COUNT, 0, optimizerContext->to
         chainParameters["RefinerGDOperatorParams"]=new OperatorParameters(gdParams);
 
         std::unordered_map<std::string,BoundedParameter> lbfgsParams=std::unordered_map<std::string,BoundedParameter>();
         lbfgsParams["LBFGS_ALPHA"]=BoundedParameter(ALPHA, 0.5, 5);
-        lbfgsParams["LBFGS_FEVALS"]=BoundedParameter(totalBaseLevelEvaluations/10.0, 1,totalBaseLevelEvaluations);
+        lbfgsParams["LBFGS_FEVALS"]=BoundedParameter(6, 6,7);
         lbfgsParams["LBFGS_C1"]=BoundedParameter(0.0001, 0.0, 0.1);
         lbfgsParams["LBFGS_C2"]=BoundedParameter(0.9, 0.8, 1.0);
 
