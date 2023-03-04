@@ -13,7 +13,7 @@
 
 class SNLPAnchor : public Problem {
 public:
-    static const unsigned ThisOperatorTreeSize = 14;
+    static const unsigned ThisOperatorTreeSize = 15;
     static const unsigned ThisParameterSize = 2;
     static const unsigned ThisConstantSize = 4;
     DDouble ThisOperatorTree[ThisOperatorTreeSize] = {};
@@ -36,7 +36,7 @@ public:
 
     __device__ __host__
     DDouble *eval(double *x, unsigned xSize) {
-        // ((c(0)-x(0))^2 + (c(1)-x(1))^2 - c(3)^2)^2
+        // sqrt(((c(0)-x(0))^2 + (c(1)-x(1))^2 - c(3)^2)^2)
         initOperatorTreePartially(x, trunc(operatorTree[2].value) * 2, 2, 0);
         operatorTree[6] = operatorTree[0] - operatorTree[4];
         operatorTree[7] = operatorTree[6].square();
@@ -46,7 +46,8 @@ public:
         operatorTree[11] = operatorTree[3].square();
         operatorTree[12] = operatorTree[10] - operatorTree[11];
         operatorTree[13] = operatorTree[12].square();
-        return &operatorTree[13];
+        operatorTree[14] = operatorTree[13].sqrt();
+        return &operatorTree[14];
     }
 };
 

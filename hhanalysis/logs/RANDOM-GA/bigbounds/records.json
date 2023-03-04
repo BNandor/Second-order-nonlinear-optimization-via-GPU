@@ -1,0 +1,484 @@
+{
+    "experiments": {
+        "910aeaf959a74599734b657528e6d39eba6c7460e715f5559bb971c69c5654ff": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/RANDOM-GA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 204.91656110700023,
+                "threads": 128
+            }
+        },
+        "653f1fd721d329794dfd6db9ab0068d62260507b745a7269e1852637b0b30a19": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/RANDOM-GA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 214.05703764699956,
+                "threads": 128
+            }
+        },
+        "52a756e2be034de8bb87f29b745671c77be974ca1db0a9858a5f518487f44a38": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/RANDOM-GA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 213.7245691249991,
+                "threads": 128
+            }
+        },
+        "97d0f71518fab98c655026f73d974d4b526af16b935a0ba866630c7a9d852cdf": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/RANDOM-GA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 457.6966929049995,
+                "threads": 128
+            }
+        },
+        "cd1955a56822b029721fecf476b5acda8e0844003c2e1d5c752ec02e23c45a46": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/RANDOM-GA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 182.0273186480008,
+                "threads": 128
+            }
+        },
+        "179a95fd0a9fc8f3adc967a8a34a828401dc701d4bb1dc8490f64a1680ee7bc7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/RANDOM-GA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 188.37829759899978,
+                "threads": 128
+            }
+        },
+        "6a2cca6771d65e77d5bad922c5bebe95094479089e97eaf754b344dd200dec6b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/RANDOM-GA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 197.35665721999976,
+                "threads": 128
+            }
+        },
+        "0ae576c71e1688d264bfc41c3a3ec94b941be1e781f098417be91f88f925990d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/RANDOM-GA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 414.9095207150003,
+                "threads": 128
+            }
+        },
+        "df172cd60a6dad9280f457ec487b26b1a3782083753160673a012146ca5ec59c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/RANDOM-GA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 216.16465254499963,
+                "threads": 128
+            }
+        },
+        "def6fb39eb722323c455bef7fdf7032e45cf987fb15f26664814941e4c8053a1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/RANDOM-GA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 230.70749487799912,
+                "threads": 128
+            }
+        },
+        "11e5f349f54ec5d3aa9b019e78bceac9a902269f5a5e786191c03c95fa30ac9c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/RANDOM-GA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 235.6403434090007,
+                "threads": 128
+            }
+        },
+        "6ea906120ab6b083f9f29ba94a9451ec6218492f41659c074dca765e80b3fb05": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/RANDOM-GA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 536.2053194620003,
+                "threads": 128
+            }
+        },
+        "9848f7c99a7070d0797bafc7f3cf3c16e06010eb80df2a041857588e0dc24360": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/RANDOM-GA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 183.20128409400058,
+                "threads": 128
+            }
+        },
+        "133effdf5f178539b3ed71b294eeb50ab5b787096ce1b5aaf6cad3ed26f61289": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/RANDOM-GA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 192.3819779759997,
+                "threads": 128
+            }
+        },
+        "6c1592f73de49b4f6f5afc05047ecd4139e8136d5d5f4ff8c48a829a593161c7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/RANDOM-GA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 195.55584918899876,
+                "threads": 128
+            }
+        },
+        "61f7b247dae29edcdee3b92aea742a7eb6e251c3fed66649a6b75b205c99dd5d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/RANDOM-GA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 379.1281600520015,
+                "threads": 128
+            }
+        },
+        "fd042eaa1117035986a01ba84f4e95795a21df9bf1cf28256422948c94810f9d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/RANDOM-GA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 175.32754371199917,
+                "threads": 128
+            }
+        },
+        "b6b376e1de8921c38ad19cd7881274ce407077b02d4f5fededaf92c59b1ff57b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/RANDOM-GA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 177.6051393079997,
+                "threads": 128
+            }
+        },
+        "7213c0537fa557d0bfdab5cc24c43e64cd59505f526ba3a8d94b7cba18d3be51": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/RANDOM-GA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 181.18821036700137,
+                "threads": 128
+            }
+        },
+        "c59913275fc940282996d630a81a447563b43b419b5d76d656cda6668e6f8887": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/RANDOM-GA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 356.8648878749991,
+                "threads": 128
+            }
+        },
+        "9d18c90d25c3098e6a1f27509af3f325fbeae3e4c9db3aae1d587845b14609d5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/RANDOM-GA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 162.7490698040001,
+                "threads": 128
+            }
+        },
+        "87991abe8c96c0db17832ffc602fac04ea259fbbb9d0f1d9fd6b6fd29d1927e1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/RANDOM-GA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 171.19120301900148,
+                "threads": 128
+            }
+        },
+        "9119772b450c2fd1c6b44d81786cecf1090da84bdc044f90b479e75a7e2d0c85": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/RANDOM-GA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 182.1370136350015,
+                "threads": 128
+            }
+        },
+        "2164ae797dce314719f9b5f0d1a631f8e08ba10c16e9343f8da05900a3d9a4a0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/RANDOM-GA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM-GA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 282.9452835840002,
+                "threads": 128
+            }
+        }
+    }
+}

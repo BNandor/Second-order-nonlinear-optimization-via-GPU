@@ -313,7 +313,15 @@ def optimizerMethodsComparisonPlot():
 }
 
 MEALPY_EXPERIMENT_RECORDS_PATH="../../logs/mealpyPerf/records.json"
-def mealpyComparison():
+SAPERTURB_EXPERIMENT_RECORDS_PATH="../../logs/SAPerturb/records.json"
+GA_EXPERIMENT_RECORDS_PATH="../../logs/GA/records.json"
+DE_EXPERIMENT_RECORDS_PATH="../../logs/DE/records.json"
+RANDOM_GA_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-GA/records.json"
+RANDOM_DE_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-DE/records.json"
+SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
+LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
+GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
+def methodsComparison():
     controlGroup=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
                                     (None,"hashSHA256"),
                                     mealpyRecordToExperiment,
@@ -328,6 +336,63 @@ def mealpyComparison():
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterSA)
+    sarefineGroup=createTestGroupView(SAREFINE_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    enrichAndFilterSA)
+    lbfgsGroup=createTestGroupView(LBFGS_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)            
+    gdGroup=createTestGroupView(GD_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)      
+    saperturbGroup=createTestGroupView(SAPERTURB_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    enrichAndFilterSA)
+    gaGroup=createTestGroupView(GA_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)            
+    deGroup=createTestGroupView(DE_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)      
+    randomgaGroup=createTestGroupView(RANDOM_GA_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)            
+    randomdeGroup=createTestGroupView(RANDOM_DE_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR"]),
+                                    {'minMedIQR':'min'},
+                                    justAggregations)                            
+                                  
     customhysDF=getCustomHySControlGroupDF()
     customhysDF['hyperLevel-id']='CUSTOMHyS'
     customhysDF=dropIrrelevantColumns(customhysDF,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
@@ -336,8 +401,50 @@ def mealpyComparison():
     testGroupDF=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     customhysDF=customhysDF[selectAllMatchAtLeastOne(customhysDF,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     testGroupDF['hyperLevel-id']='NMHH'
-
-    all=pd.concat([customhysDF,controlGroup,testGroupDF])
+    sarefineGroup=dropIrrelevantColumns(sarefineGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    sarefineGroup['hyperLevel-id']='SA-REFINE-NMHH'
+    sarefineGroup=sarefineGroup[selectAllMatchAtLeastOne(sarefineGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    lbfgsGroup=dropIrrelevantColumns(lbfgsGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    lbfgsGroup['hyperLevel-id']='LBFGS'
+    lbfgsGroup=lbfgsGroup[selectAllMatchAtLeastOne(lbfgsGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    gdGroup=dropIrrelevantColumns(gdGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    gdGroup['hyperLevel-id']='GD'
+    gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    saperturbGroup['hyperLevel-id']='SA-PERTURB'
+    saperturbGroupBig=saperturbGroup.copy()
+    saperturbGroupBig['hyperLevel-id']='SA-PERTURB-BIG'
+    saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    saperturbGroupBig=saperturbGroupBig[selectAllMatchAtLeastOne(saperturbGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    gaGroup['hyperLevel-id']='GA'
+    gaGroupBig=gaGroup.copy()
+    gaGroupBig['hyperLevel-id']='GA-BIG'
+    gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    gaGroupBig=gaGroupBig[selectAllMatchAtLeastOne(gaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    deGroup['hyperLevel-id']='DE'
+    deGroupBig=deGroup.copy()
+    deGroupBig['hyperLevel-id']='DE-BIG'
+    deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    deGroupBig=deGroupBig[selectAllMatchAtLeastOne(deGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    randomgaGroup['hyperLevel-id']='RANDOM-GA'
+    randomgaGroupBig=randomgaGroup.copy()
+    randomgaGroupBig['hyperLevel-id']='RANDOM-GA-BIG'
+    randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    randomgaGroupBig=randomgaGroupBig[selectAllMatchAtLeastOne(randomgaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    randomdeGroup['hyperLevel-id']='RANDOM-DE'
+    randomdeGroupBig=randomdeGroup.copy()
+    randomdeGroupBig['hyperLevel-id']='RANDOM-DE-BIG'
+    randomdeGroup=randomdeGroup[selectAllMatchAtLeastOne(randomdeGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    randomdeGroupBig=randomdeGroupBig[selectAllMatchAtLeastOne(randomdeGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
+    # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
+    # all=pd.concat([saperturbGroup,saperturbGroupBig,gaGroup,deGroup,randomgaGroup,randomdeGroup])
+    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
+    
     all=all.drop(['baselevelIterations'],axis=1)
     all=all.sort_values(by=['modelSize',"problemName",'minMedIQR'])
     all=all[['problemName','modelSize','hyperLevel-id','minMedIQR']]
@@ -348,16 +455,16 @@ def mealpyComparison():
         transposedRow={}
         transposedRow['problemName']=group[0]
         transposedRow['modelSize']=group[1]
-        for  index,row in groupIndex.iterrows():
+        for index,row in groupIndex.iterrows():
             transposedRow[row["hyperLevel-id"]]=row["minMedIQR"]
             optimizers.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
-    # tabloo.show(transpose)
+    print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizers))
+    tabloo.show(transpose)
     # tabloo.show(all)
     # print(all.to_latex(index=False))
     # export the styled dataframe to LaTeX
     print(transpose.to_latex(index=False))
-    print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizers))
     # return (controlGroup,testGroupDF)
 
 def all5000IterationResults():
@@ -476,6 +583,6 @@ def createTransitionProbabilityHeatMap():
 # SATempAnalysis()
 # ScalabilityAnalysis()
 # optimizerMethodsComparisonPlot()
-# mealpyComparison()
+methodsComparison()
 # all5000IterationResults()
-createTransitionProbabilityHeatMap()
+# createTransitionProbabilityHeatMap()

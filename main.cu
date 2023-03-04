@@ -1,11 +1,21 @@
 #include <iostream>
 #include "core/optimizer/base/BaseLevel.cuh"
 #include "core/optimizer/hyper/HyperLevel.cuh"
-#include "core/optimizer/hyper/RandomHyperLevel.cuh"
-#include "core/optimizer/hyper/SimulatedAnnealingHyperLevel.cuh"
-#include "core/optimizer/hyper/SimpleLocalSearchHyperLevel.cuh"
-#include "core/optimizer/hyper/SimplePerturbHyperLevel.cuh"
+#include "core/optimizer/hyper/Random/RandomHyperLevel.cuh"
+#include "core/optimizer/hyper/Random/RandomGDSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/Random/RandomLBFGSSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/Random/RandomGAHyperLevel.cuh"
+#include "core/optimizer/hyper/Random/RandomDEHyperLevel.cuh"
+#include "core/optimizer/hyper/SA/SimulatedAnnealingHyperLevel.cuh"
+#include "core/optimizer/hyper/SA/SimulatedAnnealingPerturbHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimpleLocalSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimpleGDSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimpleLBFGSSearchHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimplePerturbHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimpleGAHyperLevel.cuh"
+#include "core/optimizer/hyper/Simple/SimpleDEHyperLevel.cuh"
 #include "core/common/Statistics.cuh"
+#include "core/optimizer/hyper/SA/SimulatedAnnealingRefineHyperLevel.cuh"
 #include <vector>
 #include <string.h>
 
@@ -33,6 +43,46 @@ int main(int argc, char** argv) {
     if (STR_EQ(HH_METHOD, "SA")) {
         hyperLevel = new SimulatedAnnealingHyperLevel();
     }
+    if (STR_EQ(HH_METHOD, "SA_PERTURB")) {
+        hyperLevel = new SimulatedAnnealingPerturbHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "SA_REFINE")) {
+        hyperLevel = new SimulatedAnnealingRefineHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "GD")) {
+        hyperLevel = new SimpleGDSearchHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "LBFGS")) {
+        hyperLevel = new SimpleLBFGSSearchHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "GA")) {
+        hyperLevel = new SimpleGAHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "DE")) {
+        hyperLevel = new SimpleDEHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "RANDOM-GD")) {
+        hyperLevel = new RandomGDHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "RANDOM-LBFGS")) {
+        hyperLevel = new RandomLBFGSHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "RANDOM-GA")) {
+        hyperLevel = new RandomGAHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "RANDOM-DE")) {
+        hyperLevel = new RandomDEHyperLevel();
+    }
+
     if(hyperLevel == 0 ) {
         std::cerr<<"Hyperlevel not selected, please define HH_METHOD as either SA,PERTURB,REFINE or RANDOM"<<std::endl;
     }
