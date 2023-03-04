@@ -1,7 +1,7 @@
 buildAndRun:
-	if [ -f ./gd ];then  rm gd ;fi
-	/usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -o gd -arch=sm_60  -Xptxas -v
-	./gd
+	if [ -f ./opt ];then  rm opt ;fi
+	/usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -L/home/spaceman/.local/lib  -lcmaes -o opt -arch=sm_60  -v
+	echo "Staring optimizer" &&  ./opt
 
 test:
 	python3 run.py

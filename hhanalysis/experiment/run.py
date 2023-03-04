@@ -22,6 +22,7 @@ GD_EXPERIMENT_RECORDS_PATH="../logs/GD/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../logs/LBFGS/records.json"
 RANDOM_GD_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-GD/records.json"
 RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-LBFGS/records.json"
+CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/records.json"
 SASNLP_EXPERIMENT_RECORDS_PATH="../logs/SNLP/SA/records.json"
 SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
 
@@ -503,6 +504,27 @@ def runRandomLBFGSExperiments():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
+def runCMAESExperiments():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/CMA-ES/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/CMA-ES/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/CMA-ES/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/CMA-ES/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/CMA-ES/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/CMA-ES/qing.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50,100,500],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["CMA-ES"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),CMA_ES_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
 def runSASNLPExperiment():
     n=27
     params={}
@@ -547,3 +569,4 @@ def runSASNLPExperiment():
 # runLBFGSExperiments()
 # runRandomGDExperiments()
 # runRandomLBFGSExperiments()
+runCMAESExperiments()

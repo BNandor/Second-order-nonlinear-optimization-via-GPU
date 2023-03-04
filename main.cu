@@ -14,6 +14,7 @@
 #include "core/optimizer/hyper/Simple/SimplePerturbHyperLevel.cuh"
 #include "core/optimizer/hyper/Simple/SimpleGAHyperLevel.cuh"
 #include "core/optimizer/hyper/Simple/SimpleDEHyperLevel.cuh"
+#include "core/optimizer/hyper/CMA-ES/CMAESHyperLevel.cuh"
 #include "core/common/Statistics.cuh"
 #include "core/optimizer/hyper/SA/SimulatedAnnealingRefineHyperLevel.cuh"
 #include <vector>
@@ -81,6 +82,10 @@ int main(int argc, char** argv) {
 
     if (STR_EQ(HH_METHOD, "RANDOM-DE")) {
         hyperLevel = new RandomDEHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "CMA-ES")) {
+        hyperLevel = new CMAESHyperLevel();
     }
 
     if(hyperLevel == 0 ) {

@@ -3,6 +3,7 @@ from dict_hash import sha256
 from commonPlots import *
 from common import *
 import tabloo
+import numpy as np
 
 def enrichAndFilterSA(recordsWithMetrics,aggregations,experimentColumns):
     HHView=mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
@@ -81,6 +82,24 @@ def recordToScalabilityExperiment(record):
 def filterMetricPropertiesSA(metric):
     return {
         "minMedIQR":metric["minBaseLevelStatistic"],
+        "hashSHA256":metric["experimentHashSha256"]
+    }
+def minTrialAverage(trials):
+    minAvg=float('inf')
+    minStd=0
+    for trial in trials:
+        trialAverage=np.average(trial['performanceSamples'])
+        if(trialAverage<minAvg):
+            minAvg=trialAverage
+            minStd=np.std(trial['performanceSamples'])
+    return (minAvg,minStd)
+
+def filterMetricPropertiesAverageAndMedIQR(metric):
+    (minAvg,minStd)=minTrialAverage(metric['trials'])
+    return {
+        "minMedIQR":metric["minBaseLevelStatistic"],
+        "minAvg":minAvg,
+        "minStd":minStd,
         "hashSHA256":metric["experimentHashSha256"]
     }
 
@@ -358,40 +377,42 @@ def methodsComparison():
                                     {'minMedIQR':'min'},
                                     justAggregations)      
     saperturbGroup=createTestGroupView(SAPERTURB_EXPERIMENT_RECORDS_PATH,
-                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
-                                    enrichAndFilterSA)
+                                    set(["minMedIQR","minAvg","minStd"]),
+                                    {'minAvg':'min'},
+                                    justAggregations)
+          
     gaGroup=createTestGroupView(GA_EXPERIMENT_RECORDS_PATH,
-                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                  (filterMetricPropertiesSA,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
-                                    justAggregations)            
+                                    justAggregations)
     deGroup=createTestGroupView(DE_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesSA,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
-                                    justAggregations)      
+                                    justAggregations)     
     randomgaGroup=createTestGroupView(RANDOM_GA_EXPERIMENT_RECORDS_PATH,
-                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                   (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
-                                    justAggregations)            
+                                    set(["minMedIQR","minAvg","minStd"]),
+                                    {'minAvg':'min'},
+                                    justAggregations)      
+     
     randomdeGroup=createTestGroupView(RANDOM_DE_EXPERIMENT_RECORDS_PATH,
-                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                   (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
-                                    justAggregations)                            
+                                    set(["minMedIQR","minAvg","minStd"]),
+                                    {'minAvg':'min'},
+                                    justAggregations)                           
                                   
     customhysDF=getCustomHySControlGroupDF()
     customhysDF['hyperLevel-id']='CUSTOMHyS'
@@ -410,7 +431,7 @@ def methodsComparison():
     gdGroup=dropIrrelevantColumns(gdGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
     gdGroup['hyperLevel-id']='GD'
     gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
     saperturbGroup['hyperLevel-id']='SA-PERTURB'
     saperturbGroupBig=saperturbGroup.copy()
     saperturbGroupBig['hyperLevel-id']='SA-PERTURB-BIG'
@@ -428,13 +449,13 @@ def methodsComparison():
     deGroupBig['hyperLevel-id']='DE-BIG'
     deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     deGroupBig=deGroupBig[selectAllMatchAtLeastOne(deGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
     randomgaGroup['hyperLevel-id']='RANDOM-GA'
     randomgaGroupBig=randomgaGroup.copy()
     randomgaGroupBig['hyperLevel-id']='RANDOM-GA-BIG'
     randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     randomgaGroupBig=randomgaGroupBig[selectAllMatchAtLeastOne(randomgaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
     randomdeGroup['hyperLevel-id']='RANDOM-DE'
     randomdeGroupBig=randomdeGroup.copy()
     randomdeGroupBig['hyperLevel-id']='RANDOM-DE-BIG'
@@ -443,11 +464,11 @@ def methodsComparison():
     # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
     # all=pd.concat([saperturbGroup,saperturbGroupBig,gaGroup,deGroup,randomgaGroup,randomdeGroup])
-    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
+    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig])
     
     all=all.drop(['baselevelIterations'],axis=1)
-    all=all.sort_values(by=['modelSize',"problemName",'minMedIQR'])
-    all=all[['problemName','modelSize','hyperLevel-id','minMedIQR']]
+    all=all.sort_values(by=['modelSize',"problemName",'minAvg'])
+    all=all[['problemName','modelSize','hyperLevel-id','minAvg']]
     all=all.groupby(['problemName','modelSize'])
     transpose=pd.DataFrame()
     optimizers=set()
@@ -456,7 +477,7 @@ def methodsComparison():
         transposedRow['problemName']=group[0]
         transposedRow['modelSize']=group[1]
         for index,row in groupIndex.iterrows():
-            transposedRow[row["hyperLevel-id"]]=row["minMedIQR"]
+            transposedRow[row["hyperLevel-id"]]=row["minAvg"]
             optimizers.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
     print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizers))
