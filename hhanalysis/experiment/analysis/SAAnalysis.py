@@ -340,6 +340,36 @@ RANDOM_DE_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-DE/records.json"
 SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
+LOGS_ROOT="../../logs"
+def createMethodsPlots():
+    methods=['RANDOM-GA','RANDOM-DE','SAPerturb','DE','GA']
+    problem='rosenbrock.json'
+    methodsLogs=[]
+    for method in methods:
+        logs = open(f"{LOGS_ROOT}/{method}/{problem}")
+        methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
+    allData=pd.concat(methodsLogs)
+    allData=allData[selectAllMatchAtLeastOne(allData,[('baseLevelEvals',[100]),('baseLevel-xDim',[5,50,100,500])])]
+    allData=allData.groupby(['baseLevel-xDim'])
+    series=pd.DataFrame()
+    optimizers=set()
+    for (dimension,groupIndex) in allData:
+        serie={}
+        serie["dimension"]=dimension
+        for index,row in groupIndex.iterrows():
+            serie[row["hyperLevel-id"]]=row["trials"]
+            optimizers.add(row["hyperLevel-id"])
+        series=series.append(serie,ignore_index=True)
+    for optimizer in optimizers:
+        series[optimizer]=series[optimizer].map(lambda trials: list(map(lambda trial: trial['med_+_iqr'],trials)))
+        series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
+    performances=[]
+    titles=[]
+    for index,row in series.iterrows():
+            performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizers ])
+            titles.append(f"{problem}-{row['dimension']}")
+    plot_series(performances,titles, x_label='steps', y_label=' best fitness (log)',scale='log')
+
 def methodsComparison():
     controlGroup=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
                                     (None,"hashSHA256"),
@@ -385,18 +415,18 @@ def methodsComparison():
                                     justAggregations)
           
     gaGroup=createTestGroupView(GA_EXPERIMENT_RECORDS_PATH,
-                                  (filterMetricPropertiesSA,"hashSHA256"),
+                                  (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
+                                    set(["minMedIQR","minAvg","minStd"]),
+                                    {'minAvg':'min'},
                                     justAggregations)
     deGroup=createTestGroupView(DE_EXPERIMENT_RECORDS_PATH,
-                                    (filterMetricPropertiesSA,"hashSHA256"),
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
+                                    set(["minMedIQR","minAvg","minStd"]),
+                                    {'minAvg':'min'},
                                     justAggregations)     
     randomgaGroup=createTestGroupView(RANDOM_GA_EXPERIMENT_RECORDS_PATH,
                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
@@ -437,13 +467,13 @@ def methodsComparison():
     saperturbGroupBig['hyperLevel-id']='SA-PERTURB-BIG'
     saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     saperturbGroupBig=saperturbGroupBig[selectAllMatchAtLeastOne(saperturbGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
     gaGroup['hyperLevel-id']='GA'
     gaGroupBig=gaGroup.copy()
     gaGroupBig['hyperLevel-id']='GA-BIG'
     gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     gaGroupBig=gaGroupBig[selectAllMatchAtLeastOne(gaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
     deGroup['hyperLevel-id']='DE'
     deGroupBig=deGroup.copy()
     deGroupBig['hyperLevel-id']='DE-BIG'
@@ -464,7 +494,9 @@ def methodsComparison():
     # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
     # all=pd.concat([saperturbGroup,saperturbGroupBig,gaGroup,deGroup,randomgaGroup,randomdeGroup])
-    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig])
+    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
+    # all=pd.concat([saperturbGroupBig,randomdeGroupBig,deGroupBig])
+    all=pd.concat([saperturbGroupBig,randomgaGroupBig,gaGroupBig])
     
     all=all.drop(['baselevelIterations'],axis=1)
     all=all.sort_values(by=['modelSize',"problemName",'minAvg'])
@@ -509,7 +541,6 @@ def all5000IterationResults():
     
     # tabloo.show(transpose)
     print(transpose.to_latex(index=False))    
-
 def createCategoryTransitionHeatMapsAt(path,baselevelIterations=100):
     testGroupDF=createTestGroupView(path,
                                     (categoryTransitionMetric,"hashSHA256"),
@@ -604,6 +635,7 @@ def createTransitionProbabilityHeatMap():
 # SATempAnalysis()
 # ScalabilityAnalysis()
 # optimizerMethodsComparisonPlot()
-methodsComparison()
+# methodsComparison()
 # all5000IterationResults()
 # createTransitionProbabilityHeatMap()
+createMethodsPlots()
