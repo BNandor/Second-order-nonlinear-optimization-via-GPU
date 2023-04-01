@@ -2,16 +2,17 @@ import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.font_manager as fm
 import numpy as np
+import pickle,json
 
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 # matplotlib.rcParams['text.usetex'] = True
-def plot_series(series_of_data_series, titles,x_label='X-axis', y_label='Y-axis', file_name=None,scale='linear'):
+def plot_series(series_of_data_series, titles,x_label='X-axis', y_label='Y-axis', file_name=None,scale='linear',colors=None,figsize=(8,3)):
     prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')
     # Create a figure and axis
     # fig, ax = plt.subplots(figsize=(8,3))
     subplots=len(series_of_data_series)
-    fig, axes = plt.subplots(nrows=subplots, ncols=1,figsize=(8,3*subplots))
+    fig, axes = plt.subplots(nrows=subplots, ncols=1,figsize=(figsize[0],figsize[1]*subplots))
     
     if subplots == 1:
         axes=[axes]
@@ -20,7 +21,10 @@ def plot_series(series_of_data_series, titles,x_label='X-axis', y_label='Y-axis'
         # Plot each series in the data_series list
         for i, series in enumerate(series_of_data_series[j]):
             x, y, label = series
-            axes[j].plot(x, y, label=label,linewidth=0.8)
+            if colors !=None:
+                axes[j].plot(x, y, label=label,linewidth=0.8,color=colors[i])
+            else:
+                axes[j].plot(x, y, label=label,linewidth=0.8)
         
         # Add labels and title
         axes[j].set_xlabel(x_label,fontproperties=prop)
@@ -37,7 +41,34 @@ def plot_series(series_of_data_series, titles,x_label='X-axis', y_label='Y-axis'
     
     # Show the plot
     plt.show()
-    
+
+def plotWilcoxRanksums(df,rows,columns,labels,filename,figsize=(10,10)):
+    prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')    
+    fig, axs = plt.subplots(nrows=rows, ncols=columns, figsize=figsize, gridspec_kw={'wspace': 0.0})
+
+    # loop over each subplot and plot a random 5x5 matrix
+    fig.subplots_adjust(left=0.05, right=1.05, bottom=0.01, top=0.95,wspace=0.2, hspace=0.4)
+    for  i in range(rows):
+        for j in range(columns):
+            # if i == 0 and j == 0:
+            #     axs[i, j].legend()
+            # else:
+            #     axs[i, j].legend_.remove()
+            wilcoxRanksum = pickle.loads(json.loads(df['wilcoxRanksums'].iloc[i*columns + j]).encode('latin-1'))
+            # plot the image in the current subplot
+            axs[i, j].imshow(wilcoxRanksum, cmap='Greys',vmin=0,vmax=1)
+            # axs[i, j].axis('off')
+            title=f"{(df['problemName'].iloc[i*columns + j]).replace('PROBLEM_','')}-{int(df['modelSize'].iloc[i*columns + j])}"
+            # axs[i, j].set_xticks(np.arange(0,wilcoxRanksum.shape[0]))
+            axs[i, j].set_yticks(np.arange(0,wilcoxRanksum.shape[0]))
+            # axs[i, j].set_xticklabels(range(0,wilcoxRanksum.shape[0]),fontproperties=prop)
+            axs[i, j].xaxis.set_visible(False)
+            axs[i, j].set_yticklabels(labels,size=8,fontproperties=prop)
+            axs[i, j].set_title(title,fontproperties=prop)
+    if filename:
+        plt.savefig(filename)
+    plt.show()
+
 def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,width_ratios,height_ratios,subfigdim,figsize=(10,10),filename=None):
     prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')
     fig = plt.figure(figsize=figsize, constrained_layout=True)

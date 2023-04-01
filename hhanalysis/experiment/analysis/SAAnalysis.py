@@ -17,6 +17,13 @@ def enrichAndFilterMealpy(recordsWithMetrics,aggregations,experimentColumns):
     HHView=mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
     return HHView[ (HHView['trialStepCount']==100) ]
 
+def mergeOnAvg(recordsWithMetrics,aggregations,experimentColumns):
+    return mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minAvg"])
+
+def mergeOnMinMedIQR(recordsWithMetrics,aggregations,experimentColumns):
+    return mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
+    
+
 def justAggregations(recordsWithMetrics,aggregations,experimentColumns):
     return aggregations
 
@@ -87,19 +94,22 @@ def filterMetricPropertiesSA(metric):
 def minTrialAverage(trials):
     minAvg=float('inf')
     minStd=0
+    samples=[]
     for trial in trials:
         trialAverage=np.average(trial['performanceSamples'])
         if(trialAverage<minAvg):
             minAvg=trialAverage
             minStd=np.std(trial['performanceSamples'])
-    return (minAvg,minStd)
+            samples=trial['performanceSamples']
+    return (minAvg,minStd,samples)
 
 def filterMetricPropertiesAverageAndMedIQR(metric):
-    (minAvg,minStd)=minTrialAverage(metric['trials'])
+    (minAvg,minStd,samples)=minTrialAverage(metric['trials'])
     return {
         "minMedIQR":metric["minBaseLevelStatistic"],
         "minAvg":minAvg,
         "minStd":minStd,
+        "samples":json.dumps(samples),
         "hashSHA256":metric["experimentHashSha256"]
     }
 
@@ -341,36 +351,51 @@ SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
 LOGS_ROOT="../../logs"
-def createMethodsPlots():
-    methods=['RANDOM-GA','RANDOM-DE','SAPerturb','DE','GA']
+def createMethodsCostEvolutionPlots():
+    methods=['RANDOM-GA','RANDOM-DE','GA','DE','SAPerturb']
     problem='rosenbrock.json'
     methodsLogs=[]
     for method in methods:
         logs = open(f"{LOGS_ROOT}/{method}/{problem}")
         methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
     allData=pd.concat(methodsLogs)
-    allData=allData[selectAllMatchAtLeastOne(allData,[('baseLevelEvals',[100]),('baseLevel-xDim',[5,50,100,500])])]
+    allData=allData[selectAllMatchAtLeastOne(allData,[('baseLevelEvals',[1000]),('baseLevel-xDim',[5,50,100,500])])]
     allData=allData.groupby(['baseLevel-xDim'])
     series=pd.DataFrame()
     optimizers=set()
+    optimizersList=[]
     for (dimension,groupIndex) in allData:
         serie={}
         serie["dimension"]=dimension
         for index,row in groupIndex.iterrows():
             serie[row["hyperLevel-id"]]=row["trials"]
-            optimizers.add(row["hyperLevel-id"])
+            if row["hyperLevel-id"] not in optimizers:
+                optimizersList.append(row["hyperLevel-id"])
+                optimizers.add(row["hyperLevel-id"])
         series=series.append(serie,ignore_index=True)
-    for optimizer in optimizers:
+    for optimizer in optimizersList:
         series[optimizer]=series[optimizer].map(lambda trials: list(map(lambda trial: trial['med_+_iqr'],trials)))
         series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
     performances=[]
     titles=[]
     for index,row in series.iterrows():
-            performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizers ])
-            titles.append(f"{problem}-{row['dimension']}")
-    plot_series(performances,titles, x_label='steps', y_label=' best fitness (log)',scale='log')
+            performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizersList ])
+            titles.append(f"{problem.replace('.json','').capitalize()}-{int(row['dimension'])}")
+
+    plot_series(performances, titles, x_label='steps', y_label=' best fitness (log)',scale='log',
+                 file_name=f"plots/SA_PERTURB_DE_GA_RANDOM_DE_GA_Rosenbrock-1000.svg",figsize=(16/3,3))
 
 def methodsComparison():
+    metadata={
+        "minMetricColumn":'minAvg',
+        "metricsAggregation":{'minAvg':'min'},
+        "mergeOn":mergeOnAvg,
+        # "minMetricColumn":'minMedIQR',
+        # "metricsAggregation":{'minMedIQR':'min'},
+        # "mergeOn":mergeOnMinMedIQR,
+        'optimizers':list(),
+        "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations']
+    }
     controlGroup=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
                                     (None,"hashSHA256"),
                                     mealpyRecordToExperiment,
@@ -405,44 +430,45 @@ def methodsComparison():
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
-                                    justAggregations)      
+                                    justAggregations)    
+    
     saperturbGroup=createTestGroupView(SAPERTURB_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR","minAvg","minStd"]),
-                                    {'minAvg':'min'},
-                                    justAggregations)
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
           
     gaGroup=createTestGroupView(GA_EXPERIMENT_RECORDS_PATH,
                                   (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR","minAvg","minStd"]),
-                                    {'minAvg':'min'},
-                                    justAggregations)
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
     deGroup=createTestGroupView(DE_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR","minAvg","minStd"]),
-                                    {'minAvg':'min'},
-                                    justAggregations)     
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])     
     randomgaGroup=createTestGroupView(RANDOM_GA_EXPERIMENT_RECORDS_PATH,
                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR","minAvg","minStd"]),
-                                    {'minAvg':'min'},
-                                    justAggregations)      
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])      
      
     randomdeGroup=createTestGroupView(RANDOM_DE_EXPERIMENT_RECORDS_PATH,
-                                   (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
-                                    set(["minMedIQR","minAvg","minStd"]),
-                                    {'minAvg':'min'},
-                                    justAggregations)                           
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])                           
                                   
     customhysDF=getCustomHySControlGroupDF()
     customhysDF['hyperLevel-id']='CUSTOMHyS'
@@ -461,31 +487,31 @@ def methodsComparison():
     gdGroup=dropIrrelevantColumns(gdGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
     gdGroup['hyperLevel-id']='GD'
     gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
+    saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     saperturbGroup['hyperLevel-id']='SA-PERTURB'
     saperturbGroupBig=saperturbGroup.copy()
     saperturbGroupBig['hyperLevel-id']='SA-PERTURB-BIG'
     saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     saperturbGroupBig=saperturbGroupBig[selectAllMatchAtLeastOne(saperturbGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
+    gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     gaGroup['hyperLevel-id']='GA'
     gaGroupBig=gaGroup.copy()
     gaGroupBig['hyperLevel-id']='GA-BIG'
     gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     gaGroupBig=gaGroupBig[selectAllMatchAtLeastOne(gaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
+    deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     deGroup['hyperLevel-id']='DE'
     deGroupBig=deGroup.copy()
     deGroupBig['hyperLevel-id']='DE-BIG'
     deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     deGroupBig=deGroupBig[selectAllMatchAtLeastOne(deGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
+    randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     randomgaGroup['hyperLevel-id']='RANDOM-GA'
     randomgaGroupBig=randomgaGroup.copy()
     randomgaGroupBig['hyperLevel-id']='RANDOM-GA-BIG'
     randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     randomgaGroupBig=randomgaGroupBig[selectAllMatchAtLeastOne(randomgaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-    randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minAvg']))
+    randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     randomdeGroup['hyperLevel-id']='RANDOM-DE'
     randomdeGroupBig=randomdeGroup.copy()
     randomdeGroupBig['hyperLevel-id']='RANDOM-DE-BIG'
@@ -493,33 +519,49 @@ def methodsComparison():
     randomdeGroupBig=randomdeGroupBig[selectAllMatchAtLeastOne(randomdeGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
     # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
-    # all=pd.concat([saperturbGroup,saperturbGroupBig,gaGroup,deGroup,randomgaGroup,randomdeGroup])
-    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
+    # all=pd.concat([saperturbGroup,randomgaGroup,randomdeGroup,gaGroup,deGroup])
+    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
     # all=pd.concat([saperturbGroupBig,randomdeGroupBig,deGroupBig])
-    all=pd.concat([saperturbGroupBig,randomgaGroupBig,gaGroupBig])
-    
+    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,gaGroupBig])
+    # all=pd.concat([saperturbGroupBig,deGroupBig,gaGroupBig])
+    # all=pd.concat([saperturbGroupBig,randomdeGroupBig,randomgaGroupBig])
+    # all=pd.concat([saperturbGroupBig,gaGroupBig])
+    metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
     all=all.drop(['baselevelIterations'],axis=1)
-    all=all.sort_values(by=['modelSize',"problemName",'minAvg'])
-    all=all[['problemName','modelSize','hyperLevel-id','minAvg']]
+    all=all.sort_values(by=['modelSize',"problemName",metadata["minMetricColumn"]])
+    all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"],'minStd','samples']]
     all=all.groupby(['problemName','modelSize'])
     transpose=pd.DataFrame()
-    optimizers=set()
+    optimizersSet=set()
     for (group,groupIndex) in all:
         transposedRow={}
         transposedRow['problemName']=group[0]
         transposedRow['modelSize']=group[1]
         for index,row in groupIndex.iterrows():
-            transposedRow[row["hyperLevel-id"]]=row["minAvg"]
-            optimizers.add(row["hyperLevel-id"])
+            transposedRow[row["hyperLevel-id"]]=row[metadata["minMetricColumn"]]
+            transposedRow[f'{row["hyperLevel-id"]}-std']=row['minStd']
+            transposedRow[f'{row["hyperLevel-id"]}-samples']=json.loads(row["samples"])
+            if not row["hyperLevel-id"] in optimizersSet:
+                metadata['optimizers'].append(row["hyperLevel-id"])
+                optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
-    print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizers))
-    tabloo.show(transpose)
+    print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet))
+    addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
+    plotWilcoxRanksums(transpose,5,4,
+                       list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
+                    #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
+                       filename=None,
+                       figsize=(8,8))
+    
+    # tabloo.show(comparisonTableData)
     # tabloo.show(all)
     # print(all.to_latex(index=False))
     # export the styled dataframe to LaTeX
-    print(transpose.to_latex(index=False))
+    # print(comparisonTableData.to_latex(index=False))
+    
+    printMinAvgStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
+    # printLatexMinAvgStd(transpose,metadata['optimizers'])
     # return (controlGroup,testGroupDF)
-
 def all5000IterationResults():
     testGroupDF=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesSA,"hashSHA256"),
@@ -638,4 +680,4 @@ def createTransitionProbabilityHeatMap():
 # methodsComparison()
 # all5000IterationResults()
 # createTransitionProbabilityHeatMap()
-createMethodsPlots()
+createMethodsCostEvolutionPlots()
