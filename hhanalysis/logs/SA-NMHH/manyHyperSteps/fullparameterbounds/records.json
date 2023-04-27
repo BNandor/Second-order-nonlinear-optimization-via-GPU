@@ -1,0 +1,80 @@
+{
+    "experiments": {
+        "002d5fa6c6b8c18c44972a4039b28858d5f8b36cf179b7d824aab10b31d7ee31": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2302.877523643,
+                "threads": 128
+            }
+        },
+        "00dab34602556f44e1061682b2c2355c4307341dee3fb62ea08d92450782ab21": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 11559.887379544001,
+                "threads": 128
+            }
+        },
+        "4379b94bada4695e03205d42a4e6711dcb7e9fc1a32e9065413b1212168599a9": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1007.6799691799988,
+                "threads": 128
+            }
+        },
+        "1a248e01d7a3eca79771b78f914d3593326d07b7c407f4cdb8a2d5ab590b7c08": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 14151.035936833,
+                "threads": 128
+            }
+        }
+    }
+}

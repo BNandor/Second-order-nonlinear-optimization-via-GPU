@@ -3726,6 +3726,25 @@
                 "elapsedTimeSec": 230.28093055200043,
                 "threads": 128
             }
+        },
+        "c6065fc4934436515b5bea1966721c2701d909391fdcf87e2c21f9acfebc9a34": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 300,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1203.8997737550017,
+                "threads": 128
+            }
         }
     }
 }

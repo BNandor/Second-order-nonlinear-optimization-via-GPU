@@ -22,12 +22,19 @@ public:
             sum+=std::get<1>(parameter).value;
         });
         if(std::abs(sum - 1.0) >std::numeric_limits<double>::epsilon()) {
-            std::cerr<<"invalid simplex chainParameters provided, they add up to "<< sum;
-            std::for_each(values.begin(),values.end(),[](auto &parameter) {
-               std::cerr<<std::get<0>(parameter)<<" "<<std::get<1>(parameter).value<<" ";
+            sum=0;
+            convertValuesToSimplex();
+            std::for_each(values.begin(),values.end(),[&sum](auto &parameter) {
+                sum+=std::get<1>(parameter).value;
             });
-            std::cerr<<std::endl;
-            exit(3);
+            if(std::abs(sum - 1.0) >std::numeric_limits<double>::epsilon()) {
+                std::cerr << "invalid simplex chainParameters provided, they add up to " << sum;
+                std::for_each(values.begin(), values.end(), [](auto &parameter) {
+                    std::cerr << std::get<0>(parameter) << " " << std::get<1>(parameter).value << " ";
+                });
+                std::cerr << std::endl;
+                exit(3);
+            }
         }
     }
 
@@ -44,6 +51,16 @@ public:
         std::for_each(values.begin(),values.end(),[&sIndex,&simplexSamples](auto & parameter){
             std::get<1>(parameter).value=simplexSamples[sIndex+1]-simplexSamples[sIndex];
             sIndex++;
+        });
+    }
+
+    void convertValuesToSimplex()  {
+        double total=0;
+        std::for_each(values.begin(),values.end(),[&total](auto &parameter) {
+            total+=std::get<1>(parameter).value;
+        });
+        std::for_each(values.begin(),values.end(),[total](auto & parameter){
+            std::get<1>(parameter).value=std::get<1>(parameter).value/total;
         });
     }
 

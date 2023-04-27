@@ -57,6 +57,7 @@ protected:
     }
 
     double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations){
+
         std::vector<double> samples;
         for(int i=0;i<sampleSize;i++) {
             baseLevel.loadInitialModel();
@@ -64,12 +65,19 @@ protected:
             std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
             samples.push_back(sampleF);
         }
+        std::cout<<"calculating medIQR "<<std::endl;
         double medIqr=statistics.median(samples) + statistics.IQR(samples);
+        std::cout<<"updating json logs1 "<<std::endl;
         logJson["baseLevelEvals"]=totalBaseLevelEvaluations;
+        std::cout<<"updating json logs2 "<<std::endl;
         logJson["trials"].push_back({{"med_+_iqr",medIqr},{"atEval",baseLevel.totalEvaluations},{"performanceSamples",samples}});
+
         if(medIqr < minBaseLevelStatistic) {
+            std::cout<<"updating best solution "<<std::endl;
             minBaseLevelStatistic=medIqr;
+            std::cout<<"cloning best parameters "<<std::endl;
             cloneParameters(parameters,bestParameters);
+            std::cout<<"setting base level statistics "<<std::endl;
             logJson["minBaseLevelStatistic"]=minBaseLevelStatistic;
             logJson["bestParameters"]=getParametersJson(bestParameters);
         }
@@ -123,8 +131,12 @@ protected:
     }
 
     void printParameters(std::unordered_map<std::string,OperatorParameters*> &parameters) {
+        std::cout<<"accessing paraemters"<<std::endl;
+        std::cout<<parameters.size()<<std::endl;
+        std::cout<<"accessed parameters"<<std::endl;
         std::for_each(parameters.begin(),parameters.end(),[](auto& operatorParameter){
             std::cout<<std::get<0>(operatorParameter)<<":"<<std::endl;
+            std::cout<<"accessing paraemter value at"<<std::get<1>(operatorParameter)<<std::endl;
             std::get<1>(operatorParameter)->printParameters();
         });
     }
@@ -397,14 +409,14 @@ protected:
         // Operator parameters
         // Perturbator parameters
         std::unordered_map<std::string,BoundedParameter> deParams=std::unordered_map<std::string,BoundedParameter>();
-        deParams["DE_CR"]=BoundedParameter(0.99,0.9,1.0);
-        deParams["DE_FORCE"]=BoundedParameter(0.6,0.4,0.7);
+        deParams["DE_CR"]=BoundedParameter(0.7,0.0,1.0);
+        deParams["DE_FORCE"]=BoundedParameter(0.6,0,2);
         chainParameters["PerturbatorDEOperatorParams"]=new OperatorParameters(deParams);
 
         std::unordered_map<std::string,BoundedParameter> gaParams=std::unordered_map<std::string,BoundedParameter>();
         gaParams["GA_CR"]=BoundedParameter(0.9, 0.0, 1.0);
         gaParams["GA_CR_POINT"]=BoundedParameter(0.5, 0.0, 1.0);
-        gaParams["GA_MUTATION_RATE"]=BoundedParameter(0.05, 0.0, 0.1);
+        gaParams["GA_MUTATION_RATE"]=BoundedParameter(0.05, 0.0, 0.5);
         gaParams["GA_MUTATION_SIZE"]=BoundedParameter(50, 0.0, 100);
         gaParams["GA_PARENTPOOL_RATIO"]=BoundedParameter(0.3, 0.2, 1.0);
         gaParams["GA_ALPHA"]=BoundedParameter(0.2, 0.0, 1.0);

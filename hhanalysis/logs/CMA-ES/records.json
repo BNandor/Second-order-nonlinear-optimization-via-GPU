@@ -1,3 +1,64 @@
 {
-    "experiments": {}
+    "experiments": {
+        "b377246177a45b2b4332e3d914890893cde71171f678451f255738bd2192c3a8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/CMA-ES/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 210.06672981799966,
+                "threads": 128
+            }
+        },
+        "9d63cb3c958666e84850238ff174fa6c83aa1902e633a97960d300ca4a918210": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/CMA-ES/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2294.4117968790015,
+                "threads": 128
+            }
+        },
+        "d08b1955fe2c0780c089fd527edde3403866827f935818801be2dcc3f28a200a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/CMA-ES/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 500,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 4576.999826357001,
+                "threads": 128
+            }
+        }
+    }
 }

@@ -36,7 +36,7 @@ public:
 
     __device__ __host__
     DDouble *eval(double *x, unsigned xSize) {
-        //c(1) - x(0)*sin(x(0))
+        //x(0)^10
         initOperatorTreePartially(x, trunc(operatorTree[0].value), 1, 0);
         operatorTree[2]= operatorTree[1].square();
         operatorTree[3]= operatorTree[2].square();
