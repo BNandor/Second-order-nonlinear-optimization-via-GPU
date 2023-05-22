@@ -21,8 +21,6 @@
 
 using namespace libcmaes;
 
-
-
 class CMAESHyperLevel: public HyperLevel {
     std::unordered_map<std::string,OperatorParameters*> parameters;
     std::unordered_set<std::string> CMAES_parameters;

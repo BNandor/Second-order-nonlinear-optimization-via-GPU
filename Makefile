@@ -1,6 +1,6 @@
 buildAndRun:
 	if [ -f ./opt ];then  rm opt ;fi
-	/usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -L/home/spaceman/.local/lib  -lcmaes -o opt -arch=sm_60  -v
+	/usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -L/home/spaceman/.local/lib  -lcmaes -lsgtelib -lnomadAlgos -lnomadEval -lnomadUtils -o opt -arch=sm_60  -v
 	echo "Staring optimizer" &&  ./opt
 
 test:

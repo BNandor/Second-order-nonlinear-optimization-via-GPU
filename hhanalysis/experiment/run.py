@@ -13,7 +13,6 @@ backslash="\\"
 dquote='"'
 EXPERIMENT_RECORDS_PATH="../logs/records.json"
 SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/records.json"
-SANMHH_FULL_PARAMETERS_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/fullparameterbounds/records.json"
 RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../logs/randomHH/records.json"
 SAPERTURB_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/records.json"
 GA_EXPERIMENT_RECORDS_PATH="../logs/GA/records.json"
@@ -27,7 +26,7 @@ RANDOM_GD_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-GD/records.json"
 RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-LBFGS/records.json"
 CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/records.json"
 SA_CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/records.json"
-SA_CMA_ES_FULL_PARAMETERS_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/fullparameterbounds/records.json"
+MADS_NMHH_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/records.json"
 SASNLP_EXPERIMENT_RECORDS_PATH="../logs/SNLP/SA/records.json"
 SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
 
@@ -553,15 +552,15 @@ def runSA_CMAESExperiments():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_CMA_ES_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
-def runSA_CMAESFullParametersExperiments():
+def runMADSExperiments():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/rastrigin.json"),
-            #   ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/styblinskitang.json"),
-            #   ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/trid.json"),
-            #   ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/schwefel223.json"),
-            #   ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/fullparameterbounds/qing.json")
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/MADS-NMHH/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/MADS-NMHH/rastrigin.json"),
+            #   ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/MADS-NMHH/styblinskitang.json"),
+            #   ("PROBLEM_TRID","hhanalysis/logs/MADS-NMHH/trid.json"),
+            #   ("PROBLEM_SCHWEFEL223","hhanalysis/logs/MADS-NMHH/schwefel223.json"),
+            #   ("PROBLEM_QING","hhanalysis/logs/MADS-NMHH/qing.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -571,10 +570,9 @@ def runSA_CMAESFullParametersExperiments():
     params["trialStepCount"]=zipWithProperty([500],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
-    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    params["hyperLevelMethod"]=zipWithProperty(["MADS"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
-    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_CMA_ES_FULL_PARAMETERS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
-
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),MADS_NMHH_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSANMHH_ManyHyperheuristicSteps():
     params={}
@@ -596,27 +594,6 @@ def runSANMHH_ManyHyperheuristicSteps():
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
-
-def runSANMHHFulParameters_ManyHyperheuristicSteps():
-    params={}
-    params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/rastrigin.json"),
-            #   ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/styblinskitang.json"),
-            #   ("PROBLEM_TRID","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/trid.json"),
-            #   ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/schwefel223.json"),
-            #   ("PROBLEM_QING","hhanalysis/logs/SA-NMHH/manyHyperSteps/fullparameterbounds/qing.json")
-              ],"problems")
-    
-    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
-    params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([5,500],"modelSize")
-    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([500],"trialStepCount")
-    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
-    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
-    variations=list(itertools.product(*list(params.values())))
-    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SANMHH_FULL_PARAMETERS_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSASNLPExperiment():
     n=27
@@ -665,5 +642,4 @@ def runSASNLPExperiment():
 # runCMAESExperiments()
 # runSANMHH_ManyHyperheuristicSteps()
 # runSA_CMAESExperiments()
-# runSA_CMAESFullParametersExperiments()
-runSANMHHFulParameters_ManyHyperheuristicSteps()
+runMADSExperiments()

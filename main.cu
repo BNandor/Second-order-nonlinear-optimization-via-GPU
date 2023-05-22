@@ -16,6 +16,7 @@
 #include "core/optimizer/hyper/Simple/SimpleDEHyperLevel.cuh"
 #include "core/optimizer/hyper/CMA-ES/CMAESHyperLevel.cuh"
 #include "core/optimizer/hyper/CMA-ES/SA-CMAESHyperLevel.cuh"
+#include "core/optimizer/hyper/MADS/MADSHyperLevel.cuh"
 #include "core/common/Statistics.cuh"
 #include "core/optimizer/hyper/SA/SimulatedAnnealingRefineHyperLevel.cuh"
 #include <vector>
@@ -91,6 +92,10 @@ int main(int argc, char** argv) {
 
     if (STR_EQ(HH_METHOD, "SA-CMA-ES")) {
         hyperLevel = new SA_CMAESHyperLevel();
+    }
+
+    if (STR_EQ(HH_METHOD, "MADS")) {
+        hyperLevel = new MADSHyperLevel();
     }
 
     if(hyperLevel == 0 ) {
