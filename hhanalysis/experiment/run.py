@@ -13,6 +13,7 @@ backslash="\\"
 dquote='"'
 EXPERIMENT_RECORDS_PATH="../logs/records.json"
 SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/records.json"
+SANMHH_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/GWO/records.json"
 RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../logs/randomHH/records.json"
 SAPERTURB_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/records.json"
 GA_EXPERIMENT_RECORDS_PATH="../logs/GA/records.json"
@@ -618,6 +619,29 @@ def runSASNLPExperiment():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SASNLP_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
+def runSA_NMHH_GA_DE_GD_LBFGS_GWO():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-NMHH/GWO/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-NMHH/GWO/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-NMHH/GWO/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SA-NMHH/GWO/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-NMHH/GWO/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SA-NMHH/GWO/qing.json")
+              ],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50, 100,500],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SANMHH_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 # runAllExperiments()
 # testScalability()
@@ -642,4 +666,5 @@ def runSASNLPExperiment():
 # runCMAESExperiments()
 # runSANMHH_ManyHyperheuristicSteps()
 # runSA_CMAESExperiments()
-runMADSExperiments()
+# runMADSExperiments()
+runSA_NMHH_GA_DE_GD_LBFGS_GWO()

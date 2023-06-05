@@ -6,12 +6,14 @@
 #define PARALLELLBFGS_OPTIMIZINGMARKOVCHAIN_CUH
 #include <random>
 #include "../../../common/OptimizerContext.cuh"
+#include "../../../common/CommonStringUtils.h"
 #include "../MarkovChain.cuh"
 #include "OptimizingMarkovNode.cuh"
 #include <unordered_map>
 #include <algorithm>
 #include <utility>
 #include "./parameters/SimplexParameters.cuh"
+
 
 class OptimizingMarkovChain: public MarkovChain {
     CUDAMemoryModel* cudaMemoryModel;
@@ -56,12 +58,36 @@ class OptimizingMarkovChain: public MarkovChain {
         optimizerContext->differentialEvolutionContext.parameters=*(*chainParameters)["PerturbatorDEOperatorParams"];
         (*perturbatorChain)["GA"]=new OperatorMarkovNode(&optimizerContext->geneticAlgorithmContext,std::string("GA").c_str());
         optimizerContext->geneticAlgorithmContext.parameters=*(*chainParameters)["PerturbatorGAOperatorParams"];
+
         (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorInitializerSimplex"]->values["DE"].value);
         (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorInitializerSimplex"]->values["GA"].value);
         (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorDESimplex"]->values["DE"].value);
         (*perturbatorChain)["DE"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorDESimplex"]->values["GA"].value);
         (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["DE"], (*chainParameters)["PerturbatorGASimplex"]->values["DE"].value);
         (*perturbatorChain)["GA"]->addNext((*perturbatorChain)["GA"], (*chainParameters)["PerturbatorGASimplex"]->values["GA"].value);
+
+#ifdef BASE_PERTURB_EXTRA_OPERATORS
+        std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+        std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+        std::for_each(operatorSet.begin(),operatorSet.end(),[&perturbatorChain,optimizerContext,this,operatorSet](std::string op){
+            if(op == "GWO"){
+                (*perturbatorChain)["GWO"]=new OperatorMarkovNode(&optimizerContext->greyWolfOptimizerContext,std::string("GWO").c_str());
+                optimizerContext->greyWolfOptimizerContext.parameters=*(*chainParameters)["PerturbatorGWOOperatorParams"];
+            }
+            (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorInitializerSimplex"]->values[op].value);
+            (*perturbatorChain)["DE"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorDESimplex"]->values[op].value);
+            (*perturbatorChain)["GA"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorGASimplex"]->values[op].value);
+            if((*perturbatorChain).count(op)<=0){
+                std::cerr<<"Invalid operator configuration, please define "<<op<<std::endl;
+                exit(5);
+            }
+            (*perturbatorChain)[op]->addNext((*perturbatorChain)["DE"], (*chainParameters)["Perturbator"+op+"Simplex"]->values["DE"].value);
+            (*perturbatorChain)[op]->addNext((*perturbatorChain)["GA"], (*chainParameters)["Perturbator"+op+"Simplex"]->values["GA"].value);
+            std::for_each(operatorSet.begin(),operatorSet.end(),[&perturbatorChain,this,&op](std::string op2){
+                    (*perturbatorChain)[op]->addNext((*perturbatorChain)[op2], (*chainParameters)["Perturbator"+op+"Simplex"]->values[op2].value);
+            });
+        });
+#endif
         return new OperatorMarkovChain(*perturbatorChain,metrics);
     }
 

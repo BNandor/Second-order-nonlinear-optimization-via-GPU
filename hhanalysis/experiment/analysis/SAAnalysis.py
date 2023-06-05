@@ -347,6 +347,7 @@ GA_EXPERIMENT_RECORDS_PATH="../../logs/GA/records.json"
 DE_EXPERIMENT_RECORDS_PATH="../../logs/DE/records.json"
 RANDOM_GA_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-GA/records.json"
 RANDOM_DE_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-DE/records.json"
+RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-NMHH/GWO/records.json"
 SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
@@ -387,12 +388,12 @@ def createMethodsCostEvolutionPlots():
 
 def methodsComparison():
     metadata={
-        "minMetricColumn":'minAvg',
-        "metricsAggregation":{'minAvg':'min'},
-        "mergeOn":mergeOnAvg,
-        # "minMetricColumn":'minMedIQR',
-        # "metricsAggregation":{'minMedIQR':'min'},
-        # "mergeOn":mergeOnMinMedIQR,
+        # "minMetricColumn":'minAvg',
+        # "metricsAggregation":{'minAvg':'min'},
+        # "mergeOn":mergeOnAvg,
+        "minMetricColumn":'minMedIQR',
+        "metricsAggregation":{'minMedIQR':'min'},
+        "mergeOn":mergeOnMinMedIQR,
         'optimizers':list(),
         "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations']
     }
@@ -468,6 +469,13 @@ def methodsComparison():
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
+                                    metadata['mergeOn'])                
+    saGWOGroup=createTestGroupView(RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
                                     metadata['mergeOn'])                           
                                   
     customhysDF=getCustomHySControlGroupDF()
@@ -517,10 +525,15 @@ def methodsComparison():
     randomdeGroupBig['hyperLevel-id']='RANDOM-DE-BIG'
     randomdeGroup=randomdeGroup[selectAllMatchAtLeastOne(randomdeGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     randomdeGroupBig=randomdeGroupBig[selectAllMatchAtLeastOne(randomdeGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+
+    saGWOGroup=dropIrrelevantColumns(saGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    saGWOGroup['hyperLevel-id']='SA-GD_LBFGS-GA_DE_GWO'
+    saGWOGroup=saGWOGroup[selectAllMatchAtLeastOne(saGWOGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
     # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
+    all=pd.concat([customhysDF,controlGroup,testGroupDF,saGWOGroup])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
     # all=pd.concat([saperturbGroup,randomgaGroup,randomdeGroup,gaGroup,deGroup])
-    all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig])
+    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig,saGWOGroup])
     # all=pd.concat([saperturbGroupBig,randomdeGroupBig,deGroupBig])
     # all=pd.concat([saperturbGroupBig,randomgaGroupBig,gaGroupBig])
     # all=pd.concat([saperturbGroupBig,deGroupBig,gaGroupBig])
@@ -539,27 +552,28 @@ def methodsComparison():
         transposedRow['modelSize']=group[1]
         for index,row in groupIndex.iterrows():
             transposedRow[row["hyperLevel-id"]]=row[metadata["minMetricColumn"]]
-            transposedRow[f'{row["hyperLevel-id"]}-std']=row['minStd']
-            transposedRow[f'{row["hyperLevel-id"]}-samples']=json.loads(row["samples"])
+            # transposedRow[f'{row["hyperLevel-id"]}-std']=row['minStd']
+            # transposedRow[f'{row["hyperLevel-id"]}-samples']=json.loads(row["samples"])
             if not row["hyperLevel-id"] in optimizersSet:
                 metadata['optimizers'].append(row["hyperLevel-id"])
                 optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
     print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet))
-    addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
-    plotWilcoxRanksums(transpose,5,4,
-                       list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
-                    #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
-                       filename=None,
-                       figsize=(8,8))
+    # addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
+    # plotWilcoxRanksums(transpose,5,4,
+    #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
+    #                 #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
+    #                    filename=None,
+    #                    figsize=(8,8))
     
     # tabloo.show(comparisonTableData)
     # tabloo.show(all)
+    tabloo.show(transpose)
     # print(all.to_latex(index=False))
     # export the styled dataframe to LaTeX
     # print(comparisonTableData.to_latex(index=False))
     
-    printMinAvgStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
+    # printMinAvgStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # printLatexMinAvgStd(transpose,metadata['optimizers'])
     # return (controlGroup,testGroupDF)
 def all5000IterationResults():
@@ -677,7 +691,7 @@ def createTransitionProbabilityHeatMap():
 # SATempAnalysis()
 # ScalabilityAnalysis()
 # optimizerMethodsComparisonPlot()
-# methodsComparison()
+methodsComparison()
 # all5000IterationResults()
 # createTransitionProbabilityHeatMap()
-createMethodsCostEvolutionPlots()
+# createMethodsCostEvolutionPlots()

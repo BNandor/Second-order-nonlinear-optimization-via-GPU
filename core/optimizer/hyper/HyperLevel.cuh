@@ -7,6 +7,7 @@
 
 #include "../base/BaseLevel.cuh"
 #include "../../common/Statistics.cuh"
+#include "../../common/CommonStringUtils.h"
 #include "../../common/io/JsonOperations.cuh"
 #include <json.hpp>
 #include <utility>
@@ -221,8 +222,11 @@ protected:
     std::unordered_map<std::string,OperatorParameters*> createDefaultOptimizerParameters(int totalBaseLevelEvaluations) {
         auto chainParameters=std::unordered_map<std::string,OperatorParameters*>();
         setDefaultOptimizerChainSimplex(chainParameters);
+        printf("default optimizer chain simplex\n");
         setDefaultOperatorChainSimplex(chainParameters);
+        printf("default operator chain simplex\n");
         setDefaultOperatorParameters(chainParameters,totalBaseLevelEvaluations);
+        printf("default operator parameters\n");
         return chainParameters;
     }
 
@@ -318,6 +322,27 @@ protected:
                         {std::string("DE"),BoundedParameter(0.5,0,1)},
                         {std::string("GA"),BoundedParameter(0.5,0,1)}
                 });
+
+        addExtraOperatorSimplex(chainParameters);
+    }
+
+void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters *> &chainParameters){
+//#ifdef BASE_PERTURB_EXTRA_OPERATORS
+    std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+    std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+    printf("set of extra operators\n");
+
+    std::for_each(operatorSet.begin(),operatorSet.end(),[this,&chainParameters,&operatorSet](std::string op){
+        chainParameters["PerturbatorInitializerSimplex"]->values.insert({op,BoundedParameter(0.0,0,1)});
+        chainParameters["PerturbatorDESimplex"]->values.insert({op,BoundedParameter(0.0,0,1)});
+        chainParameters["PerturbatorGASimplex"]->values.insert({op,BoundedParameter(0.0,0,1)});
+        chainParameters["Perturbator"+op+"Simplex"]=new SimplexParameters({{"DE",BoundedParameter(0.5,0,1)},
+                                                                           {"GA",BoundedParameter(0.5,0,1)}});
+        std::for_each(operatorSet.begin(),operatorSet.end(),[&op,&chainParameters](std::string op2) {
+            chainParameters["Perturbator"+op+"Simplex"]->values.insert({op2,BoundedParameter(0.0,0,1)});
+        });
+    });
+//#endif
     }
 
     void setGAPerturbOperatorChainSimplex(
@@ -337,6 +362,7 @@ protected:
                         {std::string("DE"),BoundedParameter(0.0,0,1)},
                         {std::string("GA"),BoundedParameter(1.0,0,1)}
                 });
+        addExtraOperatorSimplex(chainParameters);
     }
 
     void setDEPerturbOperatorChainSimplex(
@@ -344,18 +370,24 @@ protected:
         chainParameters["PerturbatorInitializerSimplex"]=new SimplexParameters(
                 {
                         {std::string("DE"),BoundedParameter(1.0,0,1)},
-                        {std::string("GA"),BoundedParameter(0.0,0,1)}
+                        {std::string("GA"),BoundedParameter(0.0,0,1)},
+                        {std::string("GWO"),BoundedParameter(0.0,0,1)}
+
                 });
         chainParameters["PerturbatorDESimplex"]=new SimplexParameters(
                 {
                         {std::string("DE"),BoundedParameter(1.0,0,1)},
-                        {std::string("GA"),BoundedParameter(0.0,0,1)}
+                        {std::string("GA"),BoundedParameter(0.0,0,1)},
+                        {std::string("GWO"),BoundedParameter(0.0,0,1)}
+
                 });
         chainParameters["PerturbatorGASimplex"]=new SimplexParameters(
                 {
                         {std::string("DE"),BoundedParameter(1.0,0,1)},
-                        {std::string("GA"),BoundedParameter(0.0,0,1)}
+                        {std::string("GA"),BoundedParameter(0.0,0,1)},
+                        {std::string("GWO"),BoundedParameter(0.0,0,1)}
                 });
+        addExtraOperatorSimplex(chainParameters);
     }
 
     void setSelectorOperatorChainSimplex(std::unordered_map<std::string, OperatorParameters *> &chainParameters) const {
@@ -421,7 +453,17 @@ protected:
         gaParams["GA_PARENTPOOL_RATIO"]=BoundedParameter(0.3, 0.2, 1.0);
         gaParams["GA_ALPHA"]=BoundedParameter(0.2, 0.0, 1.0);
         chainParameters["PerturbatorGAOperatorParams"]=new OperatorParameters(gaParams);
-
+        #ifdef BASE_PERTURB_EXTRA_OPERATORS
+            std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+            std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+            std::for_each(operatorSet.begin(),operatorSet.end(),[&chainParameters,operatorSet](std::string op) {
+                if (op == "GWO") {
+                    std::unordered_map<std::string,BoundedParameter> gwoParams=std::unordered_map<std::string,BoundedParameter>();
+                    gwoParams["GWO_a"]=BoundedParameter(1.0, 0.0, 2.0);
+                    chainParameters["PerturbatorGWOOperatorParams"] = new OperatorParameters(gwoParams);
+                }
+            });
+        #endif
         // Refiner parameters
         std::unordered_map<std::string,BoundedParameter> gdParams=std::unordered_map<std::string,BoundedParameter>();
         gdParams["GD_ALPHA"]=BoundedParameter(ALPHA, 0.5, 5);

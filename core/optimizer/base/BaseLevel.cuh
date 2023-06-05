@@ -20,6 +20,7 @@
 #include "../../common/Metrics.cuh"
 #include "../../optimizer/operators/perturb/DE/DEContext.h"
 #include "../../optimizer/operators/perturb/GA/GAContext.cuh"
+#include "../../optimizer/operators/perturb/GWO/GWOContext.h"
 #include "../../common/OptimizerContext.cuh"
 #include "../../common/model/BoundedParameter.cuh"
 #include "../../optimizer/markov/optimizer/OptimizingMarkovChain.cuh"

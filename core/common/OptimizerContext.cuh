@@ -6,6 +6,7 @@
 #define PARALLELLBFGS_OPTIMIZERCONTEXT_CUH
 
 #include "../optimizer/operators/perturb/DE/DEContext.h"
+#include "../optimizer/operators/perturb/GWO/GWOContext.h"
 #include "../optimizer/operators/perturb/Perturbator.h"
 #include "../optimizer/operators/refine/LocalSearch.cuh"
 #include "config/CUDAConfig.cuh"
@@ -30,6 +31,7 @@ public:
     // Perturbators
     DEContext differentialEvolutionContext;
     GAContext geneticAlgorithmContext;
+    GWOContext greyWolfOptimizerContext;
     Perturbator* currentPerturbator;
 
     // Selectors
