@@ -164,6 +164,7 @@ def createAndSaveContext(comparisonDF,independentColumns):
     saveContext(ctx,'comparison.cxt')
 
 SA_EXPERIMENT_RECORDS_PATH="../../logs/records.json"
+SA_GA_DE_GD_LBFGS_RECORDS_PATH="../../logs/SA-NMHH/GA_DE_GD_LBFGS/records.json"
 def SAAnalysis():
     controlGroup,testGroupDF=getGroups(SA_EXPERIMENT_RECORDS_PATH)
     independentColumns=["baselevelIterations","modelSize","problemName"]
@@ -348,43 +349,78 @@ DE_EXPERIMENT_RECORDS_PATH="../../logs/DE/records.json"
 RANDOM_GA_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-GA/records.json"
 RANDOM_DE_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-DE/records.json"
 RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-NMHH/GWO/records.json"
+SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GWO/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/CMA-ES/GWO/records.json"
+MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
 SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
 LOGS_ROOT="../../logs"
 def createMethodsCostEvolutionPlots():
-    methods=['RANDOM-GA','RANDOM-DE','GA','DE','SAPerturb']
-    problem='rosenbrock.json'
-    methodsLogs=[]
-    for method in methods:
-        logs = open(f"{LOGS_ROOT}/{method}/{problem}")
-        methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
-    allData=pd.concat(methodsLogs)
-    allData=allData[selectAllMatchAtLeastOne(allData,[('baseLevelEvals',[1000]),('baseLevel-xDim',[5,50,100,500])])]
-    allData=allData.groupby(['baseLevel-xDim'])
-    series=pd.DataFrame()
-    optimizers=set()
-    optimizersList=[]
-    for (dimension,groupIndex) in allData:
-        serie={}
-        serie["dimension"]=dimension
-        for index,row in groupIndex.iterrows():
-            serie[row["hyperLevel-id"]]=row["trials"]
-            if row["hyperLevel-id"] not in optimizers:
-                optimizersList.append(row["hyperLevel-id"])
-                optimizers.add(row["hyperLevel-id"])
-        series=series.append(serie,ignore_index=True)
-    for optimizer in optimizersList:
-        series[optimizer]=series[optimizer].map(lambda trials: list(map(lambda trial: trial['med_+_iqr'],trials)))
-        series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
-    performances=[]
-    titles=[]
-    for index,row in series.iterrows():
-            performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizersList ])
-            titles.append(f"{problem.replace('.json','').capitalize()}-{int(row['dimension'])}")
+    # methods=['RANDOM-GA','RANDOM-DE','GA','DE','SAPerturb']
+    methods=[     
+                #   (BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,"bigSA_MADS"),
+                #   (SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"SA_MADS"),
+                #   (MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"MADS"),
+                  (SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"SA_CMAES"),
+                  (BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"bigSA_CMAES"),
+                  (CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"CMAES"),
+                  (SA_GA_DE_GD_LBFGS_RECORDS_PATH,"SA-NMHH")
+                  ]
+    problems=[('rosenbrock.json','log'),
+              ('rastrigin.json','log'),
+              ('styblinskitang.json','linear'),('trid.json','linear'),
+              ('schwefel223.json','log'),
+              ('qing.json','log')]
+    allperformances=[]
+    alltitles=[]
+    allscales=[]
+    for (problem,scale) in problems:
+        methodsLogs=[]
+        # for method in methods:
+        #     logs = open(f"{LOGS_ROOT}/{method}/{problem}")
+        #     methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
+        for method in methods:
+            logs = open(f"{method[0].replace('/records.json','')}/{problem}")
+            df=pd.DataFrame(json.load(logs)['experiments'])
+            df['experimentId']=method[1]
+            methodsLogs.append(df)
+        
+        allData=pd.concat(methodsLogs)
+        print(allData['experimentId'].unique())
+        allData=allData[allData['baseLevelEvals'].isin([100])  & allData['baseLevel-xDim'].isin([5,50,100,500,750])]
+        allData=allData.groupby(['baseLevel-xDim'])
+        series=pd.DataFrame()
 
-    plot_series(performances, titles, x_label='steps', y_label=' best fitness (log)',scale='log',
-                 file_name=f"plots/SA_PERTURB_DE_GA_RANDOM_DE_GA_Rosenbrock-1000.svg",figsize=(16/3,3))
+        optimizers=set()
+        optimizersList=[]
+        
+        for (dimension,groupIndex) in allData:
+            serie={}
+            serie["dimension"]=dimension
+            for index,row in groupIndex.iterrows():
+                optimizerName=row["experimentId"]
+                serie[optimizerName]=row["trials"]
+                if optimizerName not in optimizers:
+                    optimizersList.append(optimizerName)
+                    optimizers.add(optimizerName)
+            series=series.append(serie,ignore_index=True)
+        for optimizer in optimizersList:
+            series[optimizer]=series[optimizer].map(lambda trials: list(map(lambda trial: trial['med_+_iqr'],trials)))
+            series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
+        performances=[]
+        titles=[]
+        for index,row in series.iterrows():
+                performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizersList ])
+                titles.append(f"{problem.replace('.json','').capitalize()}-{int(row['dimension'])}")
+        allperformances.append(performances)
+        alltitles.append(titles)
+        allscales.append(scale)
+    plot_series(allperformances, alltitles, x_label='steps', y_label=' best fitness',scales=allscales,
+                    file_name=f"plots/SA_PERTURB_DE_GA_RANDOM_DE_GA_Rosenbrock-1000.svg",figsize=(16/3,3))
 
 def methodsComparison():
     metadata={
@@ -395,22 +431,31 @@ def methodsComparison():
         "metricsAggregation":{'minMedIQR':'min'},
         "mergeOn":mergeOnMinMedIQR,
         'optimizers':list(),
-        "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations']
+        "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations'],
+        "baselevelIterations": [100],
+        "modelSize":[3,5,7,10] 
     }
-    controlGroup=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
+    mealpyMHs=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
                                     (None,"hashSHA256"),
                                     mealpyRecordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterMealpy,enrichWithMetrics=False)
-    testGroupDF=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
+    nmhh=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesSA,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterSA)
+    nmhh2=createTestGroupView(SA_GA_DE_GD_LBFGS_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn']) 
     sarefineGroup=createTestGroupView(SAREFINE_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesSA,"hashSHA256"),
                                     recordToExperiment,
@@ -476,61 +521,136 @@ def methodsComparison():
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
+                                    metadata['mergeOn'],True)                           
+    madsGWOGroup=createTestGroupView(MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
                                     metadata['mergeOn'])                           
-                                  
+    sacmaesGWOGroup=createTestGroupView(SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    bigsacmaesGroup=createTestGroupView(BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    bigsamadsGroup=createTestGroupView(BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    
+    cmaesGWOGroup=createTestGroupView(CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    
+    saMadsGWOGroup=createTestGroupView(SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                       (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                        recordToExperiment,
+                                        set(),
+                                        set(["minMedIQR","minAvg","minStd","samples"]),
+                                        metadata['metricsAggregation'],
+                                        metadata['mergeOn'])
+    
     customhysDF=getCustomHySControlGroupDF()
     customhysDF['hyperLevel-id']='CUSTOMHyS'
     customhysDF=dropIrrelevantColumns(customhysDF,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
-    controlGroup=dropIrrelevantColumns(controlGroup,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
-    testGroupDF=dropIrrelevantColumns(testGroupDF,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
-    testGroupDF=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    customhysDF=customhysDF[selectAllMatchAtLeastOne(customhysDF,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    testGroupDF['hyperLevel-id']='NMHH'
+    mealpyMHs=dropIrrelevantColumns(mealpyMHs,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
+    nmhh=dropIrrelevantColumns(nmhh,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
+    nmhh=nmhh[selectAllMatchAtLeastOne(nmhh,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    customhysDF=customhysDF[selectAllMatchAtLeastOne(customhysDF,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    nmhh['hyperLevel-id']='NMHH'
     sarefineGroup=dropIrrelevantColumns(sarefineGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
     sarefineGroup['hyperLevel-id']='SA-REFINE-NMHH'
-    sarefineGroup=sarefineGroup[selectAllMatchAtLeastOne(sarefineGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    sarefineGroup=sarefineGroup[selectAllMatchAtLeastOne(sarefineGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
     lbfgsGroup=dropIrrelevantColumns(lbfgsGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
     lbfgsGroup['hyperLevel-id']='LBFGS'
-    lbfgsGroup=lbfgsGroup[selectAllMatchAtLeastOne(lbfgsGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    lbfgsGroup=lbfgsGroup[selectAllMatchAtLeastOne(lbfgsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
     gdGroup=dropIrrelevantColumns(gdGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
     gdGroup['hyperLevel-id']='GD'
-    gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
+    gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
     saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     saperturbGroup['hyperLevel-id']='SA-PERTURB'
     saperturbGroupBig=saperturbGroup.copy()
     saperturbGroupBig['hyperLevel-id']='SA-PERTURB-BIG'
-    saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    saperturbGroupBig=saperturbGroupBig[selectAllMatchAtLeastOne(saperturbGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    saperturbGroupBig=saperturbGroupBig[selectAllMatchAtLeastOne(saperturbGroupBig,[('baselevelIterations',[1000]),('modelSize',metadata["modelSize"])])]
     gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     gaGroup['hyperLevel-id']='GA'
     gaGroupBig=gaGroup.copy()
     gaGroupBig['hyperLevel-id']='GA-BIG'
-    gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    gaGroupBig=gaGroupBig[selectAllMatchAtLeastOne(gaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    gaGroupBig=gaGroupBig[selectAllMatchAtLeastOne(gaGroupBig,[('baselevelIterations',[1000]),('modelSize',metadata["modelSize"])])]
     deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     deGroup['hyperLevel-id']='DE'
     deGroupBig=deGroup.copy()
     deGroupBig['hyperLevel-id']='DE-BIG'
-    deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    deGroupBig=deGroupBig[selectAllMatchAtLeastOne(deGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    deGroupBig=deGroupBig[selectAllMatchAtLeastOne(deGroupBig,[('baselevelIterations',[1000]),('modelSize',metadata["modelSize"])])]
     randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     randomgaGroup['hyperLevel-id']='RANDOM-GA'
     randomgaGroupBig=randomgaGroup.copy()
     randomgaGroupBig['hyperLevel-id']='RANDOM-GA-BIG'
-    randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    randomgaGroupBig=randomgaGroupBig[selectAllMatchAtLeastOne(randomgaGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
+    randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    randomgaGroupBig=randomgaGroupBig[selectAllMatchAtLeastOne(randomgaGroupBig,[('baselevelIterations',[1000]),('modelSize',metadata["modelSize"])])]
     randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     randomdeGroup['hyperLevel-id']='RANDOM-DE'
     randomdeGroupBig=randomdeGroup.copy()
     randomdeGroupBig['hyperLevel-id']='RANDOM-DE-BIG'
-    randomdeGroup=randomdeGroup[selectAllMatchAtLeastOne(randomdeGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    randomdeGroupBig=randomdeGroupBig[selectAllMatchAtLeastOne(randomdeGroupBig,[('baselevelIterations',[1000]),('modelSize',[5,50,100,500])])]
-
+    randomdeGroup=randomdeGroup[selectAllMatchAtLeastOne(randomdeGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    randomdeGroupBig=randomdeGroupBig[selectAllMatchAtLeastOne(randomdeGroupBig,[('baselevelIterations',[1000]),('modelSize',metadata["modelSize"])])]
+    
     saGWOGroup=dropIrrelevantColumns(saGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     saGWOGroup['hyperLevel-id']='SA-GD_LBFGS-GA_DE_GWO'
-    saGWOGroup=saGWOGroup[selectAllMatchAtLeastOne(saGWOGroup,[('baselevelIterations',[100]),('modelSize',[5,50,100,500])])]
-    # all=pd.concat([customhysDF,controlGroup,testGroupDF,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
-    all=pd.concat([customhysDF,controlGroup,testGroupDF,saGWOGroup])
+    saGWOGroup=saGWOGroup[selectAllMatchAtLeastOne(saGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    
+    madsGWOGroup=dropIrrelevantColumns(madsGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    madsGWOGroup['hyperLevel-id']='MADS-GD_LBFGS-GA_DE_GWO'
+    madsGWOGroup=madsGWOGroup[selectAllMatchAtLeastOne(madsGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
+    sacmaesGWOGroup=dropIrrelevantColumns(sacmaesGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    sacmaesGWOGroup['hyperLevel-id']='SA_CMAES-GD_LBFGS-GA_DE_GWO'
+    sacmaesGWOGroup=sacmaesGWOGroup[selectAllMatchAtLeastOne(sacmaesGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    
+    cmaesGWOGroup=dropIrrelevantColumns(cmaesGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    cmaesGWOGroup['hyperLevel-id']='CMAES-GD_LBFGS-GA_DE_GWO'
+    cmaesGWOGroup=cmaesGWOGroup[selectAllMatchAtLeastOne(cmaesGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
+    saMadsGWOGroup=dropIrrelevantColumns(saMadsGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    saMadsGWOGroup['hyperLevel-id']='SA_MADS-GD_LBFGS-GA_DE_GWO'
+    saMadsGWOGroup=saMadsGWOGroup[selectAllMatchAtLeastOne(saMadsGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    nmhh2=dropIrrelevantColumns(nmhh2,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    nmhh2['hyperLevel-id']='NMHH2'
+    nmhh2=nmhh2[selectAllMatchAtLeastOne(nmhh2,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    
+    bigsacmaesGroup=dropIrrelevantColumns(bigsacmaesGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    bigsacmaesGroup['hyperLevel-id']='BIGSA_CMAES-GD_LBFGS-GA_DE'
+    bigsacmaesGroup=bigsacmaesGroup[selectAllMatchAtLeastOne(bigsacmaesGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    
+    bigsamadsGroup=dropIrrelevantColumns(bigsamadsGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    bigsamadsGroup['hyperLevel-id']='BIGSA_MADS-GD_LBFGS-GA_DE'
+    bigsamadsGroup=bigsamadsGroup[selectAllMatchAtLeastOne(bigsamadsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    # all=pd.concat([customhysDF,mealpyMHs,nmhh,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
+    # all=pd.concat([customhysDF,mealpyMHs,saGWOGroup,nmhh,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup])
+    # all=pd.concat([nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup,saperturbGroup,gaGroup,deGroup,randomgaGroup,randomdeGroup])
+    all=pd.concat([nmhh2,bigsamadsGroup,bigsacmaesGroup,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup])
+    # all=pd.concat([nmhh2,bigsacmaesGroup,sacmaesGWOGroup,cmaesGWOGroup])
+    # all=pd.concat([customhysDF,mealpyMHs,nmhh])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
     # all=pd.concat([saperturbGroup,randomgaGroup,randomdeGroup,gaGroup,deGroup])
     # all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig,saGWOGroup])
@@ -543,6 +663,7 @@ def methodsComparison():
     all=all.drop(['baselevelIterations'],axis=1)
     all=all.sort_values(by=['modelSize',"problemName",metadata["minMetricColumn"]])
     all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"],'minStd','samples']]
+    # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"]]]
     all=all.groupby(['problemName','modelSize'])
     transpose=pd.DataFrame()
     optimizersSet=set()
@@ -552,30 +673,32 @@ def methodsComparison():
         transposedRow['modelSize']=group[1]
         for index,row in groupIndex.iterrows():
             transposedRow[row["hyperLevel-id"]]=row[metadata["minMetricColumn"]]
-            # transposedRow[f'{row["hyperLevel-id"]}-std']=row['minStd']
-            # transposedRow[f'{row["hyperLevel-id"]}-samples']=json.loads(row["samples"])
+            transposedRow[f'{row["hyperLevel-id"]}-std']=row['minStd']
+            transposedRow[f'{row["hyperLevel-id"]}-samples']=json.loads(row["samples"])
             if not row["hyperLevel-id"] in optimizersSet:
                 metadata['optimizers'].append(row["hyperLevel-id"])
                 optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
     print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet))
-    # addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
-    # plotWilcoxRanksums(transpose,5,4,
-    #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
-    #                 #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
-    #                    filename=None,
-    #                    figsize=(8,8))
+    addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
+    printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
+    plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
+                       list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
+                    #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
+                       filename=None,
+                       figsize=(13,8),blockPlot=True)
     
     # tabloo.show(comparisonTableData)
     # tabloo.show(all)
-    tabloo.show(transpose)
+    # tabloo.show(transpose)
     # print(all.to_latex(index=False))
     # export the styled dataframe to LaTeX
     # print(comparisonTableData.to_latex(index=False))
     
     # printMinAvgStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # printLatexMinAvgStd(transpose,metadata['optimizers'])
-    # return (controlGroup,testGroupDF)
+    # return (mealpyMHs,nmhh)
+
 def all5000IterationResults():
     testGroupDF=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesSA,"hashSHA256"),

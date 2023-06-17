@@ -50,6 +50,10 @@ public:
     double hyperOptimize(int totalEvaluations) override {
         int totalTrials=HH_TRIALS;
         int SA_trials=totalTrials/3;
+#ifdef HH_SA_HYBRID_PERCENTAGE
+    SA_trials=std::truncf(((double)totalTrials)*HH_SA_HYBRID_PERCENTAGE);
+#endif
+
         int SA_CMA_ES_trials=totalTrials-SA_trials;
         baseLevel.init(logJson);
         simulatedAnnealingInitialization(totalEvaluations,SA_trials);
@@ -61,7 +65,14 @@ public:
                           "PerturbatorGASimplex",
                           "RefinerLBFGSSimplex",
                           "RefinerGDSimplex"};
-
+#ifdef BASE_PERTURB_EXTRA_OPERATORS
+        std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+        std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+        std::for_each(operatorSet.begin(),operatorSet.end(),[this](std::string op){
+            CMAES_parameters.insert("Perturbator"+op+"Simplex");
+            CMAES_parameters.insert("Perturbator"+op+"OperatorParams");
+        });
+#endif
 
         totalBaseLevelEvaluations=totalEvaluations;
         std::tuple<std::vector<double>, std::vector<double>, std::vector<double>,std::vector<double>> serializedParameters=getParameterArrays(parameters,CMAES_parameters);

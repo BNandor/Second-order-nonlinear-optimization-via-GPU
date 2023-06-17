@@ -326,8 +326,8 @@ protected:
         addExtraOperatorSimplex(chainParameters);
     }
 
-void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters *> &chainParameters){
-//#ifdef BASE_PERTURB_EXTRA_OPERATORS
+void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters *> &chainParameters) {
+#ifdef BASE_PERTURB_EXTRA_OPERATORS
     std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
     std::set<std::string> operatorSet=stringutil::splitString(operators,',');
     printf("set of extra operators\n");
@@ -342,7 +342,7 @@ void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters 
             chainParameters["Perturbator"+op+"Simplex"]->values.insert({op2,BoundedParameter(0.0,0,1)});
         });
     });
-//#endif
+#endif
     }
 
     void setGAPerturbOperatorChainSimplex(

@@ -46,11 +46,17 @@ def matchOneIdInIndex(index,ids):
     return mathcingRandomIs[0]
 
 def printMinResultEachRow(df,experimentCols,columns):
+    minStatistic={}
+    for column in columns:
+        minStatistic[column]=0.0
     for  index,row in df.iterrows():
         minResult=min([row[column] for column in columns])
         methodsHavingMinResult=[column for column in columns if row[column] == minResult]
+        for minMehtod in methodsHavingMinResult:
+            minStatistic[minMehtod]=minStatistic[minMehtod]+1
         print(f"{[row[column] for column in experimentCols]}{methodsHavingMinResult}->{minResult}")
-
+    for optimizer,wins in sorted(minStatistic.items(), key=lambda x: -x[1]):
+        print(f" {wins/df.shape[0]:.3f} - {optimizer}")
 
 def printLatexMinAvgStd(df, optimizers):
     std_suffix = "-std"
@@ -126,6 +132,26 @@ def printMinAvgStdHighlighWilcoxRanksums(df, optimizers):
     print("\\hline")
     print("\\end{tabular}}")
     print("\\end{table}")
+
+def printStatisticsOfWilcoxRanksums(df, optimizers):
+    std_suffix = "-std"    
+    current_problem = None
+    bestStatistics={}
+    for opt in optimizers:
+        bestStatistics[opt]=0.0
+    for index, row in df.iterrows():
+        wilcoxRanksum = pickle.loads(json.loads(row['wilcoxRanksums']).encode('latin-1'))
+        wilcoxRanksumIndexOrder = json.loads(row['wilcoxRanksumsIndexOrder'])
+        bestOptimizers=set(optimizers)
+        for i in range(len(wilcoxRanksumIndexOrder)):
+            for j in range(len(wilcoxRanksumIndexOrder)):
+                if wilcoxRanksum[i][j]==0:
+                    if wilcoxRanksumIndexOrder[j] in bestOptimizers:
+                        bestOptimizers.remove(wilcoxRanksumIndexOrder[j])
+        for opt in bestOptimizers:
+            bestStatistics[opt]=bestStatistics[opt]+1
+    for optimizer,wins in sorted(bestStatistics.items(), key=lambda x: -x[1]):
+        print(f" {wins/df.shape[0]:.3f} - {optimizer}")
 
 
 def wilcoxRanksum(samples):

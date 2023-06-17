@@ -103,20 +103,32 @@ public:
                           "OptimizerChainRefinerSimplex",
                           "OptimizerChainPerturbatorSimplex",
                           "PerturbatorDESimplex",
+                          "PerturbatorDEOperatorParams",
                           "PerturbatorGASimplex",
+                          "PerturbatorGAOperatorParams",
                           "RefinerLBFGSSimplex",
-                          "RefinerGDSimplex"};
+                          "RefinerLBFGSOperatorParams",
+                          "RefinerGDSimplex",
+                          "RefinerGDOperatorParams"};
+#ifdef BASE_PERTURB_EXTRA_OPERATORS
+        std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+        std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+        std::for_each(operatorSet.begin(),operatorSet.end(),[this](std::string op){
+            CMAES_parameters.insert("Perturbator"+op+"Simplex");
+            CMAES_parameters.insert("Perturbator"+op+"OperatorParams");
+        });
+#endif
         totalBaseLevelEvaluations=totalEvaluations;
         std::tuple<std::vector<double>, std::vector<double>, std::vector<double>,std::vector<double>> serializedParameters=getParameterArrays(parameters,CMAES_parameters);
         int dim = std::get<0>(serializedParameters).size();
         l=std::get<1>(serializedParameters);
         u=std::get<2>(serializedParameters);
         NOMAD::MainStep TheMainStep;
-
+        int trials=HH_TRIALS;
         try
         {
             auto params = std::make_shared<NOMAD::AllParameters>();
-            initAllParams(params,std::get<0>(serializedParameters),l,u,std::get<3>(serializedParameters),dim,totalBaseLevelEvaluations);
+            initAllParams(params,std::get<0>(serializedParameters),l,u,std::get<3>(serializedParameters),dim,trials);
             TheMainStep.setAllParameters(params);
             auto ev = std::make_unique<My_Evaluator>(params->getEvalParams(),this);
             TheMainStep.addEvaluator(std::move(ev));

@@ -1,0 +1,1264 @@
+{
+    "experiments": {
+        "6371867f8407c627bf45ed80ae9c0ec3de9dbb2da9f978564d4e26b566e5afa0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 431.52492756099673,
+                "threads": 128
+            }
+        },
+        "6d165f3036ab44261afbcff53c3d2567e4a86678f3e22a8e1ed8d63bb72e93ee": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 278.5865457979962,
+                "threads": 128
+            }
+        },
+        "87803f3f879a69fcc6760368e09fcc6c7da4fd2863786f75cbe8bbc9e832fcae": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 646.1804246109969,
+                "threads": 128
+            }
+        },
+        "9938d1ab0976c0e4792310fc716a007e400bbbbd71e4ea13f71dcaa189585ed0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2583.2941064189945,
+                "threads": 128
+            }
+        },
+        "3fe5540e0642afc1cae53bef93beec80b0e25a4392e2952955e6f2734e26802d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 3686.0046534379944,
+                "threads": 128
+            }
+        },
+        "f60a6065286d73a861f946fc1b78768eb1f3e1982e49c5652c82d5947b4181cc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 214.45121997200476,
+                "threads": 128
+            }
+        },
+        "9948ec5bc75a703108a87845959562c7c7d6caf5df20a66a1874059a6cd853d4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 219.0649410479964,
+                "threads": 128
+            }
+        },
+        "b812a0945920fcbc99260aa1b8f8e398a7035d3e93ed4823fe2bd18858161fb2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 186.7859889310057,
+                "threads": 128
+            }
+        },
+        "6b523e0c07c6089714a8406865af06abf3c5ff70ce70c29e54e887325294105d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1429.7315977580001,
+                "threads": 128
+            }
+        },
+        "c388aaf2a428e56939321c2c7412ade3ff2200f3260f99978e69df2e8527cbdb": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 3018.2214706130035,
+                "threads": 128
+            }
+        },
+        "ec1ee53bfc0cf57f446af4bb0be79aa2fb18f9841bee0683441763d87f4b3e6a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 413.4812889750028,
+                "threads": 128
+            }
+        },
+        "b77e03ea3e62b36184efdaf3ce218fca28839f003bca7ed01d19eab23e9bedc3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1000.9835847770009,
+                "threads": 128
+            }
+        },
+        "8f38e213cd9cd722443b9709243de43540e629557641b427440356b8b87bb475": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 449.3799688410072,
+                "threads": 128
+            }
+        },
+        "500cb8d5dbff7ada01e95999fa647934d884b66800fe6e133c7fd88bafedd13f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1580.3087137550028,
+                "threads": 128
+            }
+        },
+        "28e2000a57359921a124a3052aa802ee75199afd104eae77c6bad7bf718e874f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1714.5936002700037,
+                "threads": 128
+            }
+        },
+        "5ca2536935120f46408daec70195bc37701758e2fd9b66fa9feab017e8ced729": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 275.27816711399646,
+                "threads": 128
+            }
+        },
+        "cc4e9093053483409dae66397f2575f38ec41fd69140725bf9c7f2205fafc581": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 124.709447250003,
+                "threads": 128
+            }
+        },
+        "b95dee4f77e43af85634255a7eda80df4ea1369a9c12abd9df2d6a5e832b7337": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 201.04919735100702,
+                "threads": 128
+            }
+        },
+        "c5f99218dd44ef4bb55644da71f3f5c9319a4fb5376033201e713f21e93e6a35": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 358.45406220600125,
+                "threads": 128
+            }
+        },
+        "8df62a67b7becdde034cc80b1e87fc324364b2cf69054ed87215468a0a8cd81f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 509.7293812719872,
+                "threads": 128
+            }
+        },
+        "3ac303b9aa07a2fa0fff76584eb20633147a63269e1bdcf43918f9e8a6273c8c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 313.4296046500094,
+                "threads": 128
+            }
+        },
+        "387dc40614c1f13e297d15bb1e03932c4a4a08eb3f30e56a7e73a77eb42c81f3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 326.4932742300007,
+                "threads": 128
+            }
+        },
+        "a10a726ddd878f6425707abf80af1e4dfca74dda046417de8942abacb83b6597": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 573.0918096740061,
+                "threads": 128
+            }
+        },
+        "fcf62d18ef8a1633f0efe918dc2a4a2f62c430d2bd72ee6efeb21f0b1061d1ad": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1170.4800065229938,
+                "threads": 128
+            }
+        },
+        "7e780eed37d15043613dce6b07bbd65742632993b44fefe08f4363141524f66a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1909.2397917659982,
+                "threads": 128
+            }
+        },
+        "7b16caa379923c1b0a0046c53fde0807dfab0e42a32b6913287418a099b5d4c5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 127.40035839499615,
+                "threads": 128
+            }
+        },
+        "c00237b32ce569ca4853975e0a8c4ced7fd6e71f25360f88dde7f1497c9aa64d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 254.7290804009972,
+                "threads": 128
+            }
+        },
+        "80af9546539ac4c8ea8114a5f20e0aaef6e18bf700ee98098876124481cf9c2b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 268.0079116340057,
+                "threads": 128
+            }
+        },
+        "bcb1dbd1c397b9e673e77d3ae5d375cb4f08ac4252f8a5b21f327f59f7894240": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1097.3417650949996,
+                "threads": 128
+            }
+        },
+        "850e63e892cc562580361c6af6371e6327956e77feb9c5707d11a1ea20cfe10f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1593.903761210997,
+                "threads": 128
+            }
+        },
+        "9128aab5d9188feba34c3d816ed0217ae21ebda4f68817db91f73fef572c45d3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 575.5979457560024,
+                "threads": 128
+            }
+        },
+        "feaf22f19c1e1f62a0142de3178baaf0bb46065d7db04d4ff3985c66b8f1b2ed": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 291.4369614800089,
+                "threads": 128
+            }
+        },
+        "e891f321bd535d0a3bb7473a02e55c4abdd2c4fe7b3fbad0e5bd4ff2cb81fb9b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 312.82563936299994,
+                "threads": 128
+            }
+        },
+        "6d9a600037b230e8e793561e3079fe1b5c0153474bd0245a4634ec8e859f0e3f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 171.2234090930142,
+                "threads": 128
+            }
+        },
+        "362217fa8879539237f86e5c6273f5c17745ee5fbc46236bdcfb07a40062587a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 381.4252156900038,
+                "threads": 128
+            }
+        },
+        "40d3b24f987a9cb24960f6935a7907ab947a2fb4c1f98723acd83064834aa98a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 10,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 171.44288485200377,
+                "threads": 128
+            }
+        },
+        "9affdc7ae9543e32354819f5cca1d4c9d4dc7fed69fc73d154a115079e038846": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 485.8457091349992,
+                "threads": 128
+            }
+        },
+        "0a2cba92b8b3e0076deb16c1805b29f5f16f062279ac5254deb8ffa986ebfbb5": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 175.51425654000195,
+                "threads": 128
+            }
+        },
+        "384f869c6172a0fabf995a0a51a4a5500a9649f0fd4d4825985bd102318d405a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 411.0481281550019,
+                "threads": 128
+            }
+        },
+        "9c6ca2627e4089b88613ceb37cc63a6ceb0e027cc458a66b0bac317eb0d86901": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 152.89895605199854,
+                "threads": 128
+            }
+        },
+        "04c80b4c468eaddce68963eaa46f1b51b406a5ed192fd785c8d9b8f1733a0977": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 223.95088011899497,
+                "threads": 128
+            }
+        },
+        "d0cd3c5f73851977e5dedd436356b24896364fc620cb2552d3a1d47146e0ecbd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 3,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 179.3798184649786,
+                "threads": 128
+            }
+        },
+        "8f561decd7eba64dc369d3b42d9c80bb918f34d38387bd7fa2bdaa605ab1dcd8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 576.808613745,
+                "threads": 128
+            }
+        },
+        "aa6fbb545d3b7ed716e7e800f39a055bbde5a18581da144ab53e6851372930a2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 616.628199537,
+                "threads": 128
+            }
+        },
+        "76da3c00b2c5601a53a3983435bbc0a0412c15974f98c298c3a5639489fe80ee": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 438.33555449100004,
+                "threads": 128
+            }
+        },
+        "8367bf1171ea93834a3d82012eb804559b81e65f71f2e10e4d8b9771f1442c46": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 187.3983377099994,
+                "threads": 128
+            }
+        },
+        "1df217b371bf59d575f5dda7099e01c564075f00ae24e08c4afc41f85b3702ea": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 162.86228538100022,
+                "threads": 128
+            }
+        },
+        "9b1c5d9d207558ea972bb8f3f1ba76137b6559b52b1f10bef6b4ffae1c7799b2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 201.38569765600005,
+                "threads": 128
+            }
+        },
+        "e926e23324567b3d419f13f6c99eec290afa23928f3f6a48e2e033fd37ca1d5e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 228.68434426000022,
+                "threads": 128
+            }
+        },
+        "58578529a6f165c8cc8f000371d6edffd0b08f5027cbd2334c8a0d2cdfdd980f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 241.35042395999972,
+                "threads": 128
+            }
+        },
+        "c9f6714cf53e73f8689e945a6c1a18f902306b3b7968f8a91d6186ab585ef937": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 289.30656461499984,
+                "threads": 128
+            }
+        },
+        "017b7b6ecd783658d74739d562c0922cd1f0223a01de3ac52a4cc1c877299128": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 135.44644098200024,
+                "threads": 128
+            }
+        },
+        "16781a77753c95624e36f0a9f07a130ac6d5f35e94e48a53722d5e1686558265": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 137.10039708500062,
+                "threads": 128
+            }
+        },
+        "3d7be4597660cd603bad9e8f593bab80f8dcdb3a835a7724eba1e97a7a5e6203": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 145.26765397300005,
+                "threads": 128
+            }
+        },
+        "0e6119d8cb95ba0308bc590ac4d233cb54479116bc98653ff897726dc3a51a76": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 226.80356655600008,
+                "threads": 128
+            }
+        },
+        "a03f40d7075699ab43c8aabf74903b6552e61e24ee70433b72c633ec4940f68a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 336.02667530300005,
+                "threads": 128
+            }
+        },
+        "62b89331c77094a43093efd285f4401d65b43b7da60488fabd29d7c0ffb7ff5c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 398.139337521,
+                "threads": 128
+            }
+        },
+        "7fd27a7725d0d7f6ae8bfd53129f73aeddfce493ffbe047706e4a80fd0f1ddaa": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 7,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 140.447359838,
+                "threads": 128
+            }
+        },
+        "a893fc7432377994a7809530df641ffa045dd4b84214678e14d31d6a2cf6ae81": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 15,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 198.45622784499938,
+                "threads": 128
+            }
+        },
+        "39bd2a6c75725e87f92b5a41381ed12195cbc0c98f96034e6d68c99626a19f6c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 30,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66",
+                "hyperLevelMethod": "SA-MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 165.51036015299997,
+                "threads": 128
+            }
+        }
+    }
+}
