@@ -96,6 +96,7 @@ def minTrialAverage(trials):
     minStd=0
     samples=[]
     for trial in trials:
+        # +np.std(trial['performanceSamples'])
         trialAverage=np.average(trial['performanceSamples'])
         if(trialAverage<minAvg):
             minAvg=trialAverage
@@ -350,11 +351,17 @@ RANDOM_GA_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-GA/records.json"
 RANDOM_DE_EXPERIMENT_RECORDS_PATH="../../logs/RANDOM-DE/records.json"
 RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-NMHH/GWO/records.json"
 SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GWO/records.json"
-BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+SA_CMA_ES_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-CMA-ES-NMHH/GWO/bigSA/records.json"
 CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/CMA-ES/GWO/records.json"
+CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/CMA-ES/records.json"
 MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/MADS-NMHH/GA_DE_GD_LBFGS/records.json"                          
 SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/records.json"
 BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/records.json"
 SAREFINE_EXPERIMENT_RECORDS_PATH="../../logs/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH="../../logs/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH="../../logs/GD/records.json"
@@ -366,7 +373,7 @@ def createMethodsCostEvolutionPlots():
                 #   (SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"SA_MADS"),
                 #   (MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"MADS"),
                   (SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"SA_CMAES"),
-                  (BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"bigSA_CMAES"),
+                  (BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,"bigSA_CMAES"),
                   (CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,"CMAES"),
                   (SA_GA_DE_GD_LBFGS_RECORDS_PATH,"SA-NMHH")
                   ]
@@ -422,19 +429,25 @@ def createMethodsCostEvolutionPlots():
     plot_series(allperformances, alltitles, x_label='steps', y_label=' best fitness',scales=allscales,
                     file_name=f"plots/SA_PERTURB_DE_GA_RANDOM_DE_GA_Rosenbrock-1000.svg",figsize=(16/3,3))
 
-def methodsComparison():
+def methodsComparison(problems,dimensions,block=True):
     metadata={
-        # "minMetricColumn":'minAvg',
-        # "metricsAggregation":{'minAvg':'min'},
-        # "mergeOn":mergeOnAvg,
-        "minMetricColumn":'minMedIQR',
-        "metricsAggregation":{'minMedIQR':'min'},
-        "mergeOn":mergeOnMinMedIQR,
+        "minMetricColumn":'minAvg',
+        "metricsAggregation":{'minAvg':'min'},
+        "mergeOn":mergeOnAvg,
+        # "minMetricColumn":'minMedIQR',
+        # "metricsAggregation":{'minMedIQR':'min'},
+        # "mergeOn":mergeOnMinMedIQR,
         'optimizers':list(),
         "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations'],
         "baselevelIterations": [100],
-        "modelSize":[3,5,7,10] 
+        "problems":problems,
+        # "modelSize":[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750] 
+        "modelSize":dimensions
+        # "modelSize":[1,2,3,4,5,6,7,8,9] 
+        # "modelSize":[10,15] 
     }
+    print(f"Problems: {problems} \n Dimensions: {dimensions}")
+    
     mealpyMHs=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
                                     (None,"hashSHA256"),
                                     mealpyRecordToExperiment,
@@ -528,7 +541,14 @@ def methodsComparison():
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
-                                    metadata['mergeOn'])                           
+                                    metadata['mergeOn']) 
+    madsGroup=createTestGroupView(MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn']) 
     sacmaesGWOGroup=createTestGroupView(SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
@@ -536,14 +556,38 @@ def methodsComparison():
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'])
-    bigsacmaesGroup=createTestGroupView(BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+    bigsacmaesGroup=createTestGroupView(BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'])
+    
+    bigsacmaesGWOGroup=createTestGroupView(BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    
+    sacmaesGroup=createTestGroupView(SA_CMA_ES_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    
     bigsamadsGroup=createTestGroupView(BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
+    bigsamadsGWOGroup=createTestGroupView(BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
@@ -558,8 +602,22 @@ def methodsComparison():
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'])
+    cmaesGroup=createTestGroupView(CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+                                    (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'])
     
     saMadsGWOGroup=createTestGroupView(SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+                                       (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
+                                        recordToExperiment,
+                                        set(),
+                                        set(["minMedIQR","minAvg","minStd","samples"]),
+                                        metadata['metricsAggregation'],
+                                        metadata['mergeOn'])
+    saMadsGroup=createTestGroupView(SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
                                        (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                         recordToExperiment,
                                         set(),
@@ -623,6 +681,10 @@ def methodsComparison():
     madsGWOGroup['hyperLevel-id']='MADS-GD_LBFGS-GA_DE_GWO'
     madsGWOGroup=madsGWOGroup[selectAllMatchAtLeastOne(madsGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
 
+    madsGroup=dropIrrelevantColumns(madsGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    madsGroup['hyperLevel-id']='MADS-GD_LBFGS-GA_DE'
+    madsGroup=madsGroup[selectAllMatchAtLeastOne(madsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
     sacmaesGWOGroup=dropIrrelevantColumns(sacmaesGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     sacmaesGWOGroup['hyperLevel-id']='SA_CMAES-GD_LBFGS-GA_DE_GWO'
     sacmaesGWOGroup=sacmaesGWOGroup[selectAllMatchAtLeastOne(sacmaesGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
@@ -630,6 +692,14 @@ def methodsComparison():
     cmaesGWOGroup=dropIrrelevantColumns(cmaesGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     cmaesGWOGroup['hyperLevel-id']='CMAES-GD_LBFGS-GA_DE_GWO'
     cmaesGWOGroup=cmaesGWOGroup[selectAllMatchAtLeastOne(cmaesGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
+    sacmaesGroup=dropIrrelevantColumns(sacmaesGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    sacmaesGroup['hyperLevel-id']='SA_CMAES-GD_LBFGS-GA_DE'
+    sacmaesGroup=sacmaesGroup[selectAllMatchAtLeastOne(sacmaesGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+    
+    cmaesGroup=dropIrrelevantColumns(cmaesGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    cmaesGroup['hyperLevel-id']='CMAES-GD_LBFGS-GA_DE'
+    cmaesGroup=cmaesGroup[selectAllMatchAtLeastOne(cmaesGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
 
     saMadsGWOGroup=dropIrrelevantColumns(saMadsGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     saMadsGWOGroup['hyperLevel-id']='SA_MADS-GD_LBFGS-GA_DE_GWO'
@@ -642,14 +712,32 @@ def methodsComparison():
     bigsacmaesGroup['hyperLevel-id']='BIGSA_CMAES-GD_LBFGS-GA_DE'
     bigsacmaesGroup=bigsacmaesGroup[selectAllMatchAtLeastOne(bigsacmaesGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
     
+    
+    bigsacmaesGWOGroup=dropIrrelevantColumns(bigsacmaesGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    bigsacmaesGWOGroup['hyperLevel-id']='BIGSA_CMAES-GD_LBFGS-GA_DE_GWO'
+    bigsacmaesGWOGroup=bigsacmaesGWOGroup[selectAllMatchAtLeastOne(bigsacmaesGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
     bigsamadsGroup=dropIrrelevantColumns(bigsamadsGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     bigsamadsGroup['hyperLevel-id']='BIGSA_MADS-GD_LBFGS-GA_DE'
     bigsamadsGroup=bigsamadsGroup[selectAllMatchAtLeastOne(bigsamadsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
+    
+    bigsamadsGWOGroup=dropIrrelevantColumns(bigsamadsGWOGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    bigsamadsGWOGroup['hyperLevel-id']='BIGSA_MADS-GD_LBFGS-GA_DE_GWO'
+    bigsamadsGWOGroup=bigsamadsGWOGroup[selectAllMatchAtLeastOne(bigsamadsGWOGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
+
+    
+    saMadsGroup=dropIrrelevantColumns(saMadsGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    saMadsGroup['hyperLevel-id']='SA_MADS-GD_LBFGS-GA_DE'
+    saMadsGroup=saMadsGroup[selectAllMatchAtLeastOne(saMadsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
     # all=pd.concat([customhysDF,mealpyMHs,nmhh,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
     # all=pd.concat([customhysDF,mealpyMHs,saGWOGroup,nmhh,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup])
     # all=pd.concat([nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup,saperturbGroup,gaGroup,deGroup,randomgaGroup,randomdeGroup])
-    all=pd.concat([nmhh2,bigsamadsGroup,bigsacmaesGroup,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup])
-    # all=pd.concat([nmhh2,bigsacmaesGroup,sacmaesGWOGroup,cmaesGWOGroup])
+    all=pd.concat([nmhh2,saGWOGroup,bigsacmaesGroup,bigsacmaesGWOGroup,sacmaesGWOGroup,sacmaesGroup,cmaesGWOGroup,cmaesGroup,bigsamadsGroup,bigsamadsGWOGroup,saMadsGWOGroup,madsGWOGroup,madsGroup,saMadsGroup])
+    # all=pd.concat([nmhh2,bigsamadsGroup])
+    # all=pd.concat([nmhh2,saGWOGroup])
+    # all=pd.concat([nmhh2,bigsacmaesGroup,saGWOGroup,sacmaesGWOGroup,sacmaesGroup,cmaesGWOGroup,cmaesGroup])
+    # all=pd.concat([nmhh2,saGWOGroup])
     # all=pd.concat([customhysDF,mealpyMHs,nmhh])
     # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
     # all=pd.concat([saperturbGroup,randomgaGroup,randomdeGroup,gaGroup,deGroup])
@@ -659,6 +747,7 @@ def methodsComparison():
     # all=pd.concat([saperturbGroupBig,deGroupBig,gaGroupBig])
     # all=pd.concat([saperturbGroupBig,randomdeGroupBig,randomgaGroupBig])
     # all=pd.concat([saperturbGroupBig,gaGroupBig])
+    all=all[selectAllMatchAtLeastOne(all,[('problemName',metadata["problems"])])]
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
     all=all.drop(['baselevelIterations'],axis=1)
     all=all.sort_values(by=['modelSize',"problemName",metadata["minMetricColumn"]])
@@ -679,15 +768,20 @@ def methodsComparison():
                 metadata['optimizers'].append(row["hyperLevel-id"])
                 optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
-    print(printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet))
+    # printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet)
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
+    statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
     printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
-    plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
-                       list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
-                    #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
-                       filename=None,
-                       figsize=(13,8),blockPlot=True)
+    # printStatisticsOfWilcoxRanksumsForEachDimension(statisticsforDimension)
+    # plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
+    #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
+    #                 #    filename=f"plots/WILCOX_{[metadata[savecol] for savecol in metadata['saveMetadataColumns']]}.svg",
+    #                    filename=None,
+    #                    figsize=(13,8),blockPlot=True)
     
+    # (dimensions,methods,values)=plotDataForWilcoxRanksumsComparisonPlot(statisticsforDimension,metadata['optimizers'])
+    # plotMethodsComparison(dimensions,methods,values,'Cases','Winrates','Optimizer performances',block)
+
     # tabloo.show(comparisonTableData)
     # tabloo.show(all)
     # tabloo.show(transpose)
@@ -814,7 +908,43 @@ def createTransitionProbabilityHeatMap():
 # SATempAnalysis()
 # ScalabilityAnalysis()
 # optimizerMethodsComparisonPlot()
-methodsComparison()
+
+
+# methodsComparison(['PROBLEM_ROSENBROCK'],[10,15,30,50,100,500,750], False)
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING'],[10,15,30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_TRID'],[10,15,30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_SCHWEFEL223'],[10,15,30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_ROSENBROCK'],[1,2,3,4,5,6,7,8,9], False)
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING'],[1,2,3,4,5,6,7,8,9],False)
+# methodsComparison(['PROBLEM_TRID'],[1,2,3,4,5,6,7,8,9],False)
+# methodsComparison(['PROBLEM_SCHWEFEL223'],[1,2,3,4,5,6,7,8,9],True)
+
+# # Non-separable
+# methodsComparison(['PROBLEM_ROSENBROCK','PROBLEM_TRID'],[10,15,30,50,100,500,750], False)
+# methodsComparison(['PROBLEM_ROSENBROCK','PROBLEM_TRID'],[1,2,3,4,5,6,7,8,9], False)
+# # Separable
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_SCHWEFEL223'],[10,15,30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_SCHWEFEL223'],[1,2,3,4,5,6,7,8,9],True)
+
+# # Convex-unimodal
+# methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID'],[10,15,30,50,100,500,750], False)
+# methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID'],[1,2,3,4,5,6,7,8,9], False)
+# # Nonconvex-multimodal
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[10,15,30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6,7,8,9],True)
+
+# # Convex-unimodal
+# methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID'],[30,50,100,500,750], False)
+# methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID'],[1,2,3,4,5,6], False)
+# # Nonconvex-multimodal
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[30,50,100,500,750],False)
+# methodsComparison(['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6],True)
+
+methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[30,50,100,500,750], False)
+methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6], False)
+
+# methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750], False)
+
 # all5000IterationResults()
 # createTransitionProbabilityHeatMap()
 # createMethodsCostEvolutionPlots()

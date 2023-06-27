@@ -54,7 +54,7 @@ def printMinResultEachRow(df,experimentCols,columns):
         methodsHavingMinResult=[column for column in columns if row[column] == minResult]
         for minMehtod in methodsHavingMinResult:
             minStatistic[minMehtod]=minStatistic[minMehtod]+1
-        print(f"{[row[column] for column in experimentCols]}{methodsHavingMinResult}->{minResult}")
+        # print(f"{[row[column] for column in experimentCols]}{methodsHavingMinResult}->{minResult}")
     for optimizer,wins in sorted(minStatistic.items(), key=lambda x: -x[1]):
         print(f" {wins/df.shape[0]:.3f} - {optimizer}")
 
@@ -134,8 +134,6 @@ def printMinAvgStdHighlighWilcoxRanksums(df, optimizers):
     print("\\end{table}")
 
 def printStatisticsOfWilcoxRanksums(df, optimizers):
-    std_suffix = "-std"    
-    current_problem = None
     bestStatistics={}
     for opt in optimizers:
         bestStatistics[opt]=0.0
@@ -153,6 +151,46 @@ def printStatisticsOfWilcoxRanksums(df, optimizers):
     for optimizer,wins in sorted(bestStatistics.items(), key=lambda x: -x[1]):
         print(f" {wins/df.shape[0]:.3f} - {optimizer}")
 
+def calculateWilcoxRanksumStatisticsForEachDimension(df, optimizers):
+    statisticsforDimension={}
+    grouped=df.groupby(['modelSize'])
+    for (modelSize,groupIndex) in grouped:
+        bestStatistics={}
+        for opt in optimizers:
+            bestStatistics[opt]=0.0
+        for index, row in groupIndex.iterrows():
+            wilcoxRanksum = pickle.loads(json.loads(row['wilcoxRanksums']).encode('latin-1'))
+            wilcoxRanksumIndexOrder = json.loads(row['wilcoxRanksumsIndexOrder'])
+            bestOptimizers=set(optimizers)
+            for i in range(len(wilcoxRanksumIndexOrder)):
+                for j in range(len(wilcoxRanksumIndexOrder)):
+                    if wilcoxRanksum[i][j]==0:
+                        if wilcoxRanksumIndexOrder[j] in bestOptimizers:
+                            bestOptimizers.remove(wilcoxRanksumIndexOrder[j])
+            for opt in bestOptimizers:
+                bestStatistics[opt]=bestStatistics[opt]+1
+
+        for optimizer,wins in sorted(bestStatistics.items(), key=lambda x: -x[1]):
+            bestStatistics[optimizer]=wins/groupIndex.shape[0]
+        statisticsforDimension[modelSize]=bestStatistics
+    return statisticsforDimension
+
+def printStatisticsOfWilcoxRanksumsForEachDimension(statisticsforDimension):
+    for modelSize,statistics in statisticsforDimension.items():
+        for optimizer,wins in sorted(statistics.items(), key=lambda x: -x[1]):
+            print(f"Dim {modelSize} - {wins:.3f} - {optimizer}")
+
+def plotDataForWilcoxRanksumsComparisonPlot(statisticsforDimension,optimizers):
+    categories=[]
+    subcategories=optimizers
+    values=[]
+    for modelSize,statistics in statisticsforDimension.items():
+        categories.append(str(modelSize))
+        theseValues=[]
+        for optimizer in optimizers:
+            theseValues.append(statisticsforDimension[modelSize][optimizer])
+        values.append(theseValues)
+    return (categories,subcategories,values)
 
 def wilcoxRanksum(samples):
     sampleCount=len(samples)
@@ -169,7 +207,7 @@ def wilcoxRanksumForRow(sampleColumns,row):
     return json.dumps(pickle.dumps(wilcoxRanksum(samples)).decode('latin-1'))
 
 def addWilcoxRankSumResultToEachRow(df,experimentCols,sampleColumns):
-    print(f"Experiment order: {sampleColumns}")
+    # print(f"Experiment order: {sampleColumns}")
     matrices=[]
     df['wilcoxRanksums'] = df.apply(partial(wilcoxRanksumForRow,sampleColumns), axis=1)
     df['wilcoxRanksumsIndexOrder'] = json.dumps(list(map(lambda column:column.replace('-samples',''), sampleColumns)))

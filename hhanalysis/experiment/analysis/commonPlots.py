@@ -117,3 +117,35 @@ def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,f
     if filename:
         plt.savefig(filename)
     plt.show()
+
+def plotMethodsComparison(categories,subcategories,thevalues,xlabel,ylabel,title,block=False):
+    values=np.array(thevalues)
+    # Determine the number of subcategories
+    num_subcategories = len(subcategories)
+    bar_width = 0.1  # Width of each bar
+
+    # Calculate the positions of the bars on the x-axis
+    positions = np.arange(len(categories))
+
+    # Create the figure and axes
+    fig, ax = plt.subplots()
+
+    # Create the vertical bar plot for each subcategory
+    for i in range(num_subcategories):
+        ax.bar(positions + i * bar_width, values[:, i], bar_width, label=subcategories[i])
+
+    # Add labels and title
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+
+    # Set the x-axis tick positions and labels
+    ax.set_xticks(positions + (num_subcategories - 1) * bar_width / 2)
+    ax.set_xticklabels(categories)
+
+    # Add a legend
+    ax.legend()
+
+    # Display the plot
+    if block:
+        plt.show()

@@ -30,11 +30,14 @@ CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/records.json"
 CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/GWO/records.json"
 SA_CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/records.json"
 SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GWO/records.json"
-BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
-MADS_NMHH_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GWO/bigSA/records.json"
+MADS_NMHH_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/GA_DE_GD_LBFGS/records.json"
 MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
 SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/records.json"
 BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/records.json"
 SASNLP_EXPERIMENT_RECORDS_PATH="../logs/SNLP/SA/records.json"
 SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
 
@@ -92,7 +95,15 @@ def setOrDefault(experiment,flag,default):
         return experiment[flag]
     else:
         return default
-
+def enforceFunctionEvaluationLimit(recordsPath):
+    problems=['rosenbrock.json',
+              'rastrigin.json',
+              'styblinskitang.json',
+              'trid.json',
+              'schwefel223.json',
+              'qing.json']
+    for problem in problems:
+        trimExtraSamples(f"{recordsPath.replace('/records.json','')}/{problem}")
 def experimentWith(experiment,recordsPath,experimentId,threads=128):
             problemname=experiment['problems'][0]
             problemLogPath=experiment['problems'][1]
@@ -116,6 +127,7 @@ def experimentWith(experiment,recordsPath,experimentId,threads=128):
             print(f"Running experiment {experimentFlags}")
             start = timer()
             consumeOutput(runOptimizerWith(experimentFlags),lambda line:print(line))
+
             end = timer()
             return {"elapsedTimeSec":end-start,"threads":threads}
 
@@ -134,6 +146,8 @@ def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,
             runningId+=1
         else:
             print(f"Skipping {experiment}")
+    print('Enforcing function evaluation limits')
+    enforceFunctionEvaluationLimit(recordsPath)
 
 def runAllExperiments():
     params={}
@@ -168,7 +182,7 @@ def runAllExperiments2():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -546,19 +560,19 @@ def runRandomLBFGSExperiments():
 def runCMAESExperiments():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/CMA-ES/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/CMA-ES/rastrigin.json"),
-            #   ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/CMA-ES/styblinskitang.json"),
-            #   ("PROBLEM_TRID","hhanalysis/logs/CMA-ES/trid.json"),
-            #   ("PROBLEM_SCHWEFEL223","hhanalysis/logs/CMA-ES/schwefel223.json"),
-            #   ("PROBLEM_QING","hhanalysis/logs/CMA-ES/qing.json")
+            ("PROBLEM_ROSENBROCK","hhanalysis/logs/CMA-ES/rosenbrock.json"),
+            ("PROBLEM_RASTRIGIN","hhanalysis/logs/CMA-ES/rastrigin.json"),
+            ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/CMA-ES/styblinskitang.json"),
+            ("PROBLEM_TRID","hhanalysis/logs/CMA-ES/trid.json"),
+            ("PROBLEM_SCHWEFEL223","hhanalysis/logs/CMA-ES/schwefel223.json"),
+            ("PROBLEM_QING","hhanalysis/logs/CMA-ES/qing.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([500],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([500],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     params["hyperLevelMethod"]=zipWithProperty(["CMA-ES"],"hyperLevelMethod")
@@ -568,19 +582,19 @@ def runCMAESExperiments():
 def runSA_CMAESExperiments():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/qing.json")
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/qing.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([5,500],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([500],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
@@ -590,19 +604,19 @@ def runSA_CMAESExperiments():
 def runMADSExperiments():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/MADS-NMHH/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/MADS-NMHH/rastrigin.json"),
-            #   ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/MADS-NMHH/styblinskitang.json"),
-            #   ("PROBLEM_TRID","hhanalysis/logs/MADS-NMHH/trid.json"),
-            #   ("PROBLEM_SCHWEFEL223","hhanalysis/logs/MADS-NMHH/schwefel223.json"),
-            #   ("PROBLEM_QING","hhanalysis/logs/MADS-NMHH/qing.json")
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/qing.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([5,500],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([500],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     params["hyperLevelMethod"]=zipWithProperty(["MADS"],"hyperLevelMethod")
@@ -666,7 +680,7 @@ def runSA_NMHH_GA_DE_GD_LBFGS_GWO():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -690,7 +704,7 @@ def runMADS_NMHH_GA_DE_GD_LBFGS_GWO():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -714,7 +728,7 @@ def runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -724,6 +738,29 @@ def runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
     params["hyperLevelMethod"]=zipWithProperty(["SA-MADS"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+def runSA_MADS_NMHH_GA_DE_GD_LBFGS():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/qing.json")
+            ],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["SA-MADS"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+    
 def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS():
     params={}
     params["problems"]=zipWithProperty([
@@ -737,7 +774,7 @@ def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -747,6 +784,30 @@ def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS():
     params["hyperLevelMethod"]=zipWithProperty(["SA-MADS"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/qing.json")
+            ],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA-MADS"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runCMAES_GA_DE_GD_LBFGS_GWOExperiments():
     params={}
@@ -761,7 +822,7 @@ def runCMAES_GA_DE_GD_LBFGS_GWOExperiments():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -785,7 +846,7 @@ def runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -809,7 +870,7 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments():
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([3,5,7,10,15,30,50,100,500,750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -818,10 +879,34 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments():
     params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
     params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/qing.json")
+            ],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
 # nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup
 # runAllExperiments()
-runAllExperiments2()
 # testScalability()
 # runTemperatureAnalysis()
 # runSASNLPExperiment()
@@ -841,16 +926,24 @@ runAllExperiments2()
 # runLBFGSExperiments()
 # runRandomGDExperiments()
 # runRandomLBFGSExperiments()
-# runCMAESExperiments()
 # runSANMHH_ManyHyperheuristicSteps()
-# runSA_CMAESExperiments()
-# runMADSExperiments()
 
+runAllExperiments2()
+runSA_NMHH_GA_DE_GD_LBFGS_GWO()
 
-# runSA_NMHH_GA_DE_GD_LBFGS_GWO()
-# runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
-# runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
-# runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
-# runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
-# runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
-# runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
+runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runMADSExperiments()
+
+runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
+runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runSA_MADS_NMHH_GA_DE_GD_LBFGS()
+
+runCMAESExperiments()
+runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
+
+runSA_CMAESExperiments()
+runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
+
+runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
+runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
