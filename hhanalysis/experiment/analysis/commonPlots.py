@@ -3,12 +3,17 @@ import matplotlib
 import matplotlib.font_manager as fm
 import numpy as np
 import pickle,json
+import os
+from common import *
+import pandas as pd
 
+ROOT=f"{os.path.dirname(os.path.abspath(__file__))}"
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
+
 # matplotlib.rcParams['text.usetex'] = True
 def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axis', y_label='Y-axis', file_name=None,scales='linear',colors=None,figsize=(8,3),blockPlot=True):
-    prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')
+    prop = fm.FontProperties(fname=f'{ROOT}/plots/fonts/times-ro.ttf')
     # Create a figure and axis
     # fig, ax = plt.subplots(figsize=(8,3))
     subplotsrows=len(series_of_series_of_data_series[0])
@@ -19,22 +24,26 @@ def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axi
         axes=[axes]
     for i in range(len(series_of_series_of_data_series)):
         for j in range(len(series_of_series_of_data_series[i])):
-            axes[j,i].set_yscale(scales[i])
+            if len(series_of_series_of_data_series)>1:
+                ax=axes[j,i]
+            else:
+                ax=axes[j]
+            ax.set_yscale(scales[i])
             # Plot each series in the data_series list
             for l, series in enumerate(series_of_series_of_data_series[i][j]):
                 x, y, label = series
                 if colors !=None:
-                    axes[j,i].plot(x, y, label=label,linewidth=0.8,color=colors[l])
+                    ax.plot(x, y, label=label,linewidth=0.8,color=colors[l])
                 else:
-                    axes[j,i].plot(x, y, label=label,linewidth=0.8)
+                    ax.plot(x, y, label=label,linewidth=0.8)
             
             # Add labels and title
-            axes[j,i].set_xlabel(x_label,fontproperties=prop)
-            axes[j,i].set_ylabel(y_label,fontproperties=prop,size=12)
-            axes[j,i].set_title(series_of_titles[i][j],fontproperties=prop,size=14)
+            ax.set_xlabel(x_label,fontproperties=prop)
+            ax.set_ylabel(y_label,fontproperties=prop,size=12)
+            ax.set_title(series_of_titles[i][j],fontproperties=prop,size=14)
             
             # Add a legend
-            axes[j,i].legend(prop=prop)
+            ax.legend(prop=prop)
         plt.tight_layout(rect=(0,0,1,1))
         fig.subplots_adjust(wspace=0, hspace=0.4)
         # Save the plot to a file if file_name is provided
@@ -44,7 +53,7 @@ def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axi
         plt.show()
 
 def plotWilcoxRanksums(df,rows,columns,labels,filename,figsize=(10,10),blockPlot=True):
-    prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')    
+    prop = fm.FontProperties(fname=f'{ROOT}/plots/fonts/times-ro.ttf')    
     fig, axs = plt.subplots(nrows=rows, ncols=columns, figsize=figsize, gridspec_kw={'wspace': 0.0})
 
     # loop over each subplot and plot a random 5x5 matrix
@@ -84,7 +93,7 @@ def plotWilcoxRanksums(df,rows,columns,labels,filename,figsize=(10,10),blockPlot
         plt.show()
 
 def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,width_ratios,height_ratios,subfigdim,figsize=(10,10),filename=None):
-    prop = fm.FontProperties(fname='./plots/fonts/times-ro.ttf')
+    prop = fm.FontProperties(fname=f'{ROOT}/plots/fonts/times-ro.ttf')
     fig = plt.figure(figsize=figsize, constrained_layout=True)
     subfigs = fig.subfigures(subfigdim[0],subfigdim[1],wspace=0.05 )
     subplotsInFig=int((rows*columns)/(subfigdim[0]*subfigdim[1]))
@@ -149,3 +158,80 @@ def plotMethodsComparison(categories,subcategories,thevalues,xlabel,ylabel,title
     # Display the plot
     if block:
         plt.show()
+
+def plotDataForWilcoxRanksumsComparisonPlot(statisticsforDimension,optimizers):
+    categories=[]
+    subcategories=optimizers
+    values=[]
+    for modelSize,statistics in statisticsforDimension.items():
+        categories.append(str(modelSize))
+        theseValues=[]
+        for optimizer in optimizers:
+            theseValues.append(statisticsforDimension[modelSize][optimizer])
+        values.append(theseValues)
+    return (categories,subcategories,values)
+
+def fillStepsMinValue(steps,til):
+    filled=[]
+    min=steps[0][1]
+    i=0
+    # (0,10)
+    # (3,11)
+    # (5,1)
+    for (step,value) in steps:
+        if min > value:
+            min=value
+        for j in range(i,step+1):
+            filled.append(min)
+        i=step+1
+    for j in range(i,til):
+        filled.append(min)
+    return filled
+
+def createMethodsCostEvolutionPlots(methodPathsAndIds,experimentProblemsAndScales,performanceMapping,experimentFilter=[],filename=None,figuresize=(16/3,3)):
+    allperformances=[]
+    alltitles=[]
+    allscales=[]
+    for (problem,scale) in experimentProblemsAndScales:
+        methodsLogs=[]
+        # for method in methods:
+        #     logs = open(f"{LOGS_ROOT}/{method}/{problem}")
+        #     methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
+        for method in methodPathsAndIds:
+            logs = open(f"{method[0].replace('/records.json','')}/{problem}")
+            df=pd.DataFrame(json.load(logs)['experiments'])
+            df['experimentId']=method[1]
+            methodsLogs.append(df)
+        
+        allData=pd.concat(methodsLogs)
+        if len(experimentFilter)>0:
+            allData=allData[selectAllMatchAtLeastOne(allData,experimentFilter)]
+        allData=allData.groupby(['baseLevel-xDim'])
+        series=pd.DataFrame()
+
+        optimizers=set()
+        optimizersList=[]
+        
+        for (dimension,groupIndex) in allData:
+            serie={}
+            serie["dimension"]=dimension
+            for index,row in groupIndex.iterrows():
+                optimizerName=row["experimentId"]
+                serie[optimizerName]=row["trials"]
+                if optimizerName not in optimizers:
+                    optimizersList.append(optimizerName)
+                    optimizers.add(optimizerName)
+            series=series.append(serie,ignore_index=True)
+        for optimizer in optimizersList:
+            series[optimizer]=series[optimizer].map(lambda trials: list(map(performanceMapping,trials)))
+            series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
+        performances=[]
+        titles=[]
+        for index,row in series.iterrows():
+                performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizersList ])
+                titles.append(f"{problem.replace('.json','').capitalize()}-{int(row['dimension'])}")
+        allperformances.append(performances)
+        alltitles.append(titles)
+        allscales.append(scale)
+    plot_series(allperformances, alltitles, x_label='steps', y_label=' best fitness',scales=allscales,
+                    file_name=filename,figsize=figuresize)

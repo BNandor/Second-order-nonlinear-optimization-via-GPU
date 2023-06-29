@@ -5,8 +5,11 @@ import scipy.stats as stats
 import json
 from common import *
 import re
+import os
 
-CustomHYSPath="./results/CustomHYS/results.json"
+ROOT=f"{os.path.dirname(os.path.abspath(__file__))}/../.."
+CustomHYSPath=f"{ROOT}/results/CustomHYS/results.json"
+
 problemNameMapping={
     "Qing":"PROBLEM_QING",
     "Rastrigin":"PROBLEM_RASTRIGIN",
@@ -42,3 +45,6 @@ def onlySteps(steps):
             "steps":json.dumps(steps[problem]),
         })
     return results
+
+def getCustomHySControlGroupDF():
+    return pd.DataFrame(stepsToResults(loadResultsSteps(CustomHYSPath)))
