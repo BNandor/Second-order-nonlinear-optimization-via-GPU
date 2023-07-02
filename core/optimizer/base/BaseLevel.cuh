@@ -13,6 +13,7 @@
 #include "../../problem/Rastrigin/RastriginModel.cuh"
 #include "../../problem/Schwefel/223/Schwefel223Model.cuh"
 #include "../../problem/Qing/QingModel.cuh"
+#include "../../problem/Michalewicz/MichalewiczModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -66,6 +67,10 @@ public:
 #ifdef PROBLEM_QING
         optimizerContext.model =new  QingModel(optimizerContext.differentialEvolutionContext);
         problemId="QING";
+#endif
+#ifdef PROBLEM_MICHALEWICZ
+        optimizerContext.model =new  MichalewiczModel(optimizerContext.differentialEvolutionContext);
+        problemId="MICHALEWICZ";
 #endif
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);

@@ -905,6 +905,24 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
+def extraOptimizationProblems():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
+            ],"problems")    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([2],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
 # nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup
 # runAllExperiments()
 # testScalability()
@@ -928,22 +946,24 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
 # runRandomLBFGSExperiments()
 # runSANMHH_ManyHyperheuristicSteps()
 
-runAllExperiments2()
-runSA_NMHH_GA_DE_GD_LBFGS_GWO()
+# runAllExperiments2()
+# runSA_NMHH_GA_DE_GD_LBFGS_GWO()
 
-runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
-runMADSExperiments()
+# runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
+# runMADSExperiments()
 
-runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
-runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
-runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
-runSA_MADS_NMHH_GA_DE_GD_LBFGS()
+# runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
+# runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+# runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+# runSA_MADS_NMHH_GA_DE_GD_LBFGS()
 
-runCMAESExperiments()
-runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
+# runCMAESExperiments()
+# runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
 
-runSA_CMAESExperiments()
-runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
+# runSA_CMAESExperiments()
+# runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
 
-runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
-runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
+# runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
+# runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
+
+extraOptimizationProblems()
