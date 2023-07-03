@@ -122,13 +122,22 @@ public:
                     cudaMemoryModel->dev_data,
                     cudaMemoryModel->dev_F1,
                     cudaMemoryModel->dev_F2,
-                    &cudaMemoryModel->cudaRandom);
+                    &cudaMemoryModel->cudaRandom,
+                    cudaMemoryModel->isBounded,
+                    cudaMemoryModel->dev_lower_bounds,
+                    cudaMemoryModel->dev_upper_bounds);
         }
     }
 
-    void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data, double* oldCosts, double* newCosts, Random* cudaRandom ) override {
+    void perturb(CUDAConfig &cudaConfig,Model *model, Model * dev_model,double * dev_x1, double * dev_x2, double* dev_data, double* oldCosts, double* newCosts, Random* cudaRandom,
+                 bool isbounded,
+                 double *globalLowerBounds,
+                 double *globalUpperBounds) override {
         greyWolfOptimizerStep<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x1, dev_x2, dev_model,
                 cudaRandom->dev_curandState,oldCosts,parameters.values["GWO_a"].value);
+        if(isbounded){
+            snapToBounds<<<model->populationSize, cudaConfig.threadsPerBlock>>>(dev_x2,globalLowerBounds,globalUpperBounds,model->modelSize);
+        }
         gpuErrchk( cudaPeekAtLastError() );
         gpuErrchk( cudaDeviceSynchronize() );
         evaluateF(cudaConfig,dev_model,dev_x2,dev_data,newCosts);

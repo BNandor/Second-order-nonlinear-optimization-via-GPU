@@ -30,6 +30,9 @@ class SA_CMAESHyperLevel: public HyperLevel {
 public:
     FitFunc baseLevelPerformanceMedIQR = [this](const double *operatorParameters, const int N)
     {
+        if(currentSteps>=HH_TRIALS) {
+            return std::numeric_limits<double>::max();
+        }
         std::cout<<"Running "<<hyperLevelId<<" for "<<totalBaseLevelEvaluations<<" evaluations"<<std::endl;
         updateOperatorParams(parameters,operatorParameters,CMAES_parameters);
         for(int i=0;i<N;i++){

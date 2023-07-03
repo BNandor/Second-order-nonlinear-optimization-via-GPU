@@ -38,6 +38,9 @@ public:
             bool eval_ok = false;
             try
             {
+                if(hyperLevel->currentSteps>=HH_TRIALS) {
+                    return false;
+                }
                 std::cout<<"Running "<<hyperLevel->hyperLevelId<<" for "<<hyperLevel->totalBaseLevelEvaluations<<" evaluations, step"<<hyperLevel->currentSteps<<std::endl;
                 std::vector<double> madsPoint;
                 for(int i=0;i<x.size();i++){

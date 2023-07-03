@@ -25,69 +25,26 @@ class CMAESHyperLevel: public HyperLevel {
     std::unordered_map<std::string,OperatorParameters*> parameters;
     std::unordered_set<std::string> CMAES_parameters;
     int totalBaseLevelEvaluations;
+    int currentSteps=0;
 
 public:
     FitFunc baseLevelPerformanceMedIQR = [this](const double *operatorParameters, const int N)
     {
+        if(currentSteps>=HH_TRIALS) {
+            return std::numeric_limits<double>::max();
+        }
         std::cout<<"Running "<<hyperLevelId<<" for "<<totalBaseLevelEvaluations<<" evaluations"<<std::endl;
 //        std::mt19937 generator=std::mt19937(std::random_device()());
         updateOperatorParams(parameters,operatorParameters,CMAES_parameters);
         for(int i=0;i<N;i++){
             std::cout<<operatorParameters[i]<<" ";
         }
-//        std::unordered_map<std::string,OperatorParameters*> defaultParameters=parameters;
-//        std::unordered_map<std::string,OperatorParameters*> currentParameters=std::unordered_map<std::string,OperatorParameters*>();
-//        std::unordered_map<std::string,OperatorParameters*> currentMutatedByEpsilonParameters=std::unordered_map<std::string,OperatorParameters*>();
-//        std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
-//        cloneParameters(defaultParameters,currentParameters);
-
         baseLevel.init(logJson);
         baseLevel.loadInitialModel();
-        return getPerformanceSampleOfSize(baseLevelSampleSize,parameters,totalBaseLevelEvaluations);
-
-//        double currentF=getPerformanceSampleOfSize(baseLevelSampleSize,currentParameters,totalBaseLevelEvaluations);
-//        double min=currentF;
-//        cloneParameters(currentParameters,bestParameters);
-
-//        double temp0=HH_SA_TEMP;
-//        double temp=temp0;
-//        double alpha=HH_SA_ALPHA;
-//        int acceptedWorse=0;
-//        logJson["SA-temp0"]=temp0;
-//        logJson["SA-alpha"]=alpha;
-//        logJson["SA-temps"].push_back(temp);
-//        for(int i=0; i < trials || temp < 0; i++) {
-//
-//            printf("[med+iqr]f: %f trial %u \n",currentF, i);
-//            cloneParameters(currentParameters,currentMutatedByEpsilonParameters);
-//            mutateParameters(currentMutatedByEpsilonParameters);
-
-//            double currentFPrime=getPerformanceSampleOfSize(baseLevelSampleSize,currentMutatedByEpsilonParameters,totalBaseLevelEvaluations);
-//            printf("[med+iqr]f': %f trial %u \n",currentFPrime, i);
-//            if(currentFPrime < currentF ) {
-//                cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
-//                currentF=currentFPrime;
-//            }else {
-//                double r= std::uniform_real_distribution<double>(0,1)(generator);
-//                if(r<exp((currentF-currentFPrime)/temp)) {
-//                    cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
-//                    currentF=currentFPrime;
-//                    acceptedWorse++;
-//                    std::cout<<"Accepted worse at "<<i<<"/"<<trials-1<<" at temp: "<<temp<<std::endl;
-//                }
-//            }
-//            temp=temp0/(1+alpha*i);
-//            logJson["SA-temps"].push_back(temp);
-//        }
-
-//        printParameters(bestParameters);
-//        baseLevel.printCurrentBestGlobalModel();
-//        std::cout<<"Accepted worse rate"<<(double)acceptedWorse/(double)trials<<std::endl;
-
-//        freeOperatorParamMap(currentParameters);
-//        freeOperatorParamMap(bestParameters);
-//        freeOperatorParamMap(currentMutatedByEpsilonParameters);
-//        return 0;
+        double result=getPerformanceSampleOfSize(baseLevelSampleSize,parameters,totalBaseLevelEvaluations);
+        currentSteps+=1;
+        std::cout<<"final result "<<result<<"at step"<<currentSteps<<std::endl;
+        return result;
     };
 
     CMAESHyperLevel():HyperLevel("CMA-ES") {

@@ -20,6 +20,7 @@ class MADSHyperLevel: public HyperLevel {
     std::vector<double> l;
     std::vector<double> u;
     int totalBaseLevelEvaluations;
+    int currentSteps=0;
 
 public:
     class My_Evaluator : public NOMAD::Evaluator
@@ -37,6 +38,9 @@ public:
             bool eval_ok = false;
             try
             {
+                if(hyperLevel->currentSteps>=HH_TRIALS) {
+                    return false;
+                }
                 std::cout<<"Running "<<hyperLevel->hyperLevelId<<" for "<<hyperLevel->totalBaseLevelEvaluations<<" evaluations"<<std::endl;
                 std::vector<double> madsPoint;
                 for(int i=0;i<x.size();i++){
@@ -50,6 +54,7 @@ public:
                 double f=hyperLevel->getPerformanceSampleOfSize(hyperLevel->baseLevelSampleSize,hyperLevel->parameters,hyperLevel->totalBaseLevelEvaluations);
                 x.setBBO(to_string(f));
                 eval_ok = true;
+                hyperLevel->currentSteps+=1;
             }
             catch (std::exception &e)
             {
