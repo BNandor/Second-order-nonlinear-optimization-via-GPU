@@ -93,7 +93,7 @@ public:
 
     void loadInitialModel(){
         optimizerContext.model->loadModel(optimizerContext.cudaMemoryModel.dev_x,optimizerContext.cudaMemoryModel.dev_xDE, optimizerContext.cudaMemoryModel.dev_data,
-                                         metrics);
+                                         metrics,&optimizerContext.cudaMemoryModel);
     }
 
     double optimize(std::unordered_map<std::string,OperatorParameters*>* optimizerParameters,int maxFunctionEvaluations) {

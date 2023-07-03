@@ -30,6 +30,7 @@ void printGenerationalCosts( double *newF, unsigned generation) {
 
 __global__
 void selectBestModels(const double *oldX, double *newX, const double *oldF, double *newF) {
+
     if (oldF[blockIdx.x] < newF[blockIdx.x]) {
         for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
             newX[blockIdx.x * X_DIM + spanningTID] = oldX[blockIdx.x * X_DIM + spanningTID];
@@ -59,7 +60,7 @@ public:
 //        printPopulationCostAtGeneration(cudaMemoryModel->cudaConfig,cudaMemoryModel->dev_F1,++selections);
     }
 
-    void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) {
+    void select(CUDAConfig& cudaConfig,const double *oldX, double *newX, const double *oldF, double *newF) override{
         selectBestModels<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(oldX,newX,oldF,newF);
         gpuErrchk( cudaPeekAtLastError() );
         gpuErrchk( cudaDeviceSynchronize() );

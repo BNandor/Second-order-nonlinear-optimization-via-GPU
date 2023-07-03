@@ -6,6 +6,8 @@
 #define PARALLELLBFGS_CUDAMEMORYMODEL_CUH
 
 #include "Model.cuh"
+#include <stdio.h>
+#include <stdlib.h>
 #ifndef gpuErrchk
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
@@ -30,11 +32,16 @@ public:
     double *dev_FDE;
     double *dev_F1;
     double *dev_F2;
+    double *dev_lower_bounds;
+    double *dev_upper_bounds;
+    bool isBounded=false;
     Model* dev_Model;
     Model* model;
 
     void allocateFor(Model &theModel) {
         freeIfPresent();
+        gpuErrchk(cudaMalloc((void **) &dev_lower_bounds, theModel.modelSize * sizeof(double)));
+        gpuErrchk(cudaMalloc((void **) &dev_upper_bounds, theModel.modelSize * sizeof(double)));
         gpuErrchk(cudaMalloc((void **) &dev_x, theModel.modelPopulationSize * sizeof(double)));
         gpuErrchk(cudaMalloc((void **) &dev_xDE, theModel.modelPopulationSize * sizeof(double)));
         gpuErrchk(cudaMalloc((void **) &dev_data, theModel.residuals.residualDataSize() * sizeof(double)));
@@ -84,6 +91,14 @@ public:
         }
     }
     void freeIfPresent() {
+        if(dev_upper_bounds != nullptr){
+            gpuErrchk(cudaFree(dev_upper_bounds));
+            dev_upper_bounds=0;
+        }
+        if(dev_lower_bounds != nullptr){
+            gpuErrchk(cudaFree(dev_lower_bounds));
+            dev_lower_bounds=0;
+        }
         if(dev_x!=nullptr) {
             gpuErrchk(cudaFree(dev_x));
             dev_x=0;

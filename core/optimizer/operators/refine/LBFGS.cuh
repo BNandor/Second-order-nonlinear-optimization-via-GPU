@@ -45,6 +45,9 @@ namespace LBFGS {
         double sharedResult;
         double *xCurrent;
         double *xNext;
+        double *lowerbounds;
+        double *upperbounds;
+        bool isBounded;
         double sharedF;
     };
 
@@ -141,6 +144,27 @@ namespace LBFGS {
         }
     }
 
+    __device__ void boundedLineStep(double *x, double *xNext,double *lowerBounds,double *upperBounds, unsigned xSize, double *jacobian, double alpha) {
+        double next;
+        double l;
+        double u;
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+            next= x[spanningTID] - alpha * jacobian[spanningTID];
+            l=lowerBounds[spanningTID];
+            if(next < l){
+                xNext[spanningTID]=l;
+            }else{
+                u=upperBounds[spanningTID];
+                if(next > u){
+                    xNext[spanningTID]=u;
+                }else{
+                    xNext[spanningTID]=next;
+                }
+            }
+        }
+    }
+
+
     __device__
     int lineSearch(LocalContext *localContext,
                     SharedContext *sharedContext,
@@ -153,8 +177,13 @@ namespace LBFGS {
         do {
 
             ++localContext->fEvaluations;
-            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
-                     localContext->alpha);
+            if(!sharedContext->isBounded) {
+                lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, DX,
+                         localContext->alpha);
+            }else{
+                boundedLineStep(sharedContext->xCurrent, sharedContext->xNext,sharedContext->lowerbounds,sharedContext->upperbounds, X_DIM, DX,
+                                localContext->alpha);
+            }
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
             }
@@ -206,7 +235,12 @@ namespace LBFGS {
         do {
 
             alphaMid = (alphaLow + alphaHigh) / 2.0;
-            aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+            if(!sharedContext->isBounded) {
+                aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+            }else{
+                boundedLineStep(sharedContext->xCurrent, sharedContext->xNext, sharedContext->lowerbounds,
+                                sharedContext->upperbounds, X_DIM, r, -alphaMid);
+            }
             // xNext = x + alphaMid*r
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
@@ -224,7 +258,12 @@ namespace LBFGS {
             if (fAlphaMid > currentF + c1 * alphaMid * JdotR) {
                 alphaHigh = alphaMid;
             } else {
-                aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaLow, r, sharedContext->xNext, X_DIM);
+                if(!sharedContext->isBounded) {
+                    aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaLow, r, sharedContext->xNext, X_DIM);
+                }else{
+                    boundedLineStep(sharedContext->xCurrent, sharedContext->xNext, sharedContext->lowerbounds,
+                                    sharedContext->upperbounds, X_DIM, r, -alphaLow);
+                }
                 // xNext = x + alphaLow*r
                 __syncthreads();//
                 if (threadIdx.x == 0) {
@@ -244,7 +283,12 @@ namespace LBFGS {
                     gradientAlphaMid = dot(DXNext, r, X_DIM, *sharedContext);
                     if (abs(gradientAlphaMid) <= -c2 * JdotR) {
 //                    return alphaMid
-                        aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+                        if(!sharedContext->isBounded) {
+                            aMinusBtimesCNoSync(sharedContext->xCurrent, -alphaMid, r, sharedContext->xNext, X_DIM);
+                        }else{
+                            boundedLineStep(sharedContext->xCurrent, sharedContext->xNext, sharedContext->lowerbounds,
+                                            sharedContext->upperbounds, X_DIM, r, -alphaMid);
+                        }
                         __syncthreads();
                         if (threadIdx.x == 0) {
                             sharedContext->sharedF = fAlphaMid;
@@ -288,8 +332,13 @@ namespace LBFGS {
         double gradientAlpha1;
         double JdotR = dot(J, r, X_DIM, *sharedContext);
         do {
-            aMinusBtimesCNoSync(sharedContext->xCurrent, -alpha1, r, sharedContext->xNext, X_DIM);
-            // xNext = x + alpha1*r
+            if(!sharedContext->isBounded) {
+                aMinusBtimesCNoSync(sharedContext->xCurrent, -alpha1, r, sharedContext->xNext, X_DIM);
+            }else {
+                // xNext = x + alpha1*r
+                boundedLineStep(sharedContext->xCurrent, sharedContext->xNext, sharedContext->lowerbounds,
+                                sharedContext->upperbounds, X_DIM, r, -alpha1);
+            }
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
             }
@@ -388,7 +437,8 @@ namespace LBFGS {
     optimize(double *globalX, double *globalData,
              double *globalF
             , GlobalData *globalSharedContext,
-            void * model,int iterations,double alpha, double c1, double c2
+            void * model,int iterations,double alpha, double c1, double c2,
+             bool isBounded, double *globalLowerBounds, double *globalUpperBounds
     ) {
         if( iterations < LBFGS_M) {
             return;
@@ -414,6 +464,9 @@ namespace LBFGS {
         if (threadIdx.x == 0) {
             sharedContext.xCurrent = sharedContext.globalData->sharedX1;
             sharedContext.xNext = sharedContext.globalData->sharedX2;
+            sharedContext.lowerbounds = globalLowerBounds;
+            sharedContext.upperbounds = globalUpperBounds;
+            sharedContext.isBounded = isBounded;
         }
 
         localContext.initialAlpha = alpha;

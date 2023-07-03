@@ -32,10 +32,11 @@ public:
 
     virtual  void
     optimize(double *globalX, double *globalData,
-             double *globalF
-            , void *globalSharedContext, void * model,
-             CUDAConfig cudaConfig
-    )=0;
+             double *globalF,
+             void *globalSharedContext, void * model,
+             CUDAConfig cudaConfig,bool isBounded,
+             double *globalLowerBounds,
+             double *globalUpperBounds)=0;
 
     virtual int fEvaluationCount() =0;
 
@@ -65,7 +66,10 @@ public:
                  cudaMemoryModel->dev_F2,
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
-                 cudaMemoryModel->cudaConfig);
+                 cudaMemoryModel->cudaConfig,
+                 cudaMemoryModel->isBounded,
+                 cudaMemoryModel->dev_lower_bounds,
+                 cudaMemoryModel->dev_upper_bounds);
 //        cudaMemoryModel->swapModels();
     }
 
@@ -73,11 +77,13 @@ public:
     optimize(double *globalX, double *globalData,
              double *globalF
             , void *globalSharedContext,void* model,
-            CUDAConfig cudaConfig
+            CUDAConfig cudaConfig,bool isBounded,
+             double *globalLowerBounds,
+             double *globalUpperBounds
     ) override{
         GD::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(GD::GlobalData*)globalSharedContext,model,
                                                                                truncf(parameters.values["GD_FEVALS"].value),
-                                                                               parameters.values["GD_ALPHA"].value);
+                                                                               parameters.values["GD_ALPHA"].value,isBounded,globalLowerBounds,globalUpperBounds);
         gpuErrchk( cudaPeekAtLastError() );
         gpuErrchk( cudaDeviceSynchronize() );
     };
@@ -120,21 +126,27 @@ public:
                  cudaMemoryModel->dev_F2,
                  dev_globalContext,
                  cudaMemoryModel->dev_Model,
-                 cudaMemoryModel->cudaConfig);
+                 cudaMemoryModel->cudaConfig,
+                 cudaMemoryModel->isBounded,
+                 cudaMemoryModel->dev_lower_bounds,
+                 cudaMemoryModel->dev_upper_bounds);
 //        cudaMemoryModel->swapModels();
     }
 
     void optimize(double *globalX, double *globalData,
              double *globalF
             , void *globalSharedContext,void* model,
-             CUDAConfig cudaConfig
+             CUDAConfig cudaConfig,bool isBounded,
+             double *globalLowerBounds,
+             double *globalUpperBounds
     ) override {
 
         LBFGS::optimize<<<cudaConfig.blocksPerGrid, cudaConfig.threadsPerBlock>>>(globalX,globalData,globalF,(LBFGS::GlobalData*)globalSharedContext, model,
                                                                                     truncf(parameters.values["LBFGS_FEVALS"].value),
                                                                                     parameters.values["LBFGS_ALPHA"].value,
                                                                                     parameters.values["LBFGS_C1"].value,
-                                                                                    parameters.values["LBFGS_C2"].value);
+                                                                                    parameters.values["LBFGS_C2"].value,
+                                                                                    isBounded,globalLowerBounds,globalUpperBounds);
         gpuErrchk( cudaPeekAtLastError() );
         gpuErrchk( cudaDeviceSynchronize() );
     };

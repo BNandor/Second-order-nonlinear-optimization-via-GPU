@@ -67,7 +67,7 @@ public:
 
     virtual ~Model(){
     }
-    virtual void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData,Metrics &metrics)=0;
+    virtual void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData,Metrics &metrics,CUDAMemoryModel* model)=0;
 
     void readPopulation(double *x, unsigned xSize, std::string filename) {
         std::fstream input;

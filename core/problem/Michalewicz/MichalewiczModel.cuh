@@ -7,6 +7,7 @@
 
 #include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
+#include "../../common/model/CudaMemoryModel.cuh"
 #include "Michalewicz.cuh"
 #include <random>
 
@@ -25,20 +26,30 @@ public:
         residuals.residual= reinterpret_cast<Residual *>(&MichalewiczResidual[0]);
     }
 
-    void loadModel(void* dev_x, void* dev_xDE, void* dev_constantData, Metrics &metrics ) override {
+    void loadModel(void* dev_x, void* dev_xDE, void* dev_constantData, Metrics &metrics,CUDAMemoryModel* model ) override {
         const int constantDataSize=residuals.residualDataSize();
         double x[modelPopulationSize]={};
+        double lowerbounds[modelSize]={};
+        double upperbounds[modelSize]={};
         double data[constantDataSize]={};
 
         for(int i=0;i<modelPopulationSize;i++) {
             x[i]=std::uniform_real_distribution<double>(0, M_PI)(generator);
+        }
+        for(int i=0;i<modelSize;i++) {
+            lowerbounds[i]=0.0;
+            upperbounds[i]=M_PI;
         }
         for(int i=0; i < MichalewiczResidual[0].constantsCount; i++) {
             data[3*i]=i;
             data[3*i+1]=-1.0;
             data[3*i+2]=((double)i+1)/M_PI;
         }
+
         metrics.getCudaEventMetrics().recordStartCopy();
+        model->isBounded=true;
+        cudaMemcpy(model->dev_lower_bounds, &lowerbounds, modelSize * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(model->dev_upper_bounds, &upperbounds, modelSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_xDE, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_constantData, &data, constantDataSize * sizeof(double), cudaMemcpyHostToDevice);

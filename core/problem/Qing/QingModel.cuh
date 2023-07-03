@@ -26,7 +26,7 @@ public:
         residuals.residual= reinterpret_cast<Residual *>(&QingResidual[0]);
     }
 
-    void loadModel(void* dev_x,void* dev_xDE,void* dev_constantData, Metrics &metrics ) override {
+    void loadModel(void* dev_x, void* dev_xDE, void* dev_constantData, Metrics &metrics,CUDAMemoryModel* model ) override {
         const int constantDataSize=residuals.residualDataSize();
         double x[modelPopulationSize]={};
         double data[constantDataSize]={};

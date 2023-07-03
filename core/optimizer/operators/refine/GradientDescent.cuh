@@ -39,6 +39,9 @@ namespace GD {
         double sharedResult;
         double *xCurrent;
         double *xNext;
+        double *lowerbounds;
+        double *upperbounds;
+        bool isBounded;
         double sharedF;
         double sharedDXNorm;
     };
@@ -79,6 +82,26 @@ namespace GD {
         }
     }
 
+    __device__ void boundedLineStep(double *x, double *xNext,double *lowerBounds,double *upperBounds, unsigned xSize, double *jacobian, double alpha) {
+        double next;
+        double l;
+        double u;
+        for (unsigned spanningTID = threadIdx.x; spanningTID < X_DIM; spanningTID += blockDim.x) {
+             next= x[spanningTID] - alpha * jacobian[spanningTID];
+             l=lowerBounds[spanningTID];
+            if(next < l){
+                xNext[spanningTID]=l;
+            }else{
+                u=upperBounds[spanningTID];
+                if(next > u){
+                    xNext[spanningTID]=u;
+                }else{
+                    xNext[spanningTID]=next;
+                }
+            }
+        }
+    }
+
     __device__
     bool lineSearch(LocalContext *localContext,
                     SharedContext *sharedContext,
@@ -89,8 +112,13 @@ namespace GD {
         CAST_RESIDUAL_FUNCTIONS()
         do {
             ++localContext->fEvaluations;
-            lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->globalData->sharedDX,
-                     localContext->alpha);
+            if(!sharedContext->isBounded) {
+                lineStep(sharedContext->xCurrent, sharedContext->xNext, X_DIM, sharedContext->globalData->sharedDX,
+                         localContext->alpha);
+            }else{
+                boundedLineStep(sharedContext->xCurrent, sharedContext->xNext,sharedContext->lowerbounds,sharedContext->upperbounds, X_DIM, sharedContext->globalData->sharedDX,
+                         localContext->alpha);
+            }
             if (threadIdx.x == 0) {
                 sharedContext->sharedF = 0;
             }
@@ -116,7 +144,8 @@ namespace GD {
              double *globalF,
              GlobalData *globalSharedContext,
              void * model,
-             int localIterations, double  alpha)
+             int localIterations, double  alpha,
+             bool isBounded, double *globalLowerBounds, double *globalUpperBounds)
              {
 
 //        if( localIterations == 0 ) {
@@ -157,6 +186,9 @@ namespace GD {
         if (threadIdx.x == 0) {
             sharedContext.xCurrent = sharedContext.globalData->sharedX1;
             sharedContext.xNext = sharedContext.globalData->sharedX2;
+            sharedContext.lowerbounds = globalLowerBounds;
+            sharedContext.upperbounds = globalUpperBounds;
+            sharedContext.isBounded = isBounded;
         }
 
         localContext.fEvaluations = 0;
