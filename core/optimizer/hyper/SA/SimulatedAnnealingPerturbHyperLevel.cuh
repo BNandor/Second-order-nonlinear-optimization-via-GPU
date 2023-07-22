@@ -21,12 +21,21 @@ public:
 
     void mutateParameters(std::unordered_map<std::string,OperatorParameters*> &chainParameters) override {
         std::cout<<"mutating by selection"<<std::endl;
-        mutateSelectParametersByEpsilon(chainParameters,{
-                                                         "PerturbatorInitializerSimplex",
-                                                         "PerturbatorDESimplex",
-                                                         "PerturbatorGASimplex",
-                                                         "PerturbatorDEOperatorParams",
-                                                         "PerturbatorGAOperatorParams"});
+            std::list<std::string> mutatedParameters={
+                    "PerturbatorInitializerSimplex",
+                    "PerturbatorDESimplex",
+                    "PerturbatorGASimplex",
+                    "PerturbatorDEOperatorParams",
+                    "PerturbatorGAOperatorParams"};
+#ifdef BASE_PERTURB_EXTRA_OPERATORS
+        std::string operators=BASE_PERTURB_EXTRA_OPERATORS;
+            std::set<std::string> operatorSet=stringutil::splitString(operators,',');
+            std::for_each(operatorSet.begin(),operatorSet.end(),[&chainParameters,operatorSet,&mutatedParameters](std::string op) {
+                mutatedParameters.push_back("Perturbator"+op+"Simplex");
+                mutatedParameters.push_back("Perturbator"+op+"OperatorParams");
+            });
+#endif
+        mutateSelectParametersByEpsilon(chainParameters,mutatedParameters);
     }
 };
 

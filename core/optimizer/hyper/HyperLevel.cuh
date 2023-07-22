@@ -128,6 +128,7 @@ protected:
         std::for_each(parameters.begin(),parameters.end(),[&chainParameters](auto& operatorParameter){
             std::cout<<"mutating "<<operatorParameter<<std::endl;
             chainParameters[operatorParameter]->mutateByEpsilon();
+            std::cout<<"mutated "<<operatorParameter<<std::endl;
         });
     }
 
@@ -342,6 +343,7 @@ void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters 
             chainParameters["Perturbator"+op+"Simplex"]->values.insert({op2,BoundedParameter(0.0,0,1)});
         });
     });
+//    std::cout<<getParametersJson(chainParameters);
 #endif
     }
 
@@ -461,6 +463,27 @@ void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters 
                     std::unordered_map<std::string,BoundedParameter> gwoParams=std::unordered_map<std::string,BoundedParameter>();
                     gwoParams["GWO_a"]=BoundedParameter(1.0, 0.0, 2.0);
                     chainParameters["PerturbatorGWOOperatorParams"] = new OperatorParameters(gwoParams);
+                }
+                if (op == "GWO2") {
+                    std::unordered_map<std::string,BoundedParameter> gwoParams=std::unordered_map<std::string,BoundedParameter>();
+                    gwoParams["GWO_a"]=BoundedParameter(1.0, 0.0, 2.0);
+                    chainParameters["PerturbatorGWO2OperatorParams"] = new OperatorParameters(gwoParams);
+                }
+                if (op == "DE2") {
+                    std::unordered_map<std::string,BoundedParameter> deParams=std::unordered_map<std::string,BoundedParameter>();
+                    deParams["DE_CR"]=BoundedParameter(0.7,0.0,1.0);
+                    deParams["DE_FORCE"]=BoundedParameter(0.6,0,2);
+                    chainParameters["PerturbatorDE2OperatorParams"]=new OperatorParameters(deParams);
+                }
+                if (op == "GA2") {
+                    std::unordered_map<std::string,BoundedParameter> gaParams=std::unordered_map<std::string,BoundedParameter>();
+                    gaParams["GA_CR"]=BoundedParameter(0.9, 0.0, 1.0);
+                    gaParams["GA_CR_POINT"]=BoundedParameter(0.5, 0.0, 1.0);
+                    gaParams["GA_MUTATION_RATE"]=BoundedParameter(0.05, 0.0, 0.5);
+                    gaParams["GA_MUTATION_SIZE"]=BoundedParameter(50, 0.0, 100);
+                    gaParams["GA_PARENTPOOL_RATIO"]=BoundedParameter(0.3, 0.2, 1.0);
+                    gaParams["GA_ALPHA"]=BoundedParameter(0.2, 0.0, 1.0);
+                    chainParameters["PerturbatorGA2OperatorParams"]=new OperatorParameters(gaParams);
                 }
             });
         #endif

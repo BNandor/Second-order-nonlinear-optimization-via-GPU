@@ -42,7 +42,6 @@ def compare(methods,problems,dimensions):
     methodsComparison(all,metadata,True)
 
 allmethods=['nmhh2','saGWOGroup','bigsacmaesGroup','bigsacmaesGWOGroup','sacmaesGWOGroup','sacmaesGroup','cmaesGWOGroup','cmaesGroup','bigsamadsGroup','bigsamadsGWOGroup','saMadsGWOGroup','madsGWOGroup','madsGroup','saMadsGroup']
-
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID']
 nonconvexMultimodal=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK']
 nonSeparable=['PROBLEM_ROSENBROCK','PROBLEM_TRID']

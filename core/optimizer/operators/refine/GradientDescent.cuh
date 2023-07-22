@@ -186,9 +186,11 @@ namespace GD {
         if (threadIdx.x == 0) {
             sharedContext.xCurrent = sharedContext.globalData->sharedX1;
             sharedContext.xNext = sharedContext.globalData->sharedX2;
-            sharedContext.lowerbounds = globalLowerBounds;
-            sharedContext.upperbounds = globalUpperBounds;
             sharedContext.isBounded = isBounded;
+            if(isBounded){
+                sharedContext.lowerbounds = globalLowerBounds;
+                sharedContext.upperbounds = globalUpperBounds;
+            }
         }
 
         localContext.fEvaluations = 0;

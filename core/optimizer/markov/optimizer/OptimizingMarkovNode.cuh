@@ -23,6 +23,7 @@ public:
     }
 
     void operate(CUDAMemoryModel* cudaMemoryModel,int remainingEvaluations)  {
+//        std::cout<<"starting operation "<<std::endl;//<<((OperatorMarkovNode*)operatorChain->currentNode)->name<<std::endl;
         ((OperatorMarkovNode*)operatorChain->currentNode)->operate(cudaMemoryModel, remainingEvaluations);
     }
     void hopToNext(){

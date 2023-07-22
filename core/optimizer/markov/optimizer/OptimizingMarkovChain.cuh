@@ -74,6 +74,18 @@ class OptimizingMarkovChain: public MarkovChain {
                 (*perturbatorChain)["GWO"]=new OperatorMarkovNode(&optimizerContext->greyWolfOptimizerContext,std::string("GWO").c_str());
                 optimizerContext->greyWolfOptimizerContext.parameters=*(*chainParameters)["PerturbatorGWOOperatorParams"];
             }
+            if(op == "GWO2"){
+                (*perturbatorChain)["GWO2"]=new OperatorMarkovNode(&optimizerContext->greyWolfOptimizerContext2,std::string("GWO2").c_str());
+                optimizerContext->greyWolfOptimizerContext2.parameters=*(*chainParameters)["PerturbatorGWO2OperatorParams"];
+            }
+            if(op == "DE2"){
+                (*perturbatorChain)["DE2"]=new OperatorMarkovNode(&optimizerContext->differentialEvolutionContext2,std::string("DE2").c_str());
+                optimizerContext->differentialEvolutionContext2.parameters=*(*chainParameters)["PerturbatorDE2OperatorParams"];
+            }
+            if(op == "GA2"){
+                (*perturbatorChain)["GA2"]=new OperatorMarkovNode(&optimizerContext->geneticAlgorithmContext2,std::string("GA2").c_str());
+                optimizerContext->geneticAlgorithmContext2.parameters=*(*chainParameters)["PerturbatorGA2OperatorParams"];
+            }
             (*perturbatorChain)["initializer"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorInitializerSimplex"]->values[op].value);
             (*perturbatorChain)["DE"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorDESimplex"]->values[op].value);
             (*perturbatorChain)["GA"]->addNext((*perturbatorChain)[op], (*chainParameters)["PerturbatorGASimplex"]->values[op].value);
@@ -83,7 +95,13 @@ class OptimizingMarkovChain: public MarkovChain {
             }
             (*perturbatorChain)[op]->addNext((*perturbatorChain)["DE"], (*chainParameters)["Perturbator"+op+"Simplex"]->values["DE"].value);
             (*perturbatorChain)[op]->addNext((*perturbatorChain)["GA"], (*chainParameters)["Perturbator"+op+"Simplex"]->values["GA"].value);
+            });
+        std::for_each(operatorSet.begin(),operatorSet.end(),[&perturbatorChain,optimizerContext,this,operatorSet](std::string op){
             std::for_each(operatorSet.begin(),operatorSet.end(),[&perturbatorChain,this,&op](std::string op2){
+                if((*perturbatorChain).count(op2)<=0){
+                    std::cerr<<"Invalid operator configuration, please define "<<op2<<std::endl;
+                    exit(5);
+                }
                     (*perturbatorChain)[op]->addNext((*perturbatorChain)[op2], (*chainParameters)["Perturbator"+op+"Simplex"]->values[op2].value);
             });
         });
@@ -137,9 +155,14 @@ public:
     }
 
     void operate(int maxEvaluations) {
+//        std::cout<<"Operating"<<((OptimizingMarkovNode*)currentNode)->name<<std::endl;
+//        std::cout<<"remaining"<<maxEvaluations-metrics->modelPerformanceMetrics.fEvaluations<<std::endl;
         ((OptimizingMarkovNode*)currentNode)->operate(cudaMemoryModel,maxEvaluations-metrics->modelPerformanceMetrics.fEvaluations);
+//        std::cout<<"Operated"<<((OptimizingMarkovNode*)currentNode)->name<<std::endl;
         metrics->modelPerformanceMetrics.fEvaluations+=((OptimizingMarkovNode*)currentNode)->fEvals();
+//        std::cout<<"feval"<<((OptimizingMarkovNode*)currentNode)->name<<std::endl;
         ((OptimizingMarkovNode*)currentNode)->hopToNext();
+//        std::cout<<"hopped to next"<<((OptimizingMarkovNode*)currentNode)->name<<std::endl;
     }
 
 

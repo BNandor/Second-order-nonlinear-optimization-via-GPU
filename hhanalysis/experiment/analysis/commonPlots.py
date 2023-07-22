@@ -18,7 +18,7 @@ def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axi
     # fig, ax = plt.subplots(figsize=(8,3))
     subplotsrows=len(series_of_series_of_data_series[0])
     subplotscols=len(series_of_series_of_data_series)
-    fig, axes = plt.subplots(nrows=subplotsrows, ncols=subplotscols,figsize=(figsize[0]*subplotscols,figsize[1]*subplotsrows))
+    fig, axes = plt.subplots(nrows=subplotsrows, ncols=subplotscols,gridspec_kw={"wspace":0.2,"hspace":0.4},figsize=(figsize[0]*subplotscols,figsize[1]*subplotsrows))
     
     if subplotsrows == 1:
         axes=[axes]
@@ -45,7 +45,8 @@ def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axi
             # Add a legend
             ax.legend(prop=prop)
         plt.tight_layout(rect=(0,0,1,1))
-        fig.subplots_adjust(wspace=0, hspace=0.4)
+        fig.subplots_adjust(wspace=0.5, hspace=0)
+        fig.subplots_adjust(left=0.16, right=0.96, top=0.95)  # Adjust the left and right margins
         # Save the plot to a file if file_name is provided
     if file_name:
         plt.savefig(file_name)
@@ -188,7 +189,10 @@ def fillStepsMinValue(steps,til):
         filled.append(min)
     return filled
 
-def createMethodsCostEvolutionPlots(methodPathsAndIds,experimentProblemsAndScales,performanceMapping,experimentFilter=[],filename=None,figuresize=(16/3,3)):
+def createMethodsCostEvolutionPlots(methodPathsAndIds,
+                                    experimentProblemsAndScales,
+                                    performanceMapping,
+                                    experimentFilter=[],filename=None,figuresize=(16/3,3)):
     allperformances=[]
     alltitles=[]
     allscales=[]
@@ -197,15 +201,20 @@ def createMethodsCostEvolutionPlots(methodPathsAndIds,experimentProblemsAndScale
         # for method in methods:
         #     logs = open(f"{LOGS_ROOT}/{method}/{problem}")
         #     methodsLogs.append(pd.DataFrame(json.load(logs)['experiments']))
+
         for method in methodPathsAndIds:
-            logs = open(f"{method[0].replace('/records.json','')}/{problem}")
-            df=pd.DataFrame(json.load(logs)['experiments'])
+            if not 'customDF' in method[2]:
+                logs = open(f"{method[0].replace('/records.json','')}/{problem}")
+                df=pd.DataFrame(json.load(logs)['experiments'])
+            else:
+                df=method[2]['customDF']
+                df=method[2]['problemFilter'](df,problem)
             df['experimentId']=method[1]
             methodsLogs.append(df)
         
         allData=pd.concat(methodsLogs)
         if len(experimentFilter)>0:
-            allData=allData[selectAllMatchAtLeastOne(allData,experimentFilter)]
+                    allData=allData[selectAllMatchAtLeastOne(allData,experimentFilter)]
         allData=allData.groupby(['baseLevel-xDim'])
         series=pd.DataFrame()
 
@@ -214,17 +223,19 @@ def createMethodsCostEvolutionPlots(methodPathsAndIds,experimentProblemsAndScale
         
         for (dimension,groupIndex) in allData:
             serie={}
+            trialSizes={}
             serie["dimension"]=dimension
             for index,row in groupIndex.iterrows():
                 optimizerName=row["experimentId"]
                 serie[optimizerName]=row["trials"]
+                trialSizes[optimizerName]=row["trialCount"]
                 if optimizerName not in optimizers:
                     optimizersList.append(optimizerName)
                     optimizers.add(optimizerName)
             series=series.append(serie,ignore_index=True)
         for optimizer in optimizersList:
             series[optimizer]=series[optimizer].map(lambda trials: list(map(performanceMapping,trials)))
-            series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),len(trials)))
+            series[optimizer]=series[optimizer].map(lambda trials: fillStepsMinValue(list(zip(range(0,len(trials)),trials)),trialSizes[optimizerName]))
         performances=[]
         titles=[]
         for index,row in series.iterrows():

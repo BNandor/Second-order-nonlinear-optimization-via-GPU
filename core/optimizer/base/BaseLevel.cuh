@@ -14,6 +14,11 @@
 #include "../../problem/Schwefel/223/Schwefel223Model.cuh"
 #include "../../problem/Qing/QingModel.cuh"
 #include "../../problem/Michalewicz/MichalewiczModel.cuh"
+#include "../../problem/DixonPrice/DixonPriceModel.cuh"
+#include "../../problem/Levy/LevyModel.cuh"
+#include "../../problem/Schwefel/SchwefelModel.cuh"
+#include "../../problem/SumSquares/SumSquaresModel.cuh"
+#include "../../problem/Sphere/SphereModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -69,9 +74,31 @@ public:
         problemId="QING";
 #endif
 #ifdef PROBLEM_MICHALEWICZ
-        optimizerContext.model =new  MichalewiczModel(optimizerContext.differentialEvolutionContext);
+        optimizerContext.model =new MichalewiczModel(optimizerContext.differentialEvolutionContext);
         problemId="MICHALEWICZ";
 #endif
+#ifdef PROBLEM_DIXONPRICE
+        optimizerContext.model = new DixonPriceModel(optimizerContext.differentialEvolutionContext);
+        problemId="DIXONPRICE";
+#endif
+#ifdef  PROBLEM_LEVY
+        optimizerContext.model = new LevyModel(optimizerContext.differentialEvolutionContext);
+        problemId="LEVY";
+#endif
+#ifdef  PROBLEM_SCHWEFEL
+        optimizerContext.model = new SchwefelModel(optimizerContext.differentialEvolutionContext);
+        problemId="SCHWEFEL";
+#endif
+#ifdef PROBLEM_SUMSQUARES
+        optimizerContext.model = new SumSquaresModel(optimizerContext.differentialEvolutionContext);
+        problemId="SUMSQUARES";
+#endif
+#ifdef  PROBLEM_SPHERE
+        optimizerContext.model = new SphereModel(optimizerContext.differentialEvolutionContext);
+        problemId="SPHERE";
+#endif
+
+
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
         optimizerContext.lbfgsLocalSearch.setupGlobalData(optimizerContext.getPopulationSize());

@@ -13,7 +13,9 @@ public:
     }
 
     void operate(CUDAMemoryModel* cudaMemoryModel,int remainingEvaluations) const {
+//        std::cout<<"limiting evaluations on "<<nodeOperator<<std::endl;
         nodeOperator->limitEvaluationsTo(remainingEvaluations);
+//        std::cout<<"operation "<<std::endl;
         nodeOperator->operate(cudaMemoryModel);
     }
 

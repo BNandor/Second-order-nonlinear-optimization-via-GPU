@@ -11,7 +11,7 @@
 #include "Michalewicz.cuh"
 #include <random>
 
-//#ifdef PROBLEM_MICHALEWICZ
+#ifdef PROBLEM_MICHALEWICZ
 class MichalewiczModel: public Model {
     std::mt19937 generator=std::mt19937(std::random_device()());
     Residual MichalewiczResidual[1]{};
@@ -81,6 +81,6 @@ public:
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value; \
         } \
 
-//#endif
+#endif
 
 #endif //PARALLELLBFGS_MICHALEWICZMODEL_CUH

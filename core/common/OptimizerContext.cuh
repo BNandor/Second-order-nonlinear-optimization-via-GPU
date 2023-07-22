@@ -30,8 +30,11 @@ public:
 
     // Perturbators
     DEContext differentialEvolutionContext;
+    DEContext differentialEvolutionContext2;
     GAContext geneticAlgorithmContext;
+    GAContext geneticAlgorithmContext2;
     GWOContext greyWolfOptimizerContext;
+    GWOContext greyWolfOptimizerContext2;
     Perturbator* currentPerturbator;
 
     // Selectors

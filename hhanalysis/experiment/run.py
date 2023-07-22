@@ -17,6 +17,8 @@ SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/r
 SANMHH_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/GWO/records.json"
 RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../logs/randomHH/records.json"
 SAPERTURB_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/records.json"
+SAPERTURBGWO_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/GWO/records.json"
+SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/MultiOperators/records.json"
 GA_EXPERIMENT_RECORDS_PATH="../logs/GA/records.json"
 DE_EXPERIMENT_RECORDS_PATH="../logs/DE/records.json"
 RANDOM_GA_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-GA/records.json"
@@ -264,6 +266,52 @@ def runSAPerturbExperiments():
     params["hyperLevelMethod"]=zipWithProperty(["SA_PERTURB"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SAPERTURB_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+def runSAPerturbGWOExperiments():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SAPerturb/GWO/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SAPerturb/GWO/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SAPerturb/GWO/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SAPerturb/GWO/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SAPerturb/GWO/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SAPerturb/GWO/qing.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50,100,500],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA_PERTURB"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SAPERTURBGWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+
+def runSAPerturbMultiOperatorExperiments():
+    params={}
+    params["problems"]=zipWithProperty([
+              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SAPerturb/MultiOperators/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SAPerturb/MultiOperators/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SAPerturb/MultiOperators/styblinskitang.json"),
+              ("PROBLEM_TRID","hhanalysis/logs/SAPerturb/MultiOperators/trid.json"),
+              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SAPerturb/MultiOperators/schwefel223.json"),
+              ("PROBLEM_QING","hhanalysis/logs/SAPerturb/MultiOperators/qing.json")],"problems")
+    
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([5,50,100,500],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO,DE2,GA2{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA_PERTURB"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSAPerturbExperimentsBig():
     params={}
@@ -908,13 +956,18 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
 def extraOptimizationProblems():
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
-            ],"problems")    
+            # ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
+            # ("PROBLEM_DIXONPRICE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/dixonprice.json"),
+            # ("PROBLEM_LEVY","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/levy.json"),
+            # ("PROBLEM_SCHWEFEL","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel.json"),
+            # ("PROBLEM_SUMSQUARES","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"),
+            ("PROBLEM_SPHERE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sphere.json"),
+            ],"problems")
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([2,10],"modelSize")
+    params["modelSize"]=zipWithProperty([750],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([1],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
@@ -930,6 +983,8 @@ def extraOptimizationProblems():
 # runSASNLPExperiment()
 # runRandomHHControlGroupExperiments()
 # runSAPerturbExperiments()
+# runSAPerturbGWOExperiments()
+runSAPerturbMultiOperatorExperiments()
 # runSAPerturbExperimentsBig()
 # runGAExperiments()
 # runGAExperimentsBig()
@@ -966,4 +1021,4 @@ def extraOptimizationProblems():
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
 
-extraOptimizationProblems()
+# extraOptimizationProblems()

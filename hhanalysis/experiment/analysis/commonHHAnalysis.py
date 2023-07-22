@@ -70,10 +70,12 @@ def methodsComparison(all,metadata,block=True):
                 metadata['optimizers'].append(row["hyperLevel-id"])
                 optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
-    # printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet)
+    printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet)
+    
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
     statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
     printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
+    
     # printStatisticsOfWilcoxRanksumsForEachDimension(statisticsforDimension)
     # plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
     #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),

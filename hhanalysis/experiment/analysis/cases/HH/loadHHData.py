@@ -12,12 +12,26 @@ from common import *
 import tabloo
 import numpy as np
 from customhys.loadCustomHYS import *
+from customhys.loadCustomHyS2 import *
+import  mealpyExp.loadMealpy 
 
 def customhys(metadata):
     if "customhys" not in metadata['datasets']:
             metadata['datasets']["customhys"]=getCustomHySControlGroupDF()
             metadata['datasets']["customhys"]['hyperLevel-id']='CUSTOMHyS'
     return metadata['datasets']["customhys"]
+
+def customhys2(metadata):
+    if "customhys2" not in metadata['datasets']:
+        metadata['datasets']["customhys2"]=createTestGroupView(CUSTOMHYS2_RESULTS_PATH,
+                                    (None,"hashSHA256"),
+                                    customhys2RecordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'],enrichWithMetrics=False)
+        metadata['datasets']["customhys2"]['hyperLevel-id']='CustomHyS'
+    return metadata['datasets']["customhys2"]
 
 def mealpy(metadata):
     if "mealpy" not in metadata['datasets']:
@@ -28,8 +42,21 @@ def mealpy(metadata):
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterMealpy,enrichWithMetrics=False)
-        metadata['datasets']["mealpy"]['hyperLevel-id']='MEALPY'
+        # metadata['datasets']["mealpy"]['hyperLevel-id']='MEALPY'
     return metadata['datasets']["mealpy"]
+
+def mealpyCRO(metadata):
+    if "mealpyCRO" not in metadata['datasets']:
+        metadata['datasets']["mealpyCRO"]=createTestGroupView(MEALPY_CRO_EXPERIMENT_RECORDS_PATH,
+                                    (None,"hashSHA256"),
+                                    mealpyExp.loadMealpy.recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'],enrichWithMetrics=False)
+        metadata['datasets']["mealpyCRO"]=pd.DataFrame(metadata['datasets']["mealpyCRO"][metadata['datasets']["mealpyCRO"]['hyperLevel-id'] == 'CRO'])
+        # metadata['datasets']["mealpy"]['hyperLevel-id']='MEALPY'
+    return metadata['datasets']["mealpyCRO"]
 
 def nmhh(metadata):
     if "nmhh" not in metadata['datasets']:
@@ -108,6 +135,34 @@ def saperturbGroup(metadata):
         )
         metadata['datasets']["saperturbGroup"]['hyperLevel-id']='SA-PERTURB'
     return metadata['datasets']["saperturbGroup"]
+
+def saperturbGWOGroup(metadata):
+    if "saperturbGWOGroup" not in metadata['datasets']:
+        metadata['datasets']["saperturbGWOGroup"] = createTestGroupView(
+            SAPERTURBGWO_EXPERIMENT_RECORDS_PATH,
+            (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
+            recordToExperiment,
+            set(),
+            set(["minMedIQR", "minAvg", "minStd", "samples"]),
+            metadata['metricsAggregation'],
+            metadata['mergeOn']
+        )
+        metadata['datasets']["saperturbGWOGroup"]['hyperLevel-id']='SA-PERTURB'
+    return metadata['datasets']["saperturbGWOGroup"]
+
+def saperturbMultiOperatorGroup(metadata):
+    if "saperturbMultiOperatorGroup" not in metadata['datasets']:
+        metadata['datasets']["saperturbMultiOperatorGroup"] = createTestGroupView(
+            SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH,
+            (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
+            recordToExperiment,
+            set(),
+            set(["minMedIQR", "minAvg", "minStd", "samples"]),
+            metadata['metricsAggregation'],
+            metadata['mergeOn']
+        )
+        metadata['datasets']["saperturbMultiOperatorGroup"]['hyperLevel-id']='SA-PERTURBMultiOperator'
+    return metadata['datasets']["saperturbMultiOperatorGroup"]
 
 def gaGroup(metadata):
     if "gaGroup" not in metadata['datasets']:
@@ -354,13 +409,17 @@ def sacmaesGroup(metadata):
 def loadDataMap():
     return {
     "customhys":customhys,
+    "customhys2":customhys2,
     "mealpy": mealpy,
+    "mealpyCRO": mealpyCRO,
     "nmhh": nmhh,
     "nmhh2": nmhh2,
     "sarefineGroup": sarefineGroup,
     "lbfgsGroup": lbfgsGroup,
     "gdGroup": gdGroup,
     "saperturbGroup": saperturbGroup,
+    "saperturbGWOGroup":saperturbGWOGroup,
+    "saperturbMultiOperatorGroup":saperturbMultiOperatorGroup,
     "gaGroup": gaGroup,
     "deGroup": deGroup,
     "randomgaGroup": randomgaGroup,

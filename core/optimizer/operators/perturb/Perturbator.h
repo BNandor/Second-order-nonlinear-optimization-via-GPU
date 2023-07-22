@@ -25,6 +25,7 @@ public:
         return fEvals;
     }
     void limitEvaluationsTo(int remainingEvaluations) override {
+//        std::cout<<"limiting evaluations"<<std::endl;
         if(remainingEvaluations<=0){
             fEvals=0;
         }

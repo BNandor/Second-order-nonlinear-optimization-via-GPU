@@ -6,9 +6,11 @@ SA_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/records.json"
 SCALABILITY_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/scalabilityTests/records.json"
 SA_GA_DE_GD_LBFGS_RECORDS_PATH=f"{LOGS_ROOT}/SA-NMHH/GA_DE_GD_LBFGS/records.json"
 RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/randomHH/records.json"
-MEALPY_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/mealpyPerf/records.json"
+MEALPY_CRO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/mealpyPerf/CRO/records.json"
 MEALPY_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/mealpyPerf/records.json"
 SAPERTURB_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/records.json"
+SAPERTURBGWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/GWO/records.json"
+SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/MultiOperators/records.json"
 GA_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/GA/records.json"
 DE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/DE/records.json"
 RANDOM_GA_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/RANDOM-GA/records.json"
@@ -29,7 +31,7 @@ BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-MADS
 SAREFINE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SARefine/records.json"
 LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/LBFGS/records.json"
 GD_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/GD/records.json"
-
+CUSTOMHYS2_RESULTS_PATH=f"{LOGS_ROOT}/CustomHYSPerf/results2.json"
 
 def enrichAndFilterSA(recordsWithMetrics,aggregations,experimentColumns):
     HHView=mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
@@ -46,6 +48,9 @@ def enrichAndFilterMealpy(recordsWithMetrics,aggregations,experimentColumns):
 def mergeOnAvg(recordsWithMetrics,aggregations,experimentColumns):
     return mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minAvg"])
 
+def mergeOnElapsedTime(recordsWithMetrics,aggregations,experimentColumns):
+    return mergeOn(recordsWithMetrics,aggregations,experimentColumns+["elapsedTimeSec"])
+    
 def mergeOnMinMedIQR(recordsWithMetrics,aggregations,experimentColumns):
     return mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])
     
@@ -59,6 +64,7 @@ def recordToExperiment(record):
     experiment=record['experiment']
     experiment["problemName"]=experiment["problems"][0]
     experiment["problemPath"]=experiment["problems"][1]
+    experiment['elapsedTimeSec']=record['metadata']["elapsedTimeSec"]
     experiment.pop("problems")
     return experiment
 
@@ -98,13 +104,14 @@ def minTrialAverage(trials):
     minStd=0
     samples=[]
     for trial in trials:
-        # +np.std(trial['performanceSamples'])
+        #+np.std(trial['performanceSamples'])
         trialAverage=np.average(trial['performanceSamples'])
         if(trialAverage<minAvg):
             minAvg=trialAverage
             minStd=np.std(trial['performanceSamples'])
             samples=trial['performanceSamples']
     return (minAvg,minStd,samples)
+
 def filterMetricPropertiesAverageAndMedIQR(metric):
     (minAvg,minStd,samples)=minTrialAverage(metric['trials'])
     return {
