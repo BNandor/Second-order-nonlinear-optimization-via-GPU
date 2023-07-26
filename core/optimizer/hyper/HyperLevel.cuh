@@ -9,7 +9,7 @@
 #include "../../common/Statistics.cuh"
 #include "../../common/CommonStringUtils.h"
 #include "../../common/io/JsonOperations.cuh"
-#include <json.hpp>
+#include "../../json.hpp"
 #include <utility>
 #include <vector>
 

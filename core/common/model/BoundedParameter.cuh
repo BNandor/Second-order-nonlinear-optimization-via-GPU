@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <utility>
 #include <algorithm>
-#include <json.hpp>
+#include "../../json.hpp"
 using json = nlohmann::json;
 
 class BoundedParameter {
