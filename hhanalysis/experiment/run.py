@@ -47,9 +47,9 @@ DEFAULT_THREAD_COUNT=128
 
 
 def runOptimizerWith(flags):
-    process = subprocess.Popen(['make', 'buildAndRunExperimentWith', f'NVCCFLAGS={flags}'],
+    process = subprocess.Popen(['make', 'buildAndRunExperimentWith', f'NVCCFLAGS={flags}', f'ROOT={os.getcwd()}/../..'],
                      stdout=subprocess.PIPE, 
-                     stderr=subprocess.PIPE)
+                     stderr=subprocess.STDOUT)
     return process.stdout
 
 def consumeOutput(stdout,consumeline):
@@ -956,16 +956,16 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
 def extraOptimizationProblems():
     params={}
     params["problems"]=zipWithProperty([
-            # ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
-            # ("PROBLEM_DIXONPRICE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/dixonprice.json"),
-            # ("PROBLEM_LEVY","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/levy.json"),
-            # ("PROBLEM_SCHWEFEL","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel.json"),
-            # ("PROBLEM_SUMSQUARES","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"),
+            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/dixonprice.json"),
+            ("PROBLEM_LEVY","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/levy.json"),
+            ("PROBLEM_SCHWEFEL","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel.json"),
+            ("PROBLEM_SUMSQUARES","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"),
             ("PROBLEM_SPHERE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sphere.json"),
             ],"problems")
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([750],"modelSize")
+    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([1],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -984,7 +984,7 @@ def extraOptimizationProblems():
 # runRandomHHControlGroupExperiments()
 # runSAPerturbExperiments()
 # runSAPerturbGWOExperiments()
-runSAPerturbMultiOperatorExperiments()
+# runSAPerturbMultiOperatorExperiments()
 # runSAPerturbExperimentsBig()
 # runGAExperiments()
 # runGAExperimentsBig()
@@ -1021,4 +1021,4 @@ runSAPerturbMultiOperatorExperiments()
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
 
-# extraOptimizationProblems()
+extraOptimizationProblems()

@@ -4,7 +4,7 @@
 
 #ifndef PARALLELLBFGS_JSONOPERATIONS_CUH
 #define PARALLELLBFGS_JSONOPERATIONS_CUH
-#include <json.hpp>
+#include "../../json.hpp"
 #include <iostream>
 #include <fstream>
 using json = nlohmann::json;
