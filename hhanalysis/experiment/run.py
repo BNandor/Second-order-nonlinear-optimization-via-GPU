@@ -967,7 +967,7 @@ def extraOptimizationProblems():
     params["populationSize"]=zipWithProperty([30],"populationSize")
     params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([1],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
