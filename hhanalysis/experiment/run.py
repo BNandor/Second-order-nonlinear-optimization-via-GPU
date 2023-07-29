@@ -172,7 +172,7 @@ def runAllExperiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 # need this, in order to save the samples
-def runAllExperiments2():
+def runNMHH2():
     params={}
     params["problems"]=zipWithProperty([
               ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
@@ -1001,24 +1001,17 @@ def extraOptimizationProblems():
 # runRandomLBFGSExperiments()
 # runSANMHH_ManyHyperheuristicSteps()
 
-# runAllExperiments2()
+runNMHH2()
 # runSA_NMHH_GA_DE_GD_LBFGS_GWO()
-
 # runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
 # runMADSExperiments()
-
 # runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
 # runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
 # runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
 # runSA_MADS_NMHH_GA_DE_GD_LBFGS()
-
 # runCMAESExperiments()
 # runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
-
 # runSA_CMAESExperiments()
 # runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
-
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
 # runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
-
-extraOptimizationProblems()
