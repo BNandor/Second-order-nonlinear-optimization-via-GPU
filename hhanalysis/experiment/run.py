@@ -173,14 +173,22 @@ def runAllExperiments():
 
 # need this, in order to save the samples
 def runNMHH2():
+    logspath="hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/qing.json")],"problems")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+            ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
+              ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
@@ -606,14 +614,21 @@ def runRandomLBFGSExperiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runCMAESExperiments():
+    logspath="hhanalysis/logs/CMA-ES"
     params={}
     params["problems"]=zipWithProperty([
-            ("PROBLEM_ROSENBROCK","hhanalysis/logs/CMA-ES/rosenbrock.json"),
-            ("PROBLEM_RASTRIGIN","hhanalysis/logs/CMA-ES/rastrigin.json"),
-            ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/CMA-ES/styblinskitang.json"),
-            ("PROBLEM_TRID","hhanalysis/logs/CMA-ES/trid.json"),
-            ("PROBLEM_SCHWEFEL223","hhanalysis/logs/CMA-ES/schwefel223.json"),
-            ("PROBLEM_QING","hhanalysis/logs/CMA-ES/qing.json")
+            ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+            ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+            ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+            ("PROBLEM_TRID",f"{logspath}/trid.json"),
+            ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+            ("PROBLEM_QING",f"{logspath}/qing.json"),
+               ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -628,14 +643,21 @@ def runCMAESExperiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),CMA_ES_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSA_CMAESExperiments():
+    logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+                 ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -650,14 +672,21 @@ def runSA_CMAESExperiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_CMA_ES_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runMADSExperiments():
+    logspath="hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+            ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -717,13 +746,20 @@ def runSASNLPExperiment():
 
 def runSA_NMHH_GA_DE_GD_LBFGS_GWO():
     params={}
+    logspath="hhanalysis/logs/SA-NMHH/GWO"
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-NMHH/GWO/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-NMHH/GWO/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-NMHH/GWO/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-NMHH/GWO/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-NMHH/GWO/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-NMHH/GWO/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
               ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -740,14 +776,21 @@ def runSA_NMHH_GA_DE_GD_LBFGS_GWO():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SANMHH_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runMADS_NMHH_GA_DE_GD_LBFGS_GWO():
+    logspath="hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+               ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -764,14 +807,21 @@ def runMADS_NMHH_GA_DE_GD_LBFGS_GWO():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
+    logspath="hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/qing.json")
+            ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+            ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+            ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+            ("PROBLEM_TRID",f"{logspath}/trid.json"),
+            ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+            ("PROBLEM_QING",f"{logspath}/qing.json"),
+            ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -788,14 +838,21 @@ def runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSA_MADS_NMHH_GA_DE_GD_LBFGS():
+    logspath="hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+            ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -810,14 +867,21 @@ def runSA_MADS_NMHH_GA_DE_GD_LBFGS():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
     
 def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS():
+    logspath="hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -834,14 +898,21 @@ def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
+    logspath="hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+                 ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -858,14 +929,21 @@ def runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runCMAES_GA_DE_GD_LBFGS_GWOExperiments():
+    logspath="hhanalysis/logs/CMA-ES/GWO"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/CMA-ES/GWO/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/CMA-ES/GWO/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/CMA-ES/GWO/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/CMA-ES/GWO/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/CMA-ES/GWO/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/CMA-ES/GWO/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+                 ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -882,14 +960,21 @@ def runCMAES_GA_DE_GD_LBFGS_GWOExperiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments():
+    logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GWO"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+                 ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -906,14 +991,21 @@ def runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments():
+    logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+              ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+              ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+              ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+              ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+              ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
@@ -930,42 +1022,26 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments():
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
 def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
+    logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA"
     params={}
     params["problems"]=zipWithProperty([
-              ("PROBLEM_ROSENBROCK","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/styblinskitang.json"),
-              ("PROBLEM_TRID","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/trid.json"),
-              ("PROBLEM_SCHWEFEL223","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel223.json"),
-              ("PROBLEM_QING","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/qing.json")
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+                ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+            ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+            ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+            ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+            ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
             ],"problems")
     
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
     params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750],"modelSize")
-    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
-    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
-    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
-    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote}"]
-    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
-    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
-    variations=list(itertools.product(*list(params.values())))
-    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
-
-def extraOptimizationProblems():
-    params={}
-    params["problems"]=zipWithProperty([
-            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"),
-            ("PROBLEM_DIXONPRICE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/dixonprice.json"),
-            ("PROBLEM_LEVY","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/levy.json"),
-            ("PROBLEM_SCHWEFEL","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/schwefel.json"),
-            ("PROBLEM_SUMSQUARES","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"),
-            ("PROBLEM_SPHERE","hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sphere.json"),
-            ],"problems")
-    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
-    params["populationSize"]=zipWithProperty([30],"populationSize")
-    params["modelSize"]=zipWithProperty([1,2,3,4,5,6,7,8,9,10,15,30],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
@@ -1002,16 +1078,16 @@ def extraOptimizationProblems():
 # runSANMHH_ManyHyperheuristicSteps()
 
 runNMHH2()
-# runSA_NMHH_GA_DE_GD_LBFGS_GWO()
-# runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
-# runMADSExperiments()
-# runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
-# runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
-# runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
-# runSA_MADS_NMHH_GA_DE_GD_LBFGS()
-# runCMAESExperiments()
-# runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
-# runSA_CMAESExperiments()
-# runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
-# runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
-# runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
+runSA_NMHH_GA_DE_GD_LBFGS_GWO()
+runMADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runMADSExperiments()
+runbigSA_MADS_NMHH_GA_DE_GD_LBFGS()
+runbigSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO()
+runSA_MADS_NMHH_GA_DE_GD_LBFGS()
+runCMAESExperiments()
+runCMAES_GA_DE_GD_LBFGS_GWOExperiments()
+runSA_CMAESExperiments()
+runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
+runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
+runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
