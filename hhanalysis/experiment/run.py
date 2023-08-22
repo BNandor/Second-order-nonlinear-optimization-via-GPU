@@ -11,6 +11,7 @@ import pandas as pd
 
 backslash="\\"
 dquote='"'
+ROOT="../../"
 EXPERIMENT_RECORDS_PATH="../logs/records.json"
 SA_GA_DE_GD_LBFGS_RECORDS_PATH="../logs/SA-NMHH/GA_DE_GD_LBFGS/records.json"
 SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/records.json"
@@ -1052,6 +1053,34 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
 
+def runClusterinProblems():
+    logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA"
+    # datapath="hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
+    # datapath="hhanalysis/experiment/dataset/clustering/glass/glass.txt"
+    # datapath="hhanalysis/experiment/dataset/clustering/iris/iris.txt"
+    datapath="hhanalysis/experiment/dataset/clustering/wine/wine.txt"
+    # datapath="hhanalysis/experiment/dataset/test/test.txt"
+    with open(f"{ROOT}/{datapath}", 'r') as dataset:
+            numbers = dataset.read().split()
+            samples=int(numbers[0])
+            dimension=int(numbers[1])
+            clusters=int(numbers[2])
+
+    params={}
+    params["problems"]=zipWithProperty([("PROBLEM_CLUSTERING",f"{logspath}/clustering.json")],"problems")
+    params["baselevelIterations"]=zipWithProperty([1000],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([30],"populationSize")
+    params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([2],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote} -DPROBLEM_PATH={backslash}{dquote}{datapath}{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
+    
 # nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup
 # runAllExperiments()
 # testScalability()
@@ -1091,3 +1120,6 @@ runSA_CMAESExperiments()
 runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
 runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
 runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
+
+
+# runClusterinProblems()

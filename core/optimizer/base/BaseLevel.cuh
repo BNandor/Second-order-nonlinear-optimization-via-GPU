@@ -19,6 +19,7 @@
 #include "../../problem/Schwefel/SchwefelModel.cuh"
 #include "../../problem/SumSquares/SumSquaresModel.cuh"
 #include "../../problem/Sphere/SphereModel.cuh"
+#include "../../problem/Clustering/ClusteringModel.cuh"
 #include "../../common/Constants.cuh"
 #include "../../optimizer/operators/refine/LBFGS.cuh"
 #include "../../optimizer/operators/refine/GradientDescent.cuh"
@@ -97,7 +98,10 @@ public:
         optimizerContext.model = new SphereModel(optimizerContext.differentialEvolutionContext);
         problemId="SPHERE";
 #endif
-
+#ifdef  PROBLEM_CLUSTERING
+        optimizerContext.model = new ClusteringModel(optimizerContext.differentialEvolutionContext);
+        problemId="CLUSTERING";
+#endif
 
         optimizerContext.cudaMemoryModel.allocateFor(*optimizerContext.model);
         optimizerContext.cudaMemoryModel.copyModelToDevice(*optimizerContext.model);
@@ -163,7 +167,7 @@ public:
         metrics.getCudaEventMetrics().recordStopCompute();
         optimizerContext.cudaMemoryModel.copyModelsFromDevice(metrics.modelPerformanceMetrics);
 //        metrics.printFinalMetrics();
-//        printCurrentBestModel();
+        printCurrentBestModel();
         cudaDeviceSynchronize();
 
         double currentBestF= metrics.modelPerformanceMetrics.updateBestModelCost();
