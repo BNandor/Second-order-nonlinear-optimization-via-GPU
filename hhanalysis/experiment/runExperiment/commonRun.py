@@ -8,6 +8,9 @@ from timeit import default_timer as timer
 from analysis.common import *
 import pandas as pd
 
+backslash="\\"
+dquote='"'
+
 def runOptimizerWith(flags):
     process = subprocess.Popen(['make', 'buildAndRunExperimentWith', f'NVCCFLAGS={flags}', f'ROOT={os.getcwd()}/../..'],
                      stdout=subprocess.PIPE, 
@@ -30,6 +33,7 @@ def writeJsonToFile(path,content):
 
 def createIfNotExists(path,content):
     if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         print(f"Creating {path} with {content}")
         writeJsonToFile(path=path,content=content)
 

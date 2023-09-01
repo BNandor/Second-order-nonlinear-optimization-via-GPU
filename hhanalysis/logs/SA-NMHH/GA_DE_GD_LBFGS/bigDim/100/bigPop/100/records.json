@@ -1,0 +1,23 @@
+{
+    "experiments": {
+        "fd0bda24b716e90c0a6fabe799ee1f180a1038eb75045a6c11de5f93e732d815": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/bigDim/100/bigPop/100/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 709.5277733920084,
+                "threads": 128
+            }
+        }
+    }
+}
