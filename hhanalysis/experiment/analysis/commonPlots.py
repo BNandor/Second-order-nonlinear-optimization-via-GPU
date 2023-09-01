@@ -132,7 +132,7 @@ def plotMethodsComparison(categories,subcategories,thevalues,xlabel,ylabel,title
     values=np.array(thevalues)
     # Determine the number of subcategories
     num_subcategories = len(subcategories)
-    bar_width = 0.1  # Width of each bar
+    bar_width = 0.05  # Width of each bar
 
     # Calculate the positions of the bars on the x-axis
     positions = np.arange(len(categories))

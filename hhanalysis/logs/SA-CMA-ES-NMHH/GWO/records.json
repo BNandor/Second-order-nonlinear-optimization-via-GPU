@@ -2121,27 +2121,6 @@
                 "threads": 128
             }
         },
-        "9bad4884fbc83745f0c2f19575fe7a85c25f156bab0d300bcf202519bd43a572": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_MICHALEWICZ",
-                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/michalewicz.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 6,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50,
-                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
-                "hyperLevelMethod": "SA-CMA-ES"
-            },
-            "metadata": {
-                "elapsedTimeSec": 289.0373549450014,
-                "threads": 128
-            }
-        },
         "e4a3dc994584e045fbdd38d4247c7de4d4153d05ff402a83e69d816bdc28b8f7": {
             "experiment": {
                 "problems": [
@@ -3633,27 +3612,6 @@
                 "threads": 128
             }
         },
-        "dda67105b2f38577bc740eb1beed0fa13344effdfffc0edcb6347cc4238289f2": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_SUMSQUARES",
-                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/sumsquares.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 100,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50,
-                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
-                "hyperLevelMethod": "SA-CMA-ES"
-            },
-            "metadata": {
-                "elapsedTimeSec": 110.72840359000838,
-                "threads": 128
-            }
-        },
         "79dd2214285340aab3d211e09d5b75ec11b97d059df7d678578fb576b9255d6c": {
             "experiment": {
                 "problems": [
@@ -4029,6 +3987,48 @@
             },
             "metadata": {
                 "elapsedTimeSec": 265.388042614999,
+                "threads": 128
+            }
+        },
+        "9bad4884fbc83745f0c2f19575fe7a85c25f156bab0d300bcf202519bd43a572": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 6,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 369.709356888,
+                "threads": 128
+            }
+        },
+        "dda67105b2f38577bc740eb1beed0fa13344effdfffc0edcb6347cc4238289f2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 199.27702367500024,
                 "threads": 128
             }
         }

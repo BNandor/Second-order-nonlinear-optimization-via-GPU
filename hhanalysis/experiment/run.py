@@ -6,151 +6,48 @@ import os
 import copy
 from timeit import default_timer as timer
 from analysis.common import *
+from runExperiment.commonRun import *
 import pandas as pd
 
 
 backslash="\\"
 dquote='"'
 ROOT="../../"
-EXPERIMENT_RECORDS_PATH="../logs/records.json"
-SA_GA_DE_GD_LBFGS_RECORDS_PATH="../logs/SA-NMHH/GA_DE_GD_LBFGS/records.json"
-SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/manyHyperSteps/records.json"
-SANMHH_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-NMHH/GWO/records.json"
-RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH="../logs/randomHH/records.json"
-SAPERTURB_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/records.json"
-SAPERTURBGWO_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/GWO/records.json"
-SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH="../logs/SAPerturb/MultiOperators/records.json"
-GA_EXPERIMENT_RECORDS_PATH="../logs/GA/records.json"
-DE_EXPERIMENT_RECORDS_PATH="../logs/DE/records.json"
-RANDOM_GA_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-GA/records.json"
-RANDOM_DE_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-DE/records.json"
-SAREFINE_EXPERIMENT_RECORDS_PATH="../logs/SARefine/records.json"
-GD_EXPERIMENT_RECORDS_PATH="../logs/GD/records.json"
-LBFGS_EXPERIMENT_RECORDS_PATH="../logs/LBFGS/records.json"
-RANDOM_GD_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-GD/records.json"
-RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/RANDOM-LBFGS/records.json"
-CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/records.json"
-CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/CMA-ES/GWO/records.json"
-SA_CMA_ES_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/records.json"
-SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GWO/records.json"
-BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
-BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-CMA-ES-NMHH/GWO/bigSA/records.json"
-MADS_NMHH_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/GA_DE_GD_LBFGS/records.json"
-MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
-SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
-SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/records.json"
-BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
-BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH="../logs/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/records.json"
-SASNLP_EXPERIMENT_RECORDS_PATH="../logs/SNLP/SA/records.json"
-SCALABILITY_EXPERIMENT_RECORDS_PATH="../logs/scalabilityTests/records.json"
+LOGS_ROOT="../logs"
+
+EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/records.json"
+SA_GA_DE_GD_LBFGS_RECORDS_PATH=f"{LOGS_ROOT}/SA-NMHH/GA_DE_GD_LBFGS/records.json"
+SANMHH_MANY_HYPERSTEPS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-NMHH/manyHyperSteps/records.json"
+SANMHH_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-NMHH/GWO/records.json"
+RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/randomHH/records.json"
+SAPERTURB_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/records.json"
+SAPERTURBGWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/GWO/records.json"
+SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SAPerturb/MultiOperators/records.json"
+GA_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/GA/records.json"
+DE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/DE/records.json"
+RANDOM_GA_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/RANDOM-GA/records.json"
+RANDOM_DE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/RANDOM-DE/records.json"
+SAREFINE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SARefine/records.json"
+GD_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/GD/records.json"
+LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/LBFGS/records.json"
+RANDOM_GD_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/RANDOM-GD/records.json"
+RANDOM_LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/RANDOM-LBFGS/records.json"
+CMA_ES_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/CMA-ES/records.json"
+CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/CMA-ES/GWO/records.json"
+SA_CMA_ES_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-CMA-ES-NMHH/records.json"
+SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-CMA-ES-NMHH/GWO/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-CMA-ES-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-CMA-ES-NMHH/GWO/bigSA/records.json"
+MADS_NMHH_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/MADS-NMHH/GA_DE_GD_LBFGS/records.json"
+MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/records.json"
+SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-MADS-NMHH/GA_DE_GD_LBFGS/records.json"
+BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-MADS-NMHH/GA_DE_GD_LBFGS/bigSA/records.json"
+BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SA-MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigSA/records.json"
+SASNLP_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SNLP/SA/records.json"
+SCALABILITY_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/scalabilityTests/records.json"
 
 DEFAULT_THREAD_COUNT=128
-
-
-def runOptimizerWith(flags):
-    process = subprocess.Popen(['make', 'buildAndRunExperimentWith', f'NVCCFLAGS={flags}', f'ROOT={os.getcwd()}/../..'],
-                     stdout=subprocess.PIPE, 
-                     stderr=subprocess.STDOUT)
-    return process.stdout
-
-def consumeOutput(stdout,consumeline):
-    logs=[]
-    for linebuffer in stdout:
-        line=linebuffer.decode("utf-8")
-        logs.append(line)
-        consumeline(line)
-    return logs
-
-def writeJsonToFile(path,content):
-
-    outfile = open(path, "w")
-    [outfile.write(content)]
-    outfile.close()
-
-def createIfNotExists(path,content):
-    if not os.path.exists(path):
-        print(f"Creating {path} with {content}")
-        writeJsonToFile(path=path,content=content)
-
-def emptyExperimentRecords():
-    return {"experiments":{}}
-
-def experimented(experimentId,experimentRecordsPath):
-    createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
-    currentRecords=json.load(open(experimentRecordsPath,'r'))
-    return experimentId in currentRecords["experiments"].keys() 
-
-def trimExtraSamples(path):
-    currentRecords=json.load(open(path,'r'))
-    for experiment in currentRecords["experiments"]:
-        experiment['trials']=experiment['trials'][:experiment['trialCount']]
-    writeJsonToFile(path,json.dumps(currentRecords, indent = 4))
-
-def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
-    createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
-    currentRecords=json.load(open(experimentRecordsPath,'r'))
-    currentRecords["experiments"][experimentId]={"experiment":experiment,"metadata":metadata}
-    writeJsonToFile(experimentRecordsPath,json.dumps(currentRecords, indent = 4))
-    print(f"Saved {experiment} to {experimentRecordsPath}")
-
-def setOrDefault(experiment,flag,default):
-    if flag in experiment:
-        return experiment[flag]
-    else:
-        return default
-def enforceFunctionEvaluationLimit(recordsPath):
-    problems=['rosenbrock.json',
-              'rastrigin.json',
-              'styblinskitang.json',
-              'trid.json',
-              'schwefel223.json',
-              'qing.json']
-    for problem in problems:
-        trimExtraSamples(f"{recordsPath.replace('/records.json','')}/{problem}")
-def experimentWith(experiment,recordsPath,experimentId,threads=128):
-            problemname=experiment['problems'][0]
-            problemLogPath=experiment['problems'][1]
-            hyperLevelMethod=setOrDefault(experiment,'hyperLevelMethod',"SA")
-            additionalFlags=setOrDefault(experiment,'additionalFlags',"")
-            experimentFlags=f"-D{problemname} \
-                            -DHYPER_LEVEL_TRIAL_SAMPLE_SIZE={experiment['trialSampleSizes']} \
-                            -DITERATION_COUNT={experiment['baselevelIterations']} \
-                            -DPOPULATION_SIZE={experiment['populationSize']} \
-                            -DX_DIM={experiment['modelSize']} \
-                            -DHH_TRIALS={experiment['trialStepCount']} \
-                            -DLOGS_PATH={backslash}{dquote}{problemLogPath}{backslash}{dquote} \
-                            -DHH_SA_TEMP={experiment['HH-SA-temp']} \
-                            -DHH_SA_ALPHA={experiment['HH-SA-alpha']} \
-                            -DEXPERIMENT_HASH_SHA256={backslash}{dquote}{experimentId}{backslash}{dquote},\
-                            -DTHREADS_PER_BLOCK={threads},\
-                            -DHH_METHOD={backslash}{dquote}{hyperLevelMethod}{backslash}{dquote} \
-                            {additionalFlags} \
-                            "
-
-            print(f"Running experiment {experimentFlags}")
-            start = timer()
-            consumeOutput(runOptimizerWith(experimentFlags),lambda line:print(line))
-
-            end = timer()
-            return {"elapsedTimeSec":end-start,"threads":threads}
-
-def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threads):
-    remainingExperimentsToRun=sum([not experimented(experimentIdMapper(mapExperimentListToDict(experiment)),recordsPath) for experiment in experimentVariations])
-    print(f"Total experiments: {len(experimentVariations)}")
-    print(f"Remaining experiments: {remainingExperimentsToRun}")
-    runningId=0
-    for experiment in experimentVariations:
-        experimentDict=mapExperimentListToDict(experiment=experiment)
-        experimentId=experimentIdMapper(experimentDict)
-        if not experimented(experimentId,recordsPath):
-            print(f"Running {runningId}/{remainingExperimentsToRun}: {experiment}")
-            experimentMetadata=experimentWith(experiment=experimentDict,recordsPath=recordsPath,experimentId=experimentId,threads=threads)
-            recordExperiment(experiment=experimentDict,experimentId=experimentId,experimentRecordsPath=recordsPath,metadata=experimentMetadata)
-            runningId+=1
-        else:
-            print(f"Skipping {experiment}")
-    print('Enforcing function evaluation limits')
-    enforceFunctionEvaluationLimit(recordsPath)
 
 def runAllExperiments():
     params={}
@@ -175,6 +72,7 @@ def runAllExperiments():
 # need this, in order to save the samples
 def runNMHH2():
     logspath="hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS"
+    recordspath=f"{logspath.replace('hhanalysis/logs',LOGS_ROOT)}/records.json"
     params={}
     params["problems"]=zipWithProperty([
               ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
@@ -1055,10 +953,10 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO():
 
 def runClusterinProblems():
     logspath="hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA"
-    # datapath="hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
+    datapath="hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
     # datapath="hhanalysis/experiment/dataset/clustering/glass/glass.txt"
     # datapath="hhanalysis/experiment/dataset/clustering/iris/iris.txt"
-    datapath="hhanalysis/experiment/dataset/clustering/wine/wine.txt"
+    # datapath="hhanalysis/experiment/dataset/clustering/wine/wine.txt"
     # datapath="hhanalysis/experiment/dataset/test/test.txt"
     with open(f"{ROOT}/{datapath}", 'r') as dataset:
             numbers = dataset.read().split()
@@ -1068,16 +966,17 @@ def runClusterinProblems():
 
     params={}
     params["problems"]=zipWithProperty([("PROBLEM_CLUSTERING",f"{logspath}/clustering.json")],"problems")
-    params["baselevelIterations"]=zipWithProperty([1000],"baselevelIterations")
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
     params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([2],"trialSampleSizes")
     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
-    flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote} -DPROBLEM_PATH={backslash}{dquote}{datapath}{backslash}{dquote}"]
+    # flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote} -DPROBLEM_PATH={backslash}{dquote}{datapath}{backslash}{dquote}"]
+    flags=[f"-DPROBLEM_PATH={backslash}{dquote}{datapath}{backslash}{dquote}"]
     params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
-    params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    # params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,DEFAULT_THREAD_COUNT)
     
@@ -1120,6 +1019,5 @@ runSA_CMAESExperiments()
 runSA_CMAES_ES_GA_DE_GD_LBFGS_GWO_Experiments()
 runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments()
 runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO()
-
 
 # runClusterinProblems()

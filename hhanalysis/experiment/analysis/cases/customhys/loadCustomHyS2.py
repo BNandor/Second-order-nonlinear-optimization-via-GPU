@@ -21,7 +21,13 @@ problemNameMapping={
     "ROSENBROCK":"PROBLEM_ROSENBROCK",
     "SCHWEFEL223": "PROBLEM_SCHWEFEL223",
     "STYBLINSKITANG": "PROBLEM_STYBLINSKITANG",
-    "TRID":"PROBLEM_TRID"
+    "TRID":"PROBLEM_TRID",
+    "PROBLEM_MICHALEWICZ":"PROBLEM_MICHALEWICZ",
+    "PROBLEM_DIXONPRICE":"PROBLEM_DIXONPRICE",
+    "PROBLEM_LEVY":"PROBLEM_LEVY",
+    "PROBLEM_SCHWEFEL":"PROBLEM_SCHWEFEL",
+    "PROBLEM_SUMSQUARES":"PROBLEM_SUMSQUARES",
+    "PROBLEM_SPHERE":"PROBLEM_SPHERE"
 }
 
 problemNameRecordsMapping={
@@ -30,7 +36,13 @@ problemNameRecordsMapping={
     "rosenbrock.json":"ROSENBROCK",
     "schwefel223.json": "SCHWEFEL223",
     "styblinskitang.json": "STYBLINSKITANG",
-    "trid.json":"TRID"
+    "trid.json":"TRID",
+    "michalewicz.json":"PROBLEM_MICHALEWICZ",
+    "dixonprice.json":"PROBLEM_DIXONPRICE",
+    "levy.json":"PROBLEM_LEVY",
+    "schwefel.json":"PROBLEM_SCHWEFEL",
+    "sumsquares.json":"PROBLEM_SUMSQUARES",
+    "sphere.json":"PROBLEM_SPHERE"
 }
 
 def selectBasedOnRecordsMapping(df,recordPath):

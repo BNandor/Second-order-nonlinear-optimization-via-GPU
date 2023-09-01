@@ -7,52 +7,6 @@ import tabloo
 import numpy as np
 
 def methodsComparison(all,metadata,block=True):
-    
-    # customhysDF=dropIrrelevantColumns(customhysDF,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
-    # mealpyMHs=dropIrrelevantColumns(mealpyMHs,set(['hyperLevel-id','modelSize','problemName','baselevelIterations','minMedIQR']))
-    # nmhh=dropIrrelevantColumns(nmhh,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
-    # nmhh=nmhh[selectAllMatchAtLeastOne(nmhh,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # customhysDF=customhysDF[selectAllMatchAtLeastOne(customhysDF,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # sarefineGroup=dropIrrelevantColumns(sarefineGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
-    # sarefineGroup=sarefineGroup[selectAllMatchAtLeastOne(sarefineGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # lbfgsGroup=dropIrrelevantColumns(lbfgsGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
-    
-    # lbfgsGroup=lbfgsGroup[selectAllMatchAtLeastOne(lbfgsGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # gdGroup=dropIrrelevantColumns(gdGroup,set(['modelSize','problemName','baselevelIterations','minMedIQR']))
-    
-    # gdGroup=gdGroup[selectAllMatchAtLeastOne(gdGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # saperturbGroup=dropIrrelevantColumns(saperturbGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
-    # saperturbGroup=saperturbGroup[selectAllMatchAtLeastOne(saperturbGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # gaGroup=dropIrrelevantColumns(gaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
-    
-    # gaGroup=gaGroup[selectAllMatchAtLeastOne(gaGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # deGroup=dropIrrelevantColumns(deGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
-    # deGroup=deGroup[selectAllMatchAtLeastOne(deGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # randomgaGroup=dropIrrelevantColumns(randomgaGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
-    # randomgaGroup=randomgaGroup[selectAllMatchAtLeastOne(randomgaGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    # randomdeGroup=dropIrrelevantColumns(randomdeGroup,set(['modelSize','problemName','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
-    # randomdeGroup=randomdeGroup[selectAllMatchAtLeastOne(randomdeGroup,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"])])]
-    
-    
-    # all=pd.concat([customhysDF,mealpyMHs,nmhh,sarefineGroup,lbfgsGroup,gdGroup,saperturbGroup,gaGroup,deGroup])
-    # all=pd.concat([customhysDF,mealpyMHs,saGWOGroup,nmhh,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup])
-    # all=pd.concat([nmhh2,saGWOGroup,madsGWOGroup,saMadsGWOGroup,sacmaesGWOGroup,cmaesGWOGroup,saperturbGroup,gaGroup,deGroup,randomgaGroup,randomdeGroup])
-    
-    
-    # all=pd.concat([nmhh2,bigsamadsGroup])
-    # all=pd.concat([nmhh2,saGWOGroup])
-    # all=pd.concat([nmhh2,bigsacmaesGroup,saGWOGroup,sacmaesGWOGroup,sacmaesGroup,cmaesGWOGroup,cmaesGroup])
-    # all=pd.concat([nmhh2,saGWOGroup])
-    # all=pd.concat([customhysDF,mealpyMHs,nmhh])
-    # all=pd.concat([sarefineGroup,lbfgsGroup,gdGroup])
-    # all=pd.concat([saperturbGroup,randomgaGroup,randomdeGroup,gaGroup,deGroup])
-    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,randomdeGroupBig,gaGroupBig,deGroupBig,saGWOGroup])
-    # all=pd.concat([saperturbGroupBig,randomdeGroupBig,deGroupBig])
-    # all=pd.concat([saperturbGroupBig,randomgaGroupBig,gaGroupBig])
-    # all=pd.concat([saperturbGroupBig,deGroupBig,gaGroupBig])
-    # all=pd.concat([saperturbGroupBig,randomdeGroupBig,randomgaGroupBig])
-    # all=pd.concat([saperturbGroupBig,gaGroupBig])
-    
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"]]]
     all=all.groupby(['problemName','modelSize'])
@@ -70,7 +24,8 @@ def methodsComparison(all,metadata,block=True):
                 metadata['optimizers'].append(row["hyperLevel-id"])
                 optimizersSet.add(row["hyperLevel-id"])
         transpose=transpose.append(transposedRow,ignore_index=True)
-    printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet)
+    
+    # printMinResultEachRow(transpose,['problemName','modelSize'],optimizersSet)
     
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
     statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
@@ -83,8 +38,8 @@ def methodsComparison(all,metadata,block=True):
     #                    filename=None,
     #                    figsize=(13,8),blockPlot=True)
     
-    # (dimensions,methods,values)=plotDataForWilcoxRanksumsComparisonPlot(statisticsforDimension,metadata['optimizers'])
-    # plotMethodsComparison(dimensions,methods,values,'Cases','Winrates','Optimizer performances',block)
+    (dimensions,methods,values)=plotDataForWilcoxRanksumsComparisonPlot(statisticsforDimension,metadata['optimizers'])
+    plotMethodsComparison(dimensions,methods,values,'Cases','Winrates','Optimizer performances',block)
 
     # tabloo.show(comparisonTableData)
     # tabloo.show(all)

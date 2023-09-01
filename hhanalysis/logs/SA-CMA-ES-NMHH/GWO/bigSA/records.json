@@ -2016,27 +2016,6 @@
                 "threads": 128
             }
         },
-        "9d03790711191209050167a0e737ab56a3a38457b815229953a1c91a9b5c7040": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_MICHALEWICZ",
-                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 1,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50,
-                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
-                "hyperLevelMethod": "SA-CMA-ES"
-            },
-            "metadata": {
-                "elapsedTimeSec": 348.3110581279616,
-                "threads": 128
-            }
-        },
         "284424034015d6fede9642c44b68c9e2614ebf3244b11388a574d1b087f72404": {
             "experiment": {
                 "problems": [
@@ -3423,27 +3402,6 @@
                 "threads": 128
             }
         },
-        "96ce48c52983aba863291659a59ff59918771f43ee8ff58f324db082f1461e30": {
-            "experiment": {
-                "problems": [
-                    "PROBLEM_SUMSQUARES",
-                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"
-                ],
-                "baselevelIterations": 100,
-                "populationSize": 30,
-                "modelSize": 4,
-                "trialSampleSizes": 30,
-                "trialStepCount": 100,
-                "HH-SA-temp": 10000,
-                "HH-SA-alpha": 50,
-                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
-                "hyperLevelMethod": "SA-CMA-ES"
-            },
-            "metadata": {
-                "elapsedTimeSec": 106.43558035499882,
-                "threads": 128
-            }
-        },
         "75fc57ab0d21d50744eef9638b07d8dfd725f251c246ce63c5c488d45e6deae9": {
             "experiment": {
                 "problems": [
@@ -4029,6 +3987,48 @@
             },
             "metadata": {
                 "elapsedTimeSec": 269.07205689302646,
+                "threads": 128
+            }
+        },
+        "9d03790711191209050167a0e737ab56a3a38457b815229953a1c91a9b5c7040": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 1,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 551.1928601730033,
+                "threads": 128
+            }
+        },
+        "96ce48c52983aba863291659a59ff59918771f43ee8ff58f324db082f1461e30": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 4,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 111.79520698399983,
                 "threads": 128
             }
         }

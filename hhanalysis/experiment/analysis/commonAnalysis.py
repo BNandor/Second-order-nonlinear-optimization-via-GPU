@@ -110,6 +110,11 @@ def groupByExperimentsAndAggregate(recordsWithMetrics,explanatoryColumns,respons
 def mergeOn(recordsAndMetrics,aggregations,joinColumns):
     return pd.merge(aggregations, recordsAndMetrics, on=joinColumns,how='left').dropna(axis='columns')
 
+def checkAggregationCorrectness(aggregations):
+    rows_with_nan = aggregations[aggregations.isna().any(axis=1)]
+    if rows_with_nan.shape[0]:
+        print("Incorrect experiments:")
+        print(rows_with_nan)
 
 def createTestGroupView(recordsPath,getMetricsAndId,mapRecordToExperiment,explanatoryColumns,responseColumns,metricsAggregation,enrichAndFilter,enrichWithMetrics=True):
     _,indexColumn=getMetricsAndId
@@ -126,6 +131,7 @@ def createTestGroupView(recordsPath,getMetricsAndId,mapRecordToExperiment,explan
     else:
         recordsWithMetrics=records
     experimentColumns,aggregations=groupByExperimentsAndAggregate(recordsWithMetrics,explanatoryColumns,responseColumns,metricsAggregation)
+    checkAggregationCorrectness(aggregations)
     testGroupDF=enrichAndFilter(recordsWithMetrics,aggregations,experimentColumns)
     return testGroupDF
 
@@ -139,6 +145,7 @@ def createComparisonDF(controlDF, testDF, independetColumns):
     return pd.merge(controlDF, testDF, on=independetColumns, how="inner")
 
 def printMinResultEachRow(df,experimentCols,columns):
+    print("Win statistics:")
     minStatistic={}
     for column in columns:
         minStatistic[column]=0.0
@@ -258,6 +265,7 @@ def printMinAvgStdHighlighWilcoxRanksums(df, optimizers):
     print("\\end{table}")
 
 def printStatisticsOfWilcoxRanksums(df, optimizers):
+    print("Wilcoxon win statistics")
     bestStatistics={}
     for opt in optimizers:
         bestStatistics[opt]=0.0
