@@ -15,90 +15,98 @@ from customhys.loadCustomHYS import *
 from customhys.loadCustomHyS2 import *
 import  mealpyExp.loadMealpy 
 
-def customhys(metadata):
-    if "customhys" not in metadata['datasets']:
-            metadata['datasets']["customhys"]=getCustomHySControlGroupDF()
-            metadata['datasets']["customhys"]['hyperLevel-id']='CUSTOMHyS'
-    return metadata['datasets']["customhys"]
+def customhys(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-CUSTOMHyS'
+    if dataId not in metadata['datasets']:
+            metadata['datasets'][dataId]=getCustomHySControlGroupDF()
+            metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def customhys2(metadata):
-    if "customhys2" not in metadata['datasets']:
-        metadata['datasets']["customhys2"]=createTestGroupView(CUSTOMHYS2_RESULTS_PATH,
+def customhys2(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-CUSTOMHyS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{CUSTOMHYS2_RESULTS_PATH}{experimentPath}/records.json",
                                     (None,"hashSHA256"),
                                     customhys2RecordToExperiment,
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'],enrichWithMetrics=False)
-        metadata['datasets']["customhys2"]['hyperLevel-id']='CustomHyS'
-    return metadata['datasets']["customhys2"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def mealpy(metadata):
-    if "mealpy" not in metadata['datasets']:
-        metadata['datasets']["mealpy"]=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
+def mealpy(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-MEALPY'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{MEALPY_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
                                     (None,"hashSHA256"),
                                     mealpyRecordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterMealpy,enrichWithMetrics=False)
-        # metadata['datasets']["mealpy"]['hyperLevel-id']='MEALPY'
-    return metadata['datasets']["mealpy"]
+        # metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def mealpyCRO(metadata):
-    if "mealpyCRO" not in metadata['datasets']:
-        metadata['datasets']["mealpyCRO"]=createTestGroupView(MEALPY_CRO_EXPERIMENT_RECORDS_PATH,
+def mealpyCRO(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-MEALPY'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{MEALPY_CRO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
                                     (None,"hashSHA256"),
                                     mealpyExp.loadMealpy.recordToExperiment,
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'],enrichWithMetrics=False)
-        metadata['datasets']["mealpyCRO"]=pd.DataFrame(metadata['datasets']["mealpyCRO"][metadata['datasets']["mealpyCRO"]['hyperLevel-id'] == 'CRO'])
-        # metadata['datasets']["mealpy"]['hyperLevel-id']='MEALPY'
-    return metadata['datasets']["mealpyCRO"]
+        metadata['datasets'][dataId]=pd.DataFrame(metadata['datasets'][dataId][metadata['datasets'][dataId]['hyperLevel-id'] =='CRO'])
+        # metadata['datasets']["mealpy"]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def nmhh(metadata):
-    if "nmhh" not in metadata['datasets']:
-        metadata['datasets']["nmhh"]=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
+
+def nmhh(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-NMHH'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{SA_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
                                     (filterMetricPropertiesMinMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR"]),
                                     {'minMedIQR':'min'},
                                     enrichAndFilterSA)
-        metadata['datasets']["nmhh"]['hyperLevel-id']='NMHH'
-    return metadata['datasets']["nmhh"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def nmhh2(metadata):
-    if "nmhh2" not in metadata['datasets']:
-        metadata['datasets']["nmhh2"]=createTestGroupView(SA_GA_DE_GD_LBFGS_RECORDS_PATH,
+
+def nmhh2(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-NMHH'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{SA_GA_DE_GD_LBFGS_RECORDS_PATH}{experimentPath}/records.json",
                                     (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
                                     recordToExperiment,
                                     set(),
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn']) 
-        metadata['datasets']["nmhh2"]['hyperLevel-id']='NMHH'
-    return metadata['datasets']["nmhh2"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def sarefineGroup(metadata):
-    if "sarefineGroup" not in metadata['datasets']:
-        metadata['datasets']["sarefineGroup"] = createTestGroupView(
-            SAREFINE_EXPERIMENT_RECORDS_PATH,
+def sarefineGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-LBFGS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SAREFINE_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesMinMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
             set(["minMedIQR"]),
             {'minMedIQR': 'min'},
             enrichAndFilterSA)
-        metadata['datasets']["sarefineGroup"]['hyperLevel-id']='LBFGS'
-    return metadata['datasets']["sarefineGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def lbfgsGroup(metadata):
-    if "lbfgsGroup" not in metadata['datasets']:
-        metadata['datasets']["lbfgsGroup"] = createTestGroupView(
-            LBFGS_EXPERIMENT_RECORDS_PATH,
+def lbfgsGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-LBFGS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesMinMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -106,26 +114,27 @@ def lbfgsGroup(metadata):
             {'minMedIQR': 'min'},
             justAggregations
         )
-        metadata['datasets']["lbfgsGroup"]['hyperLevel-id']='LBFGS'
-    return metadata['datasets']["lbfgsGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def gdGroup(metadata):
-    if "gdGroup" not in metadata['datasets']:
-        metadata['datasets']["gdGroup"] = createTestGroupView(
-            GD_EXPERIMENT_RECORDS_PATH,
+
+def gdGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-GD'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{GD_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesMinMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
             set(["minMedIQR"]),
             {'minMedIQR': 'min'},
             justAggregations)
-        metadata['datasets']["gdGroup"]['hyperLevel-id']='GD'
-    return metadata['datasets']["gdGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def saperturbGroup(metadata):
-    if "saperturbGroup" not in metadata['datasets']:
-        metadata['datasets']["saperturbGroup"] = createTestGroupView(
-            SAPERTURB_EXPERIMENT_RECORDS_PATH,
+def saperturbGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-PERTURB'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SAPERTURB_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -133,13 +142,13 @@ def saperturbGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["saperturbGroup"]['hyperLevel-id']='SA-PERTURB'
-    return metadata['datasets']["saperturbGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def saperturbGWOGroup(metadata):
-    if "saperturbGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["saperturbGWOGroup"] = createTestGroupView(
-            SAPERTURBGWO_EXPERIMENT_RECORDS_PATH,
+def saperturbGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-PERTURB'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SAPERTURBGWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -147,13 +156,13 @@ def saperturbGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["saperturbGWOGroup"]['hyperLevel-id']='SA-PERTURB'
-    return metadata['datasets']["saperturbGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def saperturbMultiOperatorGroup(metadata):
-    if "saperturbMultiOperatorGroup" not in metadata['datasets']:
-        metadata['datasets']["saperturbMultiOperatorGroup"] = createTestGroupView(
-            SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH,
+def saperturbMultiOperatorGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-PERTURBMultiOperator'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SAPERTURBMULTIOPERATORS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -161,13 +170,13 @@ def saperturbMultiOperatorGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["saperturbMultiOperatorGroup"]['hyperLevel-id']='SA-PERTURBMultiOperator'
-    return metadata['datasets']["saperturbMultiOperatorGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
 
-def gaGroup(metadata):
-    if "gaGroup" not in metadata['datasets']:
-        metadata['datasets']["gaGroup"] = createTestGroupView(
-            GA_EXPERIMENT_RECORDS_PATH,
+def gaGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-GA'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{GA_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -175,12 +184,12 @@ def gaGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["gaGroup"]['hyperLevel-id']='GA'
-    return metadata['datasets']["gaGroup"]
-def deGroup(metadata):
-    if "deGroup" not in metadata['datasets']:
-        metadata['datasets']["deGroup"] = createTestGroupView(
-            DE_EXPERIMENT_RECORDS_PATH,
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
+def deGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-DE'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{DE_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -188,13 +197,13 @@ def deGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["deGroup"]['hyperLevel-id'] = 'DE'
-    return metadata['datasets']["deGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def randomgaGroup(metadata):
-    if "randomgaGroup" not in metadata['datasets']:
-        metadata['datasets']["randomgaGroup"] = createTestGroupView(
-            RANDOM_GA_EXPERIMENT_RECORDS_PATH,
+def randomgaGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-RANDOM-GA'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{RANDOM_GA_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -202,13 +211,13 @@ def randomgaGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["randomgaGroup"]['hyperLevel-id'] = 'RANDOM-GA'
-    return metadata['datasets']["randomgaGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def randomdeGroup(metadata):
-    if "randomdeGroup" not in metadata['datasets']:
-        metadata['datasets']["randomdeGroup"] = createTestGroupView(
-            RANDOM_DE_EXPERIMENT_RECORDS_PATH,
+def randomdeGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-RANDOM-DE'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{RANDOM_DE_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -216,13 +225,13 @@ def randomdeGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["randomdeGroup"]['hyperLevel-id'] = 'RANDOM-DE'
-    return metadata['datasets']["randomdeGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def saGWOGroup(metadata):
-    if "saGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["saGWOGroup"] = createTestGroupView(
-            RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH,
+def saGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{RANDOM_SA_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -231,13 +240,13 @@ def saGWOGroup(metadata):
             metadata['mergeOn'],
             True
         )
-        metadata['datasets']["saGWOGroup"]['hyperLevel-id'] = 'SA-GWO'
-    return metadata['datasets']["saGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def madsGWOGroup(metadata):
-    if "madsGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["madsGWOGroup"] = createTestGroupView(
-            MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def madsGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-MADS-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -245,13 +254,13 @@ def madsGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["madsGWOGroup"]['hyperLevel-id'] = 'MADS-GWO'
-    return metadata['datasets']["madsGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def madsGroup(metadata):
-    if "madsGroup" not in metadata['datasets']:
-        metadata['datasets']["madsGroup"] = createTestGroupView(
-            MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+def madsGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-MADS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -259,13 +268,13 @@ def madsGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["madsGroup"]['hyperLevel-id'] = 'MADS'
-    return metadata['datasets']["madsGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def sacmaesGWOGroup(metadata):
-    if "sacmaesGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["sacmaesGWOGroup"] = createTestGroupView(
-            SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def sacmaesGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-CMA-ES-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -273,15 +282,15 @@ def sacmaesGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["sacmaesGWOGroup"]['hyperLevel-id'] = 'SA-CMA-ES-GWO'
-    return metadata['datasets']["sacmaesGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
 # Repeat the same pattern for other functions...
 
-def saMadsGWOGroup(metadata):
-    if "saMadsGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["saMadsGWOGroup"] = createTestGroupView(
-            SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def saMadsGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-MADS-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -289,13 +298,13 @@ def saMadsGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["saMadsGWOGroup"]['hyperLevel-id'] = 'SA-MADS-GWO'
-    return metadata['datasets']["saMadsGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def saMadsGroup(metadata):
-    if "saMadsGroup" not in metadata['datasets']:
-        metadata['datasets']["saMadsGroup"] = createTestGroupView(
-            SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+def saMadsGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-MADS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -303,13 +312,13 @@ def saMadsGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["saMadsGroup"]['hyperLevel-id'] = 'SA-MADS'
-    return metadata['datasets']["saMadsGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def cmaesGWOGroup(metadata):
-    if "cmaesGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["cmaesGWOGroup"] = createTestGroupView(
-            CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def cmaesGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-CMA-ES-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -317,13 +326,13 @@ def cmaesGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["cmaesGWOGroup"]['hyperLevel-id'] = 'CMA-ES-GWO'
-    return metadata['datasets']["cmaesGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def cmaesGroup(metadata):
-    if "cmaesGroup" not in metadata['datasets']:
-        metadata['datasets']["cmaesGroup"] = createTestGroupView(
-            CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+def cmaesGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-CMA-ES'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -331,13 +340,13 @@ def cmaesGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["cmaesGroup"]['hyperLevel-id'] = 'CMA-ES'
-    return metadata['datasets']["cmaesGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def bigsamadsGroup(metadata):
-    if "bigsamadsGroup" not in metadata['datasets']:
-        metadata['datasets']["bigsamadsGroup"] = createTestGroupView(
-            BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+def bigsamadsGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-BIGSA-MADS'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -345,13 +354,13 @@ def bigsamadsGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["bigsamadsGroup"]['hyperLevel-id'] = 'BIGSA-MADS'
-    return metadata['datasets']["bigsamadsGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def bigsamadsGWOGroup(metadata):
-    if "bigsamadsGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["bigsamadsGWOGroup"] = createTestGroupView(
-            BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def bigsamadsGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-BIGSA-MADS-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_MADS_NMHH_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -359,13 +368,13 @@ def bigsamadsGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["bigsamadsGWOGroup"]['hyperLevel-id'] = 'BIGSA-MADS-GWO'
-    return metadata['datasets']["bigsamadsGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
-def bigsacmaesGroup(metadata):
-    if "bigsacmaesGroup" not in metadata['datasets']:
-        metadata['datasets']["bigsacmaesGroup"] = createTestGroupView(
-            BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH,
+def bigsacmaesGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-BIGSA-CMA-ES'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_CMA_ES_GA_DE_GD_LBFGS_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -373,14 +382,14 @@ def bigsacmaesGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["bigsacmaesGroup"]['hyperLevel-id'] = 'BIGSA-CMA-ES'
-    return metadata['datasets']["bigsacmaesGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
 
-def bigsacmaesGWOGroup(metadata):
-    if "bigsacmaesGWOGroup" not in metadata['datasets']:
-        metadata['datasets']["bigsacmaesGWOGroup"] = createTestGroupView(
-            BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH,
+def bigsacmaesGWOGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-BIGSA-CMA-ES-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -388,14 +397,14 @@ def bigsacmaesGWOGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["bigsacmaesGWOGroup"]['hyperLevel-id'] = 'BIGSA-CMA-ES-GWO'
-    return metadata['datasets']["bigsacmaesGWOGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
 
-def sacmaesGroup(metadata):
-    if "sacmaesGroup" not in metadata['datasets']:
-        metadata['datasets']["sacmaesGroup"] = createTestGroupView(
-            SA_CMA_ES_EXPERIMENT_RECORDS_PATH,
+def sacmaesGroup(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-SA-CMA-ES'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{SA_CMA_ES_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
             (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
             recordToExperiment,
             set(),
@@ -403,8 +412,8 @@ def sacmaesGroup(metadata):
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
-        metadata['datasets']["sacmaesGroup"]['hyperLevel-id'] = 'SA-CMA-ES'
-    return metadata['datasets']["sacmaesGroup"]
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
 
 def loadDataMap():
     return {

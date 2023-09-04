@@ -69,7 +69,13 @@ def enforceFunctionEvaluationLimit(recordsPath):
               'styblinskitang.json',
               'trid.json',
               'schwefel223.json',
-              'qing.json']
+              'qing.json',
+              "michalewicz.json",
+              "dixonprice.json",
+              "levy.json",
+              "schwefel.json",
+              "sumsquares.json",
+              "sphere.json"]
     for problem in problems:
         trimExtraSamples(f"{recordsPath.replace('/records.json','')}/{problem}")
 def experimentWith(experiment,recordsPath,experimentId,threads=128):

@@ -1,0 +1,256 @@
+{
+    "experiments": {
+        "681d8860b73aedfab986c9dbd82ca8c5ae172fa9e1d7c9f06664d9f98a69ec38": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 652.9776803159621,
+                "threads": 128
+            }
+        },
+        "6c614d66d6582ef91d46fa08376b55a83c1119bc477501c5335c45ed4e6e04b4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 319.69859109801473,
+                "threads": 128
+            }
+        },
+        "f9cbbbf9198eb21215cdb1e47857f9d91e1edeeaf6d9c0feb815832ff61a5c4f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1703.114190615015,
+                "threads": 128
+            }
+        },
+        "42f8ded9d9d27d120a64584a74b29aaf3223aff1e942e487268d531e2757826c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 343.62917930894764,
+                "threads": 128
+            }
+        },
+        "b8f6227469294157f50c2ee52bf8444bffe17dc6efab6c902b7b1501e7d17d4a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 629.1969539080164,
+                "threads": 128
+            }
+        },
+        "866be8fb7c0f08e01d582ccf545d161317f53780c457686aa8078daad7ab98be": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 440.74261480598943,
+                "threads": 128
+            }
+        },
+        "8f2d3727878b7f199b7745f259a54d773608c8af95dd066fa1cfb4c163044b5d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 939.0982266190113,
+                "threads": 128
+            }
+        },
+        "b420abbfa36ba911a3d2bcfc26ccad4b38e45f03a486b32cdfaf1ee5f3e2a5d7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 581.0093223800068,
+                "threads": 128
+            }
+        },
+        "651d2a4e3e9be378d510ad6837212c706a49af2d6a96f55eb5ea1b0c4654cdb6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 769.6671096400241,
+                "threads": 128
+            }
+        },
+        "cd9a74728c56537028a0e2b95440c3f32ab926d158430020d3074467e7498ea1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 391.2004637880018,
+                "threads": 128
+            }
+        },
+        "0daf679d1d168d75b1ffd1c5e5d19e48f02a1e06a9870f544af816b79fc8db1c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 245.88158433901845,
+                "threads": 128
+            }
+        },
+        "0bdb93c594d398dbebedc43b7fa0c10250386cb5f5c9f8161ad39b63f42fbda9": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA/bigDim/100/bigPop/100/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 180.70538318000035,
+                "threads": 128
+            }
+        }
+    }
+}

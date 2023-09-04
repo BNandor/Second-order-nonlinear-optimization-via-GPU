@@ -1,0 +1,256 @@
+{
+    "experiments": {
+        "01caa4cf0cda53b6f587a2dcf401966d584e030ff2704a272d5ecb2b47b8fb47": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 503.6072779649985,
+                "threads": 128
+            }
+        },
+        "771aa010361e67a8ae2632241baf55951ec902383c9def4aa5077b8f2870ae99": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 283.462898208003,
+                "threads": 128
+            }
+        },
+        "ad3d26b9ed2cf467df1fa5c90d1719c8b90d9cd2d0d970266962ca61cb1513ca": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 428.4930240350077,
+                "threads": 128
+            }
+        },
+        "d258994a57d8fc0502f1a4fb55d21474ae5c2164c175b3f2f8fe93de8e518ac6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 258.3852999820083,
+                "threads": 128
+            }
+        },
+        "49006c68aaf02d7c892893e02f6cca05c93ecf2bbf8d5160203b9004d58e9452": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 721.9127580500208,
+                "threads": 128
+            }
+        },
+        "6659a328ae729f619ff1e9e3d9ec7e99e9309be1fa50c5ce47a0b34ce4238918": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 258.3020382579998,
+                "threads": 128
+            }
+        },
+        "6619a2909d27263445c403d843e4c9e6d9e645fb707091fd607dc1a8a7696b9f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 812.6627775250236,
+                "threads": 128
+            }
+        },
+        "a17a457659798474af7694baf6e677231d9148efb3e7032fb47037ca3eee5947": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 412.3336168290116,
+                "threads": 128
+            }
+        },
+        "b25f1bf21015d12fd7601bfe3cb4a0e8b51a9d12532057805bd422c78f9f25c0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 708.4865929099906,
+                "threads": 128
+            }
+        },
+        "0de671ecb20943402a44ed122299844247c74c68b320760259a623f26946232e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 258.9703233729815,
+                "threads": 128
+            }
+        },
+        "d40eeb1e35f52136c05c3205a6ad58029b181da7b763301491164099e189d98d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 177.41473370502354,
+                "threads": 128
+            }
+        },
+        "8224a1785e3db850a9812644ce764b9251ccc6cef4a9343459b8132a5beeddac": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/MADS-NMHH/GA_DE_GD_LBFGS_GWO/bigDim/100/bigPop/100/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 100,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"",
+                "hyperLevelMethod": "MADS"
+            },
+            "metadata": {
+                "elapsedTimeSec": 162.51192802999867,
+                "threads": 128
+            }
+        }
+    }
+}

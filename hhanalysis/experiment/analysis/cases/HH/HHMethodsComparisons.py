@@ -12,7 +12,7 @@ import numpy as np
 from loadHHData import *
 from  commonHHAnalysis import *
 
-def compare(methods,problems,dimensions):
+def compare(methodExperiments,problems,dimensions):
     metadata={
             # "minMetricColumn":'minAvg',
             # "metricsAggregation":{'minAvg':'min'},
@@ -28,7 +28,7 @@ def compare(methods,problems,dimensions):
             "datasets":{}
         }
     hhdata=loadDataMap()
-    all=pd.concat([hhdata[method](metadata) for method in methods])
+    all=pd.concat([hhdata[methodAndExperiment[0]](metadata,methodAndExperiment[1]) for methodAndExperiment in methodExperiments])
 
     all=dropIrrelevantColumns(all,set(['modelSize','problemName','hyperLevel-id','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
     all=all[selectAllMatchAtLeastOne(all,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"]),('problemName',metadata["problems"])])]
@@ -38,11 +38,39 @@ def compare(methods,problems,dimensions):
     print(f"Problems: {problems} \n Dimensions: {dimensions}")
     methodsComparison(all,metadata,True)
 
-allmethods=['nmhh2','saGWOGroup',
-            'sacmaesGWOGroup','bigsacmaesGWOGroup','bigsacmaesGroup',
-            'sacmaesGroup',   'cmaesGWOGroup','cmaesGroup',
-            'bigsamadsGroup','bigsamadsGWOGroup',
-            'saMadsGWOGroup','madsGWOGroup','madsGroup','saMadsGroup']
+allmethods=[
+            ('nmhh2','/'),
+            # ('saGWOGroup','/'),
+            # ('sacmaesGWOGroup','/'),
+            ('bigsacmaesGWOGroup','/'),
+            # ('bigsacmaesGroup','/'),
+            # ('sacmaesGroup','/'),   
+            # ('cmaesGWOGroup','/'),
+            # ('cmaesGroup','/'),
+            # ('bigsamadsGroup','/'),
+            # ('bigsamadsGWOGroup','/'),
+            # ('saMadsGWOGroup','/'),
+            # ('madsGWOGroup','/'),
+            # ('madsGroup','/'),
+            # ('saMadsGroup','/'),
+
+            # ('nmhh2','/bigDim/100/bigPop/100'),
+            # ('saGWOGroup','/bigDim/100/bigPop/100'),
+            # ('sacmaesGWOGroup','/bigDim/100/bigPop/100'),
+            # ('bigsacmaesGWOGroup','/bigDim/100/bigPop/100'),
+            # ('bigsacmaesGroup','/bigDim/100/bigPop/100'),
+            # ('sacmaesGroup','/bigDim/100/bigPop/100'),   
+            # ('cmaesGWOGroup','/bigDim/100/bigPop/100'),
+            # ('cmaesGroup','/bigDim/100/bigPop/100'),
+            # ('bigsamadsGroup','/bigDim/100/bigPop/100'),
+            # ('bigsamadsGWOGroup','/bigDim/100/bigPop/100'),
+            # ('saMadsGWOGroup','/bigDim/100/bigPop/100'),
+            # ('madsGWOGroup','/bigDim/100/bigPop/100'),
+            # ('madsGroup','/bigDim/100/bigPop/100'),
+            # ('saMadsGroup','/bigDim/100/bigPop/100'),
+
+            # ('customhys2','/')
+            ]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
 nonconvexMultimodal=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK',
@@ -73,11 +101,13 @@ allproblems=initialproblems+extraProblems
 # http://www.sfu.ca/~ssurjano/wingweight.html
 # http://www.sfu.ca/~ssurjano/environ.html
 
-alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
-highdimensions=[750]
+# alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100]
+# alldimensions=[100]
+highdimensions=[15,30,50,100]
 lowerdimensions=[1,2,3,4,5,6,7,8,9,10]
 
-# compare(allmethods,allproblems,alldimensions)
+compare(allmethods,allproblems,alldimensions)
 
 
 # print("All-Lower dimensions")
@@ -97,7 +127,7 @@ lowerdimensions=[1,2,3,4,5,6,7,8,9,10]
 # compare(allmethods,convexUnimodal,highdimensions)
 # print("NonconvexMultimodal-High dimensions")
 # compare(allmethods,nonconvexMultimodal,highdimensions)
-print("Separable-High dimensions")
-compare(allmethods,separable,highdimensions)
-print("NonSeparable-High dimensions")
-compare(allmethods,nonSeparable,highdimensions)
+# print("Separable-High dimensions")
+# compare(allmethods,separable,highdimensions)
+# print("NonSeparable-High dimensions")
+# compare(allmethods,nonSeparable,highdimensions)
