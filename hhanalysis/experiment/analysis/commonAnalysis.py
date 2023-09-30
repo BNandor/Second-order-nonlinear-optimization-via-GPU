@@ -283,6 +283,22 @@ def printStatisticsOfWilcoxRanksums(df, optimizers):
     for optimizer,wins in sorted(bestStatistics.items(), key=lambda x: -x[1]):
         print(f" {wins/df.shape[0]:.3f} - {optimizer}")
 
+def printScoreOfWilcoxRanksums(df, optimizers):
+    print("Wilcoxon win statistics")
+    score={}
+    for opt in optimizers:
+        score[opt]=0.0
+    for index, row in df.iterrows():
+        wilcoxRanksum = pickle.loads(json.loads(row['wilcoxRanksums']).encode('latin-1'))
+        wilcoxRanksumIndexOrder = json.loads(row['wilcoxRanksumsIndexOrder'])
+        bestOptimizers=set(optimizers)
+        for i in range(len(wilcoxRanksumIndexOrder)):
+            for j in range(len(wilcoxRanksumIndexOrder)):
+                if wilcoxRanksum[i][j]==0:
+                    score[wilcoxRanksumIndexOrder[i]]+=1
+    for optimizer,wins in sorted(score.items(), key=lambda x: -x[1]):
+        print(f" {wins} - {optimizer}")
+
 def calculateWilcoxRanksumStatisticsForEachDimension(df, optimizers):
     statisticsforDimension={}
     grouped=df.groupby(['modelSize'])

@@ -29,8 +29,8 @@ def methodsComparison(all,metadata,block=True):
     
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
     statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
-    printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
-    
+    # printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
+    printScoreOfWilcoxRanksums(transpose,metadata['optimizers'])
     # printStatisticsOfWilcoxRanksumsForEachDimension(statisticsforDimension)
     # plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
     #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),

@@ -40,19 +40,19 @@ def compare(methodExperiments,problems,dimensions):
 
 allmethods=[
             ('nmhh2','/'),
-            # ('saGWOGroup','/'),
-            # ('sacmaesGWOGroup','/'),
+            ('saGWOGroup','/'),
+            ('sacmaesGWOGroup','/'),
             ('bigsacmaesGWOGroup','/'),
-            # ('bigsacmaesGroup','/'),
-            # ('sacmaesGroup','/'),   
-            # ('cmaesGWOGroup','/'),
-            # ('cmaesGroup','/'),
-            # ('bigsamadsGroup','/'),
-            # ('bigsamadsGWOGroup','/'),
-            # ('saMadsGWOGroup','/'),
-            # ('madsGWOGroup','/'),
-            # ('madsGroup','/'),
-            # ('saMadsGroup','/'),
+            ('bigsacmaesGroup','/'),
+            ('sacmaesGroup','/'),   
+            ('cmaesGWOGroup','/'),
+            ('cmaesGroup','/'),
+            ('bigsamadsGroup','/'),
+            ('bigsamadsGWOGroup','/'),
+            ('saMadsGWOGroup','/'),
+            ('madsGWOGroup','/'),
+            ('madsGroup','/'),
+            ('saMadsGroup','/'),
 
             # ('nmhh2','/bigDim/100/bigPop/100'),
             # ('saGWOGroup','/bigDim/100/bigPop/100'),
@@ -69,7 +69,7 @@ allmethods=[
             # ('madsGroup','/bigDim/100/bigPop/100'),
             # ('saMadsGroup','/bigDim/100/bigPop/100'),
 
-            # ('customhys2','/')
+            ('customhys2','/')
             ]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
@@ -107,7 +107,7 @@ alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100]
 highdimensions=[15,30,50,100]
 lowerdimensions=[1,2,3,4,5,6,7,8,9,10]
 
-compare(allmethods,allproblems,alldimensions)
+compare(allmethods,allproblems,highdimensions)
 
 
 # print("All-Lower dimensions")

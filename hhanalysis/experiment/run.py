@@ -7,6 +7,8 @@ import copy
 from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
+import runExperiment.mealpy.run
+
 import pandas as pd
 
 
@@ -52,4 +54,25 @@ def runEcaiSuite():
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments(LOGS_PATH_FROM_ROOT,ROOT,config)
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(LOGS_PATH_FROM_ROOT,ROOT,config)
 
-runEcaiSuite()
+def runMealpySuite():
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
+    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
+    optimizers=[ 'AEO','CRO','BRO','ArchOA','SMA','PSO']
+    problems=[("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
+            ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
+            ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
+            ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
+            ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
+            ]
+    populationSize=[30]
+    config={'name':'dim/2_100/pop/30',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize,
+            'optimizers':optimizers,
+            }
+    runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+
+# runEcaiSuite()
+runMealpySuite()
