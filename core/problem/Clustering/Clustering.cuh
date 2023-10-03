@@ -14,16 +14,15 @@
 
 class Clustering : public Problem {
 public:
-    static const unsigned ThisOperatorTreeSize = 5;
-//    static const unsigned ThisParameterSize = PROBLEM_CLUSTERING_POINT_DIM;
-//    static const unsigned ThisConstantSize = PROBLEM_CLUSTERING_POINT_DIM;
-    static const unsigned ThisParameterSize = -1;
-    static const unsigned ThisConstantSize = -1;
+    static const unsigned ThisOperatorTreeSize = 5 * PROBLEM_CLUSTERING_POINT_DIM ;
+    static const unsigned ThisParameterSize =  PROBLEM_CLUSTERING_POINT_DIM;
+    static const unsigned ThisConstantSize = PROBLEM_CLUSTERING_POINT_DIM;
     DDouble ThisOperatorTree[ThisOperatorTreeSize] = {};
     unsigned ThisJacobianIndices[ThisParameterSize] = {};
 
     __device__ __host__
     Clustering() {
+
         operatorTreeSize = ThisOperatorTreeSize;
         parameterSize = ThisParameterSize;
         constantSize = ThisConstantSize;
@@ -47,26 +46,27 @@ public:
         for(int i=0;i<PROBLEM_CLUSTERING_K;i++) {
             dist=0;
             for(int j=0;j<PROBLEM_CLUSTERING_POINT_DIM;j++){
-                d=(x[i*PROBLEM_CLUSTERING_POINT_DIM + j]-operatorTree[j]);
+                d=(x[i*PROBLEM_CLUSTERING_POINT_DIM + j]-operatorTree[j].value);
                 dist+=d*d;
             }
-            dist=sqrt(dist);
+//            dist=sqrt(dist);
             if(dist<minDist){
                 minIndex=i;
                 minDist=dist;
             }
         }
         // (c(1)-x(0))^2 // c(0) index of x(0)
-        initOperatorTreePartially(x, minIndex*PROBLEM_CLUSTERING_POINT_DIM , xSize, 0);
+        initOperatorTreePartially(x, minIndex*PROBLEM_CLUSTERING_POINT_DIM ,PROBLEM_CLUSTERING_POINT_DIM , 0);
         for(int i=0;i<PROBLEM_CLUSTERING_POINT_DIM;i++){
             operatorTree[2*PROBLEM_CLUSTERING_POINT_DIM+i]=operatorTree[PROBLEM_CLUSTERING_POINT_DIM+i]-operatorTree[i];
             operatorTree[3*PROBLEM_CLUSTERING_POINT_DIM+i]=operatorTree[2*PROBLEM_CLUSTERING_POINT_DIM+i].square();
         }
-        int j=3*PROBLEM_CLUSTERING_POINT_DIM;
-        for(int i=0;i<PROBLEM_CLUSTERING_POINT_DIM-1;i++){
-            operatorTree[4*PROBLEM_CLUSTERING_POINT_DIM+i]=operatorTree[3*PROBLEM_CLUSTERING_POINT_DIM+i]+;
+        operatorTree[4*PROBLEM_CLUSTERING_POINT_DIM]=operatorTree[3*PROBLEM_CLUSTERING_POINT_DIM]+operatorTree[3*PROBLEM_CLUSTERING_POINT_DIM+1];
+        for(int i=2;i<PROBLEM_CLUSTERING_POINT_DIM;i++){
+            operatorTree[4*PROBLEM_CLUSTERING_POINT_DIM+i-1]=operatorTree[4*PROBLEM_CLUSTERING_POINT_DIM+i-2]+operatorTree[3*PROBLEM_CLUSTERING_POINT_DIM+i];
         }
-        return &operatorTree[4];
+        operatorTree[5*PROBLEM_CLUSTERING_POINT_DIM-1]=operatorTree[5*PROBLEM_CLUSTERING_POINT_DIM-2].sqrt();
+        return &operatorTree[5*PROBLEM_CLUSTERING_POINT_DIM-1];
     }
 };
 

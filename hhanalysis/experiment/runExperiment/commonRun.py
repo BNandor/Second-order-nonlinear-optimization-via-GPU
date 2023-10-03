@@ -105,7 +105,7 @@ def experimentWith(experiment,recordsPath,experimentId,threads=128):
             end = timer()
             return {"elapsedTimeSec":end-start,"threads":threads}
 
-def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threads):
+def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threads,enforceEvalLimit=True):
     remainingExperimentsToRun=sum([not experimented(experimentIdMapper(mapExperimentListToDict(experiment)),recordsPath) for experiment in experimentVariations])
     print(f"Total experiments: {len(experimentVariations)}")
     print(f"Remaining experiments: {remainingExperimentsToRun}")
@@ -120,5 +120,6 @@ def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,
             runningId+=1
         else:
             print(f"Skipping {experiment}")
-    print('Enforcing function evaluation limits')
-    enforceFunctionEvaluationLimit(recordsPath)
+    if enforceEvalLimit:
+        print('Enforcing function evaluation limits')
+        enforceFunctionEvaluationLimit(recordsPath)

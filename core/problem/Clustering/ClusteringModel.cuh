@@ -23,9 +23,9 @@ public:
     explicit ClusteringModel(Perturbator& perturbator) : Model(perturbator.populationSize,X_DIM) {
         residuals.residualCount=1;
         readDatasetSize(samples,dimension,clusters);
-        ClusteringResidual[0].constantsCount = samples * dimension;
-        ClusteringResidual[0].constantsDim=2;
-        ClusteringResidual[0].parametersDim=1;
+        ClusteringResidual[0].constantsCount = samples;
+        ClusteringResidual[0].constantsDim=dimension;
+        ClusteringResidual[0].parametersDim=dimension;
         residuals.residual= reinterpret_cast<Residual *>(&ClusteringResidual[0]);
     }
 
@@ -36,15 +36,13 @@ public:
         double points[samples*dimension]={};
         int clusterIds[samples]={};
         for(int i=0;i<modelPopulationSize;i++) {
-            x[i]=std::uniform_real_distribution<double>(-100,100)(generator);
+            x[i]=std::uniform_real_distribution<double>(0,10)(generator);
         }
         readProblem(points,clusterIds,PROBLEM_PATH);
         int cit=0;
         for(int i=0; i < samples; i++) {
             for(int j=0; j < dimension; j++) {
-                    data[cit*2]=(clusterIds[i]-1)*dimension + j;
-                    data[cit*2+1]=points[i*dimension +j];
-                    cit+=1;
+                    data[i*dimension+j]=points[i*dimension +j];
             }
         }
 
