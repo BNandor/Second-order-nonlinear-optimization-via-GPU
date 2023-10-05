@@ -8,7 +8,7 @@
 #include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
 #include "Clustering.cuh"
-#ifdef PROBLEM_CLUSTERING
+//#ifdef PROBLEM_CLUSTERING
 
 class ClusteringModel: public Model {
     std::mt19937 generator=std::mt19937(std::random_device()());
@@ -32,6 +32,8 @@ public:
     void loadModel(void* dev_x, void* dev_xDE, void* dev_constantData, Metrics &metrics,CUDAMemoryModel* model ) override {
         const int constantDataSize=residuals.residualDataSize();
         double x[modelPopulationSize]={};
+        double lowerbounds[modelSize]={};
+        double upperbounds[modelSize]={};
         double data[constantDataSize]={};
         double points[samples*dimension]={};
         int clusterIds[samples]={};
@@ -39,6 +41,7 @@ public:
             x[i]=std::uniform_real_distribution<double>(0,10)(generator);
         }
         readProblem(points,clusterIds,PROBLEM_PATH);
+        setBounds(points,lowerbounds,upperbounds);
         int cit=0;
         for(int i=0; i < samples; i++) {
             for(int j=0; j < dimension; j++) {
@@ -47,6 +50,9 @@ public:
         }
 
         metrics.getCudaEventMetrics().recordStartCopy();
+        model->isBounded=true;
+        cudaMemcpy(model->dev_lower_bounds, &lowerbounds, modelSize * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(model->dev_upper_bounds, &upperbounds, modelSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_x, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_xDE, &x, modelPopulationSize * sizeof(double), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_constantData, &data, constantDataSize * sizeof(double), cudaMemcpyHostToDevice);
@@ -63,6 +69,29 @@ public:
         } else{
             std::cerr<<"Could not open"<<PROBLEM_PATH<<std::endl;
             exit(1);
+        }
+    }
+
+    void setBounds(double *points, double * lower,double * upper) {
+        for(int j=0; j < modelSize; j++) {
+            lower[j]=std::numeric_limits<double>::max();
+            upper[j]=std::numeric_limits<double>::min();
+        }
+        for(int i=0; i < samples; i++) {
+            for(int j=0; j < dimension; j++) {
+                if(points[i*dimension + j]<lower[j]){
+                    lower[j]=points[i*dimension + j];
+                }
+                if(points[i*dimension + j]>upper[j]){
+                    upper[j]=points[i*dimension + j];
+                }
+            }
+        }
+        for(int j=0; j < dimension; j++) {
+            for(int k=1;k<clusters;k++){
+                lower[dimension*k+j]=lower[j];
+                upper[dimension*k+j]=upper[j];
+            }
         }
     }
 
@@ -119,6 +148,6 @@ public:
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value; \
         }
 
-#endif
+//#endif
 
 #endif //PARALLELLBFGS_CLUSTERINGMODEL_CUH

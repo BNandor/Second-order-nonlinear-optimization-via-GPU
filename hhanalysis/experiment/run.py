@@ -76,7 +76,7 @@ def runMealpySuite():
 
 def runClusteringSuite():
     populationSize=[120]
-    config={'name':'/clustering/iris/bigPop/120',
+    config={'name':'/clustering/wine/constrained',
             'populationSize':populationSize
             }
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)

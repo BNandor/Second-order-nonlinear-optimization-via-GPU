@@ -69,7 +69,9 @@ allmethods=[
             # ('madsGroup','/bigDim/100/bigPop/100'),
             # ('saMadsGroup','/bigDim/100/bigPop/100'),
 
-            ('customhys2','/')
+            ('customhys2','/'),
+            ('mealpy','/'),
+            ('mealpy','/benchmarks/dim/2_100/pop/30')
             ]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']

@@ -1,0 +1,25 @@
+{
+    "experiments": {
+        "5ff2878ff52d7f00552655d4490846857d7cf78ce216708dd0b6847c8676be27": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_CLUSTERING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA//clustering/iris/constrained/clustering.json"
+                ],
+                "baselevelIterations": 1000,
+                "populationSize": 30,
+                "modelSize": 12,
+                "trialSampleSizes": 20,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66                 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"                 -DPROBLEM_PATH=\\\"hhanalysis/experiment/dataset/clustering/iris/iris.txt\\\"                 -DPROBLEM_CLUSTERING_POINT_DIM=4                 -DPROBLEM_CLUSTERING_K=3",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 16386.894660624996,
+                "threads": 128
+            }
+        }
+    }
+}

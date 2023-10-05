@@ -304,9 +304,9 @@ def runClusterinProblems(logsPathFromRoot,root,config):
     logspath=f"{logsPathFromRoot}/SA-CMA-ES-NMHH/GWO/bigSA/{config['name']}"
     recordspath=f"{root}/{logspath}/records.json"
     # datapath=f"{root}/hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
-    # datapath=f"{root}/hhanalysis/experiment/dataset/clustering/glass/glass.txt"
-    datapath=f"hhanalysis/experiment/dataset/clustering/iris/iris.txt"
-    # datapath=f"{root}/hhanalysis/experiment/dataset/clustering/wine/wine.txt"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/glass/glass.txt"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/iris/iris.txt"
+    datapath=f"hhanalysis/experiment/dataset/clustering/wine/wine.txt"
     # datapath=f"hhanalysis/experiment/dataset/test/test.txt"
     with open(f"{root}/{datapath}", 'r') as dataset:
             numbers = dataset.read().split()

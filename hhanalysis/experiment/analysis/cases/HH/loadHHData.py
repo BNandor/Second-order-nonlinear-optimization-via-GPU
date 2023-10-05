@@ -38,13 +38,21 @@ def customhys2(metadata,experimentPath='/'):
 def mealpy(metadata,experimentPath='/'):
     dataId=f'{experimentPath}-MEALPY'
     if dataId not in metadata['datasets']:
-        metadata['datasets'][dataId]=createTestGroupView(f"{MEALPY_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
+        datapath=f"{MEALPY_EXPERIMENT_RECORDS_PATH}{experimentPath}"
+        mealpyExp.loadMealpy.mergeExperiments(datapath)
+        metadata['datasets'][dataId]=createTestGroupView(f"{datapath}/records_concat.json",
+                                    # (None,"hashSHA256"),
+                                    # mealpyRecordToExperiment,
+                                    # set(),
+                                    # set(["minMedIQR"]),
+                                    # {'minMedIQR':'min'},
+                                    # enrichAndFilterMealpy,enrichWithMetrics=False)
                                     (None,"hashSHA256"),
-                                    mealpyRecordToExperiment,
+                                    mealpyExp.loadMealpy.recordToExperiment,
                                     set(),
-                                    set(["minMedIQR"]),
-                                    {'minMedIQR':'min'},
-                                    enrichAndFilterMealpy,enrichWithMetrics=False)
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn'],enrichWithMetrics=False)
         # metadata['datasets'][dataId]['hyperLevel-id']=dataId
     return metadata['datasets'][dataId]
 
