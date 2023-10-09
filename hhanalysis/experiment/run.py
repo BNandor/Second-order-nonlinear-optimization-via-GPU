@@ -58,7 +58,14 @@ def runMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
     dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
     optimizers=[ 'AEO','CRO','BRO','ArchOA','SMA','PSO']
-    problems=[("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+    problems=[
+              ("PROBLEM_ROSENBROCK",f"hhanalysis/logs/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"hhanalysis/logs/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"/styblinskitang.json"),
+              ("PROBLEM_TRID",f"hhanalysis/logs/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"hhanalysis/logs/schwefel223.json"),
+              ("PROBLEM_QING",f"hhanalysis/logs/qing.json"),
+            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
             ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
             ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
             ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
@@ -82,5 +89,5 @@ def runClusteringSuite():
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 # runEcaiSuite()
-# runMealpySuite()
-runClusteringSuite()
+runMealpySuite()
+# runClusteringSuite()
