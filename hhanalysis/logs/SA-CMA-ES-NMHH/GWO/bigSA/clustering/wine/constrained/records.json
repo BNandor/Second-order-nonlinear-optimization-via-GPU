@@ -1,3 +1,25 @@
 {
-    "experiments": {}
+    "experiments": {
+        "731f2d19f6f77fd090aab0fc48ee437ef53776fbbd30fa198c3047eaeea44502": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_CLUSTERING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA//clustering/wine/constrained/clustering.json"
+                ],
+                "baselevelIterations": 1000,
+                "populationSize": 120,
+                "modelSize": 39,
+                "trialSampleSizes": 20,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66                 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"                 -DPROBLEM_PATH=\\\"hhanalysis/experiment/dataset/clustering/wine/wine.txt\\\"                 -DPROBLEM_CLUSTERING_POINT_DIM=13                 -DPROBLEM_CLUSTERING_K=3",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 92543.898412305,
+                "threads": 128
+            }
+        }
+    }
 }
