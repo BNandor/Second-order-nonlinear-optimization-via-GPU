@@ -264,6 +264,47 @@ def printMinAvgStdHighlighWilcoxRanksums(df, optimizers):
     print("\\end{tabular}}")
     print("\\end{table}")
 
+def printMinMedIQRStdHighlighWilcoxRanksums(df, optimizers):
+    print("\\begin{table}[b]")
+    print("\\resizebox{\columnwidth}{!}{")
+    print("\\begin{tabular}{lc" + "".join(["l"]*len(optimizers)) + "}")
+    print("\\hline")
+    print("problem  & dimension & " + " & ".join([f"{opt}" for opt in optimizers]) + " \\\\")
+    print("\\hline")
+    
+    current_problem = None
+    for index, row in df.iterrows():
+        wilcoxRanksum = pickle.loads(json.loads(row['wilcoxRanksums']).encode('latin-1'))
+        wilcoxRanksumIndexOrder = json.loads(row['wilcoxRanksumsIndexOrder'])
+        bestOptimizers=set(optimizers)
+        for i in range(len(wilcoxRanksumIndexOrder)):
+            for j in range(len(wilcoxRanksumIndexOrder)):
+                if wilcoxRanksum[i][j]==0:
+                    if wilcoxRanksumIndexOrder[j] in bestOptimizers:
+                        bestOptimizers.remove(wilcoxRanksumIndexOrder[j])
+        
+        if row["problemName"] != current_problem:
+            if current_problem is not None:
+                print("\\hline") 
+            print(f"\\multirow{{{len(df[df['problemName'] == row['problemName']])}}}{{*}}{{{row['problemName'].replace('PROBLEM_','').capitalize()}}}")
+            current_problem = row["problemName"]
+        # find the minimal value among optimizers
+        min_value = min(row[opt] for opt in optimizers)
+        # create a list of formatted values with bold for the minimal one
+        values_str_list = []
+        for opt in optimizers:
+            value_str = f"{row[opt]:.4e}"
+            if opt in bestOptimizers:
+                value_str = f"\\textbf{{{value_str}}}" # add bold command
+            values_str_list.append(value_str)
+        # join the list with &
+        values_str = " & ".join(values_str_list)
+        print(f"&{int(row['modelSize'])}& {values_str} \\\\")
+        
+    print("\\hline")
+    print("\\end{tabular}}")
+    print("\\end{table}")
+
 def printStatisticsOfWilcoxRanksums(df, optimizers):
     print("Wilcoxon win statistics")
     bestStatistics={}

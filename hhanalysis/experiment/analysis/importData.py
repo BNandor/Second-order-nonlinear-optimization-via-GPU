@@ -150,3 +150,23 @@ def categoryTransitionMetric(metric):
         "minMedIQR":metric["minBaseLevelStatistic"],
         "hashSHA256":metric["experimentHashSha256"]
     }
+
+def operatorTransitionMetric(metric):
+    return {
+        "DE->DE":metric["bestParameters"]["PerturbatorDESimplex"]["DE"]["value"],
+        "DE->GA":metric["bestParameters"]["PerturbatorDESimplex"]["GA"]["value"],
+        "GA->DE":metric["bestParameters"]["PerturbatorGASimplex"]["DE"]["value"],
+        "GA->GA":metric["bestParameters"]["PerturbatorGASimplex"]["GA"]["value"],
+        "init->GA":metric["bestParameters"]["PerturbatorInitializerSimplex"]["GA"]["value"],
+        "init->DE":metric["bestParameters"]["PerturbatorInitializerSimplex"]["DE"]["value"],
+        "GD->LBFGS":metric["bestParameters"]["RefinerGDSimplex"]["LBFGS"]["value"],
+        "GD->GD":metric["bestParameters"]["RefinerGDSimplex"]["GD"]["value"],
+        "LBFGS->LBFGS":metric["bestParameters"]["RefinerLBFGSSimplex"]["LBFGS"]["value"],
+        "LBFGS->GD":metric["bestParameters"]["RefinerLBFGSSimplex"]["GD"]["value"],
+        "init->GD":metric["bestParameters"]["RefinerInitializerSimplex"]["GD"]["value"],
+        "init->LBFGS":metric["bestParameters"]["RefinerInitializerSimplex"]["LBFGS"]["value"],
+        "GD_ITER":metric["bestParameters"]["RefinerGDOperatorParams"]["GD_FEVALS"]["value"],
+        "LBFGS_ITER":metric["bestParameters"]["RefinerLBFGSOperatorParams"]["LBFGS_FEVALS"]["value"],
+        "minMedIQR":metric["minBaseLevelStatistic"],
+        "hashSHA256":metric["experimentHashSha256"]
+    }

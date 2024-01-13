@@ -5,7 +5,7 @@ sys.path.insert(0, '../..')
 
 from commonAnalysis import *
 from importData import *
-from hhanalysis.experiment.analysis.cases.customhys.loadCustomHYS import *
+from loadCustomHYS import *
 from dict_hash import sha256
 from commonPlots import *
 from common import *
@@ -13,7 +13,7 @@ import tabloo
 import numpy as np
 
 def createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,mealpyFilterToOneResult,ids):
-    random=createTestGroupView(RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH,
+    random=createTestGroupView(f"{RANDOM_CONTROL_GROUP_EXPERIMENT_RECORDS_PATH}/records.json",
                                     (SAStepsWithMinMedIQRMetric,"hashSHA256"),
                                     recordToExperiment,
                                     set([]),
@@ -21,7 +21,7 @@ def createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,mealpyFilter
                                     {},
                                     justAggregations)
     randomSteps=json.loads(random.loc[matchOneIdInIndex(random.index,ids)]['steps'])
-    sa=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,
+    sa=createTestGroupView(f"{SA_EXPERIMENT_RECORDS_PATH}/records.json",
                                     (SAStepsWithMinMedIQRMetric,"hashSHA256"),
                                     recordToExperiment,
                                     set([]),
@@ -29,8 +29,9 @@ def createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,mealpyFilter
                                     {},
                                     justAggregations)
     saSteps=json.loads(sa.loc[matchOneIdInIndex(sa.index,ids)]['steps'])
-    customHYS=pd.DataFrame(onlySteps(loadResultsSteps(CustomHYSPath)))
-    rosenbrockCHYSResults=customHYS[selectAllMatchAtLeastOne(customHYS,customHYSFilterToOneResult)]
+    # customHYS=pd.DataFrame(onlySteps(loadResultsSteps(CustomHYSPath)))
+    # rosenbrockCHYSResults=customHYS[selectAllMatchAtLeastOne(customHYS,customHYSFilterToOneResult)]
+    
     # mealpy=createTestGroupView(MEALPY_EXPERIMENT_RECORDS_PATH,
     #                                 (noMetric,"hashSHA256"),
     #                                 mealpyRecordToExperiment,
@@ -47,14 +48,14 @@ def createSA_RANDOM_CUSTOMHYS_PlotSeries(customHYSFilterToOneResult,mealpyFilter
     RANDOM_STEPS_MIN=fillStepsMinValue(list(zip(range(0,len(RANDOM_STEPS)),RANDOM_STEPS)),len(RANDOM_STEPS))
     SA_STEPS=list(map(lambda at: at['med_+_iqr'],saSteps))
     SA_STEPS_MIN=fillStepsMinValue(list(zip(range(0,len(SA_STEPS)),SA_STEPS)),len(SA_STEPS))
-    CUSTOMHYS_5D=fillStepsMinValue(list(map(lambda at: (int(at['step'].split('-')[0]),at['med_iqr']),json.loads(rosenbrockCHYSResults['steps'].to_list()[0]))),len(RANDOM_STEPS))
+    # CUSTOMHYS_5D=fillStepsMinValue(list(map(lambda at: (int(at['step'].split('-')[0]),at['med_iqr']),json.loads(rosenbrockCHYSResults['steps'].to_list()[0]))),len(RANDOM_STEPS))
     # MEALPY_STEPS=fillStepsMinValue(list(zip(range(0,len(mealpySteps)),mealpySteps)),len(RANDOM_STEPS))
     data_series = [
     # (range(0, len(SA_STEPS)), SA_STEPS, 'SA'),
     # (range(0, len(RANDOM_STEPS)), RANDOM_STEPS, 'RANDOM'),
     (range(0, len(RANDOM_STEPS_MIN)), RANDOM_STEPS_MIN, 'Random NMHH'),
     (range(0, len(SA_STEPS_MIN)), SA_STEPS_MIN, 'NMHH'),
-    (range(0, len(CUSTOMHYS_5D)), CUSTOMHYS_5D, 'CUSTOMHyS'),
+    # (range(0, len(CUSTOMHYS_5D)), CUSTOMHYS_5D, 'CUSTOMHyS'),
     # (range(0, len(MEALPY_STEPS)), MEALPY_STEPS, 'MEALPY'),
     ]
     return data_series
@@ -67,7 +68,9 @@ def comparisonSeriesFor(baselevelIterations,modelSize,problemName,optimizers):
               (problemName,"hhanalysis/logs/schwefel223.json"),
               (problemName,"hhanalysis/logs/randomHH/schwefel223.json"),
               (problemName,"hhanalysis/logs/qing.json"),
-              (problemName,"hhanalysis/logs/randomHH/qing.json")],"problems")
+              (problemName,"hhanalysis/logs/randomHH/qing.json"),
+              (problemName,"hhanalysis/logs/styblinskitang.json"),
+              (problemName,"hhanalysis/logs/randomHH/styblinskitang.json")],"problems")
     
     params["baselevelIterations"]=zipWithProperty([baselevelIterations],"baselevelIterations")
     params["populationSize"]=zipWithProperty([30],"populationSize")
@@ -83,10 +86,10 @@ def comparisonSeriesFor(baselevelIterations,modelSize,problemName,optimizers):
     
 def optimizerMethodsComparisonPlot():
     optimizers=["RANDOM",None]
-    performances=[comparisonSeriesFor(100,dim,"PROBLEM_ROSENBROCK",optimizers) for dim in [5,50,100,500]]
+    performances=[comparisonSeriesFor(100,dim,"PROBLEM_STYBLINSKITANG",optimizers) for dim in [5,50,100,500]]
     
-    titles=[f"Rosenbrock {dim} dimensions" for dim in [5,50,100,500]]
-    plot_series([performances],[titles], x_label='steps', y_label=' best fitness (log)',scales=['log'],file_name=f"../../plots/HH_SA_RAND_CUSTOMHYS_Rosenbrock.svg")
+    titles=[f"Styblinksi Tang {dim} dimensions" for dim in [5,50,100,500]]
+    plot_series([performances],[titles], x_label='steps', y_label=' best fitness (log)',scales=['log'],file_name=f"../../plots/HH_SA_RAND_CUSTOMHYS_PROBLEM_STYBLINSKITANG.svg")
 {
     # performances=[comparisonSeriesFor(100,dim,"PROBLEM_SCHWEFEL223") for dim in [5,50,100,500]]
     # titles=[f"Schwefel 2.23 {dim} dimensions" for dim in [5,50,100,500]]

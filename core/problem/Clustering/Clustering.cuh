@@ -11,7 +11,7 @@
 #include "../../AD/DDouble.cuh"
 #include <math.h>
 #include <limits>
-
+#ifdef PROBLEM_CLUSTERING
 class Clustering : public Problem {
 public:
     static const unsigned ThisOperatorTreeSize = 5 * PROBLEM_CLUSTERING_POINT_DIM ;
@@ -69,5 +69,6 @@ public:
         return &operatorTree[5*PROBLEM_CLUSTERING_POINT_DIM-1];
     }
 };
+#endif
 
 #endif //PARALLELLBFGS_CLUSTERING_CUH

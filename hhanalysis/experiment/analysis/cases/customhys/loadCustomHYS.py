@@ -8,7 +8,7 @@ import re
 import os
 
 ROOT=f"{os.path.dirname(os.path.abspath(__file__))}/../.."
-CustomHYSPath=f"{ROOT}/results/CustomHYS/results.json"
+CustomHYSPath=f"{ROOT}/results/CustomHYSPerf/results.json"
 
 problemNameMapping={
     "Qing":"PROBLEM_QING",

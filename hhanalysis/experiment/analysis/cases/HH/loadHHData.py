@@ -25,7 +25,7 @@ def customhys(metadata,experimentPath='/'):
 def customhys2(metadata,experimentPath='/'):
     dataId=f'{experimentPath}-CUSTOMHyS'
     if dataId not in metadata['datasets']:
-        metadata['datasets'][dataId]=createTestGroupView(f"{CUSTOMHYS2_RESULTS_PATH}{experimentPath}/records.json",
+        metadata['datasets'][dataId]=createTestGroupView(f"{CUSTOMHYS2_RESULTS_PATH}{experimentPath}/records2.json",
                                     (None,"hashSHA256"),
                                     customhys2RecordToExperiment,
                                     set(),
@@ -53,7 +53,7 @@ def mealpy(metadata,experimentPath='/'):
                                     set(["minMedIQR","minAvg","minStd","samples"]),
                                     metadata['metricsAggregation'],
                                     metadata['mergeOn'],enrichWithMetrics=False)
-        # metadata['datasets'][dataId]['hyperLevel-id']=dataId
+        metadata['datasets'][dataId]['hyperLevel-id'] =metadata['datasets'][dataId]['hyperLevel-id'].map(lambda id:f"{experimentPath}-{id}")
     return metadata['datasets'][dataId]
 
 def mealpyCRO(metadata,experimentPath='/'):

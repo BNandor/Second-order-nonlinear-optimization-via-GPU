@@ -1,0 +1,42 @@
+{
+    "experiments": {
+        "c683449534110da627728749222be57e6b5d24b88730df92fe4bfe181cab212c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime/1/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 456.4683059529998,
+                "threads": 128
+            }
+        },
+        "87c0e1c0c18bba83c963367dfa0aee7f5ad8fda457605aadb61e47bba23e5252": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime/1/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 575.529441753999,
+                "threads": 128
+            }
+        }
+    }
+}

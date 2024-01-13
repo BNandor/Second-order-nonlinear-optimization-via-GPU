@@ -1,0 +1,348 @@
+{
+    "experiments": [
+        {
+            "SA-alpha": 50.0,
+            "SA-temp0": 10000.0,
+            "SA-temps": [
+                10000.0
+            ],
+            "baseLevel-popSize": 120,
+            "baseLevel-problemId": "CLUSTERING",
+            "baseLevel-sampleSize": 20,
+            "baseLevel-xDim": 27,
+            "baseLevelEvals": 3000,
+            "bestParameters": {
+                "OptimizerChainInitializerSimplex": {
+                    "perturbator": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9159090543840817
+                    },
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.0840909456159183
+                    }
+                },
+                "OptimizerChainPerturbatorSimplex": {
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47143026133033444
+                    },
+                    "selector": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5285697386696656
+                    }
+                },
+                "OptimizerChainRefinerSimplex": {
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.015019036372395758
+                    },
+                    "selector": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9849809636276043
+                    }
+                },
+                "OptimizerChainSelectorSimplex": {
+                    "perturbator": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                },
+                "PerturbatorDEOperatorParams": {
+                    "DE_CR": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.6753715744980827
+                    },
+                    "DE_FORCE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 2.0,
+                        "value": 0.3781692578032321
+                    }
+                },
+                "PerturbatorDESimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47021910425265884
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5091666065764207
+                    },
+                    "GWO": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.020614289170920532
+                    }
+                },
+                "PerturbatorGAOperatorParams": {
+                    "GA_ALPHA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.1165458349004152
+                    },
+                    "GA_CR": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9662135382729736
+                    },
+                    "GA_CR_POINT": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.2963806401615131
+                    },
+                    "GA_MUTATION_RATE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 0.5,
+                        "value": 0.19271356018652452
+                    },
+                    "GA_MUTATION_SIZE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 100.0,
+                        "value": 35.52555774538407
+                    },
+                    "GA_PARENTPOOL_RATIO": {
+                        "lowerBound": 0.2,
+                        "upperBound": 1.0,
+                        "value": 0.28201719320147217
+                    }
+                },
+                "PerturbatorGASimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5226073618275532
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47061084068941345
+                    },
+                    "GWO": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.006781797483033369
+                    }
+                },
+                "PerturbatorGWOOperatorParams": {
+                    "GWO_a": {
+                        "lowerBound": 0.0,
+                        "upperBound": 2.0,
+                        "value": 1.1715502919057883
+                    }
+                },
+                "PerturbatorGWOSimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.4776203398274328
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5145462496598938
+                    },
+                    "GWO": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.007833410512673469
+                    }
+                },
+                "PerturbatorInitializerSimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.3900769861645829
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.4484966279518752
+                    },
+                    "GWO": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.16142638588354183
+                    }
+                },
+                "RefinerGDOperatorParams": {
+                    "GD_ALPHA": {
+                        "lowerBound": 0.5,
+                        "upperBound": 5.0,
+                        "value": 1.5129183900168637
+                    },
+                    "GD_FEVALS": {
+                        "lowerBound": 1.0,
+                        "upperBound": 3.0,
+                        "value": 1.0000516192302424
+                    }
+                },
+                "RefinerGDSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.020664313308935037
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.979335686691065
+                    }
+                },
+                "RefinerInitializerSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.0004905500438748846
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9995094499561251
+                    }
+                },
+                "RefinerLBFGSOperatorParams": {
+                    "LBFGS_ALPHA": {
+                        "lowerBound": 0.5,
+                        "upperBound": 5.0,
+                        "value": 0.8867955456705218
+                    },
+                    "LBFGS_C1": {
+                        "lowerBound": 0.0,
+                        "upperBound": 0.1,
+                        "value": 0.00226696487899689
+                    },
+                    "LBFGS_C2": {
+                        "lowerBound": 0.8,
+                        "upperBound": 1.0,
+                        "value": 0.9246543840981504
+                    },
+                    "LBFGS_FEVALS": {
+                        "lowerBound": 6.0,
+                        "upperBound": 10.0,
+                        "value": 6.3109608820577066
+                    }
+                },
+                "RefinerLBFGSSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.018104709857240154
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9818952901427598
+                    }
+                },
+                "SelectorBestSimplex": {
+                    "best": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                },
+                "SelectorInitializerSimplex": {
+                    "best": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                }
+            },
+            "experimentHashSha256": "f2cb244c266b62b77303a546f51b2870cc0392d684aa77763203c69a03be2da9",
+            "hyperLevel-id": "SA-CMA-ES",
+            "minBaseLevelStatistic": 5532.184720741376,
+            "trialCount": 3,
+            "trials": [
+                {
+                    "atEval": 60000,
+                    "med_+_iqr": 5532.196622079394,
+                    "performanceSamples": [
+                        5532.184840455487,
+                        5532.184756250108,
+                        5532.1847243207285,
+                        5532.18472125852,
+                        5532.184729897648,
+                        5532.184724409562,
+                        5532.184721059624,
+                        5532.184725985585,
+                        5532.185205006753,
+                        5532.185427608462,
+                        5532.186496624954,
+                        5532.512849989083,
+                        5532.286183724961,
+                        5532.187975951678,
+                        5532.189626085425,
+                        5532.637751344088,
+                        5532.195389860334,
+                        5532.187393420405,
+                        5532.401335282241,
+                        5532.187948608043
+                    ]
+                },
+                {
+                    "atEval": 120000,
+                    "med_+_iqr": 5532.184720741376,
+                    "performanceSamples": [
+                        5532.184720725793,
+                        5532.184720725471,
+                        5532.1847207257515,
+                        5532.184720727211,
+                        5532.184720727062,
+                        5532.184720725851,
+                        5532.184720726201,
+                        5532.184720729912,
+                        5532.184720727784,
+                        5532.1847207286,
+                        5532.184720730567,
+                        5532.1847207318615,
+                        5532.184720732908,
+                        5532.184720732274,
+                        5532.184720754286,
+                        5532.184720744784,
+                        5532.184720751444,
+                        5532.184720738198,
+                        5532.184720745583,
+                        5532.184720735859
+                    ]
+                },
+                {
+                    "atEval": 180000,
+                    "med_+_iqr": 5532.184766077442,
+                    "performanceSamples": [
+                        5532.184721167043,
+                        5532.184720728056,
+                        5532.184720752431,
+                        5532.18472072437,
+                        5532.184720726404,
+                        5532.184720724502,
+                        5532.1847207244855,
+                        5532.184720734011,
+                        5532.1847267674775,
+                        5532.184721365528,
+                        5532.184728417747,
+                        5532.184729586949,
+                        5532.184741352034,
+                        5532.184743015835,
+                        5532.184753556975,
+                        5532.400294093035,
+                        5532.184759218841,
+                        5532.1848019536965,
+                        5532.401062473467,
+                        5532.185123834687
+                    ]
+                }
+            ]
+        }
+    ]
+}

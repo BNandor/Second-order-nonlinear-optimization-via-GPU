@@ -259,6 +259,86 @@
                 "elapsedTimeSec": 215.3847453999988,
                 "threads": 128
             }
+        },
+        "d625b8d6ceac1bcb80fe24a727af9460e39d67eaaa4ae4e11657f891daadb1de": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/randomHH///styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM"
+            },
+            "metadata": {
+                "elapsedTimeSec": 267.9187345899991,
+                "threads": 128
+            }
+        },
+        "6a5467548f42590615420539d482fe74b4bd104829c21b584df6280c91c90d44": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/randomHH///styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM"
+            },
+            "metadata": {
+                "elapsedTimeSec": 297.0305227550016,
+                "threads": 128
+            }
+        },
+        "ca5e8985bfe4adf3eab0ed602a918e993e690c32cf72665683027f85a915d5a6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/randomHH///styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM"
+            },
+            "metadata": {
+                "elapsedTimeSec": 342.1080122940002,
+                "threads": 128
+            }
+        },
+        "3f70729e6ee42df693c429b5b19dec464055304052784f9de159d13c234331d0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/randomHH///styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "hyperLevelMethod": "RANDOM"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1059.567493823999,
+                "threads": 128
+            }
         }
     }
 }

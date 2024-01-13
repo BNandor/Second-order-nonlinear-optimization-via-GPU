@@ -46,10 +46,11 @@ def experimented(experimentId,experimentRecordsPath):
     return experimentId in currentRecords["experiments"].keys() 
 
 def trimExtraSamples(path):
-    currentRecords=json.load(open(path,'r'))
-    for experiment in currentRecords["experiments"]:
-        experiment['trials']=experiment['trials'][:experiment['trialCount']]
-    writeJsonToFile(path,json.dumps(currentRecords, indent = 4))
+    if os.path.isfile(path):
+        currentRecords=json.load(open(path,'r'))
+        for experiment in currentRecords["experiments"]:
+            experiment['trials']=experiment['trials'][:experiment['trialCount']]
+        writeJsonToFile(path,json.dumps(currentRecords, indent = 4))
 
 def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))

@@ -1,0 +1,36 @@
+{
+    "experiments": {
+        "003c4d4fc75f38ba42c135d3f2927c617cd2c5efe2f5c1534997577ec42a42e5": {
+            "experiment": {
+                "modelSize": 5,
+                "problems": [
+                    "Rosenbrock",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 517.981227301003
+            }
+        },
+        "7ef88a985a645d75e64742560e06f5854f8eb77dc70adcfeba367075a308969f": {
+            "experiment": {
+                "modelSize": 100,
+                "problems": [
+                    "Rosenbrock",
+                    "hhanalysis/logs/rosenbrock.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 501.9349649450014
+            }
+        }
+    }
+}

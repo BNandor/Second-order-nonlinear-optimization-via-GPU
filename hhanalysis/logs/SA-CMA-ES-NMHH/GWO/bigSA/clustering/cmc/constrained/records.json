@@ -1,3 +1,25 @@
 {
-    "experiments": {}
+    "experiments": {
+        "f2cb244c266b62b77303a546f51b2870cc0392d684aa77763203c69a03be2da9": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_CLUSTERING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA//clustering/cmc/constrained/clustering.json"
+                ],
+                "baselevelIterations": 3000,
+                "populationSize": 120,
+                "modelSize": 27,
+                "trialSampleSizes": 20,
+                "trialStepCount": 3,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DHH_SA_HYBRID_PERCENTAGE=0.66                 -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"                 -DPROBLEM_PATH=\\\"hhanalysis/experiment/dataset/clustering/CMC/cmc.txt\\\"                 -DPROBLEM_CLUSTERING_POINT_DIM=9                 -DPROBLEM_CLUSTERING_K=3",
+                "hyperLevelMethod": "SA-CMA-ES"
+            },
+            "metadata": {
+                "elapsedTimeSec": 133449.32463982198,
+                "threads": 128
+            }
+        }
+    }
 }

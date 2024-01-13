@@ -64,7 +64,7 @@ def customhys2RecordToExperiment(record):
     return experiment
 
 def loadCustomHysDF():
-    logs = open(CUSTOMHYS2_RESULTS_PATH)
+    logs = open(CUSTOMHYS2_RESULTS_PATH+"/records2.json")
     df=pd.DataFrame(list(json.load(logs)['experiments'].values()))
     df['baseLevelEvals']=df['baselevelIterations']
     df['trialCount']=df['hhsteps']

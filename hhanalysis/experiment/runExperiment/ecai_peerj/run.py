@@ -18,6 +18,24 @@ dquote='"'
 DEFAULT_THREAD_COUNT=128
 
 
+def runRandomHHControlGroupExperiments(logsPathFromRoot,root,config):
+    logspath=f"{logsPathFromRoot}/randomHH/{config['name']}"
+    recordspath=f"{root}/{logspath}/records.json"
+    params={}
+    params["problems"]=zipWithProperty(config['problems'](logspath),"problems")
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
+    params["modelSize"]=zipWithProperty(config['dimensions'],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    params["hyperLevelMethod"]=zipWithProperty(["RANDOM"],"hyperLevelMethod")
+    
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT)
+
 def runNMHH2(logsPathFromRoot,root,config):
     logspath=f"{logsPathFromRoot}/SA-NMHH/GA_DE_GD_LBFGS/{config['name']}"
     recordspath=f"{root}/{logspath}/records.json"
@@ -320,7 +338,7 @@ def runClusterinProblems(logsPathFromRoot,root,config):
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([20],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([50],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([3],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 \
@@ -333,4 +351,3 @@ def runClusterinProblems(logsPathFromRoot,root,config):
     params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT,False)
-    

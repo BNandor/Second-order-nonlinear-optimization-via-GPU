@@ -8,7 +8,7 @@
 #include "../../optimizer/operators/perturb/Perturbator.h"
 #include "../../common/Metrics.cuh"
 #include "Clustering.cuh"
-//#ifdef PROBLEM_CLUSTERING
+#ifdef PROBLEM_CLUSTERING
 
 class ClusteringModel: public Model {
     std::mt19937 generator=std::mt19937(std::random_device()());
@@ -148,6 +148,6 @@ public:
             fNext += f1->eval(sharedContext->xNext, X_DIM)->value; \
         }
 
-//#endif
+#endif
 
 #endif //PARALLELLBFGS_CLUSTERINGMODEL_CUH

@@ -8,6 +8,7 @@ from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
 import runExperiment.mealpy.run
+import runExperiment.customhys.customhys.batchexperiments 
 
 import pandas as pd
 
@@ -16,6 +17,17 @@ backslash="\\"
 dquote='"'
 ROOT="../../"
 LOGS_PATH_FROM_ROOT="hhanalysis/logs"
+
+def runRandomHHSuite():
+        problems=lambda logspath: [("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json")]
+        dimensions=[5,50,100,500]
+        populationSize=[30]
+        config={'name':'/',
+                'problems':problems,
+                'dimensions':dimensions,
+                'populationSize':populationSize
+                }
+        runRandomHHControlGroupExperiments(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 def runEcaiSuite():
     problems=lambda logspath: [
@@ -54,6 +66,26 @@ def runEcaiSuite():
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments(LOGS_PATH_FROM_ROOT,ROOT,config)
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(LOGS_PATH_FROM_ROOT,ROOT,config)
 
+def runCUSTOMHySSuite():
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
+    dimensions=[5,50,100,500]
+ 
+    problems=[
+              ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
+              ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
+              ("StyblinskiTang",f"/styblinskitang.json"),
+              ("Trid",f"hhanalysis/logs/trid.json"),
+              ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
+              ("Qing",f"hhanalysis/logs/qing.json"),
+            ]
+    populationSize=[30]
+    config={'name':'/',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize,
+            }
+    runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+
 def runMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
     dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
@@ -81,13 +113,45 @@ def runMealpySuite():
             }
     runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
 
+def runNMHHComputationalTimeExperiments():
+        problems=lambda logspath: [("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json")]
+        dimensions=[5,100]
+        populationSize=[30]
+        for i in range(10):
+                config={'name':f'comptime/{i}',
+                        'problems':problems,
+                        'dimensions':dimensions,
+                        'populationSize':populationSize
+                        }
+                runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
+
+
+def runCUSTOMHySComputationalTimeExperiments():
+        EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
+        problems= [("Rosenbrock",f"hhanalysis/logs/rosenbrock.json")]
+        dimensions=[5,100]
+        populationSize=[30]
+        for i in range(10):
+                config={'name':f'comptime/{i}',
+                        'problems':problems,
+                        'dimensions':dimensions,
+                        'populationSize':populationSize
+                        }
+                runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+
+
 def runClusteringSuite():
-    populationSize=[120]
-    config={'name':'/clustering/cmc/constrained',
-            'populationSize':populationSize
+    populationSize=[60]
+    config={
+                'name':'/clustering/cmc/smalliter',
+                'populationSize':populationSize
             }
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
 
+# runNMHHComputationalTimeExperiments()
+runCUSTOMHySComputationalTimeExperiments()
+# runRandomHHSuite()
 # runEcaiSuite()
-runMealpySuite()
+# runCUSTOMHySSuite()
+# runMealpySuite()
 # runClusteringSuite()

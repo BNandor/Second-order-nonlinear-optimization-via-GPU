@@ -93,7 +93,7 @@ def plotWilcoxRanksums(df,rows,columns,labels,filename,figsize=(10,10),blockPlot
     if blockPlot:
         plt.show()
 
-def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,width_ratios,height_ratios,subfigdim,figsize=(10,10),filename=None):
+def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,width_ratios,height_ratios,subfigdim,figsize=(10,10),filename=None,color="Greens"):
     prop = fm.FontProperties(fname=f'{ROOT}/plots/fonts/times-ro.ttf')
     fig = plt.figure(figsize=figsize, constrained_layout=True)
     subfigs = fig.subfigures(subfigdim[0],subfigdim[1],wspace=0.05 )
@@ -103,7 +103,7 @@ def plotHeatmap(Ps,rows,columns,xticks,yticks,titles,xlabelTitles,ylabelTitles,f
             axs=subfig.subplots(1, subplotsInFig,gridspec_kw={"width_ratios":width_ratios,"height_ratios":height_ratios,'wspace': 0.0})
             # fig, axs = plt.subplots(rows, columns, figsize=figsize,)
             for i, ax in enumerate(axs):
-                    im = ax.imshow(np.array(Ps[k][2*l+i]), cmap='Greens',vmin=0,vmax=1)
+                    im = ax.imshow(np.array(Ps[k][2*l+i]), cmap=color,vmin=0,vmax=1)
                     ax.set_xticks(np.arange(Ps[k][2*l+i].shape[1]))
                     ax.set_yticks(np.arange(Ps[k][2*l+i].shape[0]))
                     ax.set_xticklabels(xticks[k][2*l+i],fontproperties=prop)
@@ -192,7 +192,7 @@ def fillStepsMinValue(steps,til):
 def createMethodsCostEvolutionPlots(methodPathsAndIds,
                                     experimentProblemsAndScales,
                                     performanceMapping,
-                                    experimentFilter=[],filename=None,figuresize=(16/3,3)):
+                                    experimentFilter=[],filename=None,figuresize=(16/3,3),seriesLimit=100):
     allperformances=[]
     alltitles=[]
     allscales=[]
@@ -239,10 +239,10 @@ def createMethodsCostEvolutionPlots(methodPathsAndIds,
         performances=[]
         titles=[]
         for index,row in series.iterrows():
-                performances.append([(range(0, len(row[optimizer])),row[optimizer], optimizer) for optimizer in optimizersList ])
-                titles.append(f"{problem.replace('.json','').capitalize()}-{int(row['dimension'])}")
+                performances.append([(range(0, len(row[optimizer][0:seriesLimit])),row[optimizer][0:seriesLimit], optimizer) for optimizer in optimizersList ])
+                titles.append(f"{problem.replace('.json','').replace('styblinskitang','Styblinski Tang').capitalize()}-{int(row['dimension'])}")
         allperformances.append(performances)
         alltitles.append(titles)
         allscales.append(scale)
-    plot_series(allperformances, alltitles, x_label='steps', y_label=' best fitness',scales=allscales,
+    plot_series(allperformances, alltitles, x_label='steps', y_label=f' best fitness ({allscales[0]} scale)',scales=allscales,
                     file_name=filename,figsize=figuresize)

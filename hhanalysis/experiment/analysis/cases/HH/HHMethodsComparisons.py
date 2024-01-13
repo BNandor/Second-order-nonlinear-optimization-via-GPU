@@ -70,7 +70,7 @@ allmethods=[
             # ('saMadsGroup','/bigDim/100/bigPop/100'),
 
             ('customhys2','/'),
-            ('mealpy','/'),
+            # ('mealpy','/'),
             ('mealpy','/benchmarks/dim/2_100/pop/30')
             ]
 
@@ -103,13 +103,15 @@ allproblems=initialproblems+extraProblems
 # http://www.sfu.ca/~ssurjano/wingweight.html
 # http://www.sfu.ca/~ssurjano/environ.html
 
-# alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
-alldimensions=[1,2,3,4,5,6,7,8,9,10,15,30,50,100]
+initialdimensions=[5,50,100,500]
+# alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
 # alldimensions=[100]
 highdimensions=[15,30,50,100]
-lowerdimensions=[1,2,3,4,5,6,7,8,9,10]
+lowerdimensions=[2,3,4,5,6,7,8,9,10] 
 
-compare(allmethods,allproblems,highdimensions)
+compare(allmethods,allproblems,alldimensions)
+# compare(allmethods,initialproblems,initialdimensions)
 
 
 # print("All-Lower dimensions")
