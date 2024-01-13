@@ -258,19 +258,31 @@ def experimentWith(experiment):
             end = timer()
             return {"elapsedTimeSec":end-start,'med_iqr':min_med_iqr,'trials':trials}
 
-def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath,threadId=0,threads=1):
-    remainingExperimentsToRun=sum([not experimented(experimentIdMapper(mapExperimentListToDict(experiment)),recordsPath) for experiment in experimentVariations])
+def currentExperimentsAndRecordPath(recordsPathPrefix,threads=1,threadId=0):
+    allExperiments=set()
     if threads>1:
-        recordsPath=f"{recordsPath}_{threadId}"
+        for experiments in [json.load(open(experimentRecordsPath,'r'))["experiments"].keys() for experimentRecordsPath in [f"{recordsPathPrefix}_{thread}" for thread in range(threads)] ]:
+            for experiment in experiments:
+                allExperiments.add(experiment)
+        recordsPath=f"{recordsPathPrefix}_{threadId}"
+    else:
+        allExperiments=json.load(open(recordsPathPrefix,'r'))["experiments"].keys()
+        recordsPath=recordsPathPrefix
+        
+    return allExperiments,recordsPath
+
+def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPathPrefix,threadId=0,threads=1):
+    allExperiments,recordsPath=currentExperimentsAndRecordPath(recordsPathPrefix,threads,threadId)
     print(f"Total experiments: {len(experimentVariations)}")
-    print(f"Remaining experiments: {remainingExperimentsToRun}")
+    remainingExperiments=len(experimentVariations)-len(allExperiments)
+    print(f"Remaining experiments: {remainingExperiments}")
     runningId=0
     for experiment in experimentVariations:
         experimentDict=mapExperimentListToDict(experiment=experiment)
         experimentId=experimentIdMapper(experimentDict)
-        if not experimented(experimentId,recordsPath):
+        if experimentId not in allExperiments:
             if runningId%threads == threadId:
-                print(f"Running {runningId}/{remainingExperimentsToRun}: {experiment}")
+                print(f"Running {runningId}/{remainingExperiments}: {experiment}")
                 experimentMetadata=experimentWith(experiment=experimentDict)
                 recordExperiment(experiment=experimentDict,experimentId=experimentId,experimentRecordsPath=recordsPath,metadata=experimentMetadata)
             runningId+=1

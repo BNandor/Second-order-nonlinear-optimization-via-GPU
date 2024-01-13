@@ -68,7 +68,7 @@ def runEcaiSuite():
 
 def runCUSTOMHySSuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
-    dimensions=[5,50,100,500]
+    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
  
     problems=[
               ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
@@ -77,6 +77,12 @@ def runCUSTOMHySSuite():
               ("Trid",f"hhanalysis/logs/trid.json"),
               ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
               ("Qing",f"hhanalysis/logs/qing.json"),
+            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
+            ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
+            ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
+            ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
+            ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
             ]
     populationSize=[30]
     config={'name':'/',
@@ -149,9 +155,9 @@ def runClusteringSuite():
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 # runNMHHComputationalTimeExperiments()
-runCUSTOMHySComputationalTimeExperiments()
+# runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
 # runEcaiSuite()
 # runCUSTOMHySSuite()
-# runMealpySuite()
+runMealpySuite()
 # runClusteringSuite()

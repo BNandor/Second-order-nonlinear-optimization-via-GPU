@@ -25,7 +25,7 @@ def customhys(metadata,experimentPath='/'):
 def customhys2(metadata,experimentPath='/'):
     dataId=f'{experimentPath}-CUSTOMHyS'
     if dataId not in metadata['datasets']:
-        metadata['datasets'][dataId]=createTestGroupView(f"{CUSTOMHYS2_RESULTS_PATH}{experimentPath}/records2.json",
+        metadata['datasets'][dataId]=createTestGroupView(f"{CUSTOMHYS2_RESULTS_PATH}{experimentPath}/allRecords.json",
                                     (None,"hashSHA256"),
                                     customhys2RecordToExperiment,
                                     set(),
