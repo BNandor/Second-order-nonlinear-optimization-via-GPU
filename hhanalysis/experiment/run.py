@@ -147,9 +147,9 @@ def runCUSTOMHySComputationalTimeExperiments():
 
 
 def runClusteringSuite():
-    populationSize=[60]
+    populationSize=[40]
     config={
-                'name':'/clustering/cmc/smalliter',
+                'name':'/clustering/iris/40k',
                 'populationSize':populationSize
             }
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
@@ -159,5 +159,5 @@ def runClusteringSuite():
 # runRandomHHSuite()
 # runEcaiSuite()
 # runCUSTOMHySSuite()
-runMealpySuite()
-# runClusteringSuite()
+# runMealpySuite()
+runClusteringSuite()

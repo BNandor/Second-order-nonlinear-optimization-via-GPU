@@ -33,6 +33,7 @@ SAREFINE_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/SARefine"
 LBFGS_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/LBFGS"
 GD_EXPERIMENT_RECORDS_PATH=f"{LOGS_ROOT}/GD"
 CUSTOMHYS2_RESULTS_PATH=f"{LOGS_ROOT}/CustomHYSPerf"
+BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_CLUSTERING_PATH=f"{LOGS_ROOT}/SA-CMA-ES-NMHH/GWO/bigSA/clustering"
 
 def enrichAndFilterSA(recordsWithMetrics,aggregations,experimentColumns):
     HHView=mergeOn(recordsWithMetrics,aggregations,experimentColumns+["minMedIQR"])

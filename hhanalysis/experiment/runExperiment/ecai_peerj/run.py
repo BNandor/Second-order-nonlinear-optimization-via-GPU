@@ -321,9 +321,9 @@ def runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(logsPathFromRoot,root,confi
 def runClusterinProblems(logsPathFromRoot,root,config):
     logspath=f"{logsPathFromRoot}/SA-CMA-ES-NMHH/GWO/bigSA/{config['name']}"
     recordspath=f"{root}/{logspath}/records.json"
-    datapath=f"hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
     # datapath=f"hhanalysis/experiment/dataset/clustering/glass/glass.txt"
-    # datapath=f"hhanalysis/experiment/dataset/clustering/iris/iris.txt"
+    datapath=f"hhanalysis/experiment/dataset/clustering/iris/iris.txt"
     # datapath=f"hhanalysis/experiment/dataset/clustering/wine/wine.txt"
     # datapath=f"hhanalysis/experiment/dataset/test/test.txt"
     with open(f"{root}/{datapath}", 'r') as dataset:
@@ -334,11 +334,11 @@ def runClusterinProblems(logsPathFromRoot,root,config):
 
     params={}
     params["problems"]=zipWithProperty([("PROBLEM_CLUSTERING",f"{logspath}/clustering.json")],"problems")
-    params["baselevelIterations"]=zipWithProperty([1500],"baselevelIterations")
+    params["baselevelIterations"]=zipWithProperty([1000],"baselevelIterations")
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([20],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([3],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"-DHH_SA_HYBRID_PERCENTAGE=0.66 \

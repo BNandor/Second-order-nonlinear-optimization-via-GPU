@@ -423,6 +423,20 @@ def sacmaesGroup(metadata,experimentPath='/'):
         metadata['datasets'][dataId]['hyperLevel-id'] = dataId
     return metadata['datasets'][dataId]
 
+def clustering(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-BIG-SA-CMA-ES-GWO'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_CLUSTERING_PATH}{experimentPath}/records.json",
+            (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
+            recordToExperiment,
+            set(),
+            set(["minMedIQR", "minAvg", "minStd", "samples"]),
+            metadata['metricsAggregation'],
+            metadata['mergeOn']
+        )
+        metadata['datasets'][dataId]['hyperLevel-id'] = dataId
+    return metadata['datasets'][dataId]
+
 def loadDataMap():
     return {
     "customhys":customhys,
@@ -453,5 +467,6 @@ def loadDataMap():
     "cmaesGWOGroup": cmaesGWOGroup,
     "cmaesGroup": cmaesGroup,
     "saMadsGWOGroup": saMadsGWOGroup,
-    "saMadsGroup": saMadsGroup
+    "saMadsGroup": saMadsGroup,
+    "clustering": clustering,
 }
