@@ -7,8 +7,8 @@ import copy
 from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
-#import runExperiment.mealpy.run
-#import runExperiment.customhys.customhys.batchexperiments 
+import runExperiment.mealpy.run
+import runExperiment.customhys.customhys.batchexperiments 
 
 import pandas as pd
 
@@ -67,22 +67,23 @@ def runEcaiSuite():
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 def runCUSTOMHySSuite():
-    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
-    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/schwefel223500/"
+    #dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
+    dimensions=[500]
  
     problems=[
-              ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
-              ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
-              ("StyblinskiTang",f"/styblinskitang.json"),
-              ("Trid",f"hhanalysis/logs/trid.json"),
+    #          ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
+    #          ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
+    #          ("StyblinskiTang",f"/styblinskitang.json"),
+#              ("Trid",f"hhanalysis/logs/trid.json"),
               ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
-              ("Qing",f"hhanalysis/logs/qing.json"),
-            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
-            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
-            ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
-            ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
-            ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
-            ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
+#              ("Qing",f"hhanalysis/logs/qing.json"),
+    #        ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+#            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
+ #           ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
+ #           ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
+ #           ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
+  #          ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
             ]
     populationSize=[30]
     config={'name':'/',
@@ -90,25 +91,25 @@ def runCUSTOMHySSuite():
             'dimensions':dimensions,
             'populationSize':populationSize,
             }
- #   runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+    runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
 
 def runMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
-    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
+    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500]
     optimizers=[ 'AEO','CRO','BRO','ArchOA','SMA','PSO']
     problems=[
-              ("PROBLEM_ROSENBROCK",f"hhanalysis/logs/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN",f"hhanalysis/logs/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG",f"/styblinskitang.json"),
-              ("PROBLEM_TRID",f"hhanalysis/logs/trid.json"),
-              ("PROBLEM_SCHWEFEL223",f"hhanalysis/logs/schwefel223.json"),
-              ("PROBLEM_QING",f"hhanalysis/logs/qing.json"),
-            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
-            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
-            ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
-            ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
-            ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
-            ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
+    #          ("PROBLEM_ROSENBROCK",f"hhanalysis/logs/rosenbrock.json"),
+    #          ("PROBLEM_RASTRIGIN",f"hhanalysis/logs/rastrigin.json"),
+    #          ("PROBLEM_STYBLINSKITANG",f"/styblinskitang.json"),
+    #          ("PROBLEM_TRID",f"hhanalysis/logs/trid.json"),
+    #          ("PROBLEM_SCHWEFEL223",f"hhanalysis/logs/schwefel223.json"),
+    #          ("PROBLEM_QING",f"hhanalysis/logs/qing.json"),
+    #        ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+    #        ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
+    #        ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
+    #        ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
+    #        ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
+    #        ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
             ]
     populationSize=[30]
     config={'name':'dim/2_100/pop/30',
@@ -117,7 +118,7 @@ def runMealpySuite():
             'populationSize':populationSize,
             'optimizers':optimizers,
             }
-  #  runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+    runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
 
 def runNMHHComputationalTimeExperiments():
         problems=lambda logspath: [("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json")]
@@ -158,6 +159,6 @@ def runClusteringSuite():
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
 # runEcaiSuite()
-# runCUSTOMHySSuite()
-# runMealpySuite()
-runClusteringSuite()
+runCUSTOMHySSuite()
+#runMealpySuite()
+# runClusteringSuite()

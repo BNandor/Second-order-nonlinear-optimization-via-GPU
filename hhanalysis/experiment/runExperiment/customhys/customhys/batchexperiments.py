@@ -88,8 +88,8 @@ def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPath)
             experimentMetadata=experimentWith(experiment=experimentDict,path=os.path.dirname(recordsPath))
             recordExperiment(experiment=experimentDict,experimentId=experimentId,experimentRecordsPath=recordsPath,metadata=experimentMetadata)
             runningId+=1
-        else:
-            print(f"Skipping {experiment}")
+        #else:
+        #    print(f"Skipping {experiment}")
 
 
 def runExperiments(recordsRootPath,config):
