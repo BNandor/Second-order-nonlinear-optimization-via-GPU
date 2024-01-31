@@ -67,23 +67,23 @@ def runEcaiSuite():
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 def runCUSTOMHySSuite():
-    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/schwefel223500/"
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/michalewiczDixonPriceLecy750/"
     #dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
-    dimensions=[500]
+    dimensions=[750]
  
     problems=[
-    #          ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
-    #          ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
-    #          ("StyblinskiTang",f"/styblinskitang.json"),
+#              ("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
+#              ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
+#          ("StyblinskiTang",f"/styblinskitang.json"),
 #              ("Trid",f"hhanalysis/logs/trid.json"),
-              ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
+#              ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
 #              ("Qing",f"hhanalysis/logs/qing.json"),
-    #        ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
+#            ("PROBLEM_MICHALEWICZ","hhanalysis/logs/michalewicz.json"),
 #            ("PROBLEM_DIXONPRICE","hhanalysis/logs/dixonprice.json"),
- #           ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
- #           ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
- #           ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
-  #          ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
+            ("PROBLEM_LEVY","hhanalysis/logs/levy.json"),
+#            ("PROBLEM_SCHWEFEL", "hhanalysis/logs/schwefel.json"),
+#            ("PROBLEM_SUMSQUARES", "hhanalysis/logs/sumsquares.json"),
+#            ("PROBLEM_SPHERE", "hhanalysis/logs/sphere.json"),
             ]
     populationSize=[30]
     config={'name':'/',
@@ -160,6 +160,6 @@ def runClusteringSuite():
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
 #runEcaiSuite()
-#runCUSTOMHySSuite()
-runMealpySuite()
+runCUSTOMHySSuite()
+#runMealpySuite()
 # runClusteringSuite()

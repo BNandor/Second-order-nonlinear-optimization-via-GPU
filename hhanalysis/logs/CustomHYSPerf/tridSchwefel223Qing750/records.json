@@ -1,0 +1,36 @@
+{
+    "experiments": {
+        "96933cbf83cfbeddeac6639c3beb2481d56575d67e301c5ca71c8e1623321b1a": {
+            "experiment": {
+                "modelSize": 750,
+                "problems": [
+                    "Trid",
+                    "hhanalysis/logs/trid.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 17195.611408518977
+            }
+        },
+        "460b5b43f8115dedaa0ad2bd8cde92f4d6344664c52ad51aa117b22cd00f0f24": {
+            "experiment": {
+                "modelSize": 750,
+                "problems": [
+                    "Schwefel223",
+                    "hhanalysis/logs/schwefel223.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 133542.749365984
+            }
+        }
+    }
+}

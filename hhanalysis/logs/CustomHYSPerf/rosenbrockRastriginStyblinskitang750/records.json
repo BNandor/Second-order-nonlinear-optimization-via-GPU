@@ -1,0 +1,36 @@
+{
+    "experiments": {
+        "ac77b608451764d36149d49177d9a232a979edd3d4c1db7ef09977daed43c06a": {
+            "experiment": {
+                "modelSize": 750,
+                "problems": [
+                    "Rastrigin",
+                    "hhanalysis/logs/rastrigin.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 11834.776469578966
+            }
+        },
+        "05db683a12449ecd28f3c4d126907d73ceaec3b577007ffe042b5c06c87c5c9e": {
+            "experiment": {
+                "modelSize": 750,
+                "problems": [
+                    "StyblinskiTang",
+                    "/styblinskitang.json"
+                ],
+                "hhsteps": 100,
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "trialSampleSizes": 30
+            },
+            "metadata": {
+                "elapsedTimeSec": 7403.70656221098
+            }
+        }
+    }
+}
