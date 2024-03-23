@@ -39,7 +39,7 @@ def plot_series(series_of_series_of_data_series, series_of_titles,x_label='X-axi
             
             # Add labels and title
             ax.set_xlabel(x_label,fontproperties=prop)
-            ax.set_ylabel(y_label,fontproperties=prop,size=12)
+            ax.set_ylabel(f' best fitness ({scales[i]} scale)',fontproperties=prop,size=12)
             ax.set_title(series_of_titles[i][j],fontproperties=prop,size=14)
             
             # Add a legend
@@ -244,5 +244,34 @@ def createMethodsCostEvolutionPlots(methodPathsAndIds,
         allperformances.append(performances)
         alltitles.append(titles)
         allscales.append(scale)
-    plot_series(allperformances, alltitles, x_label='steps', y_label=f' best fitness ({allscales[0]} scale)',scales=allscales,
+    plot_series(allperformances, alltitles, x_label='steps',scales=allscales,
                     file_name=filename,figsize=figuresize)
+
+def plot_optimizer_scores(optimizer_scores, colorfunction, labelfunction):
+    num_plots = len(optimizer_scores)
+    number_of_cols_per_page=3
+    num_rows_per_page = 2
+    num_rows = num_plots // number_of_cols_per_page + (num_plots % number_of_cols_per_page > 0)  # Calculate total number of rows
+    num_pages = num_rows // num_rows_per_page + (num_rows % num_rows_per_page > 0)  # Calculate total number of pages
+
+    for page in range(num_pages):
+        start_row = page * num_rows_per_page
+        end_row = min((page + 1) * num_rows_per_page, num_rows)
+        fig, axes = plt.subplots(end_row - start_row, number_of_cols_per_page, figsize=(15, 5*(end_row - start_row)))
+
+        for i, (dimension, scores) in enumerate(list(optimizer_scores.items())[start_row*number_of_cols_per_page:end_row*number_of_cols_per_page]):
+            row = i // number_of_cols_per_page
+            col = i % number_of_cols_per_page
+            ax = axes[row, col] if end_row - start_row > 1 else axes[col]
+            
+            # Sort scores in decreasing order
+            sorted_scores = dict(sorted(scores.items(), key=lambda x: x[1], reverse=True))
+            labels=[labelfunction(label) for label in sorted_scores.keys()]
+            colors=[colorfunction(label) for label in labels]
+            ax.bar(sorted_scores.keys(), sorted_scores.values(),color=colors)
+            ax.set_title(f'Dimension {dimension} Scores')
+            ax.tick_params(axis='x', rotation=90)  # Rotate x-axis labels by 90 degrees
+            ax.set_xticklabels(labels)  # Remove specified text
+
+        plt.tight_layout()
+        plt.show()

@@ -29,7 +29,7 @@ def runRandomHHSuite():
                 }
         runRandomHHControlGroupExperiments(LOGS_PATH_FROM_ROOT,ROOT,config)
 
-def runEcaiSuite():
+def runNMHHSuite():
     problems=lambda logspath: [
               ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
               ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
@@ -45,8 +45,8 @@ def runEcaiSuite():
               ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
               ]
     dimensions=[100]
-    populationSize=[100]
-    config={'name':'bigDim/100/bigPop/100',
+    populationSize=[30]
+    config={'name':'newExperiment',
             'problems':problems,
             'dimensions':dimensions,
             'populationSize':populationSize
@@ -159,7 +159,7 @@ def runClusteringSuite():
 # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
-#runEcaiSuite()
-runCUSTOMHySSuite()
+runNMHHSuite()
+# runCUSTOMHySSuite()
 #runMealpySuite()
 # runClusteringSuite()

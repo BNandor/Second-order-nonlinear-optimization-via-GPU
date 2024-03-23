@@ -98,6 +98,19 @@ def nmhh2(metadata,experimentPath='/'):
         metadata['datasets'][dataId]['hyperLevel-id']=dataId
     return metadata['datasets'][dataId]
 
+def nmhh2Perf(metadata,experimentPath='/'):
+    dataId=f'{experimentPath}-NMHH'
+    if dataId not in metadata['datasets']:
+        metadata['datasets'][dataId]=createTestGroupView(f"{SA_GA_DE_GD_LBFGS_RECORDS_PATH}{experimentPath}/records.json",
+                                    (filterMetricPropertiesAverageAndMedIQRAndTrials,"hashSHA256"),
+                                    recordToExperiment,
+                                    set(),
+                                    set(["minMedIQR","minAvg","minStd","samples"]),
+                                    metadata['metricsAggregation'],
+                                    metadata['mergeOn']) 
+        metadata['datasets'][dataId]['hyperLevel-id']=dataId
+    return metadata['datasets'][dataId]
+
 def sarefineGroup(metadata,experimentPath='/'):
     dataId=f'{experimentPath}-LBFGS'
     if dataId not in metadata['datasets']:
@@ -427,10 +440,10 @@ def clustering(metadata,experimentPath='/'):
     dataId=f'{experimentPath}-BIG-SA-CMA-ES-GWO'
     if dataId not in metadata['datasets']:
         metadata['datasets'][dataId] = createTestGroupView(f"{BIGSA_CMA_ES_GA_DE_GD_LBFGS_GWO_CLUSTERING_PATH}{experimentPath}/records.json",
-            (filterMetricPropertiesAverageAndMedIQR, "hashSHA256"),
+            (filterMetricPropertiesAverageAndMedIQRAndBest, "hashSHA256"),
             recordToExperiment,
             set(),
-            set(["minMedIQR", "minAvg", "minStd", "samples"]),
+            set(["minMedIQR", "minAvg", "minStd", "samples",'best']),
             metadata['metricsAggregation'],
             metadata['mergeOn']
         )
@@ -445,6 +458,7 @@ def loadDataMap():
     "mealpyCRO": mealpyCRO,
     "nmhh": nmhh,
     "nmhh2": nmhh2,
+    "nmhh2Perf":nmhh2Perf,
     "sarefineGroup": sarefineGroup,
     "lbfgsGroup": lbfgsGroup,
     "gdGroup": gdGroup,

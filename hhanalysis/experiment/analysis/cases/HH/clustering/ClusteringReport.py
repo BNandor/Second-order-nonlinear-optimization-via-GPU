@@ -29,7 +29,7 @@ def compare(methodExperiments):
         }
     hhdata=loadDataMap()
     all=pd.concat([hhdata[methodAndExperiment[0]](metadata,methodAndExperiment[1]) for methodAndExperiment in methodExperiments])
-    all=dropIrrelevantColumns(all,set(['populationSize','modelSize','problemName','hyperLevel-id','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    all=dropIrrelevantColumns(all,set(['populationSize','modelSize','problemName','hyperLevel-id','baselevelIterations','minAvg','minStd','minMedIQR','samples','best']))
     tabloo.show(all)
     # methodsComparison(all,metadata,True)
 

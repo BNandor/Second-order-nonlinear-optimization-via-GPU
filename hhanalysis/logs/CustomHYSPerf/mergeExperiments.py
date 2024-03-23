@@ -29,7 +29,7 @@ def merge_json_files(base_json_path, customhys_paths):
 if __name__ == "__main__":
     # Specify the base JSON file and subdirectories
     base_json_path = "allRecords.json"
-    subdirectories = ["qing500/", "trid500/", "schwefel223500/"]  # Add your subdirectories here
+    subdirectories = ["michalewiczDixonPriceLecy750/", "schwefelSquaresSphere750/", "tridSchwefel223Qing750/","rosenbrockRastriginStyblinskitang750/"]  # Add your subdirectories here
 
     # Get the full paths of customhys JSON files in subdirectories
     customhys_paths = []

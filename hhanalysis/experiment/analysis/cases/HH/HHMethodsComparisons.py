@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 sys.path.insert(0, '../..')
 
 from commonAnalysis import *
@@ -11,6 +12,28 @@ import tabloo
 import numpy as np
 from loadHHData import *
 from  commonHHAnalysis import *
+
+colorMap=[
+    (set(['CRO','PSO','BRO','ArchOA','AEO','SMA']),'orange'),
+    (set(['NMHH']),'blue'),
+    (set(['CUSTOMHyS']),'black'),
+    (set(['SA-MADS','SA-CMA-ES']),'green')
+]
+
+def mapBarplotColors(optimizer):
+    for  colors in colorMap:
+        for category in colors[0]:
+            if category in optimizer:
+                # if 'GWO' in optimizer:
+                #     return f'dark {colors[1]}'
+                return colors[1]
+    print(f'could not map {optimizer} to a valid color, check colormap!')
+    return 'purple'
+
+def optimizerPrettify(optimizer):
+    noPathInName=optimizer.split('/')[-1]
+    noNumbers=re.sub(r'\d+', '',noPathInName)
+    return noNumbers[1:] if noNumbers.startswith('-') else noNumbers
 
 def compare(methodExperiments,problems,dimensions):
     metadata={
@@ -36,7 +59,7 @@ def compare(methodExperiments,problems,dimensions):
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"],'minStd','samples']]
 
     print(f"Problems: {problems} \n Dimensions: {dimensions}")
-    methodsComparison(all,metadata,True)
+    methodsComparison(all,metadata,True,mapBarplotColors,optimizerPrettify)
 
 allmethods=[
             ('nmhh2','/'),
@@ -105,11 +128,11 @@ allproblems=initialproblems+extraProblems
 
 initialdimensions=[5,50,100,500]
 # alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
-alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
 # alldimensions=[100]
-highdimensions=[15,30,50,100,500]
-lowerdimensions=[2,3,4,5,6,7,8,9,10] 
-
+highdimensions=[10,15,30,50,100,500,750]
+lowerdimensions=[2,3,4,5,6,7,8,9] 
+singleDim=[2]
 compare(allmethods,allproblems,alldimensions)
 # compare(allmethods,initialproblems,initialdimensions)
 

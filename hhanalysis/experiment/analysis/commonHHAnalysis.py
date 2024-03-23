@@ -6,7 +6,7 @@ from common import *
 import tabloo
 import numpy as np
 
-def methodsComparison(all,metadata,block=True):
+def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',labelfunction= lambda x:x):
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"]]]
     all=all.groupby(['problemName','modelSize'])
@@ -30,7 +30,9 @@ def methodsComparison(all,metadata,block=True):
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
     statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
     # printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
-    printScoreOfWilcoxRanksums(transpose,metadata['optimizers'])
+    # printScoreOfWilcoxRanksums(transpose,metadata['optimizers'])
+    scoresPerDim=printScoreOfWilcoxRanksumsPerDim(transpose,metadata['optimizers'])
+    plot_optimizer_scores(scoresPerDim,barplotMapping,labelfunction)
     printStatisticsOfWilcoxRanksumsForEachDimension(statisticsforDimension)
     # plotWilcoxRanksums(transpose,6,len(metadata["modelSize"]),
     #                    list(map(lambda name:name.replace('-BIG',''),metadata['optimizers'])),
@@ -43,10 +45,13 @@ def methodsComparison(all,metadata,block=True):
 
     # tabloo.show(comparisonTableData)
     # tabloo.show(all)
-    missingExperiments=transpose[list(transpose[metadata['optimizers']].columns[transpose[metadata['optimizers']].isnull().any()])+['modelSize','problemName']]
-    missingExperiments=missingExperiments.rename(columns=lambda c:c.replace('/benchmarks/dim/2_100/pop/30',''))
-    tabloo.show(missingExperiments)
-    # print(all.to_latex(index=False))
+    # missingExperiments=transpose[list(transpose[metadata['optimizers']].columns[transpose[metadata['optimizers']].isnull().any()])+['modelSize','problemName']]
+    # filteredExperiments=transpose[['problemName','modelSize']+metadata['optimizers']]
+    # filteredExperiments=filteredExperiments.rename(columns=lambda c:c.replace('/benchmarks/dim/2_100/pop/30',''))
+    transpose=transpose.sort_values(by=['problemName','modelSize'])
+    # tabloo.show(filteredExperiments)
+    # print(filteredExperiments.to_latex(index=False))
+    # printMinMedIQRStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # export the styled dataframe to LaTeX
     # print(comparisonTableData.to_latex(index=False))
     

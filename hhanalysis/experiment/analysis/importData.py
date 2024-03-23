@@ -100,11 +100,11 @@ def filterMetricPropertiesMinMedIQR(metric):
         "hashSHA256":metric["experimentHashSha256"]
     }
 
-
-def minTrialAverage(trials):
+def minTrialAverageAndBest(trials):
     minAvg=float('inf')
     minStd=0
     samples=[]
+    best=float('inf')
     for trial in trials:
         #+np.std(trial['performanceSamples'])
         trialAverage=np.average(trial['performanceSamples'])
@@ -112,6 +112,11 @@ def minTrialAverage(trials):
             minAvg=trialAverage
             minStd=np.std(trial['performanceSamples'])
             samples=trial['performanceSamples']
+            best=np.min(samples)
+    return (minAvg,minStd,samples,best)
+
+def minTrialAverage(trials):
+    (minAvg,minStd,samples,best)=minTrialAverageAndBest(trials)
     return (minAvg,minStd,samples)
 
 def filterMetricPropertiesAverageAndMedIQR(metric):
@@ -124,6 +129,27 @@ def filterMetricPropertiesAverageAndMedIQR(metric):
         "hashSHA256":metric["experimentHashSha256"]
     }
 
+def filterMetricPropertiesAverageAndMedIQRAndTrials(metric):
+    (minAvg,minStd,samples)=minTrialAverage(metric['trials'])
+    return {
+        "minMedIQR":metric["minBaseLevelStatistic"],
+        "minAvg":minAvg,
+        "minStd":minStd,
+        "samples":json.dumps(samples),
+        "trials":json.dumps(metric['trials']),
+        "hashSHA256":metric["experimentHashSha256"]
+    }
+
+def filterMetricPropertiesAverageAndMedIQRAndBest(metric):
+    (minAvg,minStd,samples,best)=minTrialAverageAndBest(metric['trials'])
+    return {
+        "minMedIQR":metric["minBaseLevelStatistic"],
+        "minAvg":minAvg,
+        "minStd":minStd,
+        "samples":json.dumps(samples),
+        "hashSHA256":metric["experimentHashSha256"],
+        'best':best
+    }
 
 def noMetric(metric):
     return {
