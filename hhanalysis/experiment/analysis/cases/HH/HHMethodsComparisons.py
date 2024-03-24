@@ -37,12 +37,12 @@ def optimizerPrettify(optimizer):
 
 def compare(methodExperiments,problems,dimensions):
     metadata={
-            # "minMetricColumn":'minAvg',
-            # "metricsAggregation":{'minAvg':'min'},
-            # "mergeOn":mergeOnAvg,
-            "minMetricColumn":'minMedIQR',
-            "metricsAggregation":{'minMedIQR':'min'},
-            "mergeOn":mergeOnMinMedIQR,
+            "minMetricColumn":'minAvg',
+            "metricsAggregation":{'minAvg':'min'},
+            "mergeOn":mergeOnAvg,
+            # "minMetricColumn":'minMedIQR',
+            # "metricsAggregation":{'minMedIQR':'min'},
+            # "mergeOn":mergeOnMinMedIQR,
             'optimizers':list(),
             "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations'],
             "baselevelIterations": [100],
@@ -63,19 +63,20 @@ def compare(methodExperiments,problems,dimensions):
 
 allmethods=[
             ('nmhh2','/'),
-            ('saGWOGroup','/'),
-            ('sacmaesGWOGroup','/'),
-            ('bigsacmaesGWOGroup','/'),
-            ('bigsacmaesGroup','/'),
-            ('sacmaesGroup','/'),   
-            ('cmaesGWOGroup','/'),
-            ('cmaesGroup','/'),
-            ('bigsamadsGroup','/'),
-            ('bigsamadsGWOGroup','/'),
-            ('saMadsGWOGroup','/'),
-            ('madsGWOGroup','/'),
-            ('madsGroup','/'),
-            ('saMadsGroup','/'),
+            ('nmhh2','/sprt-seq-t'),
+            # ('saGWOGroup','/'),
+            # ('sacmaesGWOGroup','/'),
+            # ('bigsacmaesGWOGroup','/'),
+            # ('bigsacmaesGroup','/'),
+            # ('sacmaesGroup','/'),   
+            # ('cmaesGWOGroup','/'),
+            # ('cmaesGroup','/'),
+            # ('bigsamadsGroup','/'),
+            # ('bigsamadsGWOGroup','/'),
+            # ('saMadsGWOGroup','/'),
+            # ('madsGWOGroup','/'),
+            # ('madsGroup','/'),
+            # ('saMadsGroup','/'),
 
             # ('nmhh2','/bigDim/100/bigPop/100'),
             # ('saGWOGroup','/bigDim/100/bigPop/100'),
@@ -92,9 +93,9 @@ allmethods=[
             # ('madsGroup','/bigDim/100/bigPop/100'),
             # ('saMadsGroup','/bigDim/100/bigPop/100'),
 
-            ('customhys2','/'),
+            # ('customhys2','/'),
             # ('mealpy','/'),
-            ('mealpy','/benchmarks/dim/2_100/pop/30')
+            # ('mealpy','/benchmarks/dim/2_100/pop/30')
             ]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
@@ -133,7 +134,7 @@ alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
 highdimensions=[10,15,30,50,100,500,750]
 lowerdimensions=[2,3,4,5,6,7,8,9] 
 singleDim=[2]
-compare(allmethods,allproblems,alldimensions)
+compare(allmethods,allproblems,[5])
 # compare(allmethods,initialproblems,initialdimensions)
 
 

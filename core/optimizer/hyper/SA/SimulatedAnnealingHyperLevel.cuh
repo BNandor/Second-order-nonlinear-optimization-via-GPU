@@ -115,6 +115,7 @@ public:
                 logJson["SA-temps"].push_back(temp);
                 i+=1;
             }
+            logJson["trialCount"]=i;
 
         }
 

@@ -368,4 +368,4 @@ def runSPRTTestNMHH(logsPathFromRoot,root,config):
     flags=[f"   -DSAMPLING={backslash}{dquote}SPRT-T-test{backslash}{dquote}"]
     params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
     variations=list(itertools.product(*list(params.values())))
-    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT)
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT,False)
