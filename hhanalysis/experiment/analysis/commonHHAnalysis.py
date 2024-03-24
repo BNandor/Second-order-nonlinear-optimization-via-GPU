@@ -49,7 +49,7 @@ def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',l
     # filteredExperiments=transpose[['problemName','modelSize']+metadata['optimizers']]
     # filteredExperiments=filteredExperiments.rename(columns=lambda c:c.replace('/benchmarks/dim/2_100/pop/30',''))
     transpose=transpose.sort_values(by=['problemName','modelSize'])
-    # tabloo.show(filteredExperiments)
+    tabloo.show(transpose)
     # print(filteredExperiments.to_latex(index=False))
     # printMinMedIQRStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # export the styled dataframe to LaTeX

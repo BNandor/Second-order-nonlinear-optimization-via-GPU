@@ -37,12 +37,12 @@ def optimizerPrettify(optimizer):
 
 def compare(methodExperiments,problems,dimensions):
     metadata={
-            # "minMetricColumn":'minAvg',
-            # "metricsAggregation":{'minAvg':'min'},
-            # "mergeOn":mergeOnAvg,
-            "minMetricColumn":'minMedIQR',
-            "metricsAggregation":{'minMedIQR':'min'},
-            "mergeOn":mergeOnMinMedIQR,
+            "minMetricColumn":'minAvg',
+            "metricsAggregation":{'minAvg':'min'},
+            "mergeOn":mergeOnAvg,
+            # "minMetricColumn":'minMedIQR',
+            # "metricsAggregation":{'minMedIQR':'min'},
+            # "mergeOn":mergeOnMinMedIQR,
             'optimizers':list(),
             "saveMetadataColumns":["minMetricColumn",'optimizers','baselevelIterations'],
             "baselevelIterations": [100],
@@ -63,6 +63,7 @@ def compare(methodExperiments,problems,dimensions):
 
 allmethods=[
             ('nmhh2','/'),
+            ('nmhh2','/sprt-seq-t'),
             ('saGWOGroup','/'),
             ('sacmaesGWOGroup','/'),
             ('bigsacmaesGWOGroup','/'),
@@ -127,8 +128,8 @@ allproblems=initialproblems+extraProblems
 # http://www.sfu.ca/~ssurjano/environ.html
 
 initialdimensions=[5,50,100,500]
-# alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
-alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
+alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+# alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
 # alldimensions=[100]
 highdimensions=[10,15,30,50,100,500,750]
 lowerdimensions=[2,3,4,5,6,7,8,9] 

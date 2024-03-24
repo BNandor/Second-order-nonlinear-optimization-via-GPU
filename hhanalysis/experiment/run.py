@@ -7,8 +7,8 @@ import copy
 from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
-import runExperiment.mealpy.run
-import runExperiment.customhys.customhys.batchexperiments 
+#import runExperiment.mealpy.run
+#import runExperiment.customhys.customhys.batchexperiments 
 
 import pandas as pd
 
@@ -91,7 +91,7 @@ def runCUSTOMHySSuite():
             'dimensions':dimensions,
             'populationSize':populationSize,
             }
-    runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+ #   runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
 
 def runMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
@@ -119,7 +119,7 @@ def runMealpySuite():
             'populationSize':populationSize,
             'optimizers':optimizers,
             }
-    runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+  #  runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
 
 def runNMHHComputationalTimeExperiments():
         problems=lambda logspath: [("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json")]
@@ -169,7 +169,7 @@ def runSPRTTTestNMHHSuite():
               ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
               ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
 ]
-    dimensions=[5,50,100]
+    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
     populationSize=[30]
     config={'name':'sprt-seq-t',
             'problems':problems,
