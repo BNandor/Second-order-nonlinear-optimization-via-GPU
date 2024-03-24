@@ -121,18 +121,20 @@ def sprtCheckTrials(trials):
         (sample_size,hyp) = sequential_probability_ratio_test(best_perf, trials[i]['performanceSamples'], 1)
         totalSamplesNeeded+=sample_size
         
-        avg=np.average(trials[i]['performanceSamples'])
+        avg=np.average(trials[i]['performanceSamples'][0:sample_size])
         print(f"best: {best_perf} -> {best_mean}")
         print(f"new: {trials[i]['performanceSamples'][0:sample_size]} -> {avg}")
         print("Sample size required:", sample_size)
         if hyp == 0:
            continue
+        avg=np.average(trials[i]['performanceSamples'])#avg
+        totalSamplesNeeded+=len(best_perf)-sample_size
         if avg<best_mean:
-            best_mean=avg=np.average(trials[i]['performanceSamples'])#avg
+            best_mean=avg
             # best_perf=trials[i]['performanceSamples'][0:sample_size]
             best_perf=trials[i]['performanceSamples']
-            totalSamplesNeeded+=len(best_perf)-sample_size
-            histPlotOf(best_perf)
+            
+            # histPlotOf(best_perf)
     print(f"total samples needed: {totalSamplesNeeded}")
     print(f"total samples saved: {1-totalSamplesNeeded/(len(trials[0]['performanceSamples'])*trialCount)}")
     return (best_perf,best_mean)
@@ -169,5 +171,5 @@ extraProblems=['PROBLEM_MICHALEWICZ']
 #                'PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL','PROBLEM_SUMSQUARES','PROBLEM_SPHERE']
 allproblems=initialproblems+extraProblems
 # alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
-alldimensions=[50]
-testHH(allmethods,['PROBLEM_ROSENBROCK'],alldimensions)
+alldimensions=[5]
+testHH(allmethods,['PROBLEM_RASTRIGIN'],alldimensions)

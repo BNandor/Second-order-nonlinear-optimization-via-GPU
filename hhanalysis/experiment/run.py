@@ -133,7 +133,6 @@ def runNMHHComputationalTimeExperiments():
                         }
                 runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
 
-
 def runCUSTOMHySComputationalTimeExperiments():
         EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
         problems= [("Rosenbrock",f"hhanalysis/logs/rosenbrock.json")]
@@ -147,7 +146,6 @@ def runCUSTOMHySComputationalTimeExperiments():
                         }
   #              runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
 
-
 def runClusteringSuite():
     populationSize=[40]
     config={
@@ -156,10 +154,33 @@ def runClusteringSuite():
             }
     runClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
 
+def runSPRTTTestNMHHSuite():
+    problems=lambda logspath: [
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+              ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+              ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+              ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+              ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+              ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
+]
+    dimensions=[5,50,100]
+    populationSize=[30]
+    config={'name':'sprt-seq-t',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize}
+    runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)
 # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
-runNMHHSuite()
+# runNMHHSuite()
 # runCUSTOMHySSuite()
-#runMealpySuite()
+# runMealpySuite()
 # runClusteringSuite()
+runSPRTTTestNMHHSuite()

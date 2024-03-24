@@ -10,6 +10,7 @@
 #include "../../common/CommonStringUtils.h"
 #include "../../common/io/JsonOperations.cuh"
 #include "../../json.hpp"
+#include "./sampling/SPRTTTest.h"
 #include <utility>
 #include <vector>
 
@@ -33,13 +34,28 @@ using json = nlohmann::json;
 #define EXPERIMENT_HASH_SHA256 "no-hash-defined"
 #endif
 
+#ifndef  SAMPLING
+#define SAMPLING "fixed-size-samples"
+#endif
+
+#ifndef  SAMPLING_SPRTT_ALPHA
+#define SAMPLING_SPRTT_ALPHA 0.05
+#endif
+
+#ifndef  SAMPLING_SPRTT_BETA
+#define SAMPLING_SPRTT_BETA 0.05
+#endif
+
+#ifndef  SAMPLING_SPRTT_COHENS_D
+#define  SAMPLING_SPRTT_COHENS_D 1
+#endif
 
 class HyperLevel {
-
 protected:
     BaseLevel baseLevel=BaseLevel();
     Statistics statistics = Statistics();
     double minBaseLevelStatistic=std::numeric_limits<double>::max();
+    std::vector<double> bestSamples;
     std::unordered_map<std::string,OperatorParameters*> bestParameters=std::unordered_map<std::string,OperatorParameters*>();
 
     json logJson;
@@ -59,7 +75,6 @@ protected:
     }
 
     double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations){
-
         std::vector<double> samples;
         for(int i=0;i<sampleSize;i++) {
             baseLevel.loadInitialModel();
@@ -75,11 +90,72 @@ protected:
         logJson["trials"].push_back({{"med_+_iqr",medIqr},{"atEval",baseLevel.totalEvaluations},{"performanceSamples",samples}});
 
         if(medIqr < minBaseLevelStatistic) {
+            bestSamples.assign(samples.begin(), samples.end());
             std::cout<<"updating best solution "<<std::endl;
             minBaseLevelStatistic=medIqr;
             std::cout<<"cloning best parameters "<<std::endl;
             cloneParameters(parameters,bestParameters);
             std::cout<<"setting base level statistics "<<std::endl;
+            logJson["minBaseLevelStatistic"]=minBaseLevelStatistic;
+            logJson["bestParameters"]=getParametersJson(bestParameters);
+        }
+        return medIqr;
+    }
+
+    double getPerformanceSampleOfSize(int sampleSize,std::unordered_map<std::string,OperatorParameters*> & parameters,int totalBaseLevelEvaluations,int &usedSampleCount) {
+        if(sampleSize < 3 ) {
+            std::cerr<<"Invalid performance sample size "<<sampleSize<<std::endl;
+            return std::numeric_limits<double>::max();
+        }
+        double best_mean=SPRTTTest::mean(bestSamples);
+        usedSampleCount=0;
+        std::vector<double> samples;
+        //Start with minimal number of samples
+        for(int i=0;i<4&& i<sampleSize;i++) {
+            baseLevel.loadInitialModel();
+            double sampleF=baseLevel.optimize(&parameters,totalBaseLevelEvaluations);
+            std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
+            samples.push_back(sampleF);
+            ++usedSampleCount;
+        }
+        int hypothesis=-1;
+        for(int i=4;i<sampleSize;i++) {
+            hypothesis=SPRTTTest::checkIfNewMeanIsLessThanComparisonSequentialT(bestSamples,samples,SAMPLING_SPRTT_ALPHA,SAMPLING_SPRTT_BETA,SAMPLING_SPRTT_COHENS_D);
+            if(hypothesis == 0 ){
+                break;
+            }
+            baseLevel.loadInitialModel();
+            double sampleF=baseLevel.optimize(&parameters,totalBaseLevelEvaluations);
+            std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
+            samples.push_back(sampleF);
+            ++usedSampleCount;
+        }
+        double currentAvg=SPRTTTest::mean(samples);
+        if(hypothesis == 0 ) {
+            printf("new mean (%f) >= best mean (%f)\n",currentAvg, best_mean);
+        }
+        if(hypothesis == 1 ) {
+            printf("new mean (%f) < best mean (%f)\n",currentAvg, best_mean);
+        }
+        if(hypothesis == -1 ) {
+            printf("inconclusive SPRTTest.\n");
+        }
+        printf("Sample size required:%d\n", usedSampleCount);
+
+//        std::cout<<"calculating medIQR "<<std::endl;
+        double medIqr=statistics.median(samples) + statistics.IQR(samples);
+//        std::cout<<"updating json logs1 "<<std::endl;
+        logJson["baseLevelEvals"]=totalBaseLevelEvaluations;
+//        std::cout<<"updating json logs2 "<<std::endl;
+        logJson["trials"].push_back({{"med_+_iqr",medIqr},{"atEval",baseLevel.totalEvaluations},{"performanceSamples",samples}});
+
+        if( currentAvg < best_mean && hypothesis !=0 ) {
+//            std::cout<<"updating best solution "<<std::endl;
+            minBaseLevelStatistic=medIqr;
+            bestSamples.assign(samples.begin(), samples.end());
+//            std::cout<<"cloning best parameters "<<std::endl;
+            cloneParameters(parameters,bestParameters);
+//            std::cout<<"setting base level statistics "<<std::endl;
             logJson["minBaseLevelStatistic"]=minBaseLevelStatistic;
             logJson["bestParameters"]=getParametersJson(bestParameters);
         }

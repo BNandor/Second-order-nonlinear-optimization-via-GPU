@@ -1,6 +1,6 @@
 buildAndRun:
 	if [ -f ./opt ];then  rm opt ;fi
-	export LD_LIBRARY_PATH=$(ROOT)/libs && export CPATH=$(ROOT)/libs/include/nomad:$(ROOT)/libs/include/eigen3:$(ROOT)/libs/include/cmaes  && /usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -L$(ROOT)/libs  -lcmaes -lsgtelib -lnomadAlgos -lnomadEval -lnomadUtils -o opt -arch=sm_60  
+	export LD_LIBRARY_PATH=$(ROOT)/libs && export CPATH=$(ROOT)/libs/include/nomad:$(ROOT)/libs/include/eigen3:$(ROOT)/libs/include/cmaes:$(ROOT)/libs/include/boost  && /usr/local/cuda-11.4/bin/nvcc main.cu  -g -G  $(NVCCFLAGS) -L$(ROOT)/libs  -lcmaes -lsgtelib -lnomadAlgos -lnomadEval -lnomadUtils -o opt -arch=sm_60
 	echo "Staring optimizer" &&  ./opt
 
 test:

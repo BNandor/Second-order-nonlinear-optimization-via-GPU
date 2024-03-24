@@ -51,28 +51,71 @@ public:
         logJson["SA-temp0"]=temp0;
         logJson["SA-alpha"]=alpha;
         logJson["SA-temps"].push_back(temp);
-        for(int i=0; i < trials-1 || temp < 0; i++) {
+        if (STR_EQ(SAMPLING, "fixed-size-samples")) {
+            for (int i = 0; i < trials - 1 || temp < 0; i++) {
 
-            printf("[med+iqr]f: %f trial %u \n",currentF, i);
-            cloneParameters(currentParameters,currentMutatedByEpsilonParameters);
-            mutateParameters(currentMutatedByEpsilonParameters);
+                printf("[med+iqr]f: %f trial %u \n", currentF, i);
+                cloneParameters(currentParameters, currentMutatedByEpsilonParameters);
+                mutateParameters(currentMutatedByEpsilonParameters);
 
-            double currentFPrime=getPerformanceSampleOfSize(baseLevelSampleSize,currentMutatedByEpsilonParameters,totalBaseLevelEvaluations);
-            printf("[med+iqr]f': %f trial %u \n",currentFPrime, i);
-            if(currentFPrime < currentF ) {
-                cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
-                currentF=currentFPrime;
-            }else {
-                double r= std::uniform_real_distribution<double>(0,1)(generator);
-                if(r<exp((currentF-currentFPrime)/temp)) {
-                    cloneParameters(currentMutatedByEpsilonParameters,currentParameters);
-                    currentF=currentFPrime;
-                    acceptedWorse++;
-                    std::cout<<"Accepted worse at "<<i<<"/"<<trials-1<<" at temp: "<<temp<<std::endl;
+                double currentFPrime = getPerformanceSampleOfSize(baseLevelSampleSize,
+                                                                  currentMutatedByEpsilonParameters,
+                                                                  totalBaseLevelEvaluations);
+                printf("[med+iqr]f': %f trial %u \n", currentFPrime, i);
+                if (currentFPrime < currentF) {
+                    cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                    currentF = currentFPrime;
+                } else {
+                    double r = std::uniform_real_distribution<double>(0, 1)(generator);
+                    if (r < exp((currentF - currentFPrime) / temp)) {
+                        cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                        currentF = currentFPrime;
+                        acceptedWorse++;
+                        std::cout << "Accepted worse at " << i << "/" << trials - 1 << " at temp: " << temp
+                                  << std::endl;
+                    }
                 }
+                temp = temp0 / (1 + alpha * i);
+                logJson["SA-temps"].push_back(temp);
             }
-            temp=temp0/(1+alpha*i);
-            logJson["SA-temps"].push_back(temp);
+        }
+
+        if (STR_EQ(SAMPLING, "SPRT-T-test")) {
+            int totalSamples = (trials-1)*baseLevelSampleSize;
+            int usedTotalSamples=0;
+            int i=0;
+            while (usedTotalSamples <  totalSamples) {
+
+                printf("[med+iqr]f: %f trial %u \n", currentF, i);
+                cloneParameters(currentParameters, currentMutatedByEpsilonParameters);
+                mutateParameters(currentMutatedByEpsilonParameters);
+
+                int maxUseableSamples = std::min(baseLevelSampleSize, totalSamples - usedTotalSamples);
+                int usedSamples=baseLevelSampleSize;
+                double currentFPrime  = getPerformanceSampleOfSize(maxUseableSamples,
+                                                                   currentMutatedByEpsilonParameters,
+                                                                   totalBaseLevelEvaluations,usedSamples);
+                usedTotalSamples+=usedSamples;
+
+                printf("[med+iqr]f': %f trial %u \n", currentFPrime, i);
+                if (currentFPrime < currentF) {
+                    cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                    currentF = currentFPrime;
+                } else {
+                    double r = std::uniform_real_distribution<double>(0, 1)(generator);
+                    if (r < exp((currentF - currentFPrime) / temp)) {
+                        cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                        currentF = currentFPrime;
+                        acceptedWorse++;
+                        std::cout << "Accepted worse at " << i << "/" << trials - 1 << " at temp: " << temp
+                                  << std::endl;
+                    }
+                }
+                temp = temp0 / (1 + alpha * i);
+                logJson["SA-temps"].push_back(temp);
+                i+=1;
+            }
+
         }
 
         printParameters(bestParameters);
