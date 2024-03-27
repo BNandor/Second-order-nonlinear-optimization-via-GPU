@@ -169,7 +169,7 @@ def runSPRTTTestNMHHSuite():
               ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
               ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
 ]
-    dimensions=[[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]]
+    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
     populationSize=[30]
     config={'name':'sprt-seq-t',
             'problems':problems,
