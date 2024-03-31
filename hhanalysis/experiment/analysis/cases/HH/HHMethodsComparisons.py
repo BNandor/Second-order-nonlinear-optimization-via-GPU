@@ -132,7 +132,7 @@ alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
 # alldimensions=[5,6,7,8,9,10,15,30,50,100,500,750]
 # alldimensions=[100]
 highdimensions=[10,15,30,50,100,500,750]
-lowerdimensions=[2,3,4,5,6,7,8,9] 
+lowerdimensions=[2,3,4,5,6,7,8,9]
 singleDim=[2]
 compare(allmethods,allproblems,alldimensions)
 # compare(allmethods,initialproblems,initialdimensions)

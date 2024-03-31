@@ -176,6 +176,15 @@ def runSPRTTTestNMHHSuite():
             'dimensions':dimensions,
             'populationSize':populationSize}
     runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)
+
+def runSPRTClusteringSuite():
+    populationSize=[120]
+    config={
+                'name':'/clustering/wine/constrained/sprt',
+                'populationSize':populationSize
+            }
+    runSPRTClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
+
 # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
@@ -183,4 +192,5 @@ def runSPRTTTestNMHHSuite():
 # runCUSTOMHySSuite()
 # runMealpySuite()
 # runClusteringSuite()
-runSPRTTTestNMHHSuite()
+# runSPRTTTestNMHHSuite()
+runSPRTClusteringSuite()

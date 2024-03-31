@@ -1,0 +1,24 @@
+{
+    "experiments": {
+        "239dc565437a31188200e1997b59d5cdf11e454753f1636207a1d32d2bb0567d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_CLUSTERING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA//clustering/iris/40k/sprt/clustering.json"
+                ],
+                "baselevelIterations": 1000,
+                "populationSize": 40,
+                "modelSize": 12,
+                "trialSampleSizes": 20,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"                 -DPROBLEM_PATH=\\\"hhanalysis/experiment/dataset/clustering/iris/iris.txt\\\"                 -DPROBLEM_CLUSTERING_POINT_DIM=4                 -DPROBLEM_CLUSTERING_K=3                 -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 37061.819186686,
+                "threads": 128
+            }
+        }
+    }
+}
