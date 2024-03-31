@@ -369,3 +369,36 @@ def runSPRTTestNMHH(logsPathFromRoot,root,config):
     params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT,False)
+
+def runSPRTClusterinProblems(logsPathFromRoot,root,config):
+    logspath=f"{logsPathFromRoot}/SA-CMA-ES-NMHH/GWO/bigSA/{config['name']}"
+    recordspath=f"{root}/{logspath}/records.json"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/CMC/cmc.txt"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/glass/glass.txt"
+    datapath=f"hhanalysis/experiment/dataset/clustering/iris/iris.txt"
+    # datapath=f"hhanalysis/experiment/dataset/clustering/wine/wine.txt"
+    # datapath=f"hhanalysis/experiment/dataset/test/test.txt"
+    with open(f"{root}/{datapath}", 'r') as dataset:
+            numbers = dataset.read().split()
+            samples=int(numbers[0])
+            dimension=int(numbers[1])
+            clusters=int(numbers[2])
+
+    params={}
+    params["problems"]=zipWithProperty([("PROBLEM_CLUSTERING",f"{logspath}/clustering.json")],"problems")
+    params["baselevelIterations"]=zipWithProperty([1000],"baselevelIterations")
+    params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
+    params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([20],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    flags=[f"   -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote} \
+                -DPROBLEM_PATH={backslash}{dquote}{datapath}{backslash}{dquote} \
+                -DPROBLEM_CLUSTERING_POINT_DIM={dimension} \
+                -DPROBLEM_CLUSTERING_K={clusters} \
+                -DSAMPLING={backslash}{dquote}SPRT-T-test{backslash}{dquote}"]
+    params["additionalFlags"]=zipWithProperty(flags,"additionalFlags")
+    # params["hyperLevelMethod"]=zipWithProperty(["SA-CMA-ES"],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT,False)
