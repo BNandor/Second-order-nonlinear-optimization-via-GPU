@@ -178,9 +178,9 @@ def runSPRTTTestNMHHSuite():
     runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 def runSPRTClusteringSuite():
-    populationSize=[40]
+    populationSize=[120]
     config={
-                'name':'/clustering/iris/40k/sprt',
+                'name':'/clustering/glass/constrained/sprt',
                 'populationSize':populationSize
             }
     runSPRTClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
