@@ -386,11 +386,11 @@ def runSPRTClusterinProblems(logsPathFromRoot,root,config):
 
     params={}
     params["problems"]=zipWithProperty([("PROBLEM_CLUSTERING",f"{logspath}/clustering.json")],"problems")
-    params["baselevelIterations"]=zipWithProperty([1500],"baselevelIterations")
+    params["baselevelIterations"]=zipWithProperty([1000],"baselevelIterations")
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty([clusters*dimension],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([20],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([50],"trialStepCount")
+    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"   -DBASE_PERTURB_EXTRA_OPERATORS={backslash}{dquote}GWO{backslash}{dquote} \

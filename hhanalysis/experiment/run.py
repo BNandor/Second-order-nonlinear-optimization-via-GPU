@@ -180,7 +180,7 @@ def runSPRTTTestNMHHSuite():
 def runSPRTClusteringSuite():
     populationSize=[120]
     config={
-                'name':'/clustering/glass/constrained/sprt',
+                'name':'/clustering/wine/constrained/sprt',
                 'populationSize':populationSize
             }
     runSPRTClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
