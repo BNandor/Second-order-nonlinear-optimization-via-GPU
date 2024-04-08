@@ -1,0 +1,24 @@
+{
+    "experiments": {
+        "f5a7356efa6ac9d11db28b2ae1edbe8b791f64131deec930b312366bc126b494": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_CLUSTERING",
+                    "hhanalysis/logs/SA-CMA-ES-NMHH/GWO/bigSA//clustering/wine/constrained/sprt/clustering.json"
+                ],
+                "baselevelIterations": 1000,
+                "populationSize": 120,
+                "modelSize": 63,
+                "trialSampleSizes": 20,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DBASE_PERTURB_EXTRA_OPERATORS=\\\"GWO\\\"                 -DPROBLEM_PATH=\\\"hhanalysis/experiment/dataset/clustering/glass/glass.txt\\\"                 -DPROBLEM_CLUSTERING_POINT_DIM=9                 -DPROBLEM_CLUSTERING_K=7                 -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 272908.17864868,
+                "threads": 128
+            }
+        }
+    }
+}
