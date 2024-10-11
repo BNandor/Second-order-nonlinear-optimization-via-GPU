@@ -57,13 +57,14 @@ def recordExperiment(experiment,experimentId,experimentRecordsPath,metadata):
     currentRecords=json.load(open(experimentRecordsPath,'r'))
     currentRecords["experiments"][experimentId]={"experiment":experiment,"metadata":metadata}
     writeJsonToFile(experimentRecordsPath,json.dumps(currentRecords, indent = 4))
-    print(f"Saved {experiment} to {experimentRecordsPath}")
+    # print(f"Saved {experiment} to {experimentRecordsPath}")
 
 def setOrDefault(experiment,flag,default):
     if flag in experiment:
         return experiment[flag]
     else:
         return default
+    
 def enforceFunctionEvaluationLimit(recordsPath):
     problems=['rosenbrock.json',
               'rastrigin.json',
@@ -79,6 +80,7 @@ def enforceFunctionEvaluationLimit(recordsPath):
               "sphere.json"]
     for problem in problems:
         trimExtraSamples(f"{recordsPath.replace('/records.json','')}/{problem}")
+
 def experimentWith(experiment,recordsPath,experimentId,threads=128):
             problemname=experiment['problems'][0]
             problemLogPath=experiment['problems'][1]

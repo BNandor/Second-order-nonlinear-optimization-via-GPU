@@ -4,13 +4,13 @@ import subprocess
 import itertools
 import os
 import copy
+import pandas as pd
 from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
+from runExperiment.classification.commonClassificationRun import *
 #import runExperiment.mealpy.run
 #import runExperiment.customhys.customhys.batchexperiments 
-
-import pandas as pd
 
 
 backslash="\\"
@@ -157,21 +157,22 @@ def runClusteringSuite():
 def runSPRTTTestNMHHSuite():
     problems=lambda logspath: [
               ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
-              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
-              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
-              ("PROBLEM_TRID",f"{logspath}/trid.json"),
-              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
-              ("PROBLEM_QING",f"{logspath}/qing.json"),
-              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
-              ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
-              ("PROBLEM_LEVY",f"{logspath}/levy.json"),
-              ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
-              ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
-              ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
+        #       ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+        #       ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+        #       ("PROBLEM_TRID",f"{logspath}/trid.json"),
+        #       ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+        #       ("PROBLEM_QING",f"{logspath}/qing.json"),
+        #       ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+        #       ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+        #       ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+        #       ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+        #       ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+        #       ("PROBLEM_SPHERE",f"{logspath}/sphere.json")
 ]
-    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+#     dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+    dimensions=[15]
     populationSize=[30]
-    config={'name':'sprt-seq-t',
+    config={'name':'sprtGraphExample',
             'problems':problems,
             'dimensions':dimensions,
             'populationSize':populationSize}
@@ -185,6 +186,78 @@ def runSPRTClusteringSuite():
             }
     runSPRTClusterinProblems(LOGS_PATH_FROM_ROOT,ROOT,config)
 
+def runpyNMHHClassificationSuite():
+    classifiers=[
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid']
+                        },
+                },]
+    problems=lambda logspath: [{'name':"Digits"}]
+    solutionConfigs=[{'populationSize':5,'baselevelIterations':50,'pyNMHHSteps':3}]
+    baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
+    config={
+                'name':'/smallDatasets/smallIter',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':10,
+                'baseLevelConfigs':baseLevelConfigs,
+                'solver':'pyNMHH'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,pyNMHHClassificationExperiment)
+
+
+def runbayesGPClassificationSuite():
+    classifiers=[
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid']
+                        },
+                },]
+    problems=lambda logspath: [{'name':"Digits"}]
+    solutionConfigs=[{'iterations':150}]
+    config={
+                'name':'/smallDatasets/smallIter',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':10,
+                'baseLevelConfigs':[None],
+                'solver':'bayesGP'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,bayesGPClassificationExperiment)
+
 # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
@@ -193,4 +266,7 @@ def runSPRTClusteringSuite():
 # runMealpySuite()
 # runClusteringSuite()
 # runSPRTTTestNMHHSuite()
-runSPRTClusteringSuite()
+# runSPRTClusteringSuite()
+# runSPRTTTestNMHHSuite()
+runpyNMHHClassificationSuite()
+runbayesGPClassificationSuite()

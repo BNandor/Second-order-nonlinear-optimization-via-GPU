@@ -59,24 +59,24 @@ def compare(methodExperiments,problems,dimensions):
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"],'minStd','samples']]
 
     print(f"Problems: {problems} \n Dimensions: {dimensions}")
-    methodsComparison(all,metadata,True,mapBarplotColors,optimizerPrettify)
+    methodsComparison(all,metadata,True,mapBarplotColors,optimizerPrettify,optimizerOrderlist=[4,1,2,3,5,6,7,8,9])
 
 allmethods=[
             ('nmhh2','/'),
             ('nmhh2','/sprt-seq-t'),
-            ('saGWOGroup','/'),
-            ('sacmaesGWOGroup','/'),
-            ('bigsacmaesGWOGroup','/'),
-            ('bigsacmaesGroup','/'),
-            ('sacmaesGroup','/'),   
-            ('cmaesGWOGroup','/'),
-            ('cmaesGroup','/'),
-            ('bigsamadsGroup','/'),
-            ('bigsamadsGWOGroup','/'),
-            ('saMadsGWOGroup','/'),
-            ('madsGWOGroup','/'),
-            ('madsGroup','/'),
-            ('saMadsGroup','/'),
+            # ('saGWOGroup','/'),
+            # ('sacmaesGWOGroup','/'),
+            # ('bigsacmaesGWOGroup','/'),
+            # ('bigsacmaesGroup','/'),
+            # ('sacmaesGroup','/'),   
+            # ('cmaesGWOGroup','/'),
+            # ('cmaesGroup','/'),
+            # ('bigsamadsGroup','/'),
+            # ('bigsamadsGWOGroup','/'),
+            # ('saMadsGWOGroup','/'),
+            # ('madsGWOGroup','/'),
+            # ('madsGroup','/'),
+            # ('saMadsGroup','/'),
 
             # ('nmhh2','/bigDim/100/bigPop/100'),
             # ('saGWOGroup','/bigDim/100/bigPop/100'),

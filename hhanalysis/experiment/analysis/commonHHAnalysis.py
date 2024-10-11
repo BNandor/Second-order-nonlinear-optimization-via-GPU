@@ -6,7 +6,7 @@ from common import *
 import tabloo
 import numpy as np
 
-def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',labelfunction= lambda x:x):
+def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',labelfunction= lambda x:x, optimizerOrderlist=[]):
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"]]]
     all=all.groupby(['problemName','modelSize'])
@@ -29,6 +29,9 @@ def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',l
     
     addWilcoxRankSumResultToEachRow(transpose,['problemName','modelSize'],[f'{column}-samples' for column in metadata['optimizers']])
     statisticsforDimension=calculateWilcoxRanksumStatisticsForEachDimension(transpose,metadata['optimizers'])
+    optimizerUsed= [x for _, x in sorted(zip(optimizerOrderlist, [opt for opt in metadata['optimizers']]))] if optimizerOrderlist!=[] else metadata['optimizers']
+    printMinMedIQRStdHighlighWilcoxRanksums(transpose,optimizerUsed)
+
     # printStatisticsOfWilcoxRanksums(transpose,metadata['optimizers'])
     # printScoreOfWilcoxRanksums(transpose,metadata['optimizers'])
     scoresPerDim=printScoreOfWilcoxRanksumsPerDim(transpose,metadata['optimizers'])
@@ -49,8 +52,8 @@ def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',l
     # filteredExperiments=transpose[['problemName','modelSize']+metadata['optimizers']]
     # filteredExperiments=filteredExperiments.rename(columns=lambda c:c.replace('/benchmarks/dim/2_100/pop/30',''))
     transpose=transpose.sort_values(by=['problemName','modelSize'])
-    tabloo.show(transpose)
-    # print(filteredExperiments.to_latex(index=False))
+    # tabloo.show(transpose)
+    # print(transpose.to_latex(index=False))
     # printMinMedIQRStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # export the styled dataframe to LaTeX
     # print(comparisonTableData.to_latex(index=False))
