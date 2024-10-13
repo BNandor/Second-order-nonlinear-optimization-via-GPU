@@ -24,15 +24,22 @@ from runExperiment.classification.classifiers import getClassifiers
 from runExperiment.classification.datasets import getDatasets
 import ipynb.fs.full.runExperiment.hyperParameterTuning.pyNMHH.classification.classify as classify
 
+
 def pyNMHHHyperParametersToGP(paramConfig):
     gpParamconfig=[]
     for (key,value) in paramConfig.items():
-            if isinstance(value[0], int):
+            if isinstance(value[0], int) and not isinstance(value[0], bool):
                 gpParamconfig.append(Integer(value[0],value[1],name=key))
-            elif isinstance(value[0], float):
+            elif isinstance(value[0], float) and not isinstance(value[0], bool):
                 gpParamconfig.append(Real(value[0],value[1],name=key))
             else:
-                gpParamconfig.append(Categorical(value,name=key))
+                converted=[]
+                for category in value:
+                    if isinstance(category,np.str_):
+                          converted.append(str(category))
+                    else:
+                        converted.append(category)
+                gpParamconfig.append(Categorical(converted,name=key))
     return gpParamconfig
 
 def unflatten(flatParams,paramConfig):
@@ -45,12 +52,19 @@ def unflatten(flatParams,paramConfig):
             else:
                 unflattened[key]=flatValue
     return unflattened
-
+def castToRightString(params):
+    # First, let's convert any numpy string to Python string
+    for key, value in params.items():
+        if isinstance(value, np.str_):
+            params[key] = str(value)
+        elif isinstance(value, np.generic):  # This covers other numpy types like np.int64, np.float64, etc.
+            params[key] = value.item()
+    return params
 def bayesGPTuning(config):      
     gpParams=pyNMHHHyperParametersToGP((config['hyperParameters']))
     @use_named_args(gpParams)
     def objective(**params):
-        clf = config['classifier'](**params)
+        clf = config['classifier'](**castToRightString(params))
         scores = cross_val_score(clf, config['X'], config['Y'],cv=config['crossValidations'],scoring='accuracy',n_jobs=-1)
         return -np.mean(scores)
     res_gp = gp_minimize(objective, gpParams, n_calls=config['bayesGPIterations'], random_state=0,verbose=True,n_jobs=-1)
@@ -80,6 +94,7 @@ def toPersist(config,experiment,solutions):
         persistedData['hyperParameters']=experiment['classifier']['hyperparameters']
         persistedData['classifierModel']=experiment['classifier']['model'] 
         persistedData['solutions']=json.loads(json.dumps(solutions))
+        persistedData['totalFunctionEvaluations']=config['bayesGPIterations']
         persistedData['solver']=experiment['solver']
         persistedData.pop('X')
         persistedData.pop('classifier')

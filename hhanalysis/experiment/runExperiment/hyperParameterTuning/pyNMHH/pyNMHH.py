@@ -7,6 +7,7 @@ from scipy.optimize import minimize
 import numpy as np
 import GPyOpt
 from GPyOpt.methods import BayesianOptimization
+from runExperiment.hyperParameterTuning.pyNMHH.operators.bayesGP import bayesGP
 import multiprocessing
 
 class OptimizationHistory:
@@ -109,9 +110,11 @@ def apply_operator(operator, params, population, previous_population, func,hist)
     elif operator == 'LBFGS':
         return lbfgs(population, params, func)
     elif operator == 'best':
-        return select_best(population + previous_population, func, len(population))
+        return select_best(previous_population,population , func, len(population))
     elif operator == 'BayesGP':
-        return bayes_gp(hist, func)
+        newX,newY=bayesGP(hist,func)
+        # oldsInds=bayes_gp(hist, func)
+        return [Individual(nextOffspring,fitness) for (nextOffspring,fitness) in zip(newX,newY)]
     else:
         return population
 
@@ -188,9 +191,28 @@ def get_operator_params(baseLevelConfig,category, operator):
     key = f"{category.capitalize()}{operator}OperatorParams"
     return baseLevelConfig['OperatorParams'].get(key, {})
 
-def select_best(combined_population, func, num_select):
-    return sorted(combined_population, key=lambda ind: ind.evaluate(func))[:num_select]
+def select_best(current_population,offspring_population, func, num_select):
+    sorted_current = sorted(current_population, key=lambda ind: ind.evaluate(func))
+    
+    # Determine the number of elites to keep
+    num_elites = max(3, int(0.1 * num_select))  # Keep at least 1, up to 10% as elites
+    
+    # Select the elites from the current population
+    elites = sorted_current[:num_elites]
+    
+    # Sort the offspring population
+    sorted_offspring = sorted(offspring_population, key=lambda ind: ind.evaluate(func))
+    
+    # Select the best individuals from the offspring to fill the rest of the new population
+    selected_offspring = sorted_offspring[:num_select - num_elites]
+    
+    # Combine elites and selected offspring
+    new_population = elites + selected_offspring
+    
+    return new_population
+    # return sorted(combined_population, key=lambda ind: ind.evaluate(func))[:num_select]
 
+# Not used 
 def bayes_gp(hist,func):
     histsize=len(hist.population_history)
     X = []

@@ -205,11 +205,61 @@ def runpyNMHHClassificationSuite():
                   'model':'SVM',
                   'hyperparameters': {
                         'C': [1.0,50.0],
-                        "kernel":['linear','poly','rbf','sigmoid']
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
                         },
-                },]
-    problems=lambda logspath: [{'name':"Digits"}]
-    solutionConfigs=[{'populationSize':5,'baselevelIterations':50,'pyNMHHSteps':3}]
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # }
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'}]
+    solutionConfigs=[{'populationSize':5,'baselevelIterations':30,'pyNMHHSteps':5}]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     config={
                 'name':'/smallDatasets/smallIter',
@@ -237,15 +287,65 @@ def runbayesGPClassificationSuite():
                         "criterion":['gini','entropy']
                    }
                 },
-                {
+                 {
                   'name':'SVM',
                   'model':'SVM',
                   'hyperparameters': {
                         'C': [1.0,50.0],
-                        "kernel":['linear','poly','rbf','sigmoid']
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
                         },
-                },]
-    problems=lambda logspath: [{'name':"Digits"}]
+                },
+                 {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # },
+                 {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"}]
     solutionConfigs=[{'iterations':150}]
     config={
                 'name':'/smallDatasets/smallIter',
@@ -268,5 +368,5 @@ def runbayesGPClassificationSuite():
 # runSPRTTTestNMHHSuite()
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
-runpyNMHHClassificationSuite()
+# runpyNMHHClassificationSuite()
 runbayesGPClassificationSuite()

@@ -30,8 +30,8 @@ def getDatasets():
     return {
         'Digits': datasets.load_digits,
         # (iris.data, iris.target, 'Iris'),
-        # 'BreastCancer': datasets.load_breast_cancer,
-        # 'Wine':datasets.load_wine,
+        'BreastCancer': datasets.load_breast_cancer,
+        'Wine':datasets.load_wine,
         'Banknotes': lambda :read_banknotes(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/BankNote_Authentication.csv')
         # (boston.data, boston.target, 'Boston'),
         # (covtype.data[:100], covtype.target[:100], 'Covtype')

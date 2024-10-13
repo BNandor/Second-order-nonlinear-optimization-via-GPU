@@ -25,6 +25,7 @@ def toPersist(config,experiment,solutions):
         persistedData=copy.copy(config)
         persistedData['hyperParameters']=experiment['classifier']['hyperparameters']
         persistedData['classifierModel']=experiment['classifier']['model'] 
+        persistedData['totalFunctionEvaluations']=config['baselevelIterations']*config['pyNMHHSteps']
         persistedData['solutions']=json.loads(json.dumps(solutions))
         persistedData['solver']=experiment['solver']
         persistedData.pop('X')
