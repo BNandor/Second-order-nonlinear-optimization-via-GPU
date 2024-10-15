@@ -8,10 +8,12 @@ import numpy as np
 import GPyOpt
 from GPyOpt.methods import BayesianOptimization
 from runExperiment.hyperParameterTuning.pyNMHH.operators.bayesGP import bayesGP
+from runExperiment.hyperParameterTuning.pyNMHH.operators.bayesTPE import bayesTPE
 import multiprocessing
 
 class OptimizationHistory:
     def __init__(self):
+        self.operatorStates={}
         self.best_offspring = []
         self.function_values = []
         self.population_history = []
@@ -115,8 +117,12 @@ def apply_operator(operator, params, population, previous_population, func,hist)
         newX,newY=bayesGP(hist,func)
         # oldsInds=bayes_gp(hist, func)
         return [Individual(nextOffspring,fitness) for (nextOffspring,fitness) in zip(newX,newY)]
+    elif operator == 'BayesTPE':
+        newX,newY=bayesTPE(hist,func)
+        return [Individual(nextOffspring,fitness) for (nextOffspring,fitness) in zip(newX,newY)]
     else:
-        return population
+        raise ValueError("Invalid operator")
+        # return population
 
 def differential_evolution(population, params, func):
     CR = params['DE_CR']['value']
@@ -166,12 +172,21 @@ def genetic_algorithm(population, params, func):
 
 def gradient_descent(population, params, func):
     
-    alpha = params['GD_ALPHA']['value']
+    # alpha = params['GD_ALPHA']['value']
+    # fevals = int(params['GD_FEVALS']['value'])
+    
+    # new_population = []
+    # for individual in population:
+    #     result = minimize(func, individual.genes, method='CG', options={'maxiter': fevals})
+    #     new_population.append(Individual(result.x, result.fun))
     fevals = int(params['GD_FEVALS']['value'])
     
+    # new_population = copy.deepcopy(population)
     new_population = []
+    # best=sorted(population, key=lambda ind: ind.evaluate(func))[0]
     for individual in population:
-        result = minimize(func, individual.genes, method='CG', options={'maxiter': fevals})
+        result = minimize(func, individual.genes,bounds=[(low,up)  for (low,up) in zip(func.lowerbounds,func.upperbounds)], method='CG', options={'maxfun':len(individual.genes),'maxiter': 1,'eps':1.0})
+        # new_population[population.index(best)]=Individual(result.x, result.fun)
         new_population.append(Individual(result.x, result.fun))
     return new_population
 
@@ -181,10 +196,14 @@ def lbfgs(population, params, func):
     c2 = params['LBFGS_C2']['value']
     fevals = int(params['LBFGS_FEVALS']['value'])
     
+    # new_population = copy.deepcopy(population)
+    # best=sorted(population, key=lambda ind: ind.evaluate(func))[0]
     new_population = []
     for individual in population:
-        result = minimize(func, individual.genes, method='L-BFGS-B', options={'maxiter': fevals, 'maxcor': 5})
+        result = minimize(func,  individual.genes, bounds=[(low,up)  for (low,up) in zip(func.lowerbounds,func.upperbounds)], method='L-BFGS-B',options={'maxfun':len(individual.genes),'maxiter': 1, 'maxcor': 5,'eps':1.0})
+        # new_population[population.index(best)]=Individual(result.x, result.fun)
         new_population.append(Individual(result.x, result.fun))
+    # new_population.append
     return new_population
 
 def get_operator_params(baseLevelConfig,category, operator):
@@ -192,25 +211,25 @@ def get_operator_params(baseLevelConfig,category, operator):
     return baseLevelConfig['OperatorParams'].get(key, {})
 
 def select_best(current_population,offspring_population, func, num_select):
-    sorted_current = sorted(current_population, key=lambda ind: ind.evaluate(func))
+    # sorted_current = sorted(current_population, key=lambda ind: ind.evaluate(func))
     
-    # Determine the number of elites to keep
-    num_elites = max(3, int(0.1 * num_select))  # Keep at least 1, up to 10% as elites
+    # # Determine the number of elites to keep
+    # num_elites = max(3, int(0.1 * num_select))  # Keep at least 1, up to 10% as elites
     
-    # Select the elites from the current population
-    elites = sorted_current[:num_elites]
+    # # Select the elites from the current population
+    # elites = sorted_current[:num_elites]
     
-    # Sort the offspring population
-    sorted_offspring = sorted(offspring_population, key=lambda ind: ind.evaluate(func))
+    # # Sort the offspring population
+    # sorted_offspring = sorted(offspring_population, key=lambda ind: ind.evaluate(func))
     
-    # Select the best individuals from the offspring to fill the rest of the new population
-    selected_offspring = sorted_offspring[:num_select - num_elites]
+    # # Select the best individuals from the offspring to fill the rest of the new population
+    # selected_offspring = sorted_offspring[:num_select - num_elites]
     
-    # Combine elites and selected offspring
-    new_population = elites + selected_offspring
+    # # Combine elites and selected offspring
+    # new_population = elites + selected_offspring
     
-    return new_population
-    # return sorted(combined_population, key=lambda ind: ind.evaluate(func))[:num_select]
+    # return new_population
+    return sorted(current_population+offspring_population, key=lambda ind: ind.evaluate(func))[:num_select]
 
 # Not used 
 def bayes_gp(hist,func):
@@ -286,7 +305,7 @@ def NMHHBaseOpt(wrapped_objective, initialPopulation, max_evaluations, baseLevel
 
             # Store population history    
             history.add_population([offspring.genes for offspring in population],[offspring.evaluate(wrapped_objective) for offspring in population])
-            if wrapped_objective.eval_count % (max_evaluations // 10) == 0:         
+            if  (wrapped_objective.eval_count % (max_evaluations // 10 if max_evaluations>10  else max_evaluations) == 0):         
                 if not isinstance(best_fitness, float ):
                     best_fitness=best_fitness[0]
                 print(f"                >>>>Evaluation count: {wrapped_objective.eval_count}, Best fitness = {best_fitness}")

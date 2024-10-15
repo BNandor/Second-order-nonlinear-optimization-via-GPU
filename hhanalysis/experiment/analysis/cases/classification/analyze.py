@@ -85,6 +85,6 @@ def main(file_paths: List[str]):
 
 if __name__ == "__main__":
     # Replace with your actual file paths
-    file_paths = ["/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/pyNMHH/classification/RandomForest/smallDatasets/smallIter/records.json",
-                  "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/bayesGP/classification/RandomForest/smallDatasets/smallIter/records.json"]  # Add more file paths as needed
+    file_paths = ["/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/pyNMHH/classification/DecisionTree/smallDatasets/smallIter/records.json",
+                  "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/bayesGP/classification/DecisionTree/smallDatasets/smallIter/records.json"]  # Add more file paths as needed
     main(file_paths)

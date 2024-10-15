@@ -166,6 +166,173 @@
             "metadata": {
                 "elapsedTimeSec": 3327.4723772259895
             }
+        },
+        "0a5d32523eb9da4c7bfb930dfabf137ce6f0600008433a5cb6139154fdd19298": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "DecisionTree",
+                "datasetName": "Wine",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9210922787193975,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 26,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 6,
+                            "max_features": 26,
+                            "max_leaf_nodes": 42
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9212806026365349,
+                        "solution": {
+                            "criterion": "entropy",
+                            "splitter": "random",
+                            "max_depth": 5,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 1,
+                            "max_features": 64,
+                            "max_leaf_nodes": 17
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9210922787193975,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 26,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 6,
+                            "max_features": 26,
+                            "max_leaf_nodes": 42
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9272128060263652,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "random",
+                            "max_depth": 22,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 2,
+                            "max_features": 56,
+                            "max_leaf_nodes": 25
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9210922787193975,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 7,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 6,
+                            "max_features": 41,
+                            "max_leaf_nodes": 50
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9212806026365349,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 13,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 3,
+                            "max_features": 10,
+                            "max_leaf_nodes": 18
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9212806026365348,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 50,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 4,
+                            "max_features": 8,
+                            "max_leaf_nodes": 20
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9210922787193975,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 26,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 6,
+                            "max_features": 26,
+                            "max_leaf_nodes": 42
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9440677966101695,
+                        "solution": {
+                            "criterion": "entropy",
+                            "splitter": "random",
+                            "max_depth": 50,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "max_features": 53,
+                            "max_leaf_nodes": 17
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9210922787193975,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 5,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 6,
+                            "max_features": 19,
+                            "max_leaf_nodes": 20
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2911.393343696982
+            }
         }
     }
 }

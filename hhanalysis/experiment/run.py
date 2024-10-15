@@ -259,10 +259,12 @@ def runpyNMHHClassificationSuite():
                 }
                 ]
     problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'}]
-    solutionConfigs=[{'populationSize':5,'baselevelIterations':30,'pyNMHHSteps':5}]
-    baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
+    solutionConfigs=[{'populationSize':1,'baselevelIterations':150,'pyNMHHSteps':1}]
+#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
+    baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
+    
     config={
-                'name':'/smallDatasets/smallIter',
+                'name':'/smallDatasets/HybridBayes',
                 'classifiers':classifiers,
                 'problems': problems,
                 'solutionConfigs':solutionConfigs,
@@ -368,5 +370,5 @@ def runbayesGPClassificationSuite():
 # runSPRTTTestNMHHSuite()
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
-# runpyNMHHClassificationSuite()
-runbayesGPClassificationSuite()
+runpyNMHHClassificationSuite()
+# runbayesGPClassificationSuite()

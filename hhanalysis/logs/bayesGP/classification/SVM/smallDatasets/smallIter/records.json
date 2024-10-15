@@ -185,6 +185,192 @@
             "metadata": {
                 "elapsedTimeSec": 3873.8147419820016
             }
+        },
+        "d42dd77fce9fa3fd5bc9f96c204da5fd33d3f338c811228d99e4c18a44dd3574": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "SVM",
+                "datasetName": "Wine",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.685655752124196,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.8913809266658277,
+                            "shrinking": 0,
+                            "tol": 0.0007828243539541333,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 6016.868585265009
+            }
         }
     }
 }

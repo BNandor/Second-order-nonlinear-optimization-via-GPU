@@ -60,6 +60,7 @@ def castToRightString(params):
         elif isinstance(value, np.generic):  # This covers other numpy types like np.int64, np.float64, etc.
             params[key] = value.item()
     return params
+
 def bayesGPTuning(config):      
     gpParams=pyNMHHHyperParametersToGP((config['hyperParameters']))
     @use_named_args(gpParams)

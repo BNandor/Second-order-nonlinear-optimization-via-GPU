@@ -69,5 +69,10 @@ def bayesGP(hist,func):
     gpParams=toGPParams(func)
     popsize=len(hist.population_history[0])
     newpointcount=popsize
-    res_gp = gp_minimize(func, gpParams,x0=X,y0=Y, n_calls=newpointcount, n_initial_points=0,random_state=0,verbose=True,n_jobs=-1)
+    estimator=None if 'bayesGP_estimator' not in hist.operatorStates else hist.operatorStates['bayesGP_estimator']
+    res_gp = gp_minimize(func, gpParams,base_estimator=estimator, x0=X,y0=Y, n_calls=newpointcount, n_initial_points=0,verbose=True,n_jobs=-1)
+    bestIndex=np.where(res_gp.func_vals == res_gp.fun)[-1][0]
+    if bestIndex>len(X):
+        hist.operatorStates['bayesGP_estimator']=res_gp.models[bestIndex-len(X)]
+         
     return res_gp.x_iters[-newpointcount:],res_gp.func_vals[-newpointcount:] 
