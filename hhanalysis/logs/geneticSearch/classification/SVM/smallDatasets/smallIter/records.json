@@ -1,0 +1,492 @@
+{
+    "experiments": {
+        "99c5726e081d25a1418b28dd4bf158bf028a3b395a153af55ac8d37c48cfc867": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "Digits",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9744017807456873,
+                        "solution": {
+                            "C": 2.9630559675706722,
+                            "kernel": "rbf",
+                            "degree": 4,
+                            "gamma": "scale",
+                            "coef0": 0.19639885671932422,
+                            "shrinking": true,
+                            "tol": 0.000825434869725684,
+                            "class_weight": "balanced"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9738452977184195,
+                        "solution": {
+                            "C": 12.617401088445838,
+                            "kernel": "rbf",
+                            "degree": 4,
+                            "gamma": "scale",
+                            "coef0": 0.2674354500771542,
+                            "shrinking": true,
+                            "tol": 7.79765728311536e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9749582637729549,
+                        "solution": {
+                            "C": 2.6407827739112206,
+                            "kernel": "rbf",
+                            "degree": 3,
+                            "gamma": "scale",
+                            "coef0": 0.6809428553166951,
+                            "shrinking": false,
+                            "tol": 0.0001818159388674682,
+                            "class_weight": "balanced"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9744017807456873,
+                        "solution": {
+                            "C": 7.942709925001217,
+                            "kernel": "rbf",
+                            "degree": 4,
+                            "gamma": "scale",
+                            "coef0": 0.6731908663845199,
+                            "shrinking": false,
+                            "tol": 0.0003301903593096514,
+                            "class_weight": "balanced"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9744017807456873,
+                        "solution": {
+                            "C": 3.340424282832611,
+                            "kernel": "rbf",
+                            "degree": 4,
+                            "gamma": "scale",
+                            "coef0": 0.27803770828165464,
+                            "shrinking": true,
+                            "tol": 0.0007510633337731076,
+                            "class_weight": "balanced"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 81.64482709000004
+            }
+        },
+        "99185fc47705b6e412bd427eb52fde207d9bfa839112fdf2219013ef3ae87bc4": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "Wine",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "C": 2.091363076204963,
+                            "kernel": "linear",
+                            "degree": 4,
+                            "gamma": 0.1,
+                            "coef0": 0.27645679241425414,
+                            "shrinking": false,
+                            "tol": 0.00042892833859234884,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "C": 1.714420297232823,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": 1.0,
+                            "coef0": 0.8521997180561453,
+                            "shrinking": true,
+                            "tol": 0.0008634289533707822,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "C": 2.2621849957656197,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 0.34138785276524175,
+                            "shrinking": false,
+                            "tol": 0.0008172699659156761,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "C": 1.745411351198586,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": 0.1,
+                            "coef0": 0.9281434573249203,
+                            "shrinking": false,
+                            "tol": 0.00023130876442082623,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "C": 1.9168733418389379,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": 0.1,
+                            "coef0": 0.9930217582565344,
+                            "shrinking": true,
+                            "tol": 0.0003372646682662925,
+                            "class_weight": "balanced"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 177.2978229040018
+            }
+        },
+        "fb7747b84c4113628d9847dab0d170e841580670753b04058cd2ab0c00026979": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "AuditRisk",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9883419689119171,
+                        "solution": {
+                            "C": 39.4888360126477,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": 10.0,
+                            "coef0": 0.49326445964856414,
+                            "shrinking": false,
+                            "tol": 0.0008589015997542155,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9896373056994818,
+                        "solution": {
+                            "C": 3.4643169667864515,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": "scale",
+                            "coef0": 0.4015776073456574,
+                            "shrinking": true,
+                            "tol": 0.0005373214441769167,
+                            "class_weight": "balanced"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9896373056994818,
+                        "solution": {
+                            "C": 5.260487343663909,
+                            "kernel": "poly",
+                            "degree": 2,
+                            "gamma": "auto",
+                            "coef0": 0.0019427786863778218,
+                            "shrinking": false,
+                            "tol": 0.0006412859173791143,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9883419689119171,
+                        "solution": {
+                            "C": 30.299183052986802,
+                            "kernel": "linear",
+                            "degree": 4,
+                            "gamma": 0.1,
+                            "coef0": 0.7775861954697576,
+                            "shrinking": false,
+                            "tol": 0.0009196737373820844,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9883419689119171,
+                        "solution": {
+                            "C": 13.062394743939373,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": 10.0,
+                            "coef0": 0.5808003812316196,
+                            "shrinking": false,
+                            "tol": 0.00013011394661637711,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 25.04986605399972
+            }
+        },
+        "692e18f0c84f1b97a93f91c68eb6d34640fcb6788059b94f38793e247a247198": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9568764568764568,
+                        "solution": {
+                            "C": 1.1207628239265728,
+                            "kernel": "sigmoid",
+                            "degree": 4,
+                            "gamma": "scale",
+                            "coef0": 0.9042915459629843,
+                            "shrinking": false,
+                            "tol": 0.00023722394174274854,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.958041958041958,
+                        "solution": {
+                            "C": 2.5266755885583985,
+                            "kernel": "sigmoid",
+                            "degree": 3,
+                            "gamma": "auto",
+                            "coef0": 0.7653945786287578,
+                            "shrinking": true,
+                            "tol": 0.0009365599141475714,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.958041958041958,
+                        "solution": {
+                            "C": 3.710613601991898,
+                            "kernel": "sigmoid",
+                            "degree": 3,
+                            "gamma": "scale",
+                            "coef0": 0.7549949183962743,
+                            "shrinking": false,
+                            "tol": 0.00022073018824943092,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9603729603729604,
+                        "solution": {
+                            "C": 3.1887164110034005,
+                            "kernel": "sigmoid",
+                            "degree": 4,
+                            "gamma": "auto",
+                            "coef0": 0.5942841740063071,
+                            "shrinking": false,
+                            "tol": 9.975220741736448e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 7.226071042306022,
+                            "kernel": "sigmoid",
+                            "degree": 4,
+                            "gamma": "auto",
+                            "coef0": 0.6738904619392245,
+                            "shrinking": true,
+                            "tol": 8.287505241852115e-05,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1141.739655639998
+            }
+        }
+    }
+}

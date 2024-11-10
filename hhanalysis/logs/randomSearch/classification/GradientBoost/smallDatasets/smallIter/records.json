@@ -1,0 +1,616 @@
+{
+    "experiments": {
+        "1afa6920c34ca32da816180c95edbf861dcdbc163a5b835c7cacc875ce6a47e2": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "Digits",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9543683917640511,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.07931876687811458,
+                            "max_depth": 5,
+                            "max_features": "log2",
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 7,
+                            "n_estimators": 492,
+                            "n_iter_no_change": 18,
+                            "subsample": 0.8281823060143804,
+                            "tol": 4.9587306778963775e-06,
+                            "validation_fraction": 0.11945149320545373,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9549248747913189,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.08948869842788855,
+                            "max_depth": 5,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 15,
+                            "n_estimators": 353,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.809014661479912,
+                            "tol": 1.0052020571233959e-05,
+                            "validation_fraction": 0.12166274526449694,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9538119087367836,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.147178305237134,
+                            "max_depth": 6,
+                            "max_features": "log2",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 2,
+                            "n_estimators": 783,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.8436908192825306,
+                            "tol": 3.1352507870853615e-05,
+                            "validation_fraction": 0.1305955132675935,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9538119087367836,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.012060974591891675,
+                            "max_depth": 7,
+                            "max_features": "log2",
+                            "min_samples_leaf": 4,
+                            "min_samples_split": 17,
+                            "n_estimators": 771,
+                            "n_iter_no_change": 17,
+                            "subsample": 0.8423609901628033,
+                            "tol": 8.235144437302528e-06,
+                            "validation_fraction": 0.1320680346156144,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9560378408458542,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.11768560104057547,
+                            "max_depth": 5,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 7,
+                            "n_estimators": 989,
+                            "n_iter_no_change": 15,
+                            "subsample": 0.854540770264687,
+                            "tol": 1.7312877272473286e-05,
+                            "validation_fraction": 0.12589069068822722,
+                            "warm_start": false
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 6741.254739582
+            }
+        },
+        "9091f67daf83f7af12df0ed40697b30185dbe86cf8fa2a6c8a3319eb71d924a6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "Wine",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9664783427495292,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.14680765282950115,
+                            "max_depth": 6,
+                            "max_features": "log2",
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 11,
+                            "n_estimators": 331,
+                            "n_iter_no_change": 12,
+                            "subsample": 0.8084095446642323,
+                            "tol": 4.176370228675419e-06,
+                            "validation_fraction": 0.12372147939030233,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9608286252354049,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.048860057813641264,
+                            "max_depth": 4,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 3,
+                            "min_samples_split": 15,
+                            "n_estimators": 778,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.9863573487681172,
+                            "tol": 9.304629504001692e-05,
+                            "validation_fraction": 0.1007613069237074,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9662900188323916,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.14261171602112793,
+                            "max_depth": 7,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 9,
+                            "n_estimators": 123,
+                            "n_iter_no_change": 10,
+                            "subsample": 0.8332651745311125,
+                            "tol": 1.8579305154501168e-05,
+                            "validation_fraction": 0.19107309996921304,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9664783427495292,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.18347684202497577,
+                            "max_depth": 6,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 6,
+                            "n_estimators": 265,
+                            "n_iter_no_change": 14,
+                            "subsample": 0.8421389597669785,
+                            "tol": 9.254525273328096e-05,
+                            "validation_fraction": 0.12312711265432023,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9663841807909604,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.1091681524444008,
+                            "max_depth": 5,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 2,
+                            "min_samples_split": 3,
+                            "n_estimators": 861,
+                            "n_iter_no_change": 8,
+                            "subsample": 0.9725824218480251,
+                            "tol": 6.908331103124922e-05,
+                            "validation_fraction": 0.10073424229006564,
+                            "warm_start": true
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 662.9741399019986
+            }
+        },
+        "91d25eaebbda0f665f915b05b6cebd202579bb8aa25af0f53bcfd5a6588c721e": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "AuditRisk",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.1178710637510805,
+                            "max_depth": 7,
+                            "max_features": null,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 14,
+                            "n_estimators": 615,
+                            "n_iter_no_change": 18,
+                            "subsample": 0.946347576887671,
+                            "tol": 6.908543325513265e-05,
+                            "validation_fraction": 0.10004525650491333,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.040634615442247765,
+                            "max_depth": 3,
+                            "max_features": null,
+                            "min_samples_leaf": 3,
+                            "min_samples_split": 6,
+                            "n_estimators": 448,
+                            "n_iter_no_change": 11,
+                            "subsample": 0.8432561022330964,
+                            "tol": 9.955892542003818e-05,
+                            "validation_fraction": 0.10073141357426213,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.1722927972786723,
+                            "max_depth": 4,
+                            "max_features": null,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 11,
+                            "n_estimators": 609,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.992373040675113,
+                            "tol": 4.839628381958057e-05,
+                            "validation_fraction": 0.10078043978655757,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.10158752502923388,
+                            "max_depth": 3,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 3,
+                            "n_estimators": 200,
+                            "n_iter_no_change": 6,
+                            "subsample": 0.9321310292086009,
+                            "tol": 3.0796337740720585e-05,
+                            "validation_fraction": 0.10072943293073161,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.11040484834347504,
+                            "max_depth": 6,
+                            "max_features": "log2",
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 16,
+                            "n_estimators": 715,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.9612072840377105,
+                            "tol": 4.110901956047569e-05,
+                            "validation_fraction": 0.10062773155471258,
+                            "warm_start": true
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 245.25227100799748
+            }
+        },
+        "73dd09988a7de0c67dd163328723d9d1824382c3a698ed3868efe143695d5534": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9627039627039627,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.12649968866750097,
+                            "max_depth": 3,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 3,
+                            "min_samples_split": 19,
+                            "n_estimators": 904,
+                            "n_iter_no_change": 13,
+                            "subsample": 0.8980033219232565,
+                            "tol": 3.4314681972868955e-05,
+                            "validation_fraction": 0.17207549661542057,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.1570070658363845,
+                            "max_depth": 3,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 4,
+                            "min_samples_split": 11,
+                            "n_estimators": 503,
+                            "n_iter_no_change": 13,
+                            "subsample": 0.8730148282466028,
+                            "tol": 6.309752021973763e-05,
+                            "validation_fraction": 0.105913121518458,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.1833004585545183,
+                            "max_depth": 3,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 4,
+                            "min_samples_split": 18,
+                            "n_estimators": 904,
+                            "n_iter_no_change": 11,
+                            "subsample": 0.8942366586414565,
+                            "tol": 5.414476541676786e-05,
+                            "validation_fraction": 0.18226790622469313,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.17833784301043573,
+                            "max_depth": 6,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 15,
+                            "n_estimators": 832,
+                            "n_iter_no_change": 9,
+                            "subsample": 0.8199719515985188,
+                            "tol": 7.684719923203784e-05,
+                            "validation_fraction": 0.18249035050358345,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9615384615384616,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.1209664128260313,
+                            "max_depth": 5,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 15,
+                            "n_estimators": 396,
+                            "n_iter_no_change": 10,
+                            "subsample": 0.9140968810069696,
+                            "tol": 7.106882829562597e-05,
+                            "validation_fraction": 0.19622279050764116,
+                            "warm_start": true
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 74.10016310799983
+            }
+        }
+    }
+}

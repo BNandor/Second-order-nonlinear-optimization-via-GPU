@@ -153,159 +153,6 @@
                 "elapsedTimeSec": 4115.426425208001
             }
         },
-        "bb406101ebe4b50bc5ae04a1ad9061cf320f8c278a63ccbc104d62457d888646": {
-            "experiment": {
-                "hyperParameters": {
-                    "n_estimators": [
-                        10,
-                        100
-                    ],
-                    "max_features": [
-                        1,
-                        64
-                    ],
-                    "max_depth": [
-                        5,
-                        50
-                    ],
-                    "min_samples_split": [
-                        2,
-                        11
-                    ],
-                    "min_samples_leaf": [
-                        1,
-                        11
-                    ],
-                    "criterion": [
-                        "gini",
-                        "entropy"
-                    ]
-                },
-                "crossValidations": 3,
-                "bayesGPIterations": 150,
-                "classificationTuningCount": 10,
-                "classifierName": "RandomForest",
-                "datasetName": "BreastCancer",
-                "classifierModel": "RF",
-                "solutions": [
-                    {
-                        "bestAccuracy": 0.9666109718741298,
-                        "solution": {
-                            "n_estimators": 100,
-                            "max_features": 10,
-                            "max_depth": 5,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9666202543395525,
-                        "solution": {
-                            "n_estimators": 99,
-                            "max_features": 3,
-                            "max_depth": 47,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 3,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.968365357839042,
-                        "solution": {
-                            "n_estimators": 51,
-                            "max_features": 1,
-                            "max_depth": 18,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9666016894087069,
-                        "solution": {
-                            "n_estimators": 11,
-                            "max_features": 2,
-                            "max_depth": 45,
-                            "min_samples_split": 6,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9648565859092174,
-                        "solution": {
-                            "n_estimators": 100,
-                            "max_features": 1,
-                            "max_depth": 47,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "gini"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9648658683746403,
-                        "solution": {
-                            "n_estimators": 80,
-                            "max_features": 1,
-                            "max_depth": 50,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "gini"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9648565859092174,
-                        "solution": {
-                            "n_estimators": 100,
-                            "max_features": 1,
-                            "max_depth": 50,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9683560753736192,
-                        "solution": {
-                            "n_estimators": 17,
-                            "max_features": 3,
-                            "max_depth": 40,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9666109718741298,
-                        "solution": {
-                            "n_estimators": 100,
-                            "max_features": 1,
-                            "max_depth": 36,
-                            "min_samples_split": 2,
-                            "min_samples_leaf": 1,
-                            "criterion": "entropy"
-                        }
-                    },
-                    {
-                        "bestAccuracy": 0.9613478139793928,
-                        "solution": {
-                            "n_estimators": 100,
-                            "max_features": 1,
-                            "max_depth": 15,
-                            "min_samples_split": 11,
-                            "min_samples_leaf": 4,
-                            "criterion": "entropy"
-                        }
-                    }
-                ],
-                "totalFunctionEvaluations": 150,
-                "solver": "bayesGP"
-            },
-            "metadata": {
-                "elapsedTimeSec": 4337.166604443017
-            }
-        },
         "44524d78c5da8ecb5095964cbcb76c0644045911b8cd4b2a48d5afb7b7c0afd4": {
             "experiment": {
                 "hyperParameters": {
@@ -457,6 +304,312 @@
             },
             "metadata": {
                 "elapsedTimeSec": 4259.462467926001
+            }
+        },
+        "436ebf3fbb1efee44e144cb06a0ea9e0468a8e7899adf03237fcc8cd7166034c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 63,
+                            "max_features": 54,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1940.5711544369988
+            }
+        },
+        "59486dcb24ff0320dc8e7c1eb51880c75f31a3d0b4248d43aa0cc3ce4c40adf3": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "n_estimators": 69,
+                            "max_features": 11,
+                            "max_depth": 50,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 7,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 10,
+                            "max_features": 20,
+                            "max_depth": 50,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 11,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "n_estimators": 10,
+                            "max_features": 18,
+                            "max_depth": 50,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 11,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 12,
+                            "max_features": 11,
+                            "max_depth": 5,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 6,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 18,
+                            "max_depth": 5,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 11,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 18,
+                            "max_depth": 50,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 11,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 10,
+                            "max_features": 23,
+                            "max_depth": 20,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 11,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9627039627039627,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 20,
+                            "max_depth": 13,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 11,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9638694638694639,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 18,
+                            "max_depth": 5,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 11,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9662004662004663,
+                        "solution": {
+                            "n_estimators": 55,
+                            "max_features": 16,
+                            "max_depth": 50,
+                            "min_samples_split": 11,
+                            "min_samples_leaf": 11,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2325.4674242209876
             }
         }
     }

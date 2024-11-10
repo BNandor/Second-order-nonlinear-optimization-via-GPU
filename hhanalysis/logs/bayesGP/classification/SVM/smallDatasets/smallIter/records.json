@@ -371,6 +371,378 @@
             "metadata": {
                 "elapsedTimeSec": 6016.868585265009
             }
+        },
+        "124d390e6d85a9fd758f9c913db01230ac7f32270ba5b5fea2de053d07b54ca4": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "SVM",
+                "datasetName": "AuditRisk",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9935199428910405,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": "scale",
+                            "coef0": 1.0,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2486.8733028120187
+            }
+        },
+        "1deab20516daef877ba860d740c8ae86b61bf302a9ee50f1a768538c6ae2a024": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 150,
+                "classificationTuningCount": 10,
+                "classifierName": "SVM",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "linear",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.0,
+                            "shrinking": 1,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 150,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 3802.1749495409895
+            }
         }
     }
 }

@@ -1,0 +1,280 @@
+{
+    "experiments": {
+        "4457112ac11d854f150682dc16c6ddfbf839ea9369f06dd56015a6f860e938e3": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "Digits",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9738452977184195,
+                        "solution": {
+                            "C": 43.65808348501508,
+                            "class_weight": null,
+                            "coef0": 0.5216410540178466,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": true,
+                            "tol": 0.0007777435431959254
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 108.09360244300115
+            }
+        },
+        "822dbe310fa2f22464f2956f140f438139cf88b9205af45f96f7e9c4f066cbbb": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "Wine",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9331450094161958,
+                        "solution": {
+                            "C": 44.653598932020444,
+                            "class_weight": null,
+                            "coef0": 0.016656430025174807,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.0008223445436816837
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 97.69525945699934
+            }
+        },
+        "b5b32860a7438ff93c275699ba5b539fa1b1a3bfd75017064ed53273a1dc26b3": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "AuditRisk",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9974109934746981,
+                        "solution": {
+                            "C": 46.229390620574506,
+                            "class_weight": null,
+                            "coef0": 0.610922582577796,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.00035383418832251673
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 21.60232800999802
+            }
+        },
+        "3233a84bdb199d98eef9aafc4a8877752bb2e83dbde970b654f2a8b2a6573b93": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 14.871321299971177,
+                            "class_weight": null,
+                            "coef0": 0.8548721675472871,
+                            "degree": 2,
+                            "gamma": "auto",
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.0004999985839465161
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 35.213686176997726
+            }
+        }
+    }
+}

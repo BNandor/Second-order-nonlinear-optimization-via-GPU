@@ -1,0 +1,208 @@
+{
+    "experiments": {
+        "102354ce07ccf09a044f4edc7c6e0e3c94d89dfef53e5f8307565c8139ec2ac3": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "Digits",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7707289927657207,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.10113733900107036
+            }
+        },
+        "cdb900f9725dffe9c3d3259d5d6321043df19c36077d6c445eb8dc7364a35e80": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "Wine",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8486817325800375,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.012601657001141575
+            }
+        },
+        "9ebfa175408cbedbd9f8b137bb4a2befa74685589aa8e785f5494dbc71a67b32": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "AuditRisk",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.0172444629988604
+            }
+        },
+        "69ecba1cc8726b569ba0b1e5fb1f91738df37407e4507c08c1153a8e45e8ebb4": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9405594405594405,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.04919427400091081
+            }
+        }
+    }
+}

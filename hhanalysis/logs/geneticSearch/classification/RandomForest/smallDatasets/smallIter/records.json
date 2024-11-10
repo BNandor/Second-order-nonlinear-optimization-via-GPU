@@ -1,0 +1,400 @@
+{
+    "experiments": {
+        "627827183b392ab77d6284bc4015226f073df243822d8e6754fd25ff48d8ea69": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9421257651641625,
+                        "solution": {
+                            "n_estimators": 85,
+                            "max_features": 13,
+                            "max_depth": 38,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 2,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9415692821368948,
+                        "solution": {
+                            "n_estimators": 68,
+                            "max_features": 3,
+                            "max_depth": 23,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 1,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9426822481914302,
+                        "solution": {
+                            "n_estimators": 61,
+                            "max_features": 6,
+                            "max_depth": 34,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 1,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9454646633277685,
+                        "solution": {
+                            "n_estimators": 88,
+                            "max_features": 5,
+                            "max_depth": 37,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9437952142459655,
+                        "solution": {
+                            "n_estimators": 97,
+                            "max_features": 5,
+                            "max_depth": 28,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 2,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 234.42408207100016
+            }
+        },
+        "fb3fffcf383a7a9041ad96946942bbad233d12675c6e7e0d0e3520c25bdc0d3c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9269662921348315,
+                        "solution": {
+                            "n_estimators": 36,
+                            "max_features": 41,
+                            "max_depth": 34,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 3,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9325842696629213,
+                        "solution": {
+                            "n_estimators": 97,
+                            "max_features": 20,
+                            "max_depth": 9,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 3,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9325842696629213,
+                        "solution": {
+                            "n_estimators": 28,
+                            "max_features": 59,
+                            "max_depth": 20,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 3,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9382022471910112,
+                        "solution": {
+                            "n_estimators": 13,
+                            "max_features": 57,
+                            "max_depth": 42,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 5,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9325842696629213,
+                        "solution": {
+                            "n_estimators": 30,
+                            "max_features": 49,
+                            "max_depth": 7,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 4,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 181.77959146800004
+            }
+        },
+        "5e1c18efa5b6f44ace7a2134fcdb182678dfdbab21b1432cf6d2a8b4630f0f46": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9987046632124352,
+                        "solution": {
+                            "n_estimators": 35,
+                            "max_features": 22,
+                            "max_depth": 45,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987046632124352,
+                        "solution": {
+                            "n_estimators": 30,
+                            "max_features": 33,
+                            "max_depth": 17,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 7,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987046632124352,
+                        "solution": {
+                            "n_estimators": 74,
+                            "max_features": 26,
+                            "max_depth": 14,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 4,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987046632124352,
+                        "solution": {
+                            "n_estimators": 72,
+                            "max_features": 28,
+                            "max_depth": 38,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 7,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9987046632124352,
+                        "solution": {
+                            "n_estimators": 34,
+                            "max_features": 21,
+                            "max_depth": 36,
+                            "min_samples_split": 6,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 170.88290334500016
+            }
+        },
+        "f82970aaca6dc7bd37f3282a5034a52cd59edea606032e01e4ec40425c805f5a": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 10,
+                "populationSize": 50,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9603729603729604,
+                        "solution": {
+                            "n_estimators": 12,
+                            "max_features": 35,
+                            "max_depth": 40,
+                            "min_samples_split": 7,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9603729603729604,
+                        "solution": {
+                            "n_estimators": 17,
+                            "max_features": 8,
+                            "max_depth": 30,
+                            "min_samples_split": 6,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9592074592074592,
+                        "solution": {
+                            "n_estimators": 55,
+                            "max_features": 45,
+                            "max_depth": 20,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 8,
+                            "criterion": "gini"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9603729603729604,
+                        "solution": {
+                            "n_estimators": 20,
+                            "max_features": 7,
+                            "max_depth": 36,
+                            "min_samples_split": 6,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9627039627039627,
+                        "solution": {
+                            "n_estimators": 14,
+                            "max_features": 27,
+                            "max_depth": 39,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 146.73230437299935
+            }
+        }
+    }
+}

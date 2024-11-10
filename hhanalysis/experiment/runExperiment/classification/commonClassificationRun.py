@@ -10,10 +10,12 @@ import pandas as pd
 from runExperiment.commonRun import *
 from runExperiment.hyperParameterTuning.pyNMHH.classification.run import *
 from runExperiment.hyperParameterTuning.bayesGP.bayesGP import *
-
+from runExperiment.hyperParameterTuning.random.randomSearch import *
+from runExperiment.hyperParameterTuning.genetic.genetic import *
+from runExperiment.hyperParameterTuning.gridSearch.gridSearch import *
+from runExperiment.hyperParameterTuning.default.default import *
 backslash="\\"
 dquote='"'
-
 
 
 def runClassificationExperimentVariations(experimentVariations,experimentIdMapper,experimenter,recordsPath):

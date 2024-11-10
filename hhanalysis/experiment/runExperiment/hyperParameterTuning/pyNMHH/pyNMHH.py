@@ -10,6 +10,7 @@ from GPyOpt.methods import BayesianOptimization
 from runExperiment.hyperParameterTuning.pyNMHH.operators.bayesGP import bayesGP
 from runExperiment.hyperParameterTuning.pyNMHH.operators.bayesTPE import bayesTPE
 import multiprocessing
+from mystic.solvers import fmin_powell,fmin
 
 class OptimizationHistory:
     def __init__(self):
@@ -130,9 +131,14 @@ def differential_evolution(population, params, func):
     new_population = []
     for i in range(len(population)):
         a, b, c = random.sample(range(len(population)), 3)
-        mutant = population[a].genes + F * (population[b].genes - population[c].genes)
-        trial = np.array([mutant[j] if random.random() < CR else population[i].genes[j] for j in range(len(mutant))])
-        new_population.append(Individual(trial))
+        trial=[]
+        R=random.randint(0,len(population[i].genes)-1)
+        for j in range(len(population[i].genes)):
+            if random.random() < CR or j== R:
+                trial.append( population[a].genes[j] + F * (population[b].genes[j] - population[c].genes[j]))
+            else:
+                trial.append(population[i].genes[j])
+        new_population.append(Individual(np.array(trial)))
     return new_population
 
 def genetic_algorithm(population, params, func):
@@ -144,12 +150,24 @@ def genetic_algorithm(population, params, func):
     parent_pool_ratio = params['GA_PARENTPOOL_RATIO']['value']
     
     parent_pool_size = int(len(population) * parent_pool_ratio)
-    parent_pool = sorted(population, key=lambda i:i.evaluate(func))[:parent_pool_size]
+    
     
     new_population = []
     # print(f'GA: in {population}')
     while len(new_population) < len(population):
-        parent1, parent2 = random.sample(parent_pool, 2)
+        parent_pool=random.sample(population, parent_pool_size)
+        parent1 = sorted(parent_pool, key=lambda i:i.evaluate(func))[0]
+
+        parent_pool=random.sample(population, parent_pool_size)
+        sortedPool = sorted(parent_pool, key=lambda i:i.evaluate(func))
+        parent2=sortedPool[0]
+        if parent1 == parent2:
+            if len(sortedPool)>1:
+                parent2=sortedPool[1]
+            else:
+                parent2=random.sample(population, 1)[0]
+        
+        # parent1, parent2 = random.sample(parent_pool, 2)
         child = []
         crossover_point = int(len(parent1.genes) * cr_point)
         
@@ -163,7 +181,7 @@ def genetic_algorithm(population, params, func):
                 child.append(parent1.genes[i])
         
         if random.random() < mutation_rate:
-            mutation = np.random.normal(0, mutation_size, len(child))
+            mutation = [np.random.normal(0, (upper-lower)/mutation_size) for (lower,upper) in zip(func.lowerbounds,func.upperbounds)]
             child = [c + m for c, m in zip(child, mutation)]
         
         new_population.append(Individual(np.array(child)))
@@ -179,30 +197,56 @@ def gradient_descent(population, params, func):
     # for individual in population:
     #     result = minimize(func, individual.genes, method='CG', options={'maxiter': fevals})
     #     new_population.append(Individual(result.x, result.fun))
-    fevals = int(params['GD_FEVALS']['value'])
+    optimizer = int(params['GD_OPTIMIZER']['value'])
+    eps = int(params['GD_EPS']['value'])
     
     # new_population = copy.deepcopy(population)
     new_population = []
     # best=sorted(population, key=lambda ind: ind.evaluate(func))[0]
-    for individual in population:
-        result = minimize(func, individual.genes,bounds=[(low,up)  for (low,up) in zip(func.lowerbounds,func.upperbounds)], method='CG', options={'maxfun':len(individual.genes),'maxiter': 1,'eps':1.0})
+    optimizers=['Nelder-Mead','Powell','CG','BFGS','Newton-CG', 'L-BFGS-B', 'TNC', 'COBYLA', 'SLSQP', 'trust-constr', 'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov']
+    sortedPop=sorted(population, key=lambda ind: ind.evaluate(func))
+    for individual in sortedPop:
+        # result = minimize(func, individual.genes,bounds=[(low,up) for (low,up) in zip(func.lowerbounds,func.upperbounds)], 
+        #                   method=optimizers[optimizer], options={'maxfun':len(individual.genes),
+        #                                         'maxiter': 1,
+        #                                         'eps':eps,
+        #                                         'ftol':0.000001})
+        result = fmin_powell(func, individual.genes,bounds=[(low,up) for (low,up) in zip(func.lowerbounds,func.upperbounds)], 
+                             ftol=0.001,
+                             maxiter=1,
+                             maxfun=len(individual.genes)*2,
+                             full_output=True,
+                             disp=True)
+        # print(result)
         # new_population[population.index(best)]=Individual(result.x, result.fun)
-        new_population.append(Individual(result.x, result.fun))
+        new_population.append(Individual(result[0], result[1]))
     return new_population
 
 def lbfgs(population, params, func):
-    alpha = params['LBFGS_ALPHA']['value']
-    c1 = params['LBFGS_C1']['value']
-    c2 = params['LBFGS_C2']['value']
-    fevals = int(params['LBFGS_FEVALS']['value'])
+    eps = int(params['LBFGS_EPS']['value'])
     
     # new_population = copy.deepcopy(population)
     # best=sorted(population, key=lambda ind: ind.evaluate(func))[0]
     new_population = []
-    for individual in population:
-        result = minimize(func,  individual.genes, bounds=[(low,up)  for (low,up) in zip(func.lowerbounds,func.upperbounds)], method='L-BFGS-B',options={'maxfun':len(individual.genes),'maxiter': 1, 'maxcor': 5,'eps':1.0})
+    sortedPop=sorted(population, key=lambda ind: ind.evaluate(func))
+    for individual in sortedPop:
+        # result = minimize(func,  individual.genes, bounds=[(low,up)  for (low,up) in zip(func.lowerbounds,func.upperbounds)], 
+        #                   method='L-BFGS-B',
+        #                   options={'maxfun':len(individual.genes),
+        #                            'maxiter': 1,
+        #                            'maxls':3,
+        #                             'maxcor': 30,
+        #                             'eps':eps,
+        #                             'ftol':0.0001})
+        result= fmin(func, individual.genes,bounds=[(low,up) for (low,up) in zip(func.lowerbounds,func.upperbounds)], 
+                             ftol=0.001,
+                             maxiter=1,
+                             maxfun=len(individual.genes)*2,
+                             full_output=True,
+                             disp=True)
+        
         # new_population[population.index(best)]=Individual(result.x, result.fun)
-        new_population.append(Individual(result.x, result.fun))
+        new_population.append(Individual(result[0], result[1]))
     # new_population.append
     return new_population
 
@@ -229,7 +273,14 @@ def select_best(current_population,offspring_population, func, num_select):
     # new_population = elites + selected_offspring
     
     # return new_population
-    return sorted(current_population+offspring_population, key=lambda ind: ind.evaluate(func))[:num_select]
+    # return sorted(current_population+offspring_population, key=lambda ind: ind.evaluate(func))[:num_select]
+    new_population=[]
+    for i in range(len(current_population)):
+        if current_population[i].evaluate(func) < offspring_population[i].evaluate(func):
+            new_population.append(current_population[i])
+        else:
+            new_population.append(offspring_population[i])
+    return new_population
 
 # Not used 
 def bayes_gp(hist,func):

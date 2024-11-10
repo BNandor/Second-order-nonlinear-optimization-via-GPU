@@ -1,0 +1,488 @@
+{
+    "experiments": {
+        "6b5057f77de3ba8228bbd6908fc38f95f5146e655be1e2de0c32b17ea88ac3ce": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "Digits",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9744017807456872,
+                        "solution": {
+                            "C": 7.678625829252766,
+                            "class_weight": null,
+                            "coef0": 0.8396052168220206,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": false,
+                            "tol": 0.00017764902511624816
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9749582637729549,
+                        "solution": {
+                            "C": 2.789176249774768,
+                            "class_weight": null,
+                            "coef0": 0.7465316473394441,
+                            "degree": 4,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": false,
+                            "tol": 0.00046134024056984695
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9749582637729549,
+                        "solution": {
+                            "C": 2.5838602810565607,
+                            "class_weight": "balanced",
+                            "coef0": 0.5262549870777179,
+                            "degree": 4,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": true,
+                            "tol": 0.0006344633734091931
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9738452977184195,
+                        "solution": {
+                            "C": 11.786781895891085,
+                            "class_weight": "balanced",
+                            "coef0": 0.9626490511791216,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": false,
+                            "tol": 0.0004029254649175016
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9744017807456872,
+                        "solution": {
+                            "C": 7.307477241022614,
+                            "class_weight": "balanced",
+                            "coef0": 0.3922857321513137,
+                            "degree": 4,
+                            "gamma": "scale",
+                            "kernel": "rbf",
+                            "shrinking": false,
+                            "tol": 0.00011954849958949765
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 142.78334764600004
+            }
+        },
+        "9f4814b312bcfc3cc6d5a09e9b436d62624f04a91f42bb78593bd4cced6c096a": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "Wine",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.9559301742795507,
+                            "class_weight": "balanced",
+                            "coef0": 0.17280975015312994,
+                            "degree": 2,
+                            "gamma": "auto",
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.0009272385891562287
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.617711935955609,
+                            "class_weight": null,
+                            "coef0": 0.49185648673016036,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.00017522475661592332
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.5417441856019676,
+                            "class_weight": null,
+                            "coef0": 0.1786761419906988,
+                            "degree": 4,
+                            "gamma": 10.0,
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 9.12410052032013e-05
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 3.067231796458383,
+                            "class_weight": "balanced",
+                            "coef0": 0.13204934685426573,
+                            "degree": 2,
+                            "gamma": 0.1,
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.0009983999593619576
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9387947269303202,
+                        "solution": {
+                            "C": 1.9554723885660683,
+                            "class_weight": "balanced",
+                            "coef0": 0.5287194679478656,
+                            "degree": 3,
+                            "gamma": 1.0,
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.00026522161595858037
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 121.64684778400078
+            }
+        },
+        "1d3cd7df1c733430c4f801f626b6310772910018e91b799201acb644f81654a4": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "AuditRisk",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9948270141465327,
+                        "solution": {
+                            "C": 5.485291714690615,
+                            "class_weight": "balanced",
+                            "coef0": 0.35492342497138296,
+                            "degree": 3,
+                            "gamma": 0.1,
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.000218049135007088
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9948270141465327,
+                        "solution": {
+                            "C": 5.869988976036121,
+                            "class_weight": "balanced",
+                            "coef0": 0.16786977818026716,
+                            "degree": 3,
+                            "gamma": 10.0,
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.0004955747543059953
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9948270141465327,
+                        "solution": {
+                            "C": 6.253275141111958,
+                            "class_weight": "balanced",
+                            "coef0": 0.1624910751675236,
+                            "degree": 3,
+                            "gamma": 0.1,
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.0008078084890795946
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9948270141465327,
+                        "solution": {
+                            "C": 4.445481555913186,
+                            "class_weight": "balanced",
+                            "coef0": 0.2539915180893283,
+                            "degree": 4,
+                            "gamma": 1.0,
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.00034611554094837266
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9948270141465327,
+                        "solution": {
+                            "C": 4.172460735597266,
+                            "class_weight": "balanced",
+                            "coef0": 0.8036476442786508,
+                            "degree": 2,
+                            "gamma": 10.0,
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.00019115619089141736
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 24.53559679600039
+            }
+        },
+        "ec028eef52820b8c17bd4fda4233c2503c7bdb8856535fa10770cf57d766b46e": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 11.63965230613368,
+                            "class_weight": null,
+                            "coef0": 0.19599253987601906,
+                            "degree": 2,
+                            "gamma": 0.1,
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.0008205936580931723
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.958041958041958,
+                        "solution": {
+                            "C": 4.296924468065839,
+                            "class_weight": null,
+                            "coef0": 0.025187534877564532,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "sigmoid",
+                            "shrinking": false,
+                            "tol": 0.0006252699008321201
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109557,
+                        "solution": {
+                            "C": 16.075105354156765,
+                            "class_weight": null,
+                            "coef0": 0.7396805087928928,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.0004029868485955761
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9592074592074592,
+                        "solution": {
+                            "C": 1.6301072684709434,
+                            "class_weight": null,
+                            "coef0": 0.9660417741480394,
+                            "degree": 2,
+                            "gamma": "auto",
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.00035892380150541144
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.9557109557109559,
+                        "solution": {
+                            "C": 1.5402826479122598,
+                            "class_weight": null,
+                            "coef0": 0.3215098794956788,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "sigmoid",
+                            "shrinking": false,
+                            "tol": 0.0008749267839926366
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1778.5005687089997
+            }
+        }
+    }
+}

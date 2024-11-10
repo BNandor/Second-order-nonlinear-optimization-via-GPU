@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 
 sys.path.insert(0, '../')
 sys.path.insert(0, '../..')
@@ -11,7 +12,7 @@ import itertools
 from skopt.space import Real, Integer,Categorical
 from skopt.utils import use_named_args
 from skopt import gp_minimize
-
+from functools import partial
 
 def pyNMHHHyperParametersToGP(paramConfig):
     gpParamconfig=[]
@@ -56,20 +57,29 @@ def unflatten(flatParams,paramConfig):
                 unflattened[key]=flatValue
     return unflattened
 
+def callback_with_timer(res, max_time, start_time):
+    elapsed_time = time.time() - start_time
+    if elapsed_time > max_time:
+        return True  # Stops the optimization
+    return False
+
+
 def bayesGP(hist,func):    
     histsize=len(hist.population_history)
     X = []
     Y = []
-    for pop in hist.population_history[-(min(histsize,150)):]:
+    for pop in hist.population_history[-(min(histsize,15)):]:
         for ind in pop:
             X.append(snapToType(ind,func))
-    for popvalues in hist.population_values_history[-(min(histsize,150)):]:
+    for popvalues in hist.population_values_history[-(min(histsize,15)):]:
         for value in popvalues:
             Y.append(value)
     gpParams=toGPParams(func)
     popsize=len(hist.population_history[0])
     newpointcount=popsize
     estimator=None if 'bayesGP_estimator' not in hist.operatorStates else hist.operatorStates['bayesGP_estimator']
+    # start_time = time.time()
+    # callback = partial(callback_with_timer, start_time=start_time)
     res_gp = gp_minimize(func, gpParams,base_estimator=estimator, x0=X,y0=Y, n_calls=newpointcount, n_initial_points=0,verbose=True,n_jobs=-1)
     bestIndex=np.where(res_gp.func_vals == res_gp.fun)[-1][0]
     if bestIndex>len(X):

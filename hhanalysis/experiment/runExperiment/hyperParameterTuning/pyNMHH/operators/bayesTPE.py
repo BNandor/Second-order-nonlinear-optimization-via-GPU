@@ -104,10 +104,10 @@ def bayesTPE(hist,func):
     histsize=len(hist.population_history)
     X = []
     Y = []
-    for pop in hist.population_history[-(min(histsize,150)):]:
+    for pop in hist.population_history[-(min(histsize,15)):]:
         for ind in pop:
             X.append(snapToType(ind,func))
-    for popvalues in hist.population_values_history[-(min(histsize,150)):]:
+    for popvalues in hist.population_values_history[-(min(histsize,15)):]:
         for value in popvalues:
             Y.append(value)
     tpeParams=toTPEParams(func)

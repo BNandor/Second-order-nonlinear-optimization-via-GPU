@@ -1,0 +1,220 @@
+{
+    "experiments": {
+        "a24f3e5428d0a883e76c091cc3487177a91c7186e89eebcff6a7e06f3fb0eba5": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9387868670005565,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 25,
+                            "max_features": 1,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 2,
+                            "n_estimators": 94
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 918.6399745579984
+            }
+        },
+        "10628f8c3f0a0ab31c5b52982afab8a73895f4ea6b206863a1df83ea644ead6c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9719397363465161,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 5,
+                            "max_features": 1,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 4,
+                            "n_estimators": 52
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 271.57808868400025
+            }
+        },
+        "3a484bcb00cd5943548f0ec9f3c13f2ed3d520b003d25538c3ebf687f56b9d5a": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 5,
+                            "max_features": 16,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 2,
+                            "n_estimators": 10
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 286.9383208920008
+            }
+        },
+        "3dc6bbff839bddc709971ac45de1c4b631fc5b56804ec86bb8000cc0ad1eb4d6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9627039627039627,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 15,
+                            "max_features": 16,
+                            "min_samples_leaf": 9,
+                            "min_samples_split": 2,
+                            "n_estimators": 52
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 298.54442661600115
+            }
+        }
+    }
+}

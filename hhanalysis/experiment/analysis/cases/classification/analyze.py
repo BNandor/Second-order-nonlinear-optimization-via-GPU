@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 import hashlib
 import pandas as pd
 from scipy import stats
+import numpy as np
 from itertools import combinations
 
 def hash_dict(d: Dict[str, Any]) -> str:
@@ -42,35 +43,46 @@ def group_experiments(df: pd.DataFrame):
     """Group experiments based on specified fields."""
     return df.groupby(['totalFunctionEvaluations', 'classifierModel', 
                        'datasetName', 'hyperParameters_hash'])
+def create_comparison_matrix(group):
+    """Create a comparison matrix for a group of experiments."""
+    experiment_ids = sorted(group['experiment_id'].unique())
+    n = len(experiment_ids)
+    matrix = np.full((n, n), 0.5)  # 0.5 indicates equality (diagonal)
+    
+    for i, exp1 in enumerate(experiment_ids):
+        for j, exp2 in enumerate(experiment_ids):
+            if i != j:
+                accuracies1 = group[group['experiment_id'] == exp1]['accuracies']
+                accuracies2 = group[group['experiment_id'] == exp2]['accuracies']
+                
+                statistic, p_value = stats.ranksums(accuracies1.array, accuracies2.array)
+                
+                if p_value < 0.05:
+                    # 1.0 means exp1 is better, 0.0 means exp2 is better
+                    matrix[i, j] = 1.0 if statistic > 0 else 0.0
+                else:
+                    # 0.5 means no significant difference
+                    matrix[i, j] = 0.5
+    
+    return matrix
 
 def compare_experiments(grouped_df):
-    """Compare experiments using Wilcoxon rank-sum test."""
+    """Compare experiments and generate matrices for each group."""
+    matrices = {}
+    
     for name, group in grouped_df:
-        print(f"\nComparing experiments for: {name}")
         if len(group['experiment_id'].unique()) < 2:
-            print("Not enough experiments to compare.")
             continue
-
-        experiment_ids = group['experiment_id'].unique()
-        for (exp1, exp2) in combinations(experiment_ids, 2):
-            accuracies1 = group[group['experiment_id'] == exp1]['accuracies']
-            accuracies2 = group[group['experiment_id'] == exp2]['accuracies']
             
-            statistic, p_value = stats.ranksums(accuracies1.array, accuracies2.array)
-            # (statistic,pvalue)=sp.stats.ranksums(samples[i], samples[j], alternative='less')
-            # (statistic,pvalue)=sp.stats.ranksums(samples[i], samples[j])
-            # comparisonMatrix[i][j]=1-(pvalue<0.05)
-            print(f"Wilcoxon rank-sum test between {exp1} and {exp2}:")
-            print(f"Statistic: {statistic}")
-            print(f"p-value: {p_value}")
-            
-            if p_value < 0.05:
-                if statistic > 0:
-                    print(f"Experiment {exp1} is significantly more accurate than Experiment {exp2}")
-                else:
-                    print(f"Experiment {exp2} is significantly more accurate than Experiment {exp1}")
-            else:
-                print(f"No significant difference in accuracy between Experiments {exp1} and {exp2}")
+        # Create a descriptive key for the matrix
+        key = f"{name[1]}-{name[2]}"  # classifierModel-datasetName
+        matrices[key] = create_comparison_matrix(group)
+        
+        # Print textual results for verification
+        print(f"\nComparison matrix for {key}:")
+        print(matrices[key])
+    
+    return matrices
 
 def main(file_paths: List[str]):
     all_experiments = []
@@ -81,10 +93,25 @@ def main(file_paths: List[str]):
 
     df = create_dataframe(all_experiments)
     grouped_df = group_experiments(df)
-    compare_experiments(grouped_df)
+    matrices = compare_experiments(grouped_df)
+    
+    # Save matrices to JSON for visualization
+    with open('comparison_matrices.json', 'w') as f:
+        json.dump({k: m.tolist() for k, m in matrices.items()}, f)
+
 
 if __name__ == "__main__":
     # Replace with your actual file paths
-    file_paths = ["/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/pyNMHH/classification/DecisionTree/smallDatasets/smallIter/records.json",
-                  "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/bayesGP/classification/DecisionTree/smallDatasets/smallIter/records.json"]  # Add more file paths as needed
-    main(file_paths)
+    LOGS_ROOT="/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs"
+    problemCategories=["classification"]
+    models=["RandomForest","SVM","GradientBoost","DecisionTree"]
+    # experiments=["smallDatasets/smallIter","smallDatasets/HybridBayes"]
+    # experiments=["smallDatasets/HybridBayes"]
+    experiments=["smallDatasets/smallIter"]
+    solvers=["pyNMHH","bayesGP"]
+    for problemCategory in problemCategories:
+            for experiment in experiments:
+                for model in models:
+                    file_paths = [f"{LOGS_ROOT}/{solver}/{problemCategory}/{model}/{experiment}/records.json" for solver in solvers]
+                    print(f"Category: {problemCategory}, model: {model}, experiment: {experiment}, solvers: {solvers}")
+                    main(file_paths)

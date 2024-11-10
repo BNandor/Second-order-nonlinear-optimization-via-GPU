@@ -1,0 +1,224 @@
+{
+    "experiments": {
+        "1b2d8cf12919bf22b9eb79e333ca5652aab7e02ed6a481343a79eb56cf5b32a6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9148580968280468,
+                        "solution": {
+                            "n_estimators": 76,
+                            "max_features": 10,
+                            "max_depth": 25,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 596.8323721260003
+            }
+        },
+        "5a8613b452b17b56942e89733490c6156973863dec96c7965236b9f16925e51e": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.949438202247191,
+                        "solution": {
+                            "n_estimators": 37,
+                            "max_features": 16,
+                            "max_depth": 10,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 1,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 73.28486533600062
+            }
+        },
+        "4b4d38b14507dfbb1e978bfc3caf4be86c2e515a7d731932f583fff68985fd3c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "n_estimators": 74,
+                            "max_features": 42,
+                            "max_depth": 18,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 2,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 74.99551212500046
+            }
+        },
+        "4bc0c1b3b1115f842bfe23a1ce0dda9ad9e727156a8ae4c3c1fb0b240f94976e": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9638694638694638,
+                        "solution": {
+                            "n_estimators": 11,
+                            "max_features": 36,
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 10,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 34.43598970499988
+            }
+        }
+    }
+}

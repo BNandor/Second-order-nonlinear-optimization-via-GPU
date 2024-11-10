@@ -189,18 +189,6 @@ def runSPRTClusteringSuite():
 def runpyNMHHClassificationSuite():
     classifiers=[
                 {
-                  'name':'RandomForest',
-                  'model':'RF',
-                  'hyperparameters':  {
-                        'n_estimators': [10,100],
-                        "max_features":[1,64],
-                        'max_depth': [5,50],
-                        "min_samples_split":[2,11],
-                        "min_samples_leaf":[1,11],
-                        "criterion":['gini','entropy']
-                   }
-                },
-                {
                   'name':'SVM',
                   'model':'SVM',
                   'hyperparameters': {
@@ -256,19 +244,36 @@ def runpyNMHHClassificationSuite():
                         'max_features': [1,64],
                         'max_leaf_nodes': [2, 50]
                 }
-                }
+                },
+                 {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
                 ]
-    problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'}]
-    solutionConfigs=[{'populationSize':1,'baselevelIterations':150,'pyNMHHSteps':1}]
+    problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
+                               {'name':'AuditRisk'},
+                               {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
+    solutionConfigs=[{'populationSize':50,'baselevelIterations':500,'pyNMHHSteps':5}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
     
     config={
-                'name':'/smallDatasets/HybridBayes',
+                'name':'/smallDatasets/biggerIter',
                 'classifiers':classifiers,
                 'problems': problems,
                 'solutionConfigs':solutionConfigs,
-                'classificationTuningCount':10,
+                'classificationTuningCount':1,
                 'baseLevelConfigs':baseLevelConfigs,
                 'solver':'pyNMHH'
     }
@@ -347,7 +352,12 @@ def runbayesGPClassificationSuite():
                 }
                 }
                 ]
-    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"}]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
+                               {'name':'AuditRisk'},
+                               {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
     solutionConfigs=[{'iterations':150}]
     config={
                 'name':'/smallDatasets/smallIter',
@@ -360,6 +370,365 @@ def runbayesGPClassificationSuite():
     }
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,bayesGPClassificationExperiment)
 
+def runRandomSearchClassificationSuite():
+    classifiers=[
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
+                        },
+                },
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # },
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
+                               {'name':'AuditRisk'},
+                        #        {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
+    solutionConfigs=[{'iterations':500}]
+    config={
+                'name':'/smallDatasets/smallIter',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':5,
+                'baseLevelConfigs':[None],
+                'solver':'randomSearch'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,randomSearchClassificationExperiment)
+
+def runGeneticSearchClassificationSuite():
+    classifiers=[
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
+                        },
+                },
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # },
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
+                               {'name':'AuditRisk'},
+                        #        {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
+    solutionConfigs=[{'iterations':50,'populationSize':50}]
+    config={
+                'name':'/smallDatasets/biggerIter',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':1,
+                'baseLevelConfigs':[None],
+                'solver':'geneticSearch'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,geneticSearchClassificationExperiment)
+
+def runGridSearchClassificationSuite():
+    classifiers=[
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
+                        },
+                },
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # },
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
+                               {'name':'AuditRisk'},
+                        #        {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
+    solutionConfigs=[{'iterations':2500}]
+    config={
+                'name':'/smallDatasets/biggerIter',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':1,
+                'baseLevelConfigs':[None],
+                'solver':'gridSearch'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,gridSearchClassificationExperiment)
+
+def runDefaultClassificationSuite():
+    classifiers=[
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
+                        },
+                },
+                {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                # {
+                #  'name':'KNN',
+                #  'model':'KNN',
+                #  'hyperparameters': {
+                #         'n_neighbors': [2, 5],
+                #         'weights': ['uniform', 'distance'],
+                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                #         'leaf_size': [10, 100],
+                #         'p': [1, 15],
+                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
+                # }
+                # },
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                }
+                ]
+    problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
+                               {'name':'AuditRisk'},
+                        #        {'name':'Iris'},
+                               {'name':'CervicalCancer'}
+                        #        {'name':'BreastCancer'}
+                               ]
+    solutionConfigs=[{'iterations':2500}]
+    config={
+                'name':'/smallDatasets/defaultParams',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':1,
+                'baseLevelConfigs':[None],
+                'solver':'defaultParameters'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,defaultClassificationExperiment)
 # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # runRandomHHSuite()
@@ -371,4 +740,8 @@ def runbayesGPClassificationSuite():
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
 runpyNMHHClassificationSuite()
-# runbayesGPClassificationSuite()
+runbayesGPClassificationSuite()
+runRandomSearchClassificationSuite()
+runGeneticSearchClassificationSuite()
+runGridSearchClassificationSuite()
+runDefaultClassificationSuite()

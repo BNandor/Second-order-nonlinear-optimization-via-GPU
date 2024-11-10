@@ -1,0 +1,192 @@
+{
+    "experiments": {
+        "bafa0caec15df9d77fbeb01844f619f98376907106cb60cff829d364680442d1": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.941569282136895,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1.7457637269999395
+            }
+        },
+        "6dc6e873467ceeea9dbe0fb778434e074bc7a551d840bbd1d29be1300906f422": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.938135593220339,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.6401062980003189
+            }
+        },
+        "48bb134324564f55b4dd6b2f4b368ec4abd359ff3c691c127ec7783ea23b9c5f": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.7219721589990513
+            }
+        },
+        "13e31654a20c91e3d9058fe7bc34761770751333e9203cb19bf248a85b839d5d": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9522144522144522,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.7415215800010628
+            }
+        }
+    }
+}
