@@ -1,0 +1,348 @@
+{
+    "experiments": {
+        "fc79035094a592431d2d1737d5175faa595f7735636ee8728549d225fda59f35": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "Digits",
+                "bayesCap": 15,
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9549248747913189,
+                        "solution": {
+                            "n_estimators": 553,
+                            "learning_rate": 0.08148002582036858,
+                            "max_depth": 6,
+                            "min_samples_split": 20,
+                            "min_samples_leaf": 5,
+                            "subsample": 0.8921168543581679,
+                            "max_features": "sqrt",
+                            "criterion": "friedman_mse",
+                            "warm_start": 0,
+                            "validation_fraction": 0.1,
+                            "n_iter_no_change": 18,
+                            "tol": 1e-06
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 23689.906011763997
+            }
+        },
+        "cd7cd56146cb1fe63cb634618e26f910fdca79a198a3735de5e04fb6bd38ff56": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "Wine",
+                "bayesCap": 15,
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9776836158192092,
+                        "solution": {
+                            "n_estimators": 100,
+                            "learning_rate": 0.15237274399636155,
+                            "max_depth": 4,
+                            "min_samples_split": 15,
+                            "min_samples_leaf": 7,
+                            "subsample": 0.8460069956824581,
+                            "max_features": "log2",
+                            "criterion": "friedman_mse",
+                            "warm_start": 1,
+                            "validation_fraction": 0.15857929521421796,
+                            "n_iter_no_change": 20,
+                            "tol": 0.0001
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 4744.916052270004
+            }
+        },
+        "773f7f0e15065bca18f036687849c0723f8324ad07a25bd2e190b6c7c5ecc36c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "AuditRisk",
+                "bayesCap": 15,
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "n_estimators": 988,
+                            "learning_rate": 0.1905450711755458,
+                            "max_depth": 8,
+                            "min_samples_split": 16,
+                            "min_samples_leaf": 3,
+                            "subsample": 0.8216318956461433,
+                            "max_features": "log2",
+                            "criterion": "friedman_mse",
+                            "warm_start": 0,
+                            "validation_fraction": 0.19619699107678895,
+                            "n_iter_no_change": 5,
+                            "tol": 1.37154952119481e-05
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2767.441388116
+            }
+        },
+        "1111d203a29306d4ab737bbfcced2e7894265da51ef8ae54a988d0c010589052": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "CervicalCancer",
+                "bayesCap": 15,
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9662004662004663,
+                        "solution": {
+                            "n_estimators": 931,
+                            "learning_rate": 0.2,
+                            "max_depth": 6,
+                            "min_samples_split": 20,
+                            "min_samples_leaf": 8,
+                            "subsample": 0.8,
+                            "max_features": "sqrt",
+                            "criterion": "friedman_mse",
+                            "warm_start": 1,
+                            "validation_fraction": 0.1,
+                            "n_iter_no_change": 5,
+                            "tol": 1e-06
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2722.519003412999
+            }
+        }
+    }
+}

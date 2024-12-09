@@ -1,0 +1,284 @@
+{
+    "experiments": {
+        "962fc0b882a51c12e81a65ec14ba0e218b997da1479bf7a3147ad2b67109679d": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "Digits",
+                "bayesCap": 15,
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9744017807456872,
+                        "solution": {
+                            "C": 7.197749897570431,
+                            "kernel": "rbf",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.1192089707365766,
+                            "shrinking": 0,
+                            "tol": 0.0009659483297714022,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2151.112006531999
+            }
+        },
+        "30077b6c600ccfffcf2e4920a0f5a8fc25be0955181904347aad3e9d3c9645ea": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "Wine",
+                "bayesCap": 15,
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9331450094161958,
+                        "solution": {
+                            "C": 50.0,
+                            "kernel": "linear",
+                            "degree": 2,
+                            "gamma": 0.1,
+                            "coef0": 1.0,
+                            "shrinking": 0,
+                            "tol": 1e-05,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2599.069159835002
+            }
+        },
+        "4677b56979b259079ab7293fa4e1926e3df09928bf384415eeac6141862fa36c": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "AuditRisk",
+                "bayesCap": 15,
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9948119325551232,
+                        "solution": {
+                            "C": 4.285157421689029,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": "auto",
+                            "coef0": 0.9833095741524889,
+                            "shrinking": 0,
+                            "tol": 3.289207581349603e-05,
+                            "class_weight": "balanced"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2006.6484989490018
+            }
+        },
+        "9375df48080d38f2a32dc70f69b9dc88bf7c72a3803186ef34892d0cd0e9d338": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "CervicalCancer",
+                "bayesCap": 15,
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.956876456876457,
+                        "solution": {
+                            "C": 1.0,
+                            "kernel": "sigmoid",
+                            "degree": 5,
+                            "gamma": "scale",
+                            "coef0": 0.23343807962240937,
+                            "shrinking": 1,
+                            "tol": 0.001,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 4860.211559422001
+            }
+        }
+    }
+}

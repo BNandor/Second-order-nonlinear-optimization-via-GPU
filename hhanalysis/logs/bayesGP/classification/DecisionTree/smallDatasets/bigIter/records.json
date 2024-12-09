@@ -1,0 +1,244 @@
+{
+    "experiments": {
+        "e438c1c998827fb91389e659b9215d0f44f1cd05f470a0e6cd6f211c3d6c4227": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "Digits",
+                "bayesCap": 15,
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7991096271563717,
+                        "solution": {
+                            "criterion": "entropy",
+                            "splitter": "best",
+                            "max_depth": 50,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "max_features": 47,
+                            "max_leaf_nodes": 50
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1424.202442210997
+            }
+        },
+        "71d06c99766a19c49ff0286d303b416df7db581411bca5bd08ed656d9494a139": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "Wine",
+                "bayesCap": 15,
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.944256120527307,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "random",
+                            "max_depth": 5,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 2,
+                            "max_features": 50,
+                            "max_leaf_nodes": 47
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1263.7479677759984
+            }
+        },
+        "0fbd3510288683d8645df67b49668a4f26e0caca04f58da2633c64d380321cb6": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "AuditRisk",
+                "bayesCap": 15,
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "criterion": "entropy",
+                            "splitter": "best",
+                            "max_depth": 43,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 9,
+                            "max_features": 52,
+                            "max_leaf_nodes": 32
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1190.9406280760013
+            }
+        },
+        "0544be98aba5f1523cae946e9b3741bec48dcea800a8670227f92517144d0eb6": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "CervicalCancer",
+                "bayesCap": 15,
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "random",
+                            "max_depth": 22,
+                            "min_samples_split": 7,
+                            "min_samples_leaf": 9,
+                            "max_features": 51,
+                            "max_leaf_nodes": 27
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1225.0255055180023
+            }
+        }
+    }
+}

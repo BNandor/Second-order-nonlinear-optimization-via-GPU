@@ -84,5 +84,5 @@ def bayesGP(hist,func):
     bestIndex=np.where(res_gp.func_vals == res_gp.fun)[-1][0]
     if bestIndex>len(X):
         hist.operatorStates['bayesGP_estimator']=res_gp.models[bestIndex-len(X)]
-         
+    print(f'evalcount {func.eval_count}')
     return res_gp.x_iters[-newpointcount:],res_gp.func_vals[-newpointcount:] 

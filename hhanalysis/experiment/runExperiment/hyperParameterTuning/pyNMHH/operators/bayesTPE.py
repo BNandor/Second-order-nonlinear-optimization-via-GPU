@@ -8,23 +8,6 @@ import numpy as np
 from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
 from sklearn.model_selection import cross_val_score, StratifiedKFold
 
-
-# def objective(params):
-#     params = {
-#         "optimizer":str(params['optimizer']),
-#         "activation":str(params['activation']),
-#         'batch_size': abs(int(params['batch_size'])),
-#         'neurons': abs(int(params['neurons'])),
-#         'epochs': abs(int(params['epochs'])),
-#         'patience': abs(int(params['patience']))
-#     }
-#     clf = KerasClassifier(build_fn=ANN,**params, verbose=0)
-#     score = -np.mean(cross_val_score(clf, X, y, cv=3, 
-#                                     scoring="accuracy"))
-
-#     return {'loss':score, 'status': STATUS_OK }
-
-
 def add_pre_evaluated_point(trials,tid, params, loss):
     trial = {
         'tid': tid,
@@ -121,7 +104,8 @@ def bayesTPE(hist,func):
             algo=tpe.suggest,
             max_evals=len(hist.population_history[0]),
             trials=trials)
-    # print(best)
+    print(best)
+    print(f'evalcount {func.eval_count}')
     newX,newY=trialsToXY(trials,len(hist.population_history[0]))
     return newX,newY
     # popsize=len(hist.population_history[0])

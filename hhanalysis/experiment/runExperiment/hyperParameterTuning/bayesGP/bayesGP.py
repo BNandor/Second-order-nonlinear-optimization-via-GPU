@@ -52,6 +52,21 @@ def unflatten(flatParams,paramConfig):
             else:
                 unflattened[key]=flatValue
     return unflattened
+def flattenFromString(flatParams,paramConfig):
+    unflattened=[]
+    for (flatValue,(key,value)) in zip(flatParams,paramConfig.items()):
+            if isinstance(value[0], int) and not isinstance(value[0], bool):
+                unflattened.append(int(flatValue))
+            elif isinstance(value[0], float) and not isinstance(value[0], bool):
+                unflattened.append(float(flatValue))
+            else:
+                if isinstance(flatValue,np.str_):
+                    unflattened.append(str(flatValue))
+                else:
+                    unflattened.append(flatValue)
+                # unflattened.append(flatValue)
+    return unflattened
+
 def castToRightString(params):
     # First, let's convert any numpy string to Python string
     for key, value in params.items():
@@ -68,7 +83,33 @@ def bayesGPTuning(config):
         clf = config['classifier'](**castToRightString(params))
         scores = cross_val_score(clf, config['X'], config['Y'],cv=config['crossValidations'],scoring='accuracy',n_jobs=-1)
         return -np.mean(scores)
-    res_gp = gp_minimize(objective, gpParams, n_calls=config['bayesGPIterations'], random_state=0,verbose=True,n_jobs=-1)
+    if 'bayesCap'in config:
+        print(f'BayesCap of {config["bayesCap"]} enabled')
+        estimator=None
+        res_gp = gp_minimize(objective, gpParams, base_estimator=estimator,n_calls=config['bayesCap'], random_state=0,verbose=True,n_jobs=-1,n_restarts_optimizer=1, model_queue_size=config['bayesCap'])
+        solx=res_gp.x_iters[-(config['bayesCap']):]
+        soly=res_gp.func_vals[-(config['bayesCap']):]
+        solx=[flattenFromString(sol,config['hyperParameters']) for sol in solx]
+        for i in range(config['bayesGPIterations']//config['bayesCap']-1):
+            print(f'\ntotal func evals={(i+1)*config["bayesCap"]}\n')
+            # start_time = time.time()
+            # callback = partial(callback_with_timer, start_time=start_time)
+
+            res_gp = gp_minimize(objective, gpParams,base_estimator=estimator, x0=solx,y0=soly,n_calls=config['bayesCap'],n_initial_points=0, random_state=0,verbose=True,n_jobs=-1,n_restarts_optimizer=1, model_queue_size=config['bayesCap'])
+            bestIndex=np.where(res_gp.func_vals == res_gp.fun)[-1][0]
+            if bestIndex>len(solx):
+                estimator=res_gp.models[bestIndex-len(solx)]
+            newsolx=res_gp.x_iters[-(config['bayesCap']):]
+            newsolx=[flattenFromString(sol,config['hyperParameters']) for sol in newsolx]
+            newsoly=res_gp.func_vals[-(config['bayesCap']):]
+            for i in range(config['bayesCap']):
+                 if newsoly[i]<soly[i]:
+                      solx[i]=newsolx[i]
+                      soly[i]=newsoly[i]
+            print(solx)
+    else:
+        res_gp = gp_minimize(objective, gpParams, n_calls=config['bayesGPIterations'], random_state=0,verbose=True,n_jobs=-1)
+        
     print("Accuracy:%.4f" % -res_gp.fun)
     print(res_gp.x)
     return {
@@ -117,6 +158,9 @@ def bayesGPClassificationExperiment(experiment,recordsPath,experimentId):
                         'classifierName':experiment['classifier']['name'],
                         'datasetName':experiment['problems']['name']
                     }
+            if 'bayesCap' in experiment['solutionConfigs']:
+                config['bayesCap']=experiment['solutionConfigs']['bayesCap']
+
             solutions=bayesGPTunings(config)
             end = timer()
             metadata={"elapsedTimeSec":end-start}            

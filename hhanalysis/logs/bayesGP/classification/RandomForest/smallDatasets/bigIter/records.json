@@ -1,0 +1,224 @@
+{
+    "experiments": {
+        "d9cfd002a5ec9e021510ce53e28b4d0122cb442b08a949ed57aff0cf0339d0e1": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "bayesCap": 15,
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9443516972732331,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 1,
+                            "max_depth": 50,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2473.465092443
+            }
+        },
+        "15384c9be660d53cdf8a0aeea10e2a92f48482ebd1d8b49ee66150bfb030ce23": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "bayesCap": 15,
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.9831450094161959,
+                        "solution": {
+                            "n_estimators": 57,
+                            "max_features": 1,
+                            "max_depth": 40,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 7,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1635.978613532001
+            }
+        },
+        "dfd088c0055000f3af5dcf6995bcbe2c0ca1ef2944c1ca0654dd476a08705dbd": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "bayesCap": 15,
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 1.0,
+                        "solution": {
+                            "n_estimators": 45,
+                            "max_features": 54,
+                            "max_depth": 20,
+                            "min_samples_split": 8,
+                            "min_samples_leaf": 5,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1398.5571930459992
+            }
+        },
+        "8c9a39d12502c78ae3f2693b3457901fe5a5ff7fef093299662a7914cc233b9e": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "bayesGPIterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "bayesCap": 15,
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 10,
+                            "max_features": 12,
+                            "max_depth": 48,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 8,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1626.249668984001
+            }
+        }
+    }
+}
