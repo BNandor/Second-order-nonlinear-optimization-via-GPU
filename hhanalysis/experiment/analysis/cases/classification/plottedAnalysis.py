@@ -336,10 +336,6 @@ if __name__ == "__main__":
     LOGS_ROOT = "../../../../logs"
     problemCategories = ["classification"]
     models = ["RandomForest", "SVM", "GradientBoost", "DecisionTree"]
-    # experiments = ["smallDatasets/smallIter"]
-    # experiments=["smallDatasets/HybridBayes"]
-    # experiments=["smallDatasets/biggerIter"]
-    # solvers = ["pyNMHH", "bayesGP"]
     solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/pyNMHHBased"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
     for problemCategory in problemCategories:
