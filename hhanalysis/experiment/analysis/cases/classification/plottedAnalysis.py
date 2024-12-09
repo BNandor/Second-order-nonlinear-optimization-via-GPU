@@ -110,9 +110,9 @@ def create_maxcomparison_matrix(group):
                 max2=np.max(accuracies2)
                 statistic, p_value = stats.ranksums(accuracies1.array, accuracies2.array)
                 
-                if max1-max2>0.001:
+                if max1-max2>0.003:
                     matrix[i, j] = 1.0 
-                elif abs(max1-max2)<0.001:
+                elif abs(max1-max2)<0.003:
                     # 0.5 means no significant difference
                     matrix[i, j] = 0.5
                 else: 
@@ -340,7 +340,6 @@ if __name__ == "__main__":
     # experiments=["smallDatasets/HybridBayes"]
     # experiments=["smallDatasets/biggerIter"]
     # solvers = ["pyNMHH", "bayesGP"]
-    solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/bigIterEstimatorFix"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter")]
     solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/pyNMHHBased"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
     for problemCategory in problemCategories:

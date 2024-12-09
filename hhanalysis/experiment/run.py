@@ -539,11 +539,7 @@ def runBigbayesGPPyNMHHClassificationSuite():
                                {'name':'CervicalCancer'}
                         #        {'name':'BreastCancer'}
                                ]
-<<<<<<< HEAD
-    solutionConfigs=[{'populationSize':33,'baselevelIterations':2500,'pyNMHHSteps':1}]
-=======
     solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
->>>>>>> 11c26c3b (compared bayesGP,bayesTPE,default,random,genetic,grid,pyNMHH on four datasets)
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayesGP()]
     
