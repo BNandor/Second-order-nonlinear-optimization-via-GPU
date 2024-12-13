@@ -260,16 +260,16 @@ def runpyNMHHClassificationSuite():
                 ]
     problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
                                {'name':'AuditRisk'},
-                               {'name':'Iris'},
+                            #    {'name':'Iris'},
                                {'name':'CervicalCancer'}
                         #        {'name':'BreastCancer'}
                                ]
-    solutionConfigs=[{'populationSize':50,'baselevelIterations':500,'pyNMHHSteps':5}]
+    solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
     
     config={
-                'name':'/smallDatasets/biggerIter',
+                'name':'/smallDatasets/biggerIter/smallerPop',
                 'classifiers':classifiers,
                 'problems': problems,
                 'solutionConfigs':solutionConfigs,
@@ -539,7 +539,11 @@ def runBigbayesGPPyNMHHClassificationSuite():
                                {'name':'CervicalCancer'}
                         #        {'name':'BreastCancer'}
                                ]
+<<<<<<< HEAD
     solutionConfigs=[{'populationSize':33,'baselevelIterations':2500,'pyNMHHSteps':1}]
+=======
+    solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
+>>>>>>> 11c26c3b (compared bayesGP,bayesTPE,default,random,genetic,grid,pyNMHH on four datasets)
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayesGP()]
     
@@ -1022,7 +1026,7 @@ def runDefaultClassificationSuite():
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
 runBigbayesGPPyNMHHClassificationSuite()
-runBigbayesTPEClassificationSuite()
+# runBigbayesTPEClassificationSuite()
 # runRandomSearchClassificationSuite()
 # runGeneticSearchClassificationSuite()
 # runGridSearchClassificationSuite()

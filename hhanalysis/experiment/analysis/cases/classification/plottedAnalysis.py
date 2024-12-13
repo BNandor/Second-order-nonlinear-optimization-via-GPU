@@ -333,7 +333,7 @@ def main(file_paths: List[str]):
 
 if __name__ == "__main__":
     # Your existing file paths setup
-    LOGS_ROOT = "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs"
+    LOGS_ROOT = "../../../../logs"
     problemCategories = ["classification"]
     models = ["RandomForest", "SVM", "GradientBoost", "DecisionTree"]
     # experiments = ["smallDatasets/smallIter"]
@@ -341,6 +341,7 @@ if __name__ == "__main__":
     # experiments=["smallDatasets/biggerIter"]
     # solvers = ["pyNMHH", "bayesGP"]
     solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/bigIterEstimatorFix"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter")]
+    solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/pyNMHHBased"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
     for problemCategory in problemCategories:
         for solver,experiment in  solverAndExperiment:

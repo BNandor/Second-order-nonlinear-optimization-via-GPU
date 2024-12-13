@@ -402,18 +402,18 @@ def perturb_baseLevelConfig(baseLevelConfig, temperature):
         if isinstance(matrix, list):
             for i in range(len(matrix)):
                 if isinstance(matrix[i], list):
-                    matrix[i] = [perturb_value(v, 0, 1, temperature) for v in matrix[i]]
+                    matrix[i] = [perturb_value(v, 0.01, 1, temperature) for v in matrix[i]]
                 else:
-                    matrix[i] = perturb_value(matrix[i], 0, 1, temperature)
+                    matrix[i] = perturb_value(matrix[i], 0.01, 1, temperature)
     
     for category, data in newBaseLevelConfig["OperatorTransitionMatrices"].items():
         for key, matrix in data.items():
             if isinstance(matrix, list):
                 for i in range(len(matrix)):
                     if isinstance(matrix[i], list):
-                        matrix[i] = [perturb_value(v, 0, 1, temperature) for v in matrix[i]]
+                        matrix[i] = [perturb_value(v, 0.01, 1, temperature) for v in matrix[i]]
                     else:
-                        matrix[i] = perturb_value(matrix[i], 0, 1, temperature)
+                        matrix[i] = perturb_value(matrix[i], 0.01, 1, temperature)
     
     # Perturb other parameters in baseLevelConfig
     for key, value in newBaseLevelConfig['OperatorParams'].items():
