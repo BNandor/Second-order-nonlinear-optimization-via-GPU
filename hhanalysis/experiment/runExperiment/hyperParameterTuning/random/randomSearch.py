@@ -45,6 +45,8 @@ def pyNMHHHyperParametersToSP(paramConfig):
 
 def randomSearch(config):
     rf_params = pyNMHHHyperParametersToSP((config['hyperParameters']))
+    if config['classifierName'] == "SVM":
+        rf_params['max_iter']=sp_randint(1000,1001)
     clf = config['classifier'](random_state=0)
     Random = RandomizedSearchCV(clf, param_distributions=rf_params,n_iter=config['randomSearchIterations'],cv=config['crossValidations'],scoring='accuracy',verbose=2,n_jobs=-1)
     Random.fit(config['X'], config['Y'])

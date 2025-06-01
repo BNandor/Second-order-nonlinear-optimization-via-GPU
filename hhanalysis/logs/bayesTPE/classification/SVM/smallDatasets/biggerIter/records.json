@@ -2147,6 +2147,543 @@
             "metadata": {
                 "elapsedTimeSec": 791.0621065180003
             }
+        },
+        "3fc4890e9f97c009a45116040b9d9f8e8b0a5f91066008b7d6ad0fb49c8e9f2d": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 2500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 1,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "GallStone",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesTPE"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                1.0
+                            ],
+                            [
+                                1.0,
+                                0.0
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {}
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "classifierModel": "SVM",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesTPE"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.0,
+                                    1.0
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0.0,
+                                        1.0
+                                    ],
+                                    [
+                                        1.0,
+                                        0.0
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {}
+                        },
+                        "bestAccuracy": 0.7555398812672663,
+                        "solution": {
+                            "C": 18.706836928776433,
+                            "kernel": "poly",
+                            "degree": 3,
+                            "gamma": "scale",
+                            "coef0": 0.9471379344604522,
+                            "shrinking": true,
+                            "tol": 0.0005270494257749542,
+                            "class_weight": "balanced"
+                        },
+                        "bestSequence": [
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE",
+                            "best",
+                            "BayesTPE"
+                        ]
+                    }
+                ],
+                "solver": "bayesTPE"
+            },
+            "metadata": {
+                "elapsedTimeSec": 126.30458759603789
+            }
         }
     }
 }

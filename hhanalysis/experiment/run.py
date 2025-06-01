@@ -261,12 +261,15 @@ def runpyNMHHClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
                                {'name':'AuditRisk'},
                             #    {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
+#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigEmphBayes()]
     
     config={
                 'name':'/smallDatasets/biggerIter/smallerPop',
@@ -536,7 +539,9 @@ def runBigbayesGPPyNMHHClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
@@ -630,7 +635,9 @@ def runBigbayesTPEClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
@@ -723,7 +730,9 @@ def runRandomSearchClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':500}]
@@ -813,7 +822,9 @@ def runGeneticSearchClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':50,'populationSize':50}]
@@ -903,7 +914,9 @@ def runGridSearchClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':2500}]
@@ -993,7 +1006,9 @@ def runDefaultClassificationSuite():
     problems=lambda logspath: [{'name':"Digits"},{'name':"Wine"},
                                {'name':'AuditRisk'},
                         #        {'name':'Iris'},
-                               {'name':'CervicalCancer'}
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':2500}]
@@ -1018,12 +1033,12 @@ def runDefaultClassificationSuite():
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
 
-# runpyNMHHClassificationSuite()
+runpyNMHHClassificationSuite()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
 runBigbayesGPPyNMHHClassificationSuite()
 # runBigbayesTPEClassificationSuite()
 # runRandomSearchClassificationSuite()
-# runGeneticSearchClassificationSuite()
 # runGridSearchClassificationSuite()
 # runDefaultClassificationSuite()
+# runGeneticSearchClassificationSuite()

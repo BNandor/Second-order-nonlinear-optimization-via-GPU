@@ -235,6 +235,65 @@
             "metadata": {
                 "elapsedTimeSec": 9.618845551001868
             }
+        },
+        "718f7899ad861ff30433c7d7070d5336088738ac2174e0218b7531fc855d16e5": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "GallStone",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.5550167518956092,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 5,
+                            "max_features": 1,
+                            "max_leaf_nodes": 2,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 2,
+                            "splitter": "best"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 6.7854095280054025
+            }
         }
     }
 }

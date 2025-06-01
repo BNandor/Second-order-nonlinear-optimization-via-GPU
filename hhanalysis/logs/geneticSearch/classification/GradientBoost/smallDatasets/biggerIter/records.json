@@ -343,6 +343,92 @@
             "metadata": {
                 "elapsedTimeSec": 81.29917155800104
             }
+        },
+        "79a7309561ba96b040530a735baa09f0a4220b9da0ee9026d8615861d917d9f2": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "GallStone",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8025078369905956,
+                        "solution": {
+                            "n_estimators": 340,
+                            "learning_rate": 0.04571254261458696,
+                            "max_depth": 4,
+                            "min_samples_split": 18,
+                            "min_samples_leaf": 1,
+                            "subsample": 0.8946613173366748,
+                            "max_features": "log2",
+                            "criterion": "squared_error",
+                            "warm_start": true,
+                            "validation_fraction": 0.1396827416096493,
+                            "n_iter_no_change": 12,
+                            "tol": 9.545639305582086e-06
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 59.245617807027884
+            }
         }
     }
 }

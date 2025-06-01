@@ -483,6 +483,132 @@
             "metadata": {
                 "elapsedTimeSec": 1778.5005687089997
             }
+        },
+        "1afedb7464128026e14ef4237b0f365d1478302d879ad7dda88159feb5d3e164": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "GallStone",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7367895139011345,
+                        "solution": {
+                            "C": 29.393444074344867,
+                            "class_weight": "balanced",
+                            "coef0": 0.7492338923940577,
+                            "degree": 3,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": false,
+                            "tol": 0.00026814030544365934
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7335566919414566,
+                        "solution": {
+                            "C": 46.303768479759334,
+                            "class_weight": null,
+                            "coef0": 0.768592345445999,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": true,
+                            "tol": 0.00023275418403162512
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7398460001175572,
+                        "solution": {
+                            "C": 21.080050614670782,
+                            "class_weight": null,
+                            "coef0": 0.9695920893490365,
+                            "degree": 3,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": false,
+                            "tol": 0.0003752323950805173
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7398166108270146,
+                        "solution": {
+                            "C": 21.57028139277868,
+                            "class_weight": null,
+                            "coef0": 0.17771716601557008,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": true,
+                            "tol": 0.0006631634028465226
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7335566919414566,
+                        "solution": {
+                            "C": 49.83065407025814,
+                            "class_weight": null,
+                            "coef0": 0.2495317991390974,
+                            "degree": 3,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": false,
+                            "tol": 0.00029200692003880185
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 7.908378830004949
+            }
         }
     }
 }

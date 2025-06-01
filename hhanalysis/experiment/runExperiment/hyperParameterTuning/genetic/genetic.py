@@ -22,10 +22,12 @@ from sklearn.metrics import classification_report,confusion_matrix,accuracy_scor
 # from evolutionary_search import EvolutionaryAlgorithmSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree  import DecisionTreeClassifier
+from sklearn import svm
 
 from runExperiment.hyperParameterTuning.genetic.customClassifier.CustomRF import *
 from runExperiment.hyperParameterTuning.genetic.customClassifier.CustomGradientBoost import *
 from runExperiment.hyperParameterTuning.genetic.customClassifier.CustomDT import *
+from runExperiment.hyperParameterTuning.genetic.customClassifier.CustomSVC import *
 
 from runExperiment.commonRun import *
 from runExperiment.classification.classifiers import getClassifiers
@@ -65,6 +67,8 @@ def handleCustomClassifiers(clf):
         return CustomGradientBoostClassifier()
     if isinstance(clf,DecisionTreeClassifier):
         return CustomDecisionTreeClassifier()
+    if isinstance(clf,svm.SVC):
+        return CustomSVC()
     return clf
 
 def geneticSearch(config):

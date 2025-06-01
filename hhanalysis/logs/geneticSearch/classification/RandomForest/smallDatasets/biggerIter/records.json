@@ -219,6 +219,61 @@
             "metadata": {
                 "elapsedTimeSec": 34.43598970499988
             }
+        },
+        "0cff86586c1a0c6a31bc61b95c268c20cfbac49d4ef1cf0ec5922cee6cd4c48c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "GallStone",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7899686520376176,
+                        "solution": {
+                            "n_estimators": 45,
+                            "max_features": 58,
+                            "max_depth": 16,
+                            "min_samples_split": 5,
+                            "min_samples_leaf": 2,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 125.220727737993
+            }
         }
     }
 }

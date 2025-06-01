@@ -56,6 +56,8 @@ def pyNMHHHyperParametersToRange(paramConfig,iterations):
 
 def gridSearch(config):
     clf_params = pyNMHHHyperParametersToRange((config['hyperParameters']),config['iterations'])
+    if config['classifierName'] == "SVM":
+        clf_params['max_iter']=[1000]
     clf =config['classifier'](random_state=0)
     grid = GridSearchCV(clf, clf_params, cv=config['crossValidations'], scoring='accuracy',n_jobs=-1,verbose=3)
     grid.fit(config['X'], config['Y'])

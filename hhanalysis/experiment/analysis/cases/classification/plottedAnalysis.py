@@ -9,6 +9,7 @@ from itertools import combinations
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
+from collections import Counter
 
 def hash_dict(d: Dict[str, Any]) -> str:
     """Create a hash for a dictionary."""
@@ -110,9 +111,9 @@ def create_maxcomparison_matrix(group):
                 max2=np.max(accuracies2)
                 statistic, p_value = stats.ranksums(accuracies1.array, accuracies2.array)
                 
-                if max1-max2>0.003:
+                if max1-max2>0.0025:
                     matrix[i, j] = 1.0 
-                elif abs(max1-max2)<0.003:
+                elif abs(max1-max2)<0.0025:
                     # 0.5 means no significant difference
                     matrix[i, j] = 0.5
                 else: 
@@ -189,7 +190,10 @@ def group_experiments(df: pd.DataFrame):
     #                    'datasetName', 'hyperParameters_hash'])
     return df.groupby(['classifierModel','datasetName','hyperParameters_hash'])
 
-def plot_comparison_matrices(df, max_datasets_per_figure=2):
+def capitalize_first_letter(text):
+    return text[:1].upper() + text[1:] if text else text
+
+def plot_comparison_matrices(df, max_datasets_per_figure=2,pyNMHHSolvers={}):
     """
     Plot comparison matrices with time bar plots, splitting into multiple figures 
     if there are more datasets than max_datasets_per_figure.
@@ -224,10 +228,11 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2):
                 # Filter data for this classifier-dataset combination
                 subset = df[(df['classifierModel'] == classifier) &
                            (df['datasetName'] == dataset)]
+                pyNMHHSubset=subset[(subset['solver']=='pyNMHH')]
                 
                 if not subset.empty:
                     # Create inner gridspec for matrix and barplot
-                    inner_grid = outer_grid[i, j].subgridspec(1, 2, width_ratios=[1.5, 1])
+                    inner_grid = outer_grid[i, j].subgridspec(1, 3, width_ratios=[1, 1.0,1.0])
                     
                     # Create matrix and get solver names and times
                     matrix, solvers = create_maxcomparison_matrix(subset)
@@ -243,11 +248,12 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2):
                                vmax=1,
                                square=True,
                                xticklabels=False,
-                               yticklabels=solvers,
+                               yticklabels=list(map(lambda s:capitalize_first_letter(s.replace('defaultParameters','default')).replace('PyNMHH','pyNMHH'),solvers)),
                                ax=ax_heatmap,
                                cbar_kws={'label': 'Comparison Result'},
                                cbar=False)
-                    
+                    ax_heatmap.set_xlabel('Wins')
+
                     # Plot barplot
                     ax_barplot = fig.add_subplot(inner_grid[1])
                     # Sort times for better visualization
@@ -256,11 +262,13 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2):
                     bars = ax_barplot.barh(list(range(len(sorted_times))), 
                                          list(sorted_times.values()),
                                          align='center')
-                    ax_barplot.set_xlim(0, max(sorted_times.values()) * 1.4)
+                    ax_barplot.set_xlim(0, max(sorted_times.values()) * 1.7)
                     
                     # Customize barplot
                     ax_barplot.set_yticks(range(len(sorted_times)))
-                    ax_barplot.set_yticklabels(list(sorted_times.keys()))
+                    # ax_barplot.set_yticklabels(list(map(lambda s:capitalize_first_letter(s.replace('defaultParameters','default')),sorted_times.keys())))
+                    ax_barplot.set_yticklabels( [ "" for k in sorted_times.keys()])
+                    # ax_barplot.tick_params(axis='both', labelsize=7)
                     ax_barplot.set_xlabel('Time (s)')
                     
                     # Add value labels on bars
@@ -269,11 +277,35 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2):
                         ax_barplot.text(width, bar.get_y() + bar.get_height()/2,
                                       f'{width:.1f}',
                                       ha='left', va='center')
+                    pos = ax_barplot.get_position()
+                    ax_barplot.set_position([pos.x0 -0.015, pos.y0, pos.width, pos.height])
+                    # ax_barplot.set_position([pos.x0-1000, pos.y0, pos.width, pos.height])
+                    # Operator statistics   
+                    ax_barplot_operators = fig.add_subplot(inner_grid[2])
                     
+                    operatorsUsed=pyNMHHSubset['solverOperators'].values[0]
+                    for solver in pyNMHHSolvers:
+                        if solver not in operatorsUsed:
+                            operatorsUsed[solver]=0
+
+                    sorted_operators = dict(sorted(operatorsUsed.items(),reverse=True))
+                    # colors = cm.coolwarm(np.linspace(1, 0, len(solvers)))
+                    operatorBars = ax_barplot_operators.barh(list(range(len(sorted_operators))), 
+                                         list(sorted_operators.values()),color=cm.viridis(np.linspace(0, 1, len(sorted_operators))),
+                                         align='center')
+                    ax_barplot_operators.set_xlim(0, 30)
+                    
+                    # Customize barplot
+                    ax_barplot_operators.set_yticks(range(len(sorted_operators)))
+                    ax_barplot_operators.set_yticklabels(list(map(lambda s:capitalize_first_letter(s).replace('Best','Elitist'),sorted_operators.keys())))
+                    ax_barplot_operators.set_xlabel('Frequency')
+                    pos = ax_barplot_operators.get_position()
+                    ax_barplot_operators.set_position([pos.x0 +0.01, pos.y0, pos.width, pos.height])
                     # Set titles
                     if i == 0:
                         ax_heatmap.set_title(f'{dataset}\n Results')
                         ax_barplot.set_title(f'{dataset}\nSolver Times')
+                        ax_barplot_operators.set_title('pyNMHH\n Operator Frequencies')
                     
                     if j == 0:
                         ax_heatmap.set_ylabel(f'{classifier}')
@@ -289,14 +321,57 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2):
         
         # Add figure title to indicate which datasets are included
         plt.suptitle(f'Datasets: {", ".join(current_datasets)}', fontsize=16)
-        
+        # plt.tight_layout()
+        # plt.subplots_adjust(
+        #     left=0.1,    # left margin
+        #     right=0.9,   # right margin
+        #     bottom=0.1,  # bottom margin
+        #     top=0.9,     # top margin
+        #     wspace=0.5,  # width spacing between subplots
+        #     hspace=0.4   # height spacing between subplots
+        # )
+
         # Show the figure (or save if preferred)
         plt.show()
+
+def getBestSolutionStatistics(experiment,pyNMHHSolvers):
+    if experiment['solver'] != 'pyNMHH':
+        return {}
+    bestSolution=max(experiment['solutions'],key=lambda s:s['bestAccuracy'])
+    bestSequence=bestSolution['bestSequence']
+    frequencies = Counter(bestSequence)
+    dfrequencies=dict(frequencies)
+    pyNMHHSolvers.update(list(dfrequencies.keys()))
+    return dfrequencies
+
+def printExperimentTable(df):
+    experiments=df[["datasetName","classifierModel","solver","accuracies"]]
+    result = experiments.groupby(["datasetName",'classifierModel', 'solver'])['accuracies'].max().reset_index()
+    # Convert to LaTeX format with some styling
+    pivot_table = result.pivot(
+        index=['datasetName','classifierModel'],
+        columns='solver',
+        values='accuracies'
+    ).reset_index()
+    # pivot_table=pivot_table[['datasetName','classifierModel','pyNMHH','bayesGP','bayesTPE', 'defaultParameters','geneticSearch','gridSearch','randomSearch']]
+    latex_table = pivot_table.to_latex(
+        index=False,
+        float_format="%.5f",
+        caption="Maximum Accuracies by Classifier and Dataset",
+        label="tab:accuracies_by_solver",
+        escape=True
+    )
+
+    # Improve formatting
+    latex_table = latex_table.replace('tabular', 'tabular*{\\textwidth}')
+    latex_table = latex_table.replace('classifierModel', 'Classifier')
+    latex_table = latex_table.replace('datasetName', 'Dataset')
+    print(latex_table)
 
 def main(file_paths: List[str]):
     """Main function to process data and generate visualizations."""
     all_experiments = []
-    
+    pyNMHHSolvers=set()
     # Read and process all experiment files
     for file_path in file_paths:
         try:
@@ -306,6 +381,7 @@ def main(file_paths: List[str]):
             experiments = []
             for exp_id, exp_data in data['experiments'].items():
                 experiment = exp_data['experiment']
+
                 experiments.append({
                     'experiment_id': exp_id,
                     'totalFunctionEvaluations': experiment['totalFunctionEvaluations'],
@@ -314,7 +390,8 @@ def main(file_paths: List[str]):
                     'solver': experiment['solver'],
                     'hyperParameters_hash': hash_dict(experiment['hyperParameters']),
                     'accuracies': [solution['bestAccuracy'] for solution in experiment['solutions']],
-                    'timeSec':exp_data['metadata']['elapsedTimeSec']
+                    'timeSec':exp_data['metadata']['elapsedTimeSec'],
+                    'solverOperators':getBestSolutionStatistics(experiment,pyNMHHSolvers)
                 })
             all_experiments.extend(experiments)
         except Exception as e:
@@ -324,12 +401,14 @@ def main(file_paths: List[str]):
     # Create and process DataFrame
     df = pd.DataFrame(all_experiments)
     df = df.explode('accuracies').reset_index(drop=True)
+
     df['accuracies'] = df['accuracies'].astype(float)
     # groupedDF=group_experiments(df)
 
     # Generate plot
+    printExperimentTable(df)
     plotWins(df)
-    plot_comparison_matrices(df)
+    plot_comparison_matrices(df,2,pyNMHHSolvers)
 
 if __name__ == "__main__":
     # Your existing file paths setup
@@ -337,6 +416,7 @@ if __name__ == "__main__":
     problemCategories = ["classification"]
     models = ["RandomForest", "SVM", "GradientBoost", "DecisionTree"]
     solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/pyNMHHBased"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
+    # solverAndExperiment=[("bayesGP","smallDatasets/pyNMHHBased"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
     for problemCategory in problemCategories:
         for solver,experiment in  solverAndExperiment:

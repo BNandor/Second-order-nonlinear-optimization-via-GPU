@@ -611,6 +611,159 @@
             "metadata": {
                 "elapsedTimeSec": 74.10016310799983
             }
+        },
+        "e13355088600c6955a4a8d2a427135a127cd3fa65ffb89155905abc1863c63bf": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "GallStone",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8211367777581849,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.155394529033537,
+                            "max_depth": 6,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 18,
+                            "n_estimators": 520,
+                            "n_iter_no_change": 14,
+                            "subsample": 0.8832134310336258,
+                            "tol": 7.958831377615985e-05,
+                            "validation_fraction": 0.1446596629215065,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8242814318462353,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.17829612470059616,
+                            "max_depth": 7,
+                            "max_features": "log2",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 2,
+                            "n_estimators": 606,
+                            "n_iter_no_change": 17,
+                            "subsample": 0.9035169759152657,
+                            "tol": 1.176649340275908e-05,
+                            "validation_fraction": 0.16220470075471646,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8149062481631694,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.11042500717042275,
+                            "max_depth": 3,
+                            "max_features": "log2",
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 5,
+                            "n_estimators": 230,
+                            "n_iter_no_change": 18,
+                            "subsample": 0.81450579415652,
+                            "tol": 2.126909624969417e-05,
+                            "validation_fraction": 0.16181322507309526,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.821254334920355,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.15854160555356048,
+                            "max_depth": 4,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 2,
+                            "min_samples_split": 6,
+                            "n_estimators": 577,
+                            "n_iter_no_change": 18,
+                            "subsample": 0.9352300993446652,
+                            "tol": 8.063875603945787e-06,
+                            "validation_fraction": 0.1792402047435528,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8211073884676424,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.1112112231940653,
+                            "max_depth": 6,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 3,
+                            "n_estimators": 819,
+                            "n_iter_no_change": 12,
+                            "subsample": 0.9984984315391343,
+                            "tol": 6.114170281222063e-05,
+                            "validation_fraction": 0.19691428101811767,
+                            "warm_start": true
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 88.42475348897278
+            }
         }
     }
 }

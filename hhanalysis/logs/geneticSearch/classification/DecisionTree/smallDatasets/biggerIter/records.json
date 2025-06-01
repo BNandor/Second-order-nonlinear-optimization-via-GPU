@@ -239,6 +239,66 @@
             "metadata": {
                 "elapsedTimeSec": 2.2711249900003168
             }
+        },
+        "9afab8db572f089572bcc03352ffb2c4ccda1bebbcc78f577dde8253628c535a": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "GallStone",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7366771159874608,
+                        "solution": {
+                            "criterion": "entropy",
+                            "splitter": "random",
+                            "max_depth": 44,
+                            "min_samples_split": 9,
+                            "min_samples_leaf": 6,
+                            "max_features": 45,
+                            "max_leaf_nodes": 25
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2.6079694980289787
+            }
         }
     }
 }

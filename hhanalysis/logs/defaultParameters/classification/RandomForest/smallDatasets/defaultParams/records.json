@@ -187,6 +187,53 @@
             "metadata": {
                 "elapsedTimeSec": 0.7415215800010628
             }
+        },
+        "966ef1b9e26f156ffeb43d77a57961657a746d4afd4e9e254b6faa6336149e1c": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "GallStone",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7523952271792159,
+                        "solution": {}
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "defaultParameters"
+            },
+            "metadata": {
+                "elapsedTimeSec": 0.4727116110152565
+            }
         }
     }
 }

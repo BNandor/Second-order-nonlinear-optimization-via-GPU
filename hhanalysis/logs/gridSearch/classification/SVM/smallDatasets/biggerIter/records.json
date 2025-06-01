@@ -275,6 +275,76 @@
             "metadata": {
                 "elapsedTimeSec": 35.213686176997726
             }
+        },
+        "682165f0b19f2d7dc0062d19fd330d8465c6e710aa82ca69168e1d30d87299dd": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "GallStone",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7589490389701993,
+                        "solution": {
+                            "C": 42.75462437833511,
+                            "class_weight": null,
+                            "coef0": 0.5432403543638294,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": true,
+                            "tol": 0.000457438358329042
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 7.049219863023609
+            }
         }
     }
 }

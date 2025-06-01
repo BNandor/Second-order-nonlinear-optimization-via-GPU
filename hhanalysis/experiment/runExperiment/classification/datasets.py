@@ -53,6 +53,8 @@ def getDatasets():
         'Banknotes': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/BankNote_Authentication.csv'),
         'AuditRisk': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/audit_risk.csv'),
         'CervicalCancer': readCervicalCancer,
+        'GallStone': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/gallstone.csv'),
+        'HigherEducation': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/education.csv')
         # (boston.data, boston.target, 'Boston'),
         # (covtype.data[:100], covtype.target[:100], 'Covtype')
     }

@@ -2087,6 +2087,528 @@
             "metadata": {
                 "elapsedTimeSec": 16615.891902787
             }
+        },
+        "6f3c39dce016a4c97589bdc7b37b18c4ef872197c20c243135857a9d207e993b": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 2500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 1,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "GallStone",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesGP"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                1.0
+                            ],
+                            [
+                                1.0,
+                                0.0
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {}
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "classifierModel": "RF",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesGP"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.0,
+                                    1.0
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0.0,
+                                        1.0
+                                    ],
+                                    [
+                                        1.0,
+                                        0.0
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {}
+                        },
+                        "bestAccuracy": 0.7963322165402927,
+                        "solution": {
+                            "n_estimators": 86,
+                            "max_features": 5,
+                            "max_depth": 5,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "criterion": "gini"
+                        },
+                        "bestSequence": [
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP",
+                            "best",
+                            "BayesGP"
+                        ]
+                    }
+                ],
+                "solver": "bayesGP"
+            },
+            "metadata": {
+                "elapsedTimeSec": 35032.064267229
+            }
         }
     }
 }
