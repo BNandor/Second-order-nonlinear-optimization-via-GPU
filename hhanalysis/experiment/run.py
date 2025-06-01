@@ -1033,10 +1033,10 @@ def runDefaultClassificationSuite():
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
 
-runpyNMHHClassificationSuite()
+# runpyNMHHClassificationSuite()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
-runBigbayesGPPyNMHHClassificationSuite()
+# runBigbayesGPPyNMHHClassificationSuite()
 # runBigbayesTPEClassificationSuite()
 # runRandomSearchClassificationSuite()
 # runGridSearchClassificationSuite()
