@@ -283,7 +283,7 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2,pyNMHHSolvers={}):
                     # Operator statistics   
                     ax_barplot_operators = fig.add_subplot(inner_grid[2])
                     
-                    operatorsUsed=pyNMHHSubset['solverOperators'].values[0]
+                    operatorsUsed= pyNMHHSubset['solverOperators'].values[0] if len(pyNMHHSubset['solverOperators'].values)>0 else {}
                     for solver in pyNMHHSolvers:
                         if solver not in operatorsUsed:
                             operatorsUsed[solver]=0
@@ -415,7 +415,17 @@ if __name__ == "__main__":
     LOGS_ROOT = "../../../../logs"
     problemCategories = ["classification"]
     models = ["RandomForest", "SVM", "GradientBoost", "DecisionTree"]
-    solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),("gridSearch","smallDatasets/biggerIter"),("geneticSearch","smallDatasets/biggerIter"),("randomSearch","smallDatasets/smallIter"),("bayesGP","smallDatasets/pyNMHHBased"),("bayesTPE","smallDatasets/biggerIter"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
+    solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),
+                         ("gridSearch","smallDatasets/biggerIter"),
+                         ("geneticSearch","smallDatasets/biggerIter"),
+                         ("randomSearch","smallDatasets/smallIter"),
+                         ("bayesGP","smallDatasets/pyNMHHBased"),
+                         ("bayesTPE","smallDatasets/biggerIter"),
+                        #  ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
+                        #  ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit")
+                        # Don't forget to update contents if experiments changed
+                        ("pyNMHH","smallDatasets/biggerIter/smallerPop/_combined")
+                         ]
     # solverAndExperiment=[("bayesGP","smallDatasets/pyNMHHBased"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
     for problemCategory in problemCategories:

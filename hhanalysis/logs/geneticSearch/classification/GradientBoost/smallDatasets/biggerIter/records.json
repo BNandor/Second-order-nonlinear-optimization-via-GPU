@@ -429,6 +429,92 @@
             "metadata": {
                 "elapsedTimeSec": 59.245617807027884
             }
+        },
+        "49c86a945a93ba43d66a5c06805f28c74c1a13cfd396c3bf73b73c6f3bbf2b68": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "HigherEducation",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.4068965517241379,
+                        "solution": {
+                            "n_estimators": 594,
+                            "learning_rate": 0.11194274003168782,
+                            "max_depth": 7,
+                            "min_samples_split": 14,
+                            "min_samples_leaf": 3,
+                            "subsample": 0.960934824517139,
+                            "max_features": "log2",
+                            "criterion": "friedman_mse",
+                            "warm_start": true,
+                            "validation_fraction": 0.1298448512239784,
+                            "n_iter_no_change": 15,
+                            "tol": 3.9171324039161716e-05
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 124.34914265497355
+            }
         }
     }
 }

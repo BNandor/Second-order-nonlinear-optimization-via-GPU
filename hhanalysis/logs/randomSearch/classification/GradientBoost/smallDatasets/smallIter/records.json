@@ -764,6 +764,159 @@
             "metadata": {
                 "elapsedTimeSec": 88.42475348897278
             }
+        },
+        "e129e9b5904fafb2327888920ff85ae71faa67c2d6a8ef875c7e30a06433b5d6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "HigherEducation",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.40022675736961455,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.026750469500476402,
+                            "max_depth": 7,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 3,
+                            "min_samples_split": 15,
+                            "n_estimators": 664,
+                            "n_iter_no_change": 16,
+                            "subsample": 0.8908511360343465,
+                            "tol": 2.8908235564102362e-05,
+                            "validation_fraction": 0.10746536113006112,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.4142573696145125,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.08671195613074008,
+                            "max_depth": 3,
+                            "max_features": null,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 15,
+                            "n_estimators": 948,
+                            "n_iter_no_change": 14,
+                            "subsample": 0.9346857540799315,
+                            "tol": 5.632016819033491e-05,
+                            "validation_fraction": 0.13384409899576932,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.42077664399092973,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.07812974778523077,
+                            "max_depth": 5,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 17,
+                            "n_estimators": 980,
+                            "n_iter_no_change": 19,
+                            "subsample": 0.9522893464480437,
+                            "tol": 6.508222664509631e-05,
+                            "validation_fraction": 0.14412911916802718,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.4141156462585034,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.15393237862605988,
+                            "max_depth": 5,
+                            "max_features": "log2",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 14,
+                            "n_estimators": 755,
+                            "n_iter_no_change": 15,
+                            "subsample": 0.8470086689629823,
+                            "tol": 7.156595759052461e-05,
+                            "validation_fraction": 0.1384740178336268,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.4005102040816326,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.029516985977276193,
+                            "max_depth": 3,
+                            "max_features": null,
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 19,
+                            "n_estimators": 323,
+                            "n_iter_no_change": 8,
+                            "subsample": 0.8187504049175892,
+                            "tol": 5.467835113881306e-05,
+                            "validation_fraction": 0.1109895499333611,
+                            "warm_start": false
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 233.16922352998517
+            }
         }
     }
 }

@@ -269,6 +269,60 @@
             "metadata": {
                 "elapsedTimeSec": 186.52826559595997
             }
+        },
+        "ba8480912fef28e5b626f1739e59e587931ded46cfa79f73216a8f5e153d30d6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "HigherEducation",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.3727324263038549,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 5,
+                            "max_features": 16,
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 2,
+                            "n_estimators": 10
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 233.08732479001628
+            }
         }
     }
 }

@@ -1657,7 +1657,7 @@
                 "elapsedTimeSec": 3683.361293708993
             }
         },
-        "1791dbe70d4020bf656ebdf1157e59cf4fa05ddb51223087ed614929a8f61604": {
+        "4b18e7eec1120e86c8d4090c98d9f0ae8714a664ae33db51357f4fde8d1fefd0": {
             "experiment": {
                 "populationSize": 15,
                 "baselevelIterations": 500,
@@ -1711,8 +1711,8 @@
                         "TransitionMatrix": [
                             [
                                 0.0,
-                                0.5,
-                                0.5
+                                0.1,
+                                0.9
                             ],
                             [
                                 1.0,
@@ -1721,8 +1721,8 @@
                             ],
                             [
                                 0.0,
-                                0.5,
-                                0.5
+                                0.1,
+                                0.9
                             ]
                         ]
                     },
@@ -1734,8 +1734,8 @@
                             ],
                             "TransitionMatrix": [
                                 [
-                                    0.8062957200961741,
-                                    0.19370427990382585
+                                    0.9062957200961741,
+                                    0.09370427990382585
                                 ],
                                 [
                                     1.0,
@@ -1760,12 +1760,12 @@
                             ],
                             "TransitionMatrix": [
                                 [
-                                    0.5,
-                                    0.5
+                                    0.9,
+                                    0.1
                                 ],
                                 [
-                                    0.5,
-                                    0.5
+                                    0.1,
+                                    0.9
                                 ]
                             ]
                         }
@@ -1890,15 +1890,15 @@
                             },
                             "CategoryTransitionMatrix": {
                                 "InitialProbabilities": [
-                                    0.005467950265933212,
-                                    0.48920870373021164,
-                                    0.5053233460038552
+                                    0.03393928548638396,
+                                    0.6245802499569894,
+                                    0.3414804645566267
                                 ],
                                 "TransitionMatrix": [
                                     [
                                         0,
-                                        0.9644075390730575,
-                                        0.035592460926942446
+                                        0.984860166200603,
+                                        0.015139833799396932
                                     ],
                                     [
                                         1.0,
@@ -1907,25 +1907,25 @@
                                     ],
                                     [
                                         0,
-                                        0.9566635823461195,
-                                        0.04333641765388044
+                                        0.014705882352941176,
+                                        0.9852941176470588
                                     ]
                                 ]
                             },
                             "OperatorTransitionMatrices": {
                                 "perturbator": {
                                     "InitialProbabilities": [
-                                        0.029395510344147238,
-                                        0.9706044896558528
+                                        0.5,
+                                        0.5
                                     ],
                                     "TransitionMatrix": [
                                         [
-                                            0.816349874544505,
-                                            0.18365012545549497
+                                            0.41250248335350587,
+                                            0.5874975166464942
                                         ],
                                         [
-                                            0.015817528906748743,
-                                            0.9841824710932513
+                                            0.043878206242180584,
+                                            0.9561217937578194
                                         ]
                                     ]
                                 },
@@ -1941,17 +1941,17 @@
                                 },
                                 "refiner": {
                                     "InitialProbabilities": [
-                                        0.009900990099009901,
-                                        0.9900990099009901
+                                        0.8154381775799969,
+                                        0.18456182242000305
                                     ],
                                     "TransitionMatrix": [
                                         [
-                                            0.2197386404028247,
-                                            0.7802613595971752
+                                            0.900404884147767,
+                                            0.09959511585223312
                                         ],
                                         [
-                                            0.5301883113397942,
-                                            0.4698116886602058
+                                            0.1715361461673529,
+                                            0.8284638538326472
                                         ]
                                     ]
                                 }
@@ -2003,31 +2003,41 @@
                                 }
                             }
                         },
-                        "bestAccuracy": 0.7493387409627932,
+                        "bestAccuracy": 0.7679715511667548,
                         "solution": {
                             "criterion": "gini",
                             "splitter": "best",
-                            "max_depth": 23,
-                            "min_samples_split": 5,
-                            "min_samples_leaf": 10,
-                            "max_features": 19,
-                            "max_leaf_nodes": 30
+                            "max_depth": 44,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 11,
+                            "max_features": 27,
+                            "max_leaf_nodes": 5
                         },
                         "bestSequence": [
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
                             "BayesTPE",
                             "best",
                             "GA",
                             "best",
                             "GA",
                             "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "best",
                             "DE",
                             "best",
                             "DE",
@@ -2035,33 +2045,6 @@
                             "GA",
                             "best",
                             "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "BayesTPE",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "best",
-                            "DE",
                             "best",
                             "GA",
                             "best",
@@ -2084,10 +2067,10 @@
                 "solver": "pyNMHH"
             },
             "metadata": {
-                "elapsedTimeSec": 5202.8097205730155
+                "elapsedTimeSec": 4474.194249188004
             }
         },
-        "54c1b19ed4c596458f8a6866d746e5b8283aab7583ab2eca7d8a601ca9df47d4": {
+        "1856f66a84bb25a40da759debe7de444bbd5eb60b0e6623b32f114ede4e6e1e9": {
             "experiment": {
                 "populationSize": 15,
                 "baselevelIterations": 500,
@@ -2141,8 +2124,8 @@
                         "TransitionMatrix": [
                             [
                                 0.0,
-                                0.5,
-                                0.5
+                                0.1,
+                                0.9
                             ],
                             [
                                 1.0,
@@ -2151,8 +2134,8 @@
                             ],
                             [
                                 0.0,
-                                0.5,
-                                0.5
+                                0.1,
+                                0.9
                             ]
                         ]
                     },
@@ -2164,8 +2147,8 @@
                             ],
                             "TransitionMatrix": [
                                 [
-                                    0.8062957200961741,
-                                    0.19370427990382585
+                                    0.9062957200961741,
+                                    0.09370427990382585
                                 ],
                                 [
                                     1.0,
@@ -2190,12 +2173,12 @@
                             ],
                             "TransitionMatrix": [
                                 [
-                                    0.5,
-                                    0.5
+                                    0.9,
+                                    0.1
                                 ],
                                 [
-                                    0.5,
-                                    0.5
+                                    0.1,
+                                    0.9
                                 ]
                             ]
                         }
@@ -2320,15 +2303,15 @@
                             },
                             "CategoryTransitionMatrix": {
                                 "InitialProbabilities": [
-                                    0.013006478089359704,
-                                    0.013006478089359704,
-                                    0.9739870438212805
+                                    0.00980392156862745,
+                                    0.00980392156862745,
+                                    0.9803921568627451
                                 ],
                                 "TransitionMatrix": [
                                     [
                                         0,
-                                        0.6765750436040774,
-                                        0.32342495639592256
+                                        0.31171459657709744,
+                                        0.6882854034229027
                                     ],
                                     [
                                         1.0,
@@ -2337,25 +2320,25 @@
                                     ],
                                     [
                                         0,
-                                        0.7665705860934386,
-                                        0.23342941390656122
+                                        0.2747563268854764,
+                                        0.7252436731145235
                                     ]
                                 ]
                             },
                             "OperatorTransitionMatrices": {
                                 "perturbator": {
                                     "InitialProbabilities": [
-                                        0.5579269201308811,
-                                        0.44207307986911887
+                                        0.9844831654878125,
+                                        0.015516834512187494
                                     ],
                                     "TransitionMatrix": [
                                         [
-                                            0.009900990099009901,
-                                            0.9900990099009901
+                                            0.9900990099009901,
+                                            0.009900990099009901
                                         ],
                                         [
-                                            0.6997534368837238,
-                                            0.30024656311627623
+                                            0.9900990099009901,
+                                            0.009900990099009901
                                         ]
                                     ]
                                 },
@@ -2371,17 +2354,17 @@
                                 },
                                 "refiner": {
                                     "InitialProbabilities": [
-                                        0.4556015080307529,
-                                        0.5443984919692471
+                                        0.9725488197619001,
+                                        0.027451180238099816
                                     ],
                                     "TransitionMatrix": [
                                         [
-                                            0.009900990099009901,
-                                            0.9900990099009901
+                                            0.9900990099009901,
+                                            0.009900990099009901
                                         ],
                                         [
-                                            0.3390920572705476,
-                                            0.6609079427294525
+                                            0.48763501476471316,
+                                            0.5123649852352868
                                         ]
                                     ]
                                 }
@@ -2433,81 +2416,64 @@
                                 }
                             }
                         },
-                        "bestAccuracy": 0.3656462585034013,
+                        "bestAccuracy": 0.37996031746031744,
                         "solution": {
-                            "criterion": "gini",
-                            "splitter": "random",
-                            "max_depth": 21,
-                            "min_samples_split": 9,
-                            "min_samples_leaf": 2,
-                            "max_features": 20,
-                            "max_leaf_nodes": 13
+                            "criterion": "entropy",
+                            "splitter": "best",
+                            "max_depth": 37,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 10,
+                            "max_features": 21,
+                            "max_leaf_nodes": 38
                         },
                         "bestSequence": [
                             "BayesGP",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "BayesTPE",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "BayesTPE",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "BayesTPE",
-                            "best",
-                            "GA",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "BayesTPE",
-                            "best",
-                            "GA",
-                            "BayesTPE",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
-                            "best",
-                            "DE",
-                            "best",
-                            "GA",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
                             "BayesGP",
                             "best",
                             "DE",
-                            "best",
-                            "GA",
-                            "BayesTPE",
-                            "best",
-                            "DE",
-                            "BayesTPE",
-                            "best",
-                            "GA",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
                             "best",
                             "DE",
+                            "BayesGP",
+                            "BayesGP",
                             "best",
-                            "GA",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
                             "best",
-                            "DE"
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP"
                         ]
                     }
                 ],
                 "solver": "pyNMHH"
             },
             "metadata": {
-                "elapsedTimeSec": 2566.8026044209837
+                "elapsedTimeSec": 7281.2598893639515
             }
         }
     }

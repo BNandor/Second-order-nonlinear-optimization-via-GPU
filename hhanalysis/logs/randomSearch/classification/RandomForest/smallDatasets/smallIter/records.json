@@ -489,6 +489,104 @@
             "metadata": {
                 "elapsedTimeSec": 154.95898957102327
             }
+        },
+        "f1b8204809d2daecebac5ca1798eb24a28f52cf2ff71453175b5ec049b4b79f4": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "HigherEducation",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.37259070294784574,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 34,
+                            "max_features": 11,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 10,
+                            "n_estimators": 41
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.379109977324263,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 39,
+                            "max_features": 44,
+                            "min_samples_leaf": 8,
+                            "min_samples_split": 4,
+                            "n_estimators": 20
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.37216553287981863,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 29,
+                            "max_features": 14,
+                            "min_samples_leaf": 9,
+                            "min_samples_split": 6,
+                            "n_estimators": 19
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.3724489795918367,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 20,
+                            "max_features": 56,
+                            "min_samples_leaf": 8,
+                            "min_samples_split": 2,
+                            "n_estimators": 27
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.37259070294784585,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 49,
+                            "max_features": 44,
+                            "min_samples_leaf": 10,
+                            "min_samples_split": 2,
+                            "n_estimators": 31
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 96.29209236701718
+            }
         }
     }
 }

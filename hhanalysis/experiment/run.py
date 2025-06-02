@@ -220,18 +220,6 @@ def runpyNMHHClassificationSuite():
                         'tol': [1e-6, 1e-4]
                 }
                 },
-                # {
-                #  'name':'KNN',
-                #  'model':'KNN',
-                #  'hyperparameters': {
-                #         'n_neighbors': [2, 5],
-                #         'weights': ['uniform', 'distance'],
-                #         'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
-                #         'leaf_size': [10, 100],
-                #         'p': [1, 15],
-                #         'metric': ['minkowski', 'euclidean', 'manhattan', 'chebyshev']
-                # }
-                # }
                 {
                  'name':'DecisionTree',
                  'model':'DecisionTree',
@@ -258,21 +246,21 @@ def runpyNMHHClassificationSuite():
                    }
                 },
                 ]
-    problems=lambda logspath: [{'name':"Digits"},{'name':'Wine'},
-                               {'name':'AuditRisk'},
-                            #    {'name':'Iris'},
-                               {'name':'CervicalCancer'},
-                               {'name':'GallStone'},
+    problems=lambda logspath: [
+                            #    {'name':"Digits"},
+                            #    {'name':'Wine'},
+                            #    {'name':'AuditRisk'},
+                            #    {'name':'CervicalCancer'},
+                            #    {'name':'GallStone'},
                                {'name':'HigherEducation'}
-                        #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
-    baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
-#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigEmphBayes()]
+#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
+    baseLevelConfigs=[classify.initialClassificationBaseLevelConfigEmphBayes()]
     
     config={
-                'name':'/smallDatasets/biggerIter/smallerPop',
+                'name':'/smallDatasets/biggerIter/smallerPop/bayesinit',
                 'classifiers':classifiers,
                 'problems': problems,
                 'solutionConfigs':solutionConfigs,
@@ -1036,7 +1024,7 @@ def runDefaultClassificationSuite():
 # runpyNMHHClassificationSuite()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
-runBigbayesGPPyNMHHClassificationSuite()
+# runBigbayesGPPyNMHHClassificationSuite()
 # runBigbayesTPEClassificationSuite()
 # runRandomSearchClassificationSuite()
 # runGridSearchClassificationSuite()

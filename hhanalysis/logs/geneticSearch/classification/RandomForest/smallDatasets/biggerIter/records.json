@@ -274,6 +274,61 @@
             "metadata": {
                 "elapsedTimeSec": 125.220727737993
             }
+        },
+        "cdf34e50ecdd1c83fbf82b45ecae30818cbb0dca9345aaa16ee41a5e501eca8e": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "HigherEducation",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.4482758620689655,
+                        "solution": {
+                            "n_estimators": 50,
+                            "max_features": 25,
+                            "max_depth": 27,
+                            "min_samples_split": 7,
+                            "min_samples_leaf": 10,
+                            "criterion": "gini"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 44.58983624802204
+            }
         }
     }
 }

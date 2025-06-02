@@ -299,6 +299,66 @@
             "metadata": {
                 "elapsedTimeSec": 2.6079694980289787
             }
+        },
+        "6b61df55c7bd0029c4b724844566e29d67ad5dc75b94bcd8871ae04db4a92b94": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "HigherEducation",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.3793103448275862,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "best",
+                            "max_depth": 39,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 4,
+                            "max_features": 8,
+                            "max_leaf_nodes": 22
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1.228654685022775
+            }
         }
     }
 }
