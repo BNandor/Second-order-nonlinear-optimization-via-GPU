@@ -1036,7 +1036,7 @@ def runDefaultClassificationSuite():
 # runpyNMHHClassificationSuite()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
-# runBigbayesGPPyNMHHClassificationSuite()
+runBigbayesGPPyNMHHClassificationSuite()
 # runBigbayesTPEClassificationSuite()
 # runRandomSearchClassificationSuite()
 # runGridSearchClassificationSuite()
