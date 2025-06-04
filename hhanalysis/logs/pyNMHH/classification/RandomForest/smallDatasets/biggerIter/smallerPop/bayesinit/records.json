@@ -796,6 +796,1614 @@
             "metadata": {
                 "elapsedTimeSec": 7831.329850937007
             }
+        },
+        "f6050e801f01b3b10ce5c74fa8982efb0d2cb8b75d9b106ed75e385cc67e050e": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 5,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Digits",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "perturbator",
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "perturbator": [
+                                "DE",
+                                "GA"
+                            ],
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesGP",
+                                "BayesTPE"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1,
+                                2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ],
+                            [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "perturbator": {
+                            "InitialProbabilities": [
+                                0.705285341737996,
+                                0.29471465826200405
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9062957200961741,
+                                    0.09370427990382585
+                                ],
+                                [
+                                    1.0,
+                                    0.0
+                                ]
+                            ]
+                        },
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                0.5,
+                                0.5
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9,
+                                    0.1
+                                ],
+                                [
+                                    0.1,
+                                    0.9
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {
+                        "PerturbatorDEOperatorParams": {
+                            "DE_CR": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 1.0
+                            },
+                            "DE_FORCE": {
+                                "lowerBound": 0.0,
+                                "upperBound": 2.0,
+                                "value": 0.566329910553018
+                            }
+                        },
+                        "PerturbatorGAOperatorParams": {
+                            "GA_ALPHA": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.0
+                            },
+                            "GA_CR": {
+                                "lowerBound": 0.3,
+                                "upperBound": 1.0,
+                                "value": 0.5
+                            },
+                            "GA_CR_POINT": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.9979030839478561
+                            },
+                            "GA_MUTATION_RATE": {
+                                "lowerBound": 0.05,
+                                "upperBound": 0.2,
+                                "value": 0.1
+                            },
+                            "GA_MUTATION_SIZE": {
+                                "lowerBound": 5.0,
+                                "upperBound": 10.0,
+                                "value": 7.0
+                            },
+                            "GA_PARENTPOOL_RATIO": {
+                                "lowerBound": 0.2,
+                                "upperBound": 0.5,
+                                "value": 0.3
+                            }
+                        }
+                    }
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "classifierModel": "RF",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "perturbator",
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "perturbator": [
+                                        "DE",
+                                        "GA"
+                                    ],
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesGP",
+                                        "BayesTPE"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        0
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.04264117208655128,
+                                    0.4764861971417812,
+                                    0.48087263077166764
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0,
+                                        0.5571180029227585,
+                                        0.4428819970772416
+                                    ],
+                                    [
+                                        1.0,
+                                        0,
+                                        0
+                                    ],
+                                    [
+                                        0,
+                                        0.7235948316839107,
+                                        0.27640516831608924
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "perturbator": {
+                                    "InitialProbabilities": [
+                                        0.01745512571388988,
+                                        0.9825448742861101
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.14811874291546948,
+                                            0.8518812570845306
+                                        ],
+                                        [
+                                            0.980573961034251,
+                                            0.019426038965749005
+                                        ]
+                                    ]
+                                },
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        0.5,
+                                        0.5
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.4280467705084973,
+                                            0.5719532294915026
+                                        ],
+                                        [
+                                            0.6493850229472016,
+                                            0.3506149770527985
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {
+                                "PerturbatorDEOperatorParams": {
+                                    "DE_CR": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 1.0
+                                    },
+                                    "DE_FORCE": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 2.0,
+                                        "value": 0.566329910553018
+                                    }
+                                },
+                                "PerturbatorGAOperatorParams": {
+                                    "GA_ALPHA": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.0
+                                    },
+                                    "GA_CR": {
+                                        "lowerBound": 0.3,
+                                        "upperBound": 1.0,
+                                        "value": 0.5
+                                    },
+                                    "GA_CR_POINT": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.9979030839478561
+                                    },
+                                    "GA_MUTATION_RATE": {
+                                        "lowerBound": 0.05,
+                                        "upperBound": 0.2,
+                                        "value": 0.1
+                                    },
+                                    "GA_MUTATION_SIZE": {
+                                        "lowerBound": 5.0,
+                                        "upperBound": 10.0,
+                                        "value": 7.0
+                                    },
+                                    "GA_PARENTPOOL_RATIO": {
+                                        "lowerBound": 0.2,
+                                        "upperBound": 0.5,
+                                        "value": 0.3
+                                    }
+                                }
+                            }
+                        },
+                        "bestAccuracy": 0.9482470784641069,
+                        "solution": {
+                            "n_estimators": 94,
+                            "max_features": 4,
+                            "max_depth": 19,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 1,
+                            "criterion": "gini"
+                        },
+                        "bestSequence": [
+                            "best",
+                            "GA",
+                            "BayesTPE",
+                            "best",
+                            "DE",
+                            "best",
+                            "GA",
+                            "best",
+                            "DE",
+                            "best",
+                            "GA",
+                            "best",
+                            "DE",
+                            "BayesTPE",
+                            "best",
+                            "GA",
+                            "best",
+                            "DE",
+                            "best",
+                            "DE",
+                            "BayesTPE",
+                            "best",
+                            "GA",
+                            "BayesTPE",
+                            "best",
+                            "DE",
+                            "best",
+                            "DE",
+                            "best",
+                            "GA",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "best",
+                            "GA",
+                            "BayesTPE",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "best",
+                            "GA",
+                            "best",
+                            "DE",
+                            "best",
+                            "GA",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesTPE",
+                            "best",
+                            "GA",
+                            "BayesGP",
+                            "best",
+                            "DE"
+                        ]
+                    }
+                ],
+                "solver": "pyNMHH"
+            },
+            "metadata": {
+                "elapsedTimeSec": 4778.404399523977
+            }
+        },
+        "7ada12f287ff32bd501ffd7c06004dbc4a7299c5023b868d53f63e5acc91c6c2": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 5,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "Wine",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "perturbator",
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "perturbator": [
+                                "DE",
+                                "GA"
+                            ],
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesGP",
+                                "BayesTPE"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1,
+                                2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ],
+                            [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "perturbator": {
+                            "InitialProbabilities": [
+                                0.705285341737996,
+                                0.29471465826200405
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9062957200961741,
+                                    0.09370427990382585
+                                ],
+                                [
+                                    1.0,
+                                    0.0
+                                ]
+                            ]
+                        },
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                0.5,
+                                0.5
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9,
+                                    0.1
+                                ],
+                                [
+                                    0.1,
+                                    0.9
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {
+                        "PerturbatorDEOperatorParams": {
+                            "DE_CR": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 1.0
+                            },
+                            "DE_FORCE": {
+                                "lowerBound": 0.0,
+                                "upperBound": 2.0,
+                                "value": 0.566329910553018
+                            }
+                        },
+                        "PerturbatorGAOperatorParams": {
+                            "GA_ALPHA": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.0
+                            },
+                            "GA_CR": {
+                                "lowerBound": 0.3,
+                                "upperBound": 1.0,
+                                "value": 0.5
+                            },
+                            "GA_CR_POINT": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.9979030839478561
+                            },
+                            "GA_MUTATION_RATE": {
+                                "lowerBound": 0.05,
+                                "upperBound": 0.2,
+                                "value": 0.1
+                            },
+                            "GA_MUTATION_SIZE": {
+                                "lowerBound": 5.0,
+                                "upperBound": 10.0,
+                                "value": 7.0
+                            },
+                            "GA_PARENTPOOL_RATIO": {
+                                "lowerBound": 0.2,
+                                "upperBound": 0.5,
+                                "value": 0.3
+                            }
+                        }
+                    }
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "classifierModel": "RF",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "perturbator",
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "perturbator": [
+                                        "DE",
+                                        "GA"
+                                    ],
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesGP",
+                                        "BayesTPE"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        0
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ],
+                                    [
+                                        1.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "perturbator": {
+                                    "InitialProbabilities": [
+                                        0.705285341737996,
+                                        0.29471465826200405
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9062957200961741,
+                                            0.09370427990382585
+                                        ],
+                                        [
+                                            1.0,
+                                            0.0
+                                        ]
+                                    ]
+                                },
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        0.5,
+                                        0.5
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9,
+                                            0.1
+                                        ],
+                                        [
+                                            0.1,
+                                            0.9
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {
+                                "PerturbatorDEOperatorParams": {
+                                    "DE_CR": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 1.0
+                                    },
+                                    "DE_FORCE": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 2.0,
+                                        "value": 0.566329910553018
+                                    }
+                                },
+                                "PerturbatorGAOperatorParams": {
+                                    "GA_ALPHA": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.0
+                                    },
+                                    "GA_CR": {
+                                        "lowerBound": 0.3,
+                                        "upperBound": 1.0,
+                                        "value": 0.5
+                                    },
+                                    "GA_CR_POINT": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.9979030839478561
+                                    },
+                                    "GA_MUTATION_RATE": {
+                                        "lowerBound": 0.05,
+                                        "upperBound": 0.2,
+                                        "value": 0.1
+                                    },
+                                    "GA_MUTATION_SIZE": {
+                                        "lowerBound": 5.0,
+                                        "upperBound": 10.0,
+                                        "value": 7.0
+                                    },
+                                    "GA_PARENTPOOL_RATIO": {
+                                        "lowerBound": 0.2,
+                                        "upperBound": 0.5,
+                                        "value": 0.3
+                                    }
+                                }
+                            }
+                        },
+                        "bestAccuracy": 0.9831450094161959,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 1,
+                            "max_depth": 49,
+                            "min_samples_split": 6,
+                            "min_samples_leaf": 1,
+                            "criterion": "entropy"
+                        },
+                        "bestSequence": [
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "best",
+                            "DE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "best",
+                            "DE",
+                            "BayesTPE",
+                            "BayesTPE",
+                            "best",
+                            "DE"
+                        ]
+                    }
+                ],
+                "solver": "pyNMHH"
+            },
+            "metadata": {
+                "elapsedTimeSec": 5502.648827112978
+            }
+        },
+        "5672535fb28f73424d0ebc4b0d80c2b4fc0fd0acbd1eafa6ae41e546270d2d5e": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 5,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "AuditRisk",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "perturbator",
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "perturbator": [
+                                "DE",
+                                "GA"
+                            ],
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesGP",
+                                "BayesTPE"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1,
+                                2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ],
+                            [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "perturbator": {
+                            "InitialProbabilities": [
+                                0.705285341737996,
+                                0.29471465826200405
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9062957200961741,
+                                    0.09370427990382585
+                                ],
+                                [
+                                    1.0,
+                                    0.0
+                                ]
+                            ]
+                        },
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                0.5,
+                                0.5
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9,
+                                    0.1
+                                ],
+                                [
+                                    0.1,
+                                    0.9
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {
+                        "PerturbatorDEOperatorParams": {
+                            "DE_CR": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 1.0
+                            },
+                            "DE_FORCE": {
+                                "lowerBound": 0.0,
+                                "upperBound": 2.0,
+                                "value": 0.566329910553018
+                            }
+                        },
+                        "PerturbatorGAOperatorParams": {
+                            "GA_ALPHA": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.0
+                            },
+                            "GA_CR": {
+                                "lowerBound": 0.3,
+                                "upperBound": 1.0,
+                                "value": 0.5
+                            },
+                            "GA_CR_POINT": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.9979030839478561
+                            },
+                            "GA_MUTATION_RATE": {
+                                "lowerBound": 0.05,
+                                "upperBound": 0.2,
+                                "value": 0.1
+                            },
+                            "GA_MUTATION_SIZE": {
+                                "lowerBound": 5.0,
+                                "upperBound": 10.0,
+                                "value": 7.0
+                            },
+                            "GA_PARENTPOOL_RATIO": {
+                                "lowerBound": 0.2,
+                                "upperBound": 0.5,
+                                "value": 0.3
+                            }
+                        }
+                    }
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "classifierModel": "RF",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "perturbator",
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "perturbator": [
+                                        "DE",
+                                        "GA"
+                                    ],
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesGP",
+                                        "BayesTPE"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        0
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ],
+                                    [
+                                        1.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "perturbator": {
+                                    "InitialProbabilities": [
+                                        0.705285341737996,
+                                        0.29471465826200405
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9062957200961741,
+                                            0.09370427990382585
+                                        ],
+                                        [
+                                            1.0,
+                                            0.0
+                                        ]
+                                    ]
+                                },
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        0.5,
+                                        0.5
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9,
+                                            0.1
+                                        ],
+                                        [
+                                            0.1,
+                                            0.9
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {
+                                "PerturbatorDEOperatorParams": {
+                                    "DE_CR": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 1.0
+                                    },
+                                    "DE_FORCE": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 2.0,
+                                        "value": 0.566329910553018
+                                    }
+                                },
+                                "PerturbatorGAOperatorParams": {
+                                    "GA_ALPHA": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.0
+                                    },
+                                    "GA_CR": {
+                                        "lowerBound": 0.3,
+                                        "upperBound": 1.0,
+                                        "value": 0.5
+                                    },
+                                    "GA_CR_POINT": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.9979030839478561
+                                    },
+                                    "GA_MUTATION_RATE": {
+                                        "lowerBound": 0.05,
+                                        "upperBound": 0.2,
+                                        "value": 0.1
+                                    },
+                                    "GA_MUTATION_SIZE": {
+                                        "lowerBound": 5.0,
+                                        "upperBound": 10.0,
+                                        "value": 7.0
+                                    },
+                                    "GA_PARENTPOOL_RATIO": {
+                                        "lowerBound": 0.2,
+                                        "upperBound": 0.5,
+                                        "value": 0.3
+                                    }
+                                }
+                            }
+                        },
+                        "bestAccuracy": 0.9987029831387808,
+                        "solution": {
+                            "n_estimators": 70,
+                            "max_features": 35,
+                            "max_depth": 33,
+                            "min_samples_split": 4,
+                            "min_samples_leaf": 8,
+                            "criterion": "gini"
+                        },
+                        "bestSequence": [
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesTPE",
+                            "BayesTPE"
+                        ]
+                    }
+                ],
+                "solver": "pyNMHH"
+            },
+            "metadata": {
+                "elapsedTimeSec": 6592.852209126984
+            }
+        },
+        "8511cacb6f1487567d94ec0b4bd559fc0eb681692c71442841eabd02a9cb2efa": {
+            "experiment": {
+                "populationSize": 15,
+                "baselevelIterations": 500,
+                "crossValidations": 3,
+                "pyNMHHSteps": 5,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "CervicalCancer",
+                "trainingFraction": 0.75,
+                "baseLevelConfig": {
+                    "OperatorsAndCategories": {
+                        "categories": [
+                            "perturbator",
+                            "selector",
+                            "refiner"
+                        ],
+                        "operators": {
+                            "perturbator": [
+                                "DE",
+                                "GA"
+                            ],
+                            "selector": [
+                                "best"
+                            ],
+                            "refiner": [
+                                "BayesGP",
+                                "BayesTPE"
+                            ]
+                        }
+                    },
+                    "Restrictions": {
+                        "CategoryTransitionRestrictions": [
+                            [
+                                0
+                            ],
+                            [
+                                1,
+                                2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    },
+                    "CategoryTransitionMatrix": {
+                        "InitialProbabilities": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "TransitionMatrix": [
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ],
+                            [
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            [
+                                0.0,
+                                0.1,
+                                0.9
+                            ]
+                        ]
+                    },
+                    "OperatorTransitionMatrices": {
+                        "perturbator": {
+                            "InitialProbabilities": [
+                                0.705285341737996,
+                                0.29471465826200405
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9062957200961741,
+                                    0.09370427990382585
+                                ],
+                                [
+                                    1.0,
+                                    0.0
+                                ]
+                            ]
+                        },
+                        "selector": {
+                            "InitialProbabilities": [
+                                1.0
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    1.0
+                                ]
+                            ]
+                        },
+                        "refiner": {
+                            "InitialProbabilities": [
+                                0.5,
+                                0.5
+                            ],
+                            "TransitionMatrix": [
+                                [
+                                    0.9,
+                                    0.1
+                                ],
+                                [
+                                    0.1,
+                                    0.9
+                                ]
+                            ]
+                        }
+                    },
+                    "OperatorParams": {
+                        "PerturbatorDEOperatorParams": {
+                            "DE_CR": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 1.0
+                            },
+                            "DE_FORCE": {
+                                "lowerBound": 0.0,
+                                "upperBound": 2.0,
+                                "value": 0.566329910553018
+                            }
+                        },
+                        "PerturbatorGAOperatorParams": {
+                            "GA_ALPHA": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.0
+                            },
+                            "GA_CR": {
+                                "lowerBound": 0.3,
+                                "upperBound": 1.0,
+                                "value": 0.5
+                            },
+                            "GA_CR_POINT": {
+                                "lowerBound": 0.0,
+                                "upperBound": 1.0,
+                                "value": 0.9979030839478561
+                            },
+                            "GA_MUTATION_RATE": {
+                                "lowerBound": 0.05,
+                                "upperBound": 0.2,
+                                "value": 0.1
+                            },
+                            "GA_MUTATION_SIZE": {
+                                "lowerBound": 5.0,
+                                "upperBound": 10.0,
+                                "value": 7.0
+                            },
+                            "GA_PARENTPOOL_RATIO": {
+                                "lowerBound": 0.2,
+                                "upperBound": 0.5,
+                                "value": 0.3
+                            }
+                        }
+                    }
+                },
+                "SA_temp0": 1.0,
+                "SA_coolingRate": 0.995,
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "classifierModel": "RF",
+                "totalFunctionEvaluations": 2500,
+                "solutions": [
+                    {
+                        "bestBaseConfig": {
+                            "OperatorsAndCategories": {
+                                "categories": [
+                                    "perturbator",
+                                    "selector",
+                                    "refiner"
+                                ],
+                                "operators": {
+                                    "perturbator": [
+                                        "DE",
+                                        "GA"
+                                    ],
+                                    "selector": [
+                                        "best"
+                                    ],
+                                    "refiner": [
+                                        "BayesGP",
+                                        "BayesTPE"
+                                    ]
+                                }
+                            },
+                            "Restrictions": {
+                                "CategoryTransitionRestrictions": [
+                                    [
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        0
+                                    ]
+                                ]
+                            },
+                            "CategoryTransitionMatrix": {
+                                "InitialProbabilities": [
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "TransitionMatrix": [
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ],
+                                    [
+                                        1.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    [
+                                        0.0,
+                                        0.1,
+                                        0.9
+                                    ]
+                                ]
+                            },
+                            "OperatorTransitionMatrices": {
+                                "perturbator": {
+                                    "InitialProbabilities": [
+                                        0.705285341737996,
+                                        0.29471465826200405
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9062957200961741,
+                                            0.09370427990382585
+                                        ],
+                                        [
+                                            1.0,
+                                            0.0
+                                        ]
+                                    ]
+                                },
+                                "selector": {
+                                    "InitialProbabilities": [
+                                        1.0
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            1.0
+                                        ]
+                                    ]
+                                },
+                                "refiner": {
+                                    "InitialProbabilities": [
+                                        0.5,
+                                        0.5
+                                    ],
+                                    "TransitionMatrix": [
+                                        [
+                                            0.9,
+                                            0.1
+                                        ],
+                                        [
+                                            0.1,
+                                            0.9
+                                        ]
+                                    ]
+                                }
+                            },
+                            "OperatorParams": {
+                                "PerturbatorDEOperatorParams": {
+                                    "DE_CR": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 1.0
+                                    },
+                                    "DE_FORCE": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 2.0,
+                                        "value": 0.566329910553018
+                                    }
+                                },
+                                "PerturbatorGAOperatorParams": {
+                                    "GA_ALPHA": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.0
+                                    },
+                                    "GA_CR": {
+                                        "lowerBound": 0.3,
+                                        "upperBound": 1.0,
+                                        "value": 0.5
+                                    },
+                                    "GA_CR_POINT": {
+                                        "lowerBound": 0.0,
+                                        "upperBound": 1.0,
+                                        "value": 0.9979030839478561
+                                    },
+                                    "GA_MUTATION_RATE": {
+                                        "lowerBound": 0.05,
+                                        "upperBound": 0.2,
+                                        "value": 0.1
+                                    },
+                                    "GA_MUTATION_SIZE": {
+                                        "lowerBound": 5.0,
+                                        "upperBound": 10.0,
+                                        "value": 7.0
+                                    },
+                                    "GA_PARENTPOOL_RATIO": {
+                                        "lowerBound": 0.2,
+                                        "upperBound": 0.5,
+                                        "value": 0.3
+                                    }
+                                }
+                            }
+                        },
+                        "bestAccuracy": 0.965034965034965,
+                        "solution": {
+                            "n_estimators": 100,
+                            "max_features": 14,
+                            "max_depth": 12,
+                            "min_samples_split": 2,
+                            "min_samples_leaf": 11,
+                            "criterion": "entropy"
+                        },
+                        "bestSequence": [
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "GA",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "best",
+                            "DE",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP",
+                            "BayesGP"
+                        ]
+                    }
+                ],
+                "solver": "pyNMHH"
+            },
+            "metadata": {
+                "elapsedTimeSec": 8514.582156325981
+            }
         }
     }
 }

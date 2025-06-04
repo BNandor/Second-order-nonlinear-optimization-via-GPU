@@ -247,11 +247,11 @@ def runpyNMHHClassificationSuite():
                 },
                 ]
     problems=lambda logspath: [
-                            #    {'name':"Digits"},
-                            #    {'name':'Wine'},
-                            #    {'name':'AuditRisk'},
-                            #    {'name':'CervicalCancer'},
-                            #    {'name':'GallStone'},
+                               {'name':"Digits"},
+                               {'name':'Wine'},
+                               {'name':'AuditRisk'},
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
                                {'name':'HigherEducation'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
@@ -1021,7 +1021,7 @@ def runDefaultClassificationSuite():
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
 
-# runpyNMHHClassificationSuite()
+runpyNMHHClassificationSuite()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
 # runBigbayesGPPyNMHHClassificationSuite()
