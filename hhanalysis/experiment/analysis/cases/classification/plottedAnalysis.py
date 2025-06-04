@@ -414,7 +414,12 @@ if __name__ == "__main__":
     # Your existing file paths setup
     LOGS_ROOT = "../../../../logs"
     problemCategories = ["classification"]
-    models = ["RandomForest", "SVM", "GradientBoost", "DecisionTree"]
+    models = [
+            "RandomForest", 
+              "GradientBoost", 
+              "DecisionTree",
+              "SVM"
+            ]
     solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),
                          ("gridSearch","smallDatasets/biggerIter"),
                          ("geneticSearch","smallDatasets/biggerIter"),

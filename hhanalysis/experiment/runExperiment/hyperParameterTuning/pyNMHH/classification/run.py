@@ -38,6 +38,7 @@ def pyNMHHClassificationExperiment(experiment,recordsPath,experimentId):
             print(f"        >>>Running experiment {experimentId}")
             start = timer()
             dataset=getDatasets()[experiment['problems']['name']]()
+            hyperLevel= 'SA' if 'hyperLevel' not in experiment['solutionConfigs'] else experiment['solutionConfigs']['hyperLevel']
             config={
                         'X':dataset.data,
                         'Y':dataset.target,
@@ -52,6 +53,7 @@ def pyNMHHClassificationExperiment(experiment,recordsPath,experimentId):
                         'datasetName':experiment['problems']['name'],
                         'trainingFraction':0.75,
                         'baseLevelConfig':experiment['baseLevelConfigs'],
+                        'hyperLevel':hyperLevel,
                         'SA_temp0':1.0,
                         'SA_coolingRate':0.995
                     }

@@ -461,3 +461,57 @@ def NMHHHyperOpt(initialBaseLevelConfig, baseLevel, iterations=1000, initialTemp
         temperature *= cooling_rate
     
     return bestBaseLevelConfig, bestEnergy, history, bestSequence,bestSolution
+
+
+def pyNMHHHyperOpt_halfSA(initialBaseLevelConfig, baseLevel, iterations=1000, initialTemp=1.0, cooling_rate=0.995):
+    # Calculate budget:
+    # half the budget is spent on finding the right configuration
+    # the other half to apply the configuration
+    total_evaluations=iterations*baseLevel.max_evaluations
+    total_adapting_evaluations=int(total_evaluations/2)
+    remaining_evaluations=total_evaluations-total_adapting_evaluations
+    adapting_evaluations=total_adapting_evaluations/iterations
+
+    currentBaseLevelConfig = copy.deepcopy(initialBaseLevelConfig)
+    history = OptimizationHistory()
+    solution=baseLevel(currentBaseLevelConfig, history,adapting_evaluations)
+    currentEnergy=solution['fitness']
+    currentSolution=solution['solution']
+    bestBaseLevelConfig = currentBaseLevelConfig
+    bestEnergy = currentEnergy
+    bestSolution=currentSolution
+    bestSequence=history.operator_sequence_history[0]
+    temperature = initialTemp
+
+    for i in range(iterations-1):
+        perturbedBaseLevelConfig = perturb_baseLevelConfig(currentBaseLevelConfig, temperature)
+        solution=baseLevel(perturbedBaseLevelConfig, history,adapting_evaluations)
+        perturbedConfigEnergy= solution['fitness']
+        currentSolution=solution['solution']
+        
+        if perturbedConfigEnergy < currentEnergy or random.random() < math.exp((currentEnergy - perturbedConfigEnergy) / temperature):
+            currentBaseLevelConfig = perturbedBaseLevelConfig
+            currentEnergy = perturbedConfigEnergy
+            
+            if currentEnergy < bestEnergy:
+                bestBaseLevelConfig = currentBaseLevelConfig
+                bestEnergy = currentEnergy
+                bestSolution=currentSolution
+                bestSequence=history.operator_sequence_history[-1]
+                print(f"                >>>>Adaptive Iteration {i}: New best energy = {bestEnergy}")
+        
+        temperature *= cooling_rate
+    
+    # Use adapted solver
+    print(f"                >>>>Trying adapted solution on remaining evaluations: {remaining_evaluations} ")
+    solution=baseLevel(bestBaseLevelConfig, history,remaining_evaluations)
+    currentEnergy= solution['fitness']
+    currentSolution=solution['solution']
+    if currentEnergy < bestEnergy:
+                bestBaseLevelConfig = bestBaseLevelConfig
+                bestEnergy = currentEnergy
+                bestSolution=currentSolution
+                bestSequence=history.operator_sequence_history[-1]
+                print(f"                >>>>Adapted solution: New best energy = {bestEnergy}")
+
+    return bestBaseLevelConfig, bestEnergy, history, bestSequence,bestSolution

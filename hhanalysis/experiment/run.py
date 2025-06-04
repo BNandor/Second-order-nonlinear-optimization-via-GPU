@@ -271,6 +271,91 @@ def runpyNMHHClassificationSuite():
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,pyNMHHClassificationExperiment)
 
 
+def runpyNMHHClassificationSuite_HalfSA():
+    classifiers=[
+                {
+                  'name':'SVM',
+                  'model':'SVM',
+                  'hyperparameters': {
+                        'C': [1.0,50.0],
+                        "kernel":['linear','poly','rbf','sigmoid'],
+                        'degree': [2, 5],
+                        'gamma': ['scale', 'auto', 0.1, 1.0, 10.0],
+                        'coef0': [0.0, 1.0],
+                        'shrinking': [True, False],
+                        'tol': [1e-5, 1e-3],
+                        'class_weight': [None, 'balanced']
+                        },
+                },
+                {
+                 'name':'GradientBoost',
+                 'model':'GBoost',
+                 'hyperparameters': {
+                        'n_estimators': [100, 1000],
+                        'learning_rate': [0.01, 0.2],
+                        'max_depth': [3, 8],
+                        'min_samples_split': [2, 20],
+                        'min_samples_leaf': [1, 8],
+                        'subsample': [0.8, 1.0],
+                        'max_features': ['sqrt', 'log2', None],
+                        'criterion': ['friedman_mse', 'squared_error'],
+                        'warm_start': [True, False],
+                        'validation_fraction': [0.1, 0.2],
+                        'n_iter_no_change': [5,20],
+                        'tol': [1e-6, 1e-4]
+                }
+                },
+                {
+                 'name':'DecisionTree',
+                 'model':'DecisionTree',
+                 'hyperparameters': {
+                        'criterion': ['gini', 'entropy'],
+                        'splitter': ['best', 'random'],
+                        'max_depth': [5, 50],
+                        'min_samples_split': [2, 11],
+                        'min_samples_leaf': [1, 11],
+                        'max_features': [1,64],
+                        'max_leaf_nodes': [2, 50]
+                }
+                },
+                 {
+                  'name':'RandomForest',
+                  'model':'RF',
+                  'hyperparameters':  {
+                        'n_estimators': [10,100],
+                        "max_features":[1,64],
+                        'max_depth': [5,50],
+                        "min_samples_split":[2,11],
+                        "min_samples_leaf":[1,11],
+                        "criterion":['gini','entropy']
+                   }
+                },
+                ]
+    problems=lambda logspath: [
+                               {'name':"Digits"},
+                               {'name':'Wine'},
+                               {'name':'AuditRisk'},
+                               {'name':'CervicalCancer'},
+                               {'name':'GallStone'},
+                               {'name':'HigherEducation'}
+                               ]
+    solutionConfigs=[{'populationSize':15,'baselevelIterations':250,'pyNMHHSteps':10,'hyperLevel':'HALF_SA'}]
+#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
+#     baseLevelConfigs=[classify.initialClassificationBaseLevelConfigBayes()]
+    baseLevelConfigs=[classify.initialClassificationBaseLevelConfigEmphBayes()]
+    
+    config={
+                'name':'/smallDatasets/halfSA/smallerPop/bayesinit',
+                'classifiers':classifiers,
+                'problems': problems,
+                'solutionConfigs':solutionConfigs,
+                'classificationTuningCount':1,
+                'baseLevelConfigs':baseLevelConfigs,
+                'solver':'pyNMHH_HALF_SA'
+    }
+    runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,pyNMHHClassificationExperiment)
+
+
 def runbayesGPClassificationSuite():
     classifiers=[
                 {
@@ -1021,7 +1106,8 @@ def runDefaultClassificationSuite():
 # runSPRTClusteringSuite()
 # runSPRTTTestNMHHSuite()
 
-runpyNMHHClassificationSuite()
+# runpyNMHHClassificationSuite()
+runpyNMHHClassificationSuite_HalfSA()
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
 # runBigbayesGPPyNMHHClassificationSuite()
