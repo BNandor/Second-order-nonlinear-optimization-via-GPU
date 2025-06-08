@@ -368,10 +368,11 @@ def printExperimentTable(df):
     latex_table = latex_table.replace('datasetName', 'Dataset')
     print(latex_table)
 
-def main(file_paths: List[str]):
+def main(file_paths: List[str],datasets_filter=[]):
     """Main function to process data and generate visualizations."""
     all_experiments = []
     pyNMHHSolvers=set()
+
     # Read and process all experiment files
     for file_path in file_paths:
         try:
@@ -400,6 +401,9 @@ def main(file_paths: List[str]):
 
     # Create and process DataFrame
     df = pd.DataFrame(all_experiments)
+    if datasets_filter:
+        df = df[df["datasetName"].isin(datasets_filter)]
+    
     df = df.explode('accuracies').reset_index(drop=True)
 
     df['accuracies'] = df['accuracies'].astype(float)
@@ -415,21 +419,34 @@ if __name__ == "__main__":
     LOGS_ROOT = "../../../../logs"
     problemCategories = ["classification"]
     models = [
-            "RandomForest", 
+              "RandomForest", 
               "GradientBoost", 
               "DecisionTree",
               "SVM"
             ]
-    solverAndExperiment=[("defaultParameters","smallDatasets/defaultParams"),
+    datasets=[ 
+        'Digits',
+        'Wine',
+        'AuditRisk',
+        'CervicalCancer',
+        # 'GallStone',
+        # 'HigherEducation'
+        ]
+    
+    solverAndExperiment=[
+                         ("defaultParameters","smallDatasets/defaultParams"),
                          ("gridSearch","smallDatasets/biggerIter"),
                          ("geneticSearch","smallDatasets/biggerIter"),
                          ("randomSearch","smallDatasets/smallIter"),
                          ("bayesGP","smallDatasets/pyNMHHBased"),
                          ("bayesTPE","smallDatasets/biggerIter"),
+
                         #  ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
-                        #  ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit")
+                        # ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit"),
+                        
                         # Don't forget to update contents if experiments changed
-                        ("pyNMHH","smallDatasets/biggerIter/smallerPop/_combined")
+                        # ("pyNMHH","smallDatasets/biggerIter/smallerPop/_combined"),
+                        ('pyNMHH_HALF_SA','smallDatasets/halfSA/smallerPop/bayesinit')
                          ]
     # solverAndExperiment=[("bayesGP","smallDatasets/pyNMHHBased"),("pyNMHH","smallDatasets/biggerIter/smallerPop")]
     paths=[]
@@ -438,4 +455,4 @@ if __name__ == "__main__":
             for model in models:
                 paths.append(f"{LOGS_ROOT}/{solver}/{problemCategory}/{model}/{experiment}/records.json" )
                 # print(f"Category: {problemCategory}, model: {model}, experiment: {experiment}, solvers: {solvers}")
-    main(paths)
+    main(paths,datasets)

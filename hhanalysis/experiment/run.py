@@ -1107,12 +1107,15 @@ def runDefaultClassificationSuite():
 # runSPRTTTestNMHHSuite()
 
 # runpyNMHHClassificationSuite()
-runpyNMHHClassificationSuite_HalfSA()
+# runpyNMHHClassificationSuite_HalfSA()
+
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
-# runBigbayesGPPyNMHHClassificationSuite()
-# runBigbayesTPEClassificationSuite()
-# runRandomSearchClassificationSuite()
-# runGridSearchClassificationSuite()
-# runDefaultClassificationSuite()
+
+runBigbayesGPPyNMHHClassificationSuite()
+runBigbayesTPEClassificationSuite()
+runRandomSearchClassificationSuite()
+runGridSearchClassificationSuite()
+runDefaultClassificationSuite()
+
 # runGeneticSearchClassificationSuite()
