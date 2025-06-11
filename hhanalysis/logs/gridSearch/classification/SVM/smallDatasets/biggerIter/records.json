@@ -275,6 +275,146 @@
             "metadata": {
                 "elapsedTimeSec": 35.213686176997726
             }
+        },
+        "682165f0b19f2d7dc0062d19fd330d8465c6e710aa82ca69168e1d30d87299dd": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "GallStone",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7336448598130841,
+                        "solution": {
+                            "C": 26.93658074432343,
+                            "class_weight": null,
+                            "coef0": 0.8253699032698544,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": true,
+                            "tol": 0.00011029235402534819
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2.394257833948359
+            }
+        },
+        "0192a0ede3e6c25b0de7d58a60915a87169f9098f64985c5c49d18beb4314fbc": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "HigherEducation",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.3518990929705215,
+                        "solution": {
+                            "C": 43.10221905038031,
+                            "class_weight": null,
+                            "coef0": 0.5254020321950011,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "poly",
+                            "max_iter": 1000,
+                            "shrinking": true,
+                            "tol": 0.0004743676477593992
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 2.5256513509666547
+            }
         }
     }
 }
