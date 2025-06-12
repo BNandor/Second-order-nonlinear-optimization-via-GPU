@@ -279,6 +279,146 @@
             "metadata": {
                 "elapsedTimeSec": 74.34397875200011
             }
+        },
+        "dce5d7b5a3febcb6865944bfc960f24569cb2a76fbdeaf9a15a813d7c614592c": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "GallStone",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.7899686520376176,
+                        "solution": {
+                            "C": 7.674929013407266,
+                            "kernel": "linear",
+                            "degree": 3,
+                            "gamma": 1.0,
+                            "coef0": 0.7444902511764212,
+                            "shrinking": true,
+                            "tol": 0.0009068515346877093,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 20939.575366382
+            }
+        },
+        "b2a520616bb008819410de51711a9544a345f885a0b5f82929694191fcd35bff": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "HigherEducation",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.3586206896551724,
+                        "solution": {
+                            "C": 4.370668558712315,
+                            "kernel": "rbf",
+                            "degree": 3,
+                            "gamma": "scale",
+                            "coef0": 0.3778117054150236,
+                            "shrinking": true,
+                            "tol": 0.0008656057489586148,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 4.541649351001979
+            }
         }
     }
 }

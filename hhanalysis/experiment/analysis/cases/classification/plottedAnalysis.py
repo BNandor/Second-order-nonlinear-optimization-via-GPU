@@ -425,11 +425,11 @@ if __name__ == "__main__":
               "SVM"
             ]
     datasets=[ 
-        'Digits',
-        'Wine',
-        'AuditRisk',
-        'CervicalCancer',
-        'GallStone',
+        # 'Digits',
+        # 'Wine',
+        # 'AuditRisk',
+        # 'CervicalCancer',
+        # 'GallStone',
         'HigherEducation'
         ]
     proposedSolver='pyNMHH_HALF_SA'
