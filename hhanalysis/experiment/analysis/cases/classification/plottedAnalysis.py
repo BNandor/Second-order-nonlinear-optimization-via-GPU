@@ -425,11 +425,11 @@ if __name__ == "__main__":
               "SVM"
             ]
     datasets=[ 
-        # 'Digits',
-        # 'Wine',
-        # 'AuditRisk',
-        # 'CervicalCancer',
-        # 'GallStone',
+        'Digits',
+        'Wine',
+        'AuditRisk',
+        'CervicalCancer',
+        'GallStone',
         'HigherEducation'
         ]
     proposedSolver='pyNMHH_HALF_SA'
@@ -441,7 +441,7 @@ if __name__ == "__main__":
                          ("bayesGP","smallDatasets/pyNMHHBased"),
                          ("bayesTPE","smallDatasets/biggerIter"),
 
-                        #  ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
+                         ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
                         # ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit"),
                         
                         # Don't forget to update contents if experiments changed

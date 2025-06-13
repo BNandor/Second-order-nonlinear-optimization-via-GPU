@@ -82,7 +82,8 @@ def getDatasets():
         'CervicalCancer': readCervicalCancer,
         'GallStone': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/gallstone.csv'),
         'HigherEducation': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/education.csv'),
-        'MouseProtein':lambda :read_and_map_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/mouse_protein.csv',sep=";") 
+        'MouseProtein':lambda :read_and_map_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/mouse_protein.csv',sep=";"),
+        'WholesaleCustomer': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/wholesale_customer.csv')
         # (boston.data, boston.target, 'Boston'),
         # (covtype.data[:100], covtype.target[:100], 'Covtype')
     }
