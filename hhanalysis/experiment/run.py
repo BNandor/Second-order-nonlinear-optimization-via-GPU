@@ -253,7 +253,7 @@ def runpyNMHHClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
@@ -339,7 +339,7 @@ def runpyNMHHClassificationSuite_HalfSA():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':250,'pyNMHHSteps':10,'hyperLevel':'HALF_SA'}]
 #     baseLevelConfigs=[classify.initialClassificationBaseLevelConfig()]
@@ -617,7 +617,7 @@ def runBigbayesGPPyNMHHClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
@@ -714,7 +714,7 @@ def runBigbayesTPEClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':2500,'pyNMHHSteps':1}]
@@ -810,7 +810,7 @@ def runRandomSearchClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':500}]
@@ -995,7 +995,7 @@ def runGridSearchClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':2500}]
@@ -1088,7 +1088,7 @@ def runDefaultClassificationSuite():
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
                                {'name':'HigherEducation'},
-                               {'name':'WholesaleCustomer'}
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':2500}]

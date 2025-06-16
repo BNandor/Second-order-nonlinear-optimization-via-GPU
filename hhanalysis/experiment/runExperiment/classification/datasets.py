@@ -10,14 +10,17 @@ class Dataset:
         self.data = X
         self.target = Y
 
-def read_from_csv(file_path):
+def read_from_csv(file_path,scale=False):
     # Read the CSV file using pandas, specifying that the first row is a header
     df = pd.read_csv(file_path, header=0).sample(frac=1.0)
     
     # Separate features (X) and classes (Y)
     X = df.iloc[:, :-1].values  # All columns except the last one
     Y = df.iloc[:, -1].values   # Only the last column
-    
+    if scale:
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+    # return X,Y
     return Dataset(X[0:1000], Y[0:1000])
 
 def read_and_map_csv(file_path,sep):
@@ -83,10 +86,11 @@ def getDatasets():
         'GallStone': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/gallstone.csv'),
         'HigherEducation': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/education.csv'),
         'MouseProtein':lambda :read_and_map_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/mouse_protein.csv',sep=";"),
-        'WholesaleCustomer': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/wholesale_customer.csv')
+        'WholesaleCustomer': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/wholesale_customer.csv'),
+        'HeartFailure': lambda :read_from_csv(f'{os.path.dirname(os.path.abspath(__file__))}/datasets/heart_failure.csv',scale=True)
         # (boston.data, boston.target, 'Boston'),
         # (covtype.data[:100], covtype.target[:100], 'Covtype')
     }
 
-# X,Y=getDatasets()["MouseProtein"]()
-# print(X)
+# X,Y=getDatasets()["HeartFailure"]()
+# print(X[0])
