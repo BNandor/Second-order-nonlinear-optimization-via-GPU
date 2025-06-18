@@ -247,12 +247,12 @@ def runpyNMHHClassificationSuite():
                 },
                 ]
     problems=lambda logspath: [
-                               {'name':"Digits"},
-                               {'name':'Wine'},
-                               {'name':'AuditRisk'},
-                               {'name':'CervicalCancer'},
-                               {'name':'GallStone'},
-                               {'name':'HigherEducation'},
+                        #        {'name':"Digits"},
+                        #        {'name':'Wine'},
+                        #        {'name':'AuditRisk'},
+                        #        {'name':'CervicalCancer'},
+                        #        {'name':'GallStone'},
+                        #        {'name':'HigherEducation'},
                                {'name':'HeartFailure'}
                                ]
     solutionConfigs=[{'populationSize':15,'baselevelIterations':500,'pyNMHHSteps':5}]
@@ -1114,13 +1114,14 @@ def runDefaultClassificationSuite():
 # runSPRTTTestNMHHSuite()
 
 # runpyNMHHClassificationSuite()
-runpyNMHHClassificationSuite_HalfSA()
+# runpyNMHHClassificationSuite_HalfSA()
 
 # runbayesGPClassificationSuite()
 # runBigbayesGPClassificationSuite()
 
 runBigbayesGPPyNMHHClassificationSuite()
 runBigbayesTPEClassificationSuite()
+
 runRandomSearchClassificationSuite()
 runGridSearchClassificationSuite()
 runDefaultClassificationSuite()

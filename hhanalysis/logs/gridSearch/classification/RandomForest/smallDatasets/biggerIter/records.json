@@ -323,6 +323,60 @@
             "metadata": {
                 "elapsedTimeSec": 233.08732479001628
             }
+        },
+        "46fe459a71af6ecf1f80b7f6ffba2e6263a59b59dfe08a533e3985569967b4c6": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "iterations": 2500,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "HeartFailure",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8495959595959596,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 5,
+                            "max_features": 16,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 2,
+                            "n_estimators": 10
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "gridSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 86.1643572030589
+            }
         }
     }
 }

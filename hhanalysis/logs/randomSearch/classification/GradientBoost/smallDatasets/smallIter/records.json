@@ -917,6 +917,159 @@
             "metadata": {
                 "elapsedTimeSec": 233.16922352998517
             }
+        },
+        "0c3c4fc52acfd3b20ab624de619110c0b9bdf7b27336b9d12c8cf1ffb902d784": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "GradientBoost",
+                "datasetName": "HeartFailure",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8728956228956228,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.1261282519653311,
+                            "max_depth": 3,
+                            "max_features": null,
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 18,
+                            "n_estimators": 729,
+                            "n_iter_no_change": 12,
+                            "subsample": 0.9852853387103182,
+                            "tol": 9.919601932143015e-05,
+                            "validation_fraction": 0.10536068186873736,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8763636363636363,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.15498396031208686,
+                            "max_depth": 3,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 2,
+                            "n_estimators": 474,
+                            "n_iter_no_change": 5,
+                            "subsample": 0.9444225594576947,
+                            "tol": 3.1296118135410335e-05,
+                            "validation_fraction": 0.15181033938549793,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8696632996632996,
+                        "solution": {
+                            "criterion": "squared_error",
+                            "learning_rate": 0.02703848435015096,
+                            "max_depth": 3,
+                            "max_features": "log2",
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 7,
+                            "n_estimators": 578,
+                            "n_iter_no_change": 5,
+                            "subsample": 0.8827577244230762,
+                            "tol": 3.9912148603396624e-05,
+                            "validation_fraction": 0.1378885840893468,
+                            "warm_start": false
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8763299663299664,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.04462260581734847,
+                            "max_depth": 3,
+                            "max_features": "log2",
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 14,
+                            "n_estimators": 558,
+                            "n_iter_no_change": 13,
+                            "subsample": 0.8549086040935363,
+                            "tol": 5.6253608005195464e-05,
+                            "validation_fraction": 0.10823479560865676,
+                            "warm_start": true
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8763636363636363,
+                        "solution": {
+                            "criterion": "friedman_mse",
+                            "learning_rate": 0.0710229815232849,
+                            "max_depth": 7,
+                            "max_features": "sqrt",
+                            "min_samples_leaf": 4,
+                            "min_samples_split": 15,
+                            "n_estimators": 338,
+                            "n_iter_no_change": 13,
+                            "subsample": 0.8319032150449281,
+                            "tol": 4.236045527350743e-05,
+                            "validation_fraction": 0.1522052534479868,
+                            "warm_start": true
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 32.735864089103416
+            }
         }
     }
 }

@@ -641,6 +641,113 @@
             "metadata": {
                 "elapsedTimeSec": 4.0003846940235235
             }
+        },
+        "a646cc19287659456d4bae6d95e3082602c79cfe9f79d45a89097450a00926c4": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "DecisionTree",
+                "datasetName": "HeartFailure",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8595286195286196,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 7,
+                            "max_features": 61,
+                            "max_leaf_nodes": 10,
+                            "min_samples_leaf": 2,
+                            "min_samples_split": 3,
+                            "splitter": "best"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8560606060606061,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 48,
+                            "max_features": 54,
+                            "max_leaf_nodes": 15,
+                            "min_samples_leaf": 5,
+                            "min_samples_split": 6,
+                            "splitter": "random"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8694949494949494,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 6,
+                            "max_features": 35,
+                            "max_leaf_nodes": 10,
+                            "min_samples_leaf": 1,
+                            "min_samples_split": 7,
+                            "splitter": "random"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8594949494949495,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 37,
+                            "max_features": 57,
+                            "max_leaf_nodes": 14,
+                            "min_samples_leaf": 2,
+                            "min_samples_split": 9,
+                            "splitter": "random"
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8594949494949495,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 9,
+                            "max_features": 36,
+                            "max_leaf_nodes": 8,
+                            "min_samples_leaf": 3,
+                            "min_samples_split": 10,
+                            "splitter": "random"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 3.621532775927335
+            }
         }
     }
 }

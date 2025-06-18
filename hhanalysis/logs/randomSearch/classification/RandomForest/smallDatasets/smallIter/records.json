@@ -587,6 +587,104 @@
             "metadata": {
                 "elapsedTimeSec": 96.29209236701718
             }
+        },
+        "481930270c115d629944ba8564de3c9b0132ecd02855d5eacad7b9c15939704b": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "RandomForest",
+                "datasetName": "HeartFailure",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8561616161616161,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 15,
+                            "max_features": 9,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 8,
+                            "n_estimators": 64
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8628619528619529,
+                        "solution": {
+                            "criterion": "gini",
+                            "max_depth": 16,
+                            "max_features": 5,
+                            "min_samples_leaf": 7,
+                            "min_samples_split": 6,
+                            "n_estimators": 95
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8594612794612795,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 44,
+                            "max_features": 12,
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 6,
+                            "n_estimators": 26
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8594612794612795,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 31,
+                            "max_features": 24,
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 10,
+                            "n_estimators": 25
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8561279461279461,
+                        "solution": {
+                            "criterion": "entropy",
+                            "max_depth": 42,
+                            "max_features": 30,
+                            "min_samples_leaf": 6,
+                            "min_samples_split": 3,
+                            "n_estimators": 27
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 37.839713647030294
+            }
         }
     }
 }

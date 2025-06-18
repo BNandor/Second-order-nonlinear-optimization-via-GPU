@@ -725,6 +725,127 @@
             "metadata": {
                 "elapsedTimeSec": 9.360912979929708
             }
+        },
+        "343c7055cb6c9ec58fa44cb57f8327c534615ab0ffe75ccedd5a8c5fb57bcf3f": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "randomSearchIterations": 500,
+                "classificationTuningCount": 5,
+                "classifierName": "SVM",
+                "datasetName": "HeartFailure",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8026599326599326,
+                        "solution": {
+                            "C": 1.8072515275619452,
+                            "class_weight": null,
+                            "coef0": 0.1728894789261115,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.00046313685866351866
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7925252525252526,
+                        "solution": {
+                            "C": 1.2386117807284556,
+                            "class_weight": null,
+                            "coef0": 0.5313201841952627,
+                            "degree": 3,
+                            "gamma": "scale",
+                            "kernel": "linear",
+                            "shrinking": false,
+                            "tol": 0.0002633409708445516
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.8093939393939394,
+                        "solution": {
+                            "C": 3.724560443784587,
+                            "class_weight": null,
+                            "coef0": 0.05194331934283458,
+                            "degree": 2,
+                            "gamma": "auto",
+                            "kernel": "sigmoid",
+                            "shrinking": false,
+                            "tol": 0.0009521119416682817
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7891919191919191,
+                        "solution": {
+                            "C": 4.171917576760672,
+                            "class_weight": null,
+                            "coef0": 0.5431170954592529,
+                            "degree": 2,
+                            "gamma": "scale",
+                            "kernel": "linear",
+                            "shrinking": true,
+                            "tol": 0.00032888478225590354
+                        }
+                    },
+                    {
+                        "bestAccuracy": 0.7993265993265993,
+                        "solution": {
+                            "C": 17.238603922494473,
+                            "class_weight": null,
+                            "coef0": 0.13280088329652706,
+                            "degree": 4,
+                            "gamma": 0.1,
+                            "kernel": "sigmoid",
+                            "shrinking": true,
+                            "tol": 0.0005484748644100615
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 500,
+                "solver": "randomSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 10.906604116084054
+            }
         }
     }
 }
