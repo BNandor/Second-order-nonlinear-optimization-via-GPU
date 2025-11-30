@@ -18,6 +18,21 @@ dquote='"'
 ROOT="../../"
 LOGS_PATH_FROM_ROOT="hhanalysis/logs"
 
+
+def runSNLPSuite():
+    problems=lambda logspath: [
+              ("PROBLEM_SNLP",f"{logspath}/snlp.json"),
+              ]
+    config={'name':'boxsize_100_comm_r_50_total_nodes_n_50_anchors_n_10_gpsErr_3',
+            'problems':problems,
+            'solver':'SA',
+            'n':47,
+            'populationSize':100,
+            'baselevelIterations':200,
+            'trialStepCount':100
+            }
+    runSASNLPExperiment(LOGS_PATH_FROM_ROOT,ROOT,config)
+
 def runRandomHHSuite():
         problems=lambda logspath: [("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json")]
         dimensions=[5,50,100,500]
@@ -902,7 +917,8 @@ def runGeneticSearchClassificationSuite():
                         #        {'name':'Iris'},
                                {'name':'CervicalCancer'},
                                {'name':'GallStone'},
-                               {'name':'HigherEducation'}
+                               {'name':'HigherEducation'},
+                               {'name':'HeartFailure'}
                         #        {'name':'BreastCancer'}
                                ]
     solutionConfigs=[{'iterations':50,'populationSize':50}]
@@ -1102,28 +1118,31 @@ def runDefaultClassificationSuite():
                 'solver':'defaultParameters'
     }
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,defaultClassificationExperiment)
-# runNMHHComputationalTimeExperiments()
-# runCUSTOMHySComputationalTimeExperiments()
-# runRandomHHSuite()
-# runNMHHSuite()
-# runCUSTOMHySSuite()
-# runMealpySuite()
-# runClusteringSuite()
-# runSPRTTTestNMHHSuite()
-# runSPRTClusteringSuite()
-# runSPRTTTestNMHHSuite()
 
-# runpyNMHHClassificationSuite()
-# runpyNMHHClassificationSuite_HalfSA()
+runSNLPSuite()
 
-# runbayesGPClassificationSuite()
-# runBigbayesGPClassificationSuite()
+# # runNMHHComputationalTimeExperiments()
+# # runCUSTOMHySComputationalTimeExperiments()
+# # runRandomHHSuite()
+# # runNMHHSuite()
+# # runCUSTOMHySSuite()
+# # runMealpySuite()
+# # runClusteringSuite()
+# # runSPRTTTestNMHHSuite()
+# # runSPRTClusteringSuite()
+# # runSPRTTTestNMHHSuite()
 
-runBigbayesGPPyNMHHClassificationSuite()
-runBigbayesTPEClassificationSuite()
+# # runpyNMHHClassificationSuite()
+# # runpyNMHHClassificationSuite_HalfSA()
 
-runRandomSearchClassificationSuite()
-runGridSearchClassificationSuite()
-runDefaultClassificationSuite()
+# # runbayesGPClassificationSuite()
+# # runBigbayesGPClassificationSuite()
+
+# runBigbayesGPPyNMHHClassificationSuite()
+# runBigbayesTPEClassificationSuite()
+
+# runRandomSearchClassificationSuite()
+# runGridSearchClassificationSuite()
+# runDefaultClassificationSuite()
 
 # runGeneticSearchClassificationSuite()

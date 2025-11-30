@@ -103,30 +103,32 @@ def runMADSExperiments(logsPathFromRoot,root,config):
     variations=list(itertools.product(*list(params.values())))
     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT)
 
-# def runSASNLPExperiment(logsPathFromRoot,root,config):
-#     logspath=f"{logsPathFromRoot}/CMA-ES/{config['name']}"
-#     recordspath=f"{root}/{logspath}/records.json"
-#     n=27
-#     params={}
-#     params["problems"]=zipWithProperty([("PROBLEM_SNLP","hhanalysis/logs/SNLP/SA/snlp.json")],"problems")
-#     params["baselevelIterations"]=zipWithProperty([50000],"baselevelIterations")
-#     params["populationSize"]=zipWithProperty([20],"populationSize")
-#     params["modelSize"]=zipWithProperty([n*2],"modelSize")
-#     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-#     params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
-#     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
-#     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
-#     constants1=len(pd.read_csv("../data/snlp/exported.snlp",header=None,delimiter=' ')[0])
-#     constants2=len(pd.read_csv("../data/snlp/exported.snlpa",header=None,delimiter=' ')[0])
-#     pathFlags=[f"-DPROBLEM_PATH={backslash}{dquote}hhanalysis/data/snlp/exported.snlp{backslash}{dquote} \
-#                  -DPROBLEM_ANCHOR_PATH={backslash}{dquote}hhanalysis/data/snlp/exported.snlpa{backslash}{dquote} \
-#                  -DPROBLEM_INPUT_POPULATION_PATH={backslash}{dquote}hhanalysis/data/snlp/random227-400-20.pop{backslash}{dquote} \
-#                  -DRESIDUAL_CONSTANTS_COUNT_1={constants1} \
-#                  -DRESIDUAL_CONSTANTS_COUNT_2={constants2}"]
-#     params["additionalFlags"]=zipWithProperty(pathFlags,"additionalFlags")
-#     params["hyperLevelMethod"]=zipWithProperty(["SA"],"hyperLevelMethod")
-#     variations=list(itertools.product(*list(params.values())))
-#     runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT)
+def runSASNLPExperiment(logsPathFromRoot,root,config):
+    logspath=f"{logsPathFromRoot}/SNLP/{config['solver']}/{config['name']}"
+    recordspath=f"{root}/{logspath}/records.json"
+    n=config['n']
+    params={}
+    params["problems"]=zipWithProperty(config['problems'](logspath),"problems")
+    params["baselevelIterations"]=zipWithProperty([config['baselevelIterations']],"baselevelIterations")
+    params["populationSize"]=zipWithProperty([config['populationSize']],"populationSize")
+    params["modelSize"]=zipWithProperty([n*2],"modelSize")
+    params["trialSampleSizes"]=zipWithProperty([1],"trialSampleSizes")
+    params["trialStepCount"]=zipWithProperty([config['trialStepCount']],"trialStepCount")
+    params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
+    params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
+    constants1=len(pd.read_csv("../data/snlp/comparison/exportedDVHop.snlp",header=None,delimiter=' ')[0])
+    constants2=len(pd.read_csv("../data/snlp/comparison/exportedDVHop.snlpa",header=None,delimiter=' ')[0])
+    pathFlags=[f"-DPROBLEM_PATH={backslash}{dquote}hhanalysis/data/snlp/comparison/exportedDVHop.snlp{backslash}{dquote} \
+                 -DPROBLEM_ANCHOR_PATH={backslash}{dquote}hhanalysis/data/snlp/comparison/exportedDVHop.snlpa{backslash}{dquote} \
+                 -DPROBLEM_INPUT_POPULATION_PATH={backslash}{dquote}hhanalysis/data/snlp/comparison/random247-400-100.pop{backslash}{dquote} \
+                 -DRESIDUAL_CONSTANTS_COUNT_1={constants1} \
+                 -DRESIDUAL_CONSTANTS_COUNT_2={constants2} \
+                 -DSAMPLING={backslash}{dquote}warmup-multifidelity{backslash}{dquote}"]
+    
+    params["additionalFlags"]=zipWithProperty(pathFlags,"additionalFlags")
+    params["hyperLevelMethod"]=zipWithProperty([config['solver']],"hyperLevelMethod")
+    variations=list(itertools.product(*list(params.values())))
+    runExperimentVariations(variations,lambda exp:hashOfExperiment(exp),recordspath,DEFAULT_THREAD_COUNT)
 
 def runSA_NMHH_GA_DE_GD_LBFGS_GWO(logsPathFromRoot,root,config):
     logspath=f"{logsPathFromRoot}/SA-NMHH/GWO/{config['name']}"

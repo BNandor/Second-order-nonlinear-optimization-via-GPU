@@ -144,14 +144,20 @@ def getInitialDistributionsMatchOne(df,dim):
                      [irefiner[0]],\
                      [0.0]])
 def createTransitionProbabilityHeatMap():
-    baselevelIterations=100
-    testGroupDF=createCategoryTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
-    rastrigin=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_RASTRIGIN'])])]                                    
-    rosenbrock=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_ROSENBROCK'])])]                                  
-    qing=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_QING'])])]                                    
-    trid=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_TRID'])])]                                    
-    schwefel=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_SCHWEFEL223'])])]                                    
-    styblinskitang=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_STYBLINSKITANG'])])]                                  
+    baselevelIterations=200
+    # testGroupDF=createCategoryTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    # rastrigin=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_RASTRIGIN'])])]                                    
+    # rosenbrock=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_ROSENBROCK'])])]                                  
+    # qing=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_QING'])])]                                    
+    # trid=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_TRID'])])]                                    
+    # schwefel=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_SCHWEFEL223'])])]                                    
+    # styblinskitang=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_STYBLINSKITANG'])])]                                  
+    snlptestGroupDF_1=createCategoryTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_1_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_1=snlptestGroupDF_1[selectAllMatchAtLeastOne(snlptestGroupDF_1,[('problemName',['PROBLEM_SNLP'])])]                                  
+    snlptestGroupDF_2=createCategoryTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_2_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_2=snlptestGroupDF_2[selectAllMatchAtLeastOne(snlptestGroupDF_2,[('problemName',['PROBLEM_SNLP'])])]                                  
+    snlptestGroupDF_3=createCategoryTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_3_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_3=snlptestGroupDF_3[selectAllMatchAtLeastOne(snlptestGroupDF_3,[('problemName',['PROBLEM_SNLP'])])]                                  
     Ps=[]
     xticks=[]
     yticks=[]
@@ -160,11 +166,11 @@ def createTransitionProbabilityHeatMap():
     figuretitles=[]
     xlabelTitles=[]
     ylabelTitles=[]
-    dims=[5,50,100,500]
+    dims=[94]
     # problems=['Rastrigin','Rosenbrock','Qing','Trid','Schwefel223','Styblinksi Tang']
     # problemdfs=[rastrigin,rosenbrock,qing,trid,schwefel,styblinskitang]
-    problems=['Styblinksi Tang','Rosenbrock']
-    problemdfs=[styblinskitang,rosenbrock]
+    problems=['Communication radius of 50, 3 anchors and  GPS Error of 0.03','Communication radius of 50, 10 anchors and  GPS Error of 0.03','Communication radius of 100, 3 anchors and  GPS Error of 0.003']
+    problemdfs=[snlp_1,snlp_2,snlp_3]
     for problem,df in zip(problems,problemdfs):
         plotRow=[]
         rowxTicks=[]
@@ -184,7 +190,7 @@ def createTransitionProbabilityHeatMap():
             rowxTicks.append(states)
             rowyTicks.append(states)
             rowTitles.append('Transition probabilities')
-            figureTitleRow.append(f"{problem} {dim}")   
+            figureTitleRow.append(f"{problem} ")   
             xlabelTitleRow.append('Next category')
             ylabelTitleRow.append('Current category') 
         Ps.append(plotRow)
@@ -199,18 +205,24 @@ def createTransitionProbabilityHeatMap():
     height_ratios=[1]
     rowsize=3
     plotHeatmap(Ps,len(problems),len(dims)*2,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,
-                        width_ratios=width_ratios,height_ratios=height_ratios,subfigdim=(len(problems),len(dims)) ,figsize=(17,len(problems)*rowsize),
+                        width_ratios=width_ratios,height_ratios=height_ratios,subfigdim=(len(problems),len(dims)) ,figsize=(5.5,len(problems)*rowsize),
                         filename=f"plots/P_{problems}_{dims}_{baselevelIterations}.svg")
 
 def createOperatorTransitionProbabilityHeatMap():
-    baselevelIterations=100
-    testGroupDF=createOperatorTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    baselevelIterations=200
+    # testGroupDF=createOperatorTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
     # rastrigin=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_RASTRIGIN'])])]                                    
-    rosenbrock=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_ROSENBROCK'])])]                                  
+    # rosenbrock=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_ROSENBROCK'])])]                                  
     # qing=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_QING'])])]                                    
     # trid=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_TRID'])])]                                    
     # schwefel=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_SCHWEFEL223'])])]                                    
-    styblinskitang=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_STYBLINSKITANG'])])]                                  
+    # styblinskitang=testGroupDF[selectAllMatchAtLeastOne(testGroupDF,[('problemName',['PROBLEM_STYBLINSKITANG'])])]                          
+    snlptestGroupDF_1=createOperatorTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_1_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_1=snlptestGroupDF_1[selectAllMatchAtLeastOne(snlptestGroupDF_1,[('problemName',['PROBLEM_SNLP'])])]                                  
+    snlptestGroupDF_2=createOperatorTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_2_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_2=snlptestGroupDF_2[selectAllMatchAtLeastOne(snlptestGroupDF_2,[('problemName',['PROBLEM_SNLP'])])]                                  
+    snlptestGroupDF_3=createOperatorTransitionHeatMapsAt(SA_GA_DE_GD_LBFGS_SNLP_3_RECORDS_PATH+"/records.json",baselevelIterations=baselevelIterations)
+    snlp_3=snlptestGroupDF_3[selectAllMatchAtLeastOne(snlptestGroupDF_3,[('problemName',['PROBLEM_SNLP'])])]                                  
     Ps=[]
     xticks=[]
     yticks=[]
@@ -220,11 +232,11 @@ def createOperatorTransitionProbabilityHeatMap():
     figuretitles=[]
     xlabelTitles=[]
     ylabelTitles=[]
-    dims=[5,50,100,500]
+    dims=[94]
     # problems=['Rastrigin','Rosenbrock','Qing','Trid','Schwefel223','Styblinksi Tang']
     # problemdfs=[rastrigin,rosenbrock,qing,trid,schwefel,styblinskitang]
-    problems=['Styblinksi Tang','Rosenbrock']
-    problemdfs=[styblinskitang,rosenbrock]
+    problems=['Communication radius of 50, 3 anchors and  GPS Error of 0.03','Communication radius of 50, 10 anchors and  GPS Error of 0.03','Communication radius of 100, 3 anchors and  GPS Error of 0.003']
+    problemdfs=[snlp_1,snlp_2,snlp_3]
     for problem,df in zip(problems,problemdfs):
         plotRow=[]
         rowxTicks=[]
@@ -244,7 +256,8 @@ def createOperatorTransitionProbabilityHeatMap():
             rowxTicks.append(refineStates)
             rowyTicks.append(refineStates)
             rowTitles.append('Refine transitions')
-            figureTitleRow.append(f"{problem} {dim}")   
+            # figureTitleRow.append(f"{problem} {dim}")   
+            figureTitleRow.append(f"{problem}")   
             xlabelTitleRow.append('Next operator')
             ylabelTitleRow.append('Current operator') 
         Ps.append(plotRow)
@@ -259,7 +272,7 @@ def createOperatorTransitionProbabilityHeatMap():
     height_ratios=[1]
     rowsize=3
     plotHeatmap(Ps,len(problems),len(dims)*2,xticks,yticks,titles,xlabelTitles,ylabelTitles,figuretitles,
-                        width_ratios=width_ratios,height_ratios=height_ratios,subfigdim=(len(problems),len(dims)) ,figsize=(17,len(problems)*rowsize),
+                        width_ratios=width_ratios,height_ratios=height_ratios,subfigdim=(len(problems),len(dims)) ,figsize=(6,len(problems)*rowsize),
                         filename=f"plots/P_{problems}_{dims}_{baselevelIterations}-operatorP.svg",color='Blues')
 
 # methodsComparison(['PROBLEM_ROSENBROCK'],[10,15,30,50,100,500,750], False)
@@ -298,6 +311,6 @@ def createOperatorTransitionProbabilityHeatMap():
 # methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750], False)
 
 # all5000IterationResults()
-# createTransitionProbabilityHeatMap()
+createTransitionProbabilityHeatMap()
 # createOperatorTransitionProbabilityHeatMap()
 # createMethodsCostEvolutionPlots()

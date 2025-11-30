@@ -359,6 +359,66 @@
             "metadata": {
                 "elapsedTimeSec": 1.228654685022775
             }
+        },
+        "b791308989d69c2a8386131a638139a62fbd9ee38b459be5aa2a69efa6995b97": {
+            "experiment": {
+                "hyperParameters": {
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ],
+                    "splitter": [
+                        "best",
+                        "random"
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_leaf_nodes": [
+                        2,
+                        50
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "DecisionTree",
+                "datasetName": "HeartFailure",
+                "classifierModel": "DecisionTree",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8494983277591973,
+                        "solution": {
+                            "criterion": "gini",
+                            "splitter": "random",
+                            "max_depth": 19,
+                            "min_samples_split": 3,
+                            "min_samples_leaf": 7,
+                            "max_features": 20,
+                            "max_leaf_nodes": 33
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 1.5648367380000536
+            }
         }
     }
 }

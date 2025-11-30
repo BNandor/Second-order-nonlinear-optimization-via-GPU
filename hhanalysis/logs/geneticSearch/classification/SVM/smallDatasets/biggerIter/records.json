@@ -419,6 +419,76 @@
             "metadata": {
                 "elapsedTimeSec": 4.541649351001979
             }
+        },
+        "de902cf18e3a26ca46990cee83dd19d48004b7f2ea493e7b00116b766ecc3d1c": {
+            "experiment": {
+                "hyperParameters": {
+                    "C": [
+                        1.0,
+                        50.0
+                    ],
+                    "kernel": [
+                        "linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                    ],
+                    "degree": [
+                        2,
+                        5
+                    ],
+                    "gamma": [
+                        "scale",
+                        "auto",
+                        0.1,
+                        1.0,
+                        10.0
+                    ],
+                    "coef0": [
+                        0.0,
+                        1.0
+                    ],
+                    "shrinking": [
+                        true,
+                        false
+                    ],
+                    "tol": [
+                        1e-05,
+                        0.001
+                    ],
+                    "class_weight": [
+                        null,
+                        "balanced"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "SVM",
+                "datasetName": "HeartFailure",
+                "classifierModel": "SVM",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8193979933110368,
+                        "solution": {
+                            "C": 1.7095118021433349,
+                            "kernel": "linear",
+                            "degree": 4,
+                            "gamma": 0.1,
+                            "coef0": 0.5646849065808021,
+                            "shrinking": false,
+                            "tol": 0.000706141391988293,
+                            "class_weight": null
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 17.20568217899995
+            }
         }
     }
 }

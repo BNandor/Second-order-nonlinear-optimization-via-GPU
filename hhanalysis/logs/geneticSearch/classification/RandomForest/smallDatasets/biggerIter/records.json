@@ -329,6 +329,61 @@
             "metadata": {
                 "elapsedTimeSec": 44.58983624802204
             }
+        },
+        "bca2e2c3042785ed236523b039c33f1bc81d9d5002e06811ca32a0bb49dc0a69": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        10,
+                        100
+                    ],
+                    "max_features": [
+                        1,
+                        64
+                    ],
+                    "max_depth": [
+                        5,
+                        50
+                    ],
+                    "min_samples_split": [
+                        2,
+                        11
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        11
+                    ],
+                    "criterion": [
+                        "gini",
+                        "entropy"
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "RandomForest",
+                "datasetName": "HeartFailure",
+                "classifierModel": "RF",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8595317725752508,
+                        "solution": {
+                            "n_estimators": 44,
+                            "max_features": 7,
+                            "max_depth": 11,
+                            "min_samples_split": 10,
+                            "min_samples_leaf": 7,
+                            "criterion": "entropy"
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 67.715891887
+            }
         }
     }
 }

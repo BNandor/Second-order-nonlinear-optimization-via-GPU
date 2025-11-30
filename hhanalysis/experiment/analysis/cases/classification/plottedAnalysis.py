@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
 from collections import Counter
+from matplotlib.colors import ListedColormap
+import matplotlib as mpl
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from matplotlib.collections import LineCollection
 
 def hash_dict(d: Dict[str, Any]) -> str:
     """Create a hash for a dictionary."""
@@ -111,9 +115,9 @@ def create_maxcomparison_matrix(group):
                 max2=np.max(accuracies2)
                 statistic, p_value = stats.ranksums(accuracies1.array, accuracies2.array)
                 
-                if max1-max2>0.0025:
+                if max1-max2>0.003:
                     matrix[i, j] = 1.0 
-                elif abs(max1-max2)<0.0025:
+                elif abs(max1-max2)<0.003:
                     # 0.5 means no significant difference
                     matrix[i, j] = 0.5
                 else: 
@@ -146,6 +150,100 @@ def calculate_solver_wins(df):
             solver_wins[solver] += wins
     
     return solver_wins
+def plotEfficiencyFrontier(df,proposedSolver):
+    solver_wins = calculate_solver_wins(df)
+    # Calculate efficiency: totalFunctionEvaluations sum per solver divided by total timeSec per solver
+    efficiency = {}
+    for solver in df['solver'].unique():
+        solver_df = df[df['solver'] == solver]
+        total_evals = solver_df['totalFunctionEvaluations'].sum()
+        total_time = solver_df['timeSec'].sum()
+        efficiency[solver] = total_time / total_evals if total_evals > 0 else 0
+
+    # Prepare data for plotting
+    solvers = list(solver_wins.keys())
+    scores = [solver_wins[solver] for solver in solvers]
+    neg_efficiency = [efficiency[solver] for solver in solvers]
+
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(scores, neg_efficiency, c=range(len(solvers)), cmap='coolwarm', s=100)
+
+    ax = plt.gca()
+    plt.xlabel('Total number of wins')
+    plt.ylabel('Seconds / Function Evaluation')
+    plt.title('Tuner Efficiency Frontier')
+    plt.grid(True, linestyle='--', alpha=0.6)
+
+    # Calculate axis limits with some padding
+    x_min, x_max = min(scores), max(scores)
+    y_min, y_max = min(neg_efficiency), max(neg_efficiency)
+    x_pad = (x_max - x_min) * 0.08 if x_max > x_min else 1
+    y_pad = (y_max - y_min) * 0.08 if y_max > y_min else 1
+    ax.set_xlim(x_min - x_pad, x_max + x_pad)
+    ax.set_ylim(y_min - y_pad, y_max + y_pad)
+
+    # Place labels, adjusting position to avoid going outside plot
+    for i, solver in enumerate(solvers):
+        x, y = scores[i], neg_efficiency[i]
+        # Default offsets
+        dx = -0.02 * (x_max - x_min) if x > (x_min + x_max) / 2 else 0.02 * (x_max - x_min)
+        dy = -0.02 * (y_max - y_min) if y > (y_min + y_max) / 2 else 0.02 * (y_max - y_min)
+        # Clamp label inside axis
+        label_x = min(max(x + dx, x_min - x_pad * 0.5), x_max + x_pad * 0.5)
+        label_y = min(max(y + dy, y_min - y_pad * 0.5), y_max + y_pad * 0.5)
+        solverName=capitalize_first_letter(solver.replace('defaultParameters','default').replace('pyNMHH','NMHT').replace('HALF_SA','WARM'))
+        plt.text(label_x, label_y, solverName, fontsize=9, ha='right' if dx < 0 else 'left', va='bottom' if dy >= 0 else 'top')
+
+    # Normalize scores and neg_efficiency for weighted sum
+    scores_arr = np.array(scores)
+    eff_arr = np.array(neg_efficiency)
+    norm_scores = (scores_arr - scores_arr.min()) / (scores_arr.max() - scores_arr.min() + 1e-8)
+    norm_eff = (eff_arr.max() - eff_arr) / (eff_arr.max() - eff_arr.min() + 1e-8)  # lower time is better
+
+    # Sweep weights from 0 to 1 for a smooth frontier
+    num_weights = 100
+    weights = np.linspace(0, 1, num_weights)
+    cmap = plt.get_cmap('winter')
+    frontier_points = []
+    frontier_colors = []
+
+    for idx, w_score in enumerate(weights):
+        w_time = 1 - w_score
+        weighted = w_score * norm_scores + w_time * norm_eff
+        max_val = np.max(weighted)
+        optimal_indices = np.where(np.isclose(weighted, max_val, atol=1e-8))[0]
+        color = cmap(idx / (num_weights - 1))
+        for best_idx in optimal_indices:
+            frontier_points.append((scores_arr[best_idx], eff_arr[best_idx]))
+            frontier_colors.append(color)
+
+    # Plot the continuous frontier line, coloring by weight
+    xs = [pt[0] for pt in frontier_points]
+    ys = [pt[1] for pt in frontier_points]
+    points = np.array([xs, ys]).T.reshape(-1, 1, 2)
+    if len(points) > 1:
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, colors=frontier_colors[:-1], linewidths=3, zorder=4)
+        ax.add_collection(lc)
+
+    # Plot all optimal points with stars
+    for (x, y), color in zip(frontier_points, frontier_colors):
+        plt.scatter([x], [y], marker='*', color=color, s=120, edgecolor='black', zorder=5)
+
+    # Add a small gradient colorbar inside the scatter plot as a legend on the left
+    axins = inset_axes(ax, width="3%", height="30%", loc='upper left', borderpad=1.2)
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=0, vmax=1))
+    sm.set_array([])
+    cbar = plt.colorbar(sm, cax=axins, orientation='vertical')
+    cbar.set_ticks([0, 1])
+    cbar.set_ticklabels(['0% Score\n100% Time', '100% Score\n0% Time'])
+    cbar.ax.tick_params(labelsize=8)
+    cbar.set_label('Frontier Weight', rotation=90, fontsize=9, labelpad=8)
+
+    plt.tight_layout()
+    plt.show()
+
+
 
 def plotWins(df):
     solver_wins = calculate_solver_wins(df)
@@ -153,7 +251,7 @@ def plotWins(df):
 
     # Sort solvers by number of wins in descending order
     sorted_solver_wins = dict(sorted(solver_wins.items(), key=lambda x: x[1], reverse=True))
-    solvers = list(sorted_solver_wins.keys())
+    solvers = [ s.replace('pyNMHH','NMHT').replace('HALF_SA','WARM') for s in list(sorted_solver_wins.keys())]
     wins = list(sorted_solver_wins.values())
 
     colors = cm.coolwarm(np.linspace(0, 1, len(solvers)))
@@ -175,9 +273,9 @@ def plotWins(df):
 
     ax.set_xlim(0, max(wins) * 1.1)
 
-    plt.title('Solver scores')
-    plt.ylabel('Solver')
-    plt.xlabel('Score')
+    plt.title('Tuner scores')
+    plt.ylabel('Tuner')
+    plt.xlabel('Wins')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
@@ -248,7 +346,7 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2,pyNMHHSolvers={},prop
                                vmax=1,
                                square=True,
                                xticklabels=False,
-                               yticklabels=list(map(lambda s:capitalize_first_letter(s.replace('defaultParameters','default')).replace(proposedSolver,'NMHT'),solvers)),
+                               yticklabels=list(map(lambda s:capitalize_first_letter(s.replace('defaultParameters','default').replace('pyNMHH','NMHT').replace('HALF_SA','WARM')).replace(proposedSolver,'NMHT'),solvers)),
                                ax=ax_heatmap,
                                cbar_kws={'label': 'Comparison Result'},
                                cbar=False)
@@ -304,8 +402,8 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2,pyNMHHSolvers={},prop
                     # Set titles
                     if i == 0:
                         ax_heatmap.set_title(f'{dataset}\n Results')
-                        ax_barplot.set_title(f'{dataset}\nSolver Times')
-                        ax_barplot_operators.set_title('pyNMHH\n Operator Frequencies')
+                        ax_barplot.set_title(f'{dataset}\Tuner Times')
+                        ax_barplot_operators.set_title('NMHT_WARM\n Operator Frequencies')
                     
                     if j == 0:
                         ax_heatmap.set_ylabel(f'{classifier}')
@@ -321,15 +419,6 @@ def plot_comparison_matrices(df, max_datasets_per_figure=2,pyNMHHSolvers={},prop
         
         # Add figure title to indicate which datasets are included
         plt.suptitle(f'Datasets: {", ".join(current_datasets)}', fontsize=16)
-        # plt.tight_layout()
-        # plt.subplots_adjust(
-        #     left=0.1,    # left margin
-        #     right=0.9,   # right margin
-        #     bottom=0.1,  # bottom margin
-        #     top=0.9,     # top margin
-        #     wspace=0.5,  # width spacing between subplots
-        #     hspace=0.4   # height spacing between subplots
-        # )
 
         # Show the figure (or save if preferred)
         plt.show()
@@ -353,7 +442,7 @@ def printExperimentTable(df):
         columns='solver',
         values='accuracies'
     ).reset_index()
-    # pivot_table=pivot_table[['datasetName','classifierModel','pyNMHH','bayesGP','bayesTPE', 'defaultParameters','geneticSearch','gridSearch','randomSearch']]
+    pivot_table=pivot_table[['datasetName','classifierModel','pyNMHH_HALF_SA','pyNMHH','bayesGP','bayesTPE', 'defaultParameters','geneticSearch','gridSearch','randomSearch']]
     latex_table = pivot_table.to_latex(
         index=False,
         float_format="%.5f",
@@ -410,7 +499,9 @@ def main(file_paths: List[str],datasets_filter=[],proposedSolver='pyNMHH'):
     # groupedDF=group_experiments(df)
 
     # Generate plot
+    
     printExperimentTable(df)
+    plotEfficiencyFrontier(df,proposedSolver)
     plotWins(df)
     plot_comparison_matrices(df,2,pyNMHHSolvers,proposedSolver)
 
@@ -430,7 +521,8 @@ if __name__ == "__main__":
         'AuditRisk',
         'CervicalCancer',
         'GallStone',
-        'HigherEducation'
+        # 'HigherEducation',
+        'HeartFailure'
         ]
     proposedSolver='pyNMHH_HALF_SA'
     solverAndExperiment=[
@@ -441,8 +533,8 @@ if __name__ == "__main__":
                          ("bayesGP","smallDatasets/pyNMHHBased"),
                          ("bayesTPE","smallDatasets/biggerIter"),
 
-                         ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
-                        # ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit"),
+                        #  ("pyNMHH","smallDatasets/biggerIter/smallerPop"),
+                        ("pyNMHH","smallDatasets/biggerIter/smallerPop/bayesinit"),
                         
                         # Don't forget to update contents if experiments changed
                         # ("pyNMHH","smallDatasets/biggerIter/smallerPop/_combined"),

@@ -79,6 +79,51 @@ public:
                 logJson["SA-temps"].push_back(temp);
             }
         }
+        if (STR_EQ(SAMPLING, "warmup-multifidelity")) {
+            int totalFuncEvaluations = (trials-1) * totalBaseLevelEvaluations;
+            int totalWarmupEvaluations = totalFuncEvaluations/3;
+            int warmupSampleSize = 10;
+            for (int i = 0; i < warmupSampleSize  || temp < 0; i++) {
+
+                printf("[med+iqr]f: %f warmup trial %u \n", currentF, i);
+                cloneParameters(currentParameters, currentMutatedByEpsilonParameters);
+                mutateParameters(currentMutatedByEpsilonParameters);
+
+                double currentFPrime = getPerformanceSampleOfSize(1,
+                                                                  currentMutatedByEpsilonParameters,
+                                                                  totalWarmupEvaluations/warmupSampleSize);
+                printf("[med+iqr]f': %f warmup trial %u / %u \n", currentFPrime, i,warmupSampleSize);
+                if (currentFPrime < currentF) {
+                    cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                    currentF = currentFPrime;
+                    printf("[med+iqr]f': %f accepted better in warmup step %u \n", currentFPrime, i);
+                } else {
+                    double r = std::uniform_real_distribution<double>(0, 1)(generator);
+                    if (r < exp((currentF - currentFPrime) / temp)) {
+                        cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+                        currentF = currentFPrime;
+                        acceptedWorse++;
+                        std::cout << "Accepted worse at " << i << "/" << trials - 1 << " at temp: " << temp
+                                  << std::endl;
+                    }
+                }
+                temp = temp0 / (1 + alpha * i);
+                logJson["SA-temps"].push_back(temp);
+            }
+
+            double currentFPrime = getPerformanceSampleOfSize(1,
+                                                              currentParameters,
+                                                              totalFuncEvaluations-totalWarmupEvaluations);
+            printf("[med+iqr]f': %f post warmup result \n", currentFPrime);
+            if (currentFPrime < currentF) {
+                printf("[med+iqr]f': %f post warmup is better than %f \n", currentFPrime,currentF);
+//                cloneParameters(currentMutatedByEpsilonParameters, currentParameters);
+//                currentF = currentFPrime;
+            } else {
+                printf("[med+iqr]f': %f post warmup  is not better than %f \n", currentFPrime,currentF);
+            }
+
+        }
 
         if (STR_EQ(SAMPLING, "SPRT-T-test")) {
             int totalSamples = (trials-1)*baseLevelSampleSize;

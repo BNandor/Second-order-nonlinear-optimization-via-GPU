@@ -1,0 +1,325 @@
+{
+    "experiments": [
+        {
+            "SA-alpha": 50.0,
+            "SA-temp0": 10000.0,
+            "SA-temps": [
+                10000.0,
+                10000.0,
+                196.07843137254903,
+                99.00990099009901,
+                66.2251655629139,
+                49.75124378109453,
+                39.8406374501992,
+                33.222591362126245,
+                28.49002849002849,
+                24.93765586034913,
+                22.172949002217294
+            ],
+            "baseLevel-popSize": 100,
+            "baseLevel-problemId": "SNLP",
+            "baseLevel-sampleSize": 1,
+            "baseLevel-xDim": 94,
+            "baseLevelEvals": 13200,
+            "bestParameters": {
+                "OptimizerChainInitializerSimplex": {
+                    "perturbator": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.03730409161023396
+                    },
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.962695908389766
+                    }
+                },
+                "OptimizerChainPerturbatorSimplex": {
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5201183982808996
+                    },
+                    "selector": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47988160171910044
+                    }
+                },
+                "OptimizerChainRefinerSimplex": {
+                    "refiner": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.8338395636685362
+                    },
+                    "selector": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.16616043633146382
+                    }
+                },
+                "OptimizerChainSelectorSimplex": {
+                    "perturbator": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                },
+                "PerturbatorDEOperatorParams": {
+                    "DE_CR": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    },
+                    "DE_FORCE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 2.0,
+                        "value": 0.3909140668497464
+                    }
+                },
+                "PerturbatorDESimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47229421703215957
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5277057829678404
+                    }
+                },
+                "PerturbatorGAOperatorParams": {
+                    "GA_ALPHA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.47791536766425496
+                    },
+                    "GA_CR": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.3843463614732978
+                    },
+                    "GA_CR_POINT": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.7535584873237992
+                    },
+                    "GA_MUTATION_RATE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 0.5,
+                        "value": 0.25045598866415963
+                    },
+                    "GA_MUTATION_SIZE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 100.0,
+                        "value": 80.30149952987087
+                    },
+                    "GA_PARENTPOOL_RATIO": {
+                        "lowerBound": 0.2,
+                        "upperBound": 1.0,
+                        "value": 0.6439138606532917
+                    }
+                },
+                "PerturbatorGASimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.9940953383438763
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.005904661656123689
+                    }
+                },
+                "PerturbatorInitializerSimplex": {
+                    "DE": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.5507179582973486
+                    },
+                    "GA": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.4492820417026514
+                    }
+                },
+                "RefinerGDOperatorParams": {
+                    "GD_ALPHA": {
+                        "lowerBound": 0.5,
+                        "upperBound": 5.0,
+                        "value": 0.6961463069692553
+                    },
+                    "GD_FEVALS": {
+                        "lowerBound": 1.0,
+                        "upperBound": 3.0,
+                        "value": 2.170180653579972
+                    }
+                },
+                "RefinerGDSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.0
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                },
+                "RefinerInitializerSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.0
+                    }
+                },
+                "RefinerLBFGSOperatorParams": {
+                    "LBFGS_ALPHA": {
+                        "lowerBound": 0.5,
+                        "upperBound": 5.0,
+                        "value": 5.0
+                    },
+                    "LBFGS_C1": {
+                        "lowerBound": 0.0,
+                        "upperBound": 0.1,
+                        "value": 0.0
+                    },
+                    "LBFGS_C2": {
+                        "lowerBound": 0.8,
+                        "upperBound": 1.0,
+                        "value": 0.9315171561467237
+                    },
+                    "LBFGS_FEVALS": {
+                        "lowerBound": 6.0,
+                        "upperBound": 10.0,
+                        "value": 6.562145569269684
+                    }
+                },
+                "RefinerLBFGSSimplex": {
+                    "GD": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    },
+                    "LBFGS": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 0.0
+                    }
+                },
+                "SelectorBestSimplex": {
+                    "best": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                },
+                "SelectorInitializerSimplex": {
+                    "best": {
+                        "lowerBound": 0.0,
+                        "upperBound": 1.0,
+                        "value": 1.0
+                    }
+                }
+            },
+            "experimentHashSha256": "f07313b9bc2c581ed7a6ad8ed6772174327465c80c9b95684eca2cc36d211f7e",
+            "hyperLevel-id": "SA",
+            "minBaseLevelStatistic": 17121.285673389742,
+            "trialCount": 100,
+            "trials": [
+                {
+                    "atEval": 200,
+                    "med_+_iqr": 281626.3359852848,
+                    "performanceSamples": [
+                        281626.3359852848
+                    ]
+                },
+                {
+                    "atEval": 860,
+                    "med_+_iqr": 522712.83147024375,
+                    "performanceSamples": [
+                        522712.83147024375
+                    ]
+                },
+                {
+                    "atEval": 1520,
+                    "med_+_iqr": 526383.6211281732,
+                    "performanceSamples": [
+                        526383.6211281732
+                    ]
+                },
+                {
+                    "atEval": 2180,
+                    "med_+_iqr": 437136.0505050152,
+                    "performanceSamples": [
+                        437136.0505050152
+                    ]
+                },
+                {
+                    "atEval": 2840,
+                    "med_+_iqr": 127704.00657338505,
+                    "performanceSamples": [
+                        127704.00657338505
+                    ]
+                },
+                {
+                    "atEval": 3500,
+                    "med_+_iqr": 153522.060465055,
+                    "performanceSamples": [
+                        153522.060465055
+                    ]
+                },
+                {
+                    "atEval": 4160,
+                    "med_+_iqr": 915908.3664740849,
+                    "performanceSamples": [
+                        915908.3664740849
+                    ]
+                },
+                {
+                    "atEval": 4820,
+                    "med_+_iqr": 141970.0499924424,
+                    "performanceSamples": [
+                        141970.0499924424
+                    ]
+                },
+                {
+                    "atEval": 5480,
+                    "med_+_iqr": 346216.5158820142,
+                    "performanceSamples": [
+                        346216.5158820142
+                    ]
+                },
+                {
+                    "atEval": 6140,
+                    "med_+_iqr": 49959.44617457546,
+                    "performanceSamples": [
+                        49959.44617457546
+                    ]
+                },
+                {
+                    "atEval": 6800,
+                    "med_+_iqr": 81886.1732872406,
+                    "performanceSamples": [
+                        81886.1732872406
+                    ]
+                },
+                {
+                    "atEval": 20000,
+                    "med_+_iqr": 17121.285673389742,
+                    "performanceSamples": [
+                        17121.285673389742
+                    ]
+                }
+            ]
+        }
+    ]
+}

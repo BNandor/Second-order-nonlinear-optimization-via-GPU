@@ -1,0 +1,25 @@
+{
+    "experiments": {
+        "1ee99a11cbcf291b328b84a02987b7c093ab666125f9fa9ebf8b186fd7544749": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SNLP",
+                    "hhanalysis/logs/SNLP/SA/boxsize_100_comm_r_50_total_nodes_n_50_anchors_n_10_gpsErr_3/snlp.json"
+                ],
+                "baselevelIterations": 200,
+                "populationSize": 100,
+                "modelSize": 94,
+                "trialSampleSizes": 1,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "-DPROBLEM_PATH=\\\"hhanalysis/data/snlp/comparison/exportedDVHop.snlp\\\"                  -DPROBLEM_ANCHOR_PATH=\\\"hhanalysis/data/snlp/comparison/exportedDVHop.snlpa\\\"                  -DPROBLEM_INPUT_POPULATION_PATH=\\\"hhanalysis/data/snlp/comparison/random247-400-100.pop\\\"                  -DRESIDUAL_CONSTANTS_COUNT_1=404                  -DRESIDUAL_CONSTANTS_COUNT_2=206                  -DSAMPLING=\\\"warmup-multifidelity\\\"",
+                "hyperLevelMethod": "SA"
+            },
+            "metadata": {
+                "elapsedTimeSec": 422.006382218,
+                "threads": 128
+            }
+        }
+    }
+}

@@ -82,8 +82,15 @@ protected:
             std::cout<<"ran sample number "<<i<<"/"<<sampleSize<<" with minf: "<<sampleF<<std::endl;
             samples.push_back(sampleF);
         }
+
         std::cout<<"calculating medIQR "<<std::endl;
-        double medIqr=statistics.median(samples) + statistics.IQR(samples);
+        double medIqr;
+        if(sampleSize==1){
+//            return samples[0];
+            medIqr=samples[0];
+        } else {
+            medIqr = statistics.median(samples) + statistics.IQR(samples);
+        }
         std::cout<<"updating json logs1 "<<std::endl;
         logJson["baseLevelEvals"]=totalBaseLevelEvaluations;
         std::cout<<"updating json logs2 "<<std::endl;
@@ -588,6 +595,9 @@ void addExtraOperatorSimplex(std::unordered_map<std::string, OperatorParameters 
 public:
     void saveLogs(){
         JsonOperations::appendLogs(logJson, LOGS_PATH);
+    }
+    void persistBest(){
+        baseLevel.persistCurrentBestModel(hyperLevelId);
     }
     virtual double hyperOptimize(int totalEvaluations)=0;
     virtual ~HyperLevel()= default;

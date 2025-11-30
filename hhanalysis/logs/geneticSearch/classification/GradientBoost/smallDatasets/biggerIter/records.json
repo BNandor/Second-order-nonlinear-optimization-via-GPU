@@ -515,6 +515,92 @@
             "metadata": {
                 "elapsedTimeSec": 124.34914265497355
             }
+        },
+        "1675582030a353876d9851708b192e07ca2933711c77e4c489f898b55784a70a": {
+            "experiment": {
+                "hyperParameters": {
+                    "n_estimators": [
+                        100,
+                        1000
+                    ],
+                    "learning_rate": [
+                        0.01,
+                        0.2
+                    ],
+                    "max_depth": [
+                        3,
+                        8
+                    ],
+                    "min_samples_split": [
+                        2,
+                        20
+                    ],
+                    "min_samples_leaf": [
+                        1,
+                        8
+                    ],
+                    "subsample": [
+                        0.8,
+                        1.0
+                    ],
+                    "max_features": [
+                        "sqrt",
+                        "log2",
+                        null
+                    ],
+                    "criterion": [
+                        "friedman_mse",
+                        "squared_error"
+                    ],
+                    "warm_start": [
+                        true,
+                        false
+                    ],
+                    "validation_fraction": [
+                        0.1,
+                        0.2
+                    ],
+                    "n_iter_no_change": [
+                        5,
+                        20
+                    ],
+                    "tol": [
+                        1e-06,
+                        0.0001
+                    ]
+                },
+                "crossValidations": 3,
+                "geneticSearchGenerations": 50,
+                "populationSize": 50,
+                "classificationTuningCount": 1,
+                "classifierName": "GradientBoost",
+                "datasetName": "HeartFailure",
+                "classifierModel": "GBoost",
+                "solutions": [
+                    {
+                        "bestAccuracy": 0.8795986622073578,
+                        "solution": {
+                            "n_estimators": 899,
+                            "learning_rate": 0.10484782724182515,
+                            "max_depth": 3,
+                            "min_samples_split": 12,
+                            "min_samples_leaf": 7,
+                            "subsample": 0.9300327441088629,
+                            "max_features": "log2",
+                            "criterion": "squared_error",
+                            "warm_start": true,
+                            "validation_fraction": 0.11673787743089162,
+                            "n_iter_no_change": 6,
+                            "tol": 4.8654595833797407e-05
+                        }
+                    }
+                ],
+                "totalFunctionEvaluations": 2500,
+                "solver": "geneticSearch"
+            },
+            "metadata": {
+                "elapsedTimeSec": 64.33765834200005
+            }
         }
     }
 }

@@ -108,6 +108,8 @@ int main(int argc, char** argv) {
     }
     hyperLevel->hyperOptimize(totalFunctionEvaluations);
     hyperLevel->saveLogs();
+
+    hyperLevel->persistBest();
 //    cudaDeviceReset();
     delete hyperLevel;
     return 0;

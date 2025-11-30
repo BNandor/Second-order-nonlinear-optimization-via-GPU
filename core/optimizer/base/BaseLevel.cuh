@@ -201,8 +201,8 @@ public:
         globalMetrics.modelPerformanceMetrics.updateBestModelCost();
     }
 
-    void persistCurrentBestModel() {
-        metrics.modelPerformanceMetrics.persistBestModelTo(optimizerContext.model,std::string("finalModel-Hyper")+ std::string(".csv"));
+    void persistCurrentBestModel(std::string hyperLevel) {
+        metrics.modelPerformanceMetrics.persistBestModelTo(optimizerContext.model,std::string("finalModel-Hyper")+hyperLevel+ std::string(".csv"));
     }
 
     void printCurrentBestModel() {
