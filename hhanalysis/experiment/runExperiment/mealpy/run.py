@@ -35,8 +35,16 @@ def rastrigin(variables):
     variables_num=len(variables)
     return 10. * variables_num + np.sum(
             np.square(variables) - 10. * np.cos(2. * np.pi * variables))
+def shifted_rastrigin(variables):
+    variables_num=len(variables)
+    shifted_variables = variables - 200.0  # Example shift value
+    return 10. * variables_num + np.sum(
+            np.square(shifted_variables) - 10. * np.cos(2. * np.pi * shifted_variables))
 def schwefel223(variables):
     return np.sum(np.power(variables, 10.))
+def shifted_schwefel223(variables):
+    shifted_variables = variables - 200.0  # Example shift value
+    return np.sum(np.power(shifted_variables, 10.))
 def styblinskitang(variables):
     return 0.5 * np.sum(np.power(variables, 4) - 16. * np.square(variables) + 5. * variables)
 def trid(variables):
@@ -76,7 +84,9 @@ class ProblemSet:
               "PROBLEM_LEVY":self.getLevy(),
               "PROBLEM_SCHWEFEL":self.getSchwefel(),
               "PROBLEM_SUMSQUARES": self.getSumSquares(),
-              "PROBLEM_SPHERE": self.getSphere()}[name]
+              "PROBLEM_SPHERE": self.getSphere(),
+              "PROBLEM_SHIFTED_RASTRIGIN":self.getShiftedRastrigin(),
+              "PROBLEM_SHIFTED_SCHWEFEL223":self.getShiftedSchwefel223()}[name]
 
     def getRosenbrock(self):
         return {
@@ -104,12 +114,28 @@ class ProblemSet:
             "minmax": "min",
                "log_to": None
         }
-
+    def getShiftedRastrigin(self):
+        return {
+            "fit_func": shifted_rastrigin,
+            "lb": [-400, ] * self.dim,
+            "ub": [400, ] * self.dim,
+            "minmax": "min",
+               "log_to": None
+        }
+    
     def getSchwefel223(self):
         return {
             "fit_func": schwefel223,
             "lb": [-10, ] * self.dim,
             "ub": [10, ] * self.dim,
+            "minmax": "min",
+               "log_to": None
+        }
+    def getShiftedSchwefel223(self):
+        return {
+            "fit_func": shifted_schwefel223,
+            "lb": [-400, ] * self.dim,
+            "ub": [400, ] * self.dim,
             "minmax": "min",
                "log_to": None
         }
@@ -261,7 +287,10 @@ def experimentWith(experiment):
 def currentExperimentsAndRecordPath(recordsPathPrefix,threads=1,threadId=0):
     allExperiments=set()
     if threads>1:
-        for experiments in [json.load(open(experimentRecordsPath,'r'))["experiments"].keys() for experimentRecordsPath in [f"{recordsPathPrefix}_{thread}" for thread in range(threads)] ]:
+        experimentlist=[f"{recordsPathPrefix}_{thread}" for thread in range(threads)]
+        for experimentRecordsPath in experimentlist:
+            createIfNotExists(experimentRecordsPath,json.dumps(emptyExperimentRecords(), indent = 4))
+        for experiments in [json.load(open(experimentRecordsPath,'r'))["experiments"].keys() for experimentRecordsPath in  experimentlist]:
             for experiment in experiments:
                 allExperiments.add(experiment)
         recordsPath=f"{recordsPathPrefix}_{threadId}"

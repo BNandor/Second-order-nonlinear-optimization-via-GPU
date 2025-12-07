@@ -9,8 +9,8 @@ from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
 from runExperiment.classification.commonClassificationRun import *
-#import runExperiment.mealpy.run
-#import runExperiment.customhys.customhys.batchexperiments 
+import runExperiment.mealpy.run
+import runExperiment.customhys.customhys.batchexperiments 
 
 
 backslash="\\"
@@ -81,6 +81,20 @@ def runNMHHSuite():
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments(LOGS_PATH_FROM_ROOT,ROOT,config)
     runbigSA_CMAES_ES_GA_DE_GD_LBFGS_Experiments_GWO(LOGS_PATH_FROM_ROOT,ROOT,config)
 
+def runShiftedNMHHSuite():
+    problems=lambda logspath: [
+              ("PROBLEM_SHIFTED_RASTRIGIN",f"{logspath}/shifted_rastrigin.json"),
+              ("PROBLEM_SHIFTED_SCHWEFEL223",f"{logspath}/shifted_schwefel223.json")
+              ]
+    dimensions=[5,50,100,500]
+    populationSize=[30]
+    config={'name':'shifted',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize
+            }
+    runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
+
 def runCUSTOMHySSuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/michalewiczDixonPriceLecy750/"
     #dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100]
@@ -134,32 +148,76 @@ def runMealpySuite():
             'populationSize':populationSize,
             'optimizers':optimizers,
             }
-  #  runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+    runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+
+
+def runShiftedMealpySuite():
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
+    dimensions=[5,50,100,500]
+    optimizers=['AEO','BRO','SMA']
+#     dimensions=[500]
+#     optimizers=['BRO']
+    problems=[
+              ("PROBLEM_SHIFTED_RASTRIGIN",f"hhanalysis/logs/shifted_rastrigin.json"),
+              ("PROBLEM_SHIFTED_SCHWEFEL223",f"hhanalysis/logs/schwefel223.json"),
+            ]
+    populationSize=[30]
+    config={'name':'shifted/pop/30',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize,
+            'optimizers':optimizers,
+            }
+    runExperiment.mealpy.run.runExtraBenchMarks(EXPERIMENT_RECORDS_PATH,config)
+
 
 def runNMHHComputationalTimeExperiments():
-        problems=lambda logspath: [("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json")]
+        problems=lambda logspath: [("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+                                   ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+                                        ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+                                        ("PROBLEM_TRID",f"{logspath}/trid.json"),
+                                        ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+                                        ("PROBLEM_QING",f"{logspath}/qing.json")]
         dimensions=[5,100]
         populationSize=[30]
-        for i in range(10):
+        iterations=3
+        for i in range(iterations):
                 config={'name':f'comptime/{i}',
                         'problems':problems,
                         'dimensions':dimensions,
                         'populationSize':populationSize
                         }
+                start_time = timer()
                 runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
+                elapsed = timer() - start_time
+                remaining_iterations = iterations - (i + 1)
+                estimated_remaining = elapsed * remaining_iterations
+                print(f"Iteration {i+1}/iterations completed in {elapsed:.2f}s. Estimated remaining time: {estimated_remaining:.2f}s")
+
 
 def runCUSTOMHySComputationalTimeExperiments():
         EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/newExperiment/"
-        problems= [("Rosenbrock",f"hhanalysis/logs/rosenbrock.json")]
+        problems= [("Rosenbrock",f"hhanalysis/logs/rosenbrock.json"),
+                   ("Rastrigin",f"hhanalysis/logs/rastrigin.json"),
+                   ("StyblinskiTang",f"/styblinskitang.json"),
+                   ("Trid",f"hhanalysis/logs/trid.json"),
+                   ("Schwefel223",f"hhanalysis/logs/schwefel223.json"),
+                   ("Qing",f"hhanalysis/logs/qing.json")]
         dimensions=[5,100]
         populationSize=[30]
-        for i in range(10):
+        iterations=3
+        for i in range(iterations):
                 config={'name':f'comptime/{i}',
                         'problems':problems,
                         'dimensions':dimensions,
                         'populationSize':populationSize
                         }
-  #              runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+                start_time = timer()
+                runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+                elapsed = timer() - start_time
+                remaining_iterations = iterations - (i + 1)
+                estimated_remaining = elapsed * remaining_iterations
+                print(f"Iteration {i+1}/iterations completed in {elapsed:.2f}s. Estimated remaining time: {estimated_remaining:.2f}s")
 
 def runClusteringSuite():
     populationSize=[40]
@@ -1119,14 +1177,16 @@ def runDefaultClassificationSuite():
     }
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,defaultClassificationExperiment)
 
-runSNLPSuite()
+# runSNLPSuite()
 
-# # runNMHHComputationalTimeExperiments()
-# # runCUSTOMHySComputationalTimeExperiments()
+# runNMHHComputationalTimeExperiments()
+runCUSTOMHySComputationalTimeExperiments()
 # # runRandomHHSuite()
 # # runNMHHSuite()
+runShiftedNMHHSuite()
 # # runCUSTOMHySSuite()
 # # runMealpySuite()
+runShiftedMealpySuite()
 # # runClusteringSuite()
 # # runSPRTTTestNMHHSuite()
 # # runSPRTClusteringSuite()

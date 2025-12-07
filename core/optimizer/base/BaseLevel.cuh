@@ -11,7 +11,9 @@
 #include "../../problem/StyblinskiTang/StyblinskiTangModel.cuh"
 #include "../../problem/Trid/TridModel.cuh"
 #include "../../problem/Rastrigin/RastriginModel.cuh"
+#include "../../problem/ShiftedRastrigin/ShiftedRastriginModel.cuh"
 #include "../../problem/Schwefel/223/Schwefel223Model.cuh"
+#include "../../problem/Schwefel/223/Shifted/ShiftedSchwefel223Model.cuh"
 #include "../../problem/Qing/QingModel.cuh"
 #include "../../problem/Michalewicz/MichalewiczModel.cuh"
 #include "../../problem/DixonPrice/DixonPriceModel.cuh"
@@ -66,10 +68,19 @@ public:
         optimizerContext.model =new  RastriginModel(optimizerContext.differentialEvolutionContext);
         problemId="RASTRIGIN";
 #endif
+#ifdef PROBLEM_SHIFTED_RASTRIGIN
+        optimizerContext.model =new  ShiftedRastriginModel(optimizerContext.differentialEvolutionContext);
+        problemId="SHIFTED_RASTRIGIN";
+#endif
 #ifdef PROBLEM_SCHWEFEL223
         optimizerContext.model =new  Schwefel223Model(optimizerContext.differentialEvolutionContext);
         problemId="SCHWEFEL223";
 #endif
+#ifdef PROBLEM_SHIFTED_SCHWEFEL223
+        optimizerContext.model =new  ShiftedSchwefel223Model(optimizerContext.differentialEvolutionContext);
+        problemId="SHIFTED_SCHWEFEL223";
+#endif
+
 #ifdef PROBLEM_QING
         optimizerContext.model =new  QingModel(optimizerContext.differentialEvolutionContext);
         problemId="QING";

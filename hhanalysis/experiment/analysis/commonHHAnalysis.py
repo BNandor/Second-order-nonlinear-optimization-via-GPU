@@ -311,6 +311,6 @@ def createOperatorTransitionProbabilityHeatMap():
 # methodsComparison(['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK'],[1,2,3,4,5,6,7,8,9,10,15,30,50,100,500,750], False)
 
 # all5000IterationResults()
-createTransitionProbabilityHeatMap()
+# createTransitionProbabilityHeatMap()
 # createOperatorTransitionProbabilityHeatMap()
 # createMethodsCostEvolutionPlots()
