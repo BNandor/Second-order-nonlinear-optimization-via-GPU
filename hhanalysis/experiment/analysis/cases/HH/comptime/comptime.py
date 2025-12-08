@@ -210,8 +210,8 @@ def aggregate_by_problem_only(combined_df, method_names):
             if mean_col in problem_data.columns:
                 # Average of means across dimensions
                 row[f'{method_name}_mean'] = problem_data[mean_col].mean()
-                # Compute combined std across dimensions
-                row[f'{method_name}_std'] = problem_data[std_col].mean()
+                # Standard deviation across the different means (per problem)
+                row[f'{method_name}_std'] = problem_data[mean_col].std()
         
         result_rows.append(row)
     
@@ -254,9 +254,22 @@ def to_latex_table(df, caption="Computational Time Analysis", label="tab:comptim
     return latex_str
 
 
+def format_mean_std(mean_val, std_val, bold=False):
+    """Format mean and std as 'mean $\\pm$ std' (or mean only if std is NaN), optionally bolded."""
+    if pd.notna(mean_val):
+        if pd.notna(std_val):
+            formatted = f"{mean_val:.2f} $\\pm$ {std_val:.2f}"
+        else:
+            formatted = f"{mean_val:.2f}"
+        if bold:
+            formatted = f"\\textbf{{{formatted}}}"
+        return formatted
+    return "---"
+
+
 def to_latex_comparison_table(df, method_names, by_problem=False, caption="Computational Time Comparison", label="tab:comptime_comparison"):
     """
-    Convert comparison data to LaTeX table format.
+    Convert comparison data to LaTeX table format with mean±std notation and multirow for problems.
     
     Args:
         df (pd.DataFrame): Combined DataFrame from aggregate_multiple_methods() or aggregate_by_problem_only()
@@ -266,32 +279,123 @@ def to_latex_comparison_table(df, method_names, by_problem=False, caption="Compu
         label (str): LaTeX table label
         
     Returns:
-        str: LaTeX table code
+        str: LaTeX table code with multirow for problems
     """
     df_latex = df.copy()
     
-    # Format all numeric columns to 2 decimal places
-    for col in df_latex.columns:
-        if col not in ['problem', 'dimension']:
-            df_latex[col] = df_latex[col].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "---")
+    # Convert mean±std format for each method
+    for method_name in method_names:
+        mean_col = f'{method_name}_mean'
+        std_col = f'{method_name}_std'
+        
+        if mean_col in df_latex.columns and std_col in df_latex.columns:
+            df_latex[f'{method_name}'] = df_latex.apply(
+                lambda row: format_mean_std(row[mean_col], row[std_col]),
+                axis=1
+            )
+            # Drop the separate mean and std columns
+            df_latex = df_latex.drop(columns=[mean_col, std_col])
     
-    # Rename problem column
-    df_latex.columns = ['Problem' if c == 'problem' else 'Dimension' if c == 'dimension' else c 
-                        for c in df_latex.columns]
+    # Handle by_problem case (no multirow needed)
+    if by_problem:
+            # Bold the minimum value in each row
+        for idx, row in df_latex.iterrows():
+                # Find minimum mean across methods for this row
+                method_values = []
+                for method_name in method_names:
+                    mean_col = f'{method_name}_mean'
+                    if mean_col in df.columns:
+                        method_values.append((method_name, df.loc[idx, mean_col]))
+            
+                # Find which method has minimum mean
+                valid_means = [(m, v) for m, v in method_values if pd.notna(v)]
+                min_method = min(valid_means, key=lambda x: x[1])[0] if valid_means else None
+            
+                # Bold the minimum in the formatted row
+                for method_name in method_names:
+                    if method_name == min_method:
+                        current_val = df_latex.loc[idx, method_name]
+                        if isinstance(current_val, str) and '---' not in current_val:
+                            df_latex.loc[idx, method_name] = f"\\textbf{{{current_val}}}"
+
+        df_latex.columns = ['Problem' if c == 'problem' else c for c in df_latex.columns]
+        latex_str = df_latex.to_latex(
+            index=False,
+            caption=caption,
+            label=label,
+            escape=False
+        )
+        return latex_str
     
-    # Remove dimension column if by_problem is True
-    if by_problem and 'Dimension' in df_latex.columns:
-        df_latex = df_latex.drop(columns=['Dimension'])
+    # For detailed comparison with multirow
+    # Group by problem and create multirow formatting
+    latex_lines = []
+    latex_lines.append("\\begin{table}")
+    latex_lines.append("\\centering")
+    latex_lines.append(f"\\caption{{{caption}}}")
+    latex_lines.append(f"\\label{{{label}}}")
     
-    # Generate LaTeX table
-    latex_str = df_latex.to_latex(
-        index=False,
-        caption=caption,
-        label=label,
-        escape=False
-    )
+    # Build column specification
+    num_methods = len(method_names)
+    col_spec = "|l|r|" + "|".join(["c" for _ in range(num_methods)]) + "|"
+    latex_lines.append(f"\\begin{{tabular}}{{{col_spec}}}")
+    latex_lines.append("\\hline")
     
-    return latex_str
+    # Build header
+    header = "Problem & Dimension & " + " & ".join(method_names) + " \\\\"
+    latex_lines.append(header)
+    latex_lines.append("\\hline")
+    
+    # Group by problem and write rows with multirow
+    problems = df_latex['problem'].unique()
+    for problem in problems:
+        problem_indices = df_latex[df_latex['problem'] == problem].index
+        problem_data = df_latex.loc[problem_indices].reset_index(drop=True)
+        num_rows = len(problem_data)
+        
+        for idx, (_, row) in enumerate(problem_data.iterrows()):
+                # Find minimum mean across methods for this row (use original df)
+                original_idx = problem_indices[idx]
+                mean_values = []
+                for method_name in method_names:
+                    mean_col = f'{method_name}_mean'
+                    if mean_col in df.columns:
+                        mean_values.append((method_name, df.loc[original_idx, mean_col]))
+            
+                # Find which method has minimum mean (only consider valid numbers)
+                valid_means = [(m, v) for m, v in mean_values if pd.notna(v)]
+                min_method = min(valid_means, key=lambda x: x[1])[0] if valid_means else None
+
+                # Add multirow for problem on first row only
+                if idx == 0 and num_rows > 1:
+                    problem_str = f"\\multirow{{{num_rows}}}{{*}}{{{row['problem']}}}"
+                elif idx == 0:
+                    problem_str = row['problem']
+                else:
+                    problem_str = ""
+                
+                # Build row data
+                dimension = row['dimension']
+                method_values_list = []
+                for method_name in method_names:
+                    value_str = str(row[method_name])
+                    if method_name == min_method:
+                        value_str = f"\\textbf{{{value_str}}}"
+                    method_values_list.append(value_str)
+                
+                method_values = " & ".join(method_values_list)
+                
+                if problem_str:
+                    latex_lines.append(f"{problem_str} & {dimension} & {method_values} \\\\")
+                else:
+                    latex_lines.append(f" & {dimension} & {method_values} \\\\")
+            
+        latex_lines.append("\\hline")
+    
+    latex_lines.append("\\end{tabular}")
+    latex_lines.append("\\end{table}")
+    
+    return "\n".join(latex_lines)
 
 
 def save_results(df, output_dir, base_name="comptime_aggregated"):
