@@ -46,7 +46,8 @@ __all__ = ['Ackley1', 'Ackley4', 'Alpine1', 'Alpine2', 'Bohachevsky', 'Brent', '
            'StyblinskiTang', 'SumSquares', 'Trid', 'Trigonometric1', 'Trigonometric2', 'TypeI', 'TypeII', 'Vincent',
            'WWavy', 'Weierstrass', 'Whitley', 'XinSheYang1', 'XinSheYang2', 'XinSheYang3', 'XinSheYang4', 'YaoLiu09',
            'Zakharov', 'ZeroSum',
-           'PROBLEM_MICHALEWICZ','PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL','PROBLEM_SUMSQUARES','PROBLEM_SPHERE']
+           'PROBLEM_MICHALEWICZ','PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL','PROBLEM_SUMSQUARES','PROBLEM_SPHERE',
+           'PROBLEM_SHIFTED_RASTRIGIN','PROBLEM_SHIFTED_SCHWEFEL223']
 
 
 # %% BASIC FUNCTION CLASS
@@ -1281,6 +1282,27 @@ class Rastrigin(BasicProblem):
         return 10. * self.variable_num + np.sum(
             np.square(variables) - 10. * np.cos(2. * np.pi * variables))
 
+# Class Rastrigin function
+class PROBLEM_SHIFTED_RASTRIGIN(BasicProblem):
+    def __init__(self, variable_num):
+        super().__init__(variable_num)
+        self.max_search_range = np.array([400] * self.variable_num)
+        self.min_search_range = np.array([-400] * self.variable_num)
+        self.optimal_solution = np.array([200.0] * self.variable_num)
+        self.global_optimum_solution = 0.
+        self.func_name = 'PROBLEM_SHIFTED_RASTRIGIN'
+        self.features = {'Continuous': True,
+                         'Differentiable': True,
+                         'Separable': True,
+                         'Scalable': True,
+                         'Unimodal': False,
+                         'Convex': False}
+
+    def get_func_val(self, variables, *args):
+        shifted_variables = variables - 200.0
+        return 10. * self.variable_num + np.sum(
+            np.square(shifted_variables) - 10. * np.cos(2. * np.pi * shifted_variables))
+
 
 # Class Ridge function
 class Ridge(BasicProblem):
@@ -1644,6 +1666,26 @@ class Schwefel223(BasicProblem):
     def get_func_val(self, variables, *args):
         return np.sum(np.power(variables, 10.))
 
+
+# 125 - Class Shifted Schwefel 2.23 function
+class PROBLEM_SHIFTED_SCHWEFEL223(BasicProblem):
+    def __init__(self, variable_num):
+        super().__init__(variable_num)
+        self.max_search_range = np.array([400.] * self.variable_num)
+        self.min_search_range = np.array([-400.] * self.variable_num)
+        self.optimal_solution = np.array([200.] * self.variable_num)
+        self.global_optimum_solution = 0.
+        self.func_name = 'PROBLEM_SHIFTED_SCHWEFEL223'
+        self.features = {'Continuous': True,
+                         'Differentiable': True,
+                         'Separable': True,
+                         'Scalable': True,
+                         'Unimodal': True,
+                         'Convex': True}
+
+    def get_func_val(self, variables, *args):
+        shifted_variables = variables - 200.
+        return np.sum(np.power(shifted_variables, 10.))
 
 # 127 - Class Schwefel 2.25 function
 class Schwefel225(BasicProblem):

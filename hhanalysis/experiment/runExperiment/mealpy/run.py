@@ -3,7 +3,7 @@
 #       Email: nguyenthieu2102@gmail.com            %
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
-from mealpy.bio_based import BBO, EOA, IWO, SBO, SMA, TPO, VCS, WHO
+from mealpy.bio_based import  SMA, TPO, VCS, WHO
 from mealpy.evolutionary_based import CRO, DE, EP, ES, FPA, GA, MA
 from mealpy.human_based import BRO, BSO, CA, CHIO, FBIO, GSKA, ICA, LCO, QSA, SARO, SSDO, TLO
 from mealpy.math_based import AOA, CEM, CGO, GBO, HC, PSS, SCA
@@ -320,7 +320,7 @@ def runExperimentVariations(experimentVariations,experimentIdMapper,recordsPathP
 
 def mealpyOptimizers():
     return [ 'AEO','CRO','BRO','ArchOA','SMA','PSO']
-
+    
 def runGeccoExperiments(recordsPath,config):
     params={}
     params["problems"]=zipWithProperty([
@@ -371,8 +371,9 @@ def runExtraBenchMarks(recordsRootPath,config):
     processes=[]
     # Start processes
     cores=multiprocessing.cpu_count()
+    multiprocessing.freeze_support()
     for i in range(cores):
-        process = multiprocessing.Process(target=runExperimentVariations, args=(variations,lambda exp:hashOfExperiment(exp),recordsPath,i,cores))
+        process = multiprocessing.Process(target=runExperimentVariations, args=(variations,hashOfExperiment,recordsPath,i,cores))
         processes.append(process)
         process.start()
 

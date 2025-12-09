@@ -225,7 +225,7 @@ class Experiment:
         if self.exp_config['use_parallel']:
             # multiprocessing.set_start_method('spawn')
             pool = multiprocessing.Pool(self.exp_config['parallel_pool_size'])
-            pool.map(self._simple_run, all_problems,self.exp_config['recordspath'])
+            pool.starmap(self._simple_run, [(prob_dim, self.exp_config['recordspath']) for prob_dim in all_problems])
         else:
             for prob_dim in all_problems:
                 self._simple_run(prob_dim,self.exp_config['recordspath'])

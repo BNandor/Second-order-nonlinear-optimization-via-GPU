@@ -62,12 +62,14 @@ def experimentWith(experiment,path):
             exp = Experiment(exp_config={
                                 "experiment_name": f"{problemname}-{experiment['modelSize']}", 
                                 "experiment_type": "default",
+                                'use_parallel': True,
                                 "recordspath":path},
                             hh_config={"cardinality": 3, 
                                            "num_replicas": experiment['trialSampleSizes'],
                                            'num_iterations':experiment['baselevelIterations'],
                                            'num_agents':experiment['populationSize'],
-                                           "num_steps": experiment['hhsteps']},
+                                           "num_steps": experiment['hhsteps'],
+                                           'stagnation_percentage':0.1},
                             prob_config= {"dimensions": [experiment['modelSize']],
                                                           "functions": [problemname]})
             

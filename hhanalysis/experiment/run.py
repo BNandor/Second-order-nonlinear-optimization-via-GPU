@@ -122,6 +122,22 @@ def runCUSTOMHySSuite():
             }
  #   runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
 
+def runShiftedCUSTOMHySSuite():
+    EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf"
+    dimensions=[5,50,100,500]
+ 
+    problems=[
+             ("PROBLEM_SHIFTED_RASTRIGIN","hhanalysis/logs/CustomHYSPerf/shifted_rastrigin.json"),
+              ("PROBLEM_SHIFTED_SCHWEFEL223","hhanalysis/logs/CustomHYSPerf/shifted_schwefel223.json")
+            ]
+    populationSize=[30]
+    config={'name':'shifted',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize,
+            }
+    runExperiment.customhys.customhys.batchexperiments.runExperiments(EXPERIMENT_RECORDS_PATH,config)
+
 def runMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
     #dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500]
@@ -154,7 +170,7 @@ def runMealpySuite():
 def runShiftedMealpySuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/mealpyPerf/benchmarks/"
     dimensions=[5,50,100,500]
-    optimizers=['AEO','BRO','SMA']
+    optimizers=[ 'AEO','CRO','BRO','ArchOA','SMA','PSO']
 #     dimensions=[500]
 #     optimizers=['BRO']
     problems=[
@@ -1178,15 +1194,16 @@ def runDefaultClassificationSuite():
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,defaultClassificationExperiment)
 
 # runSNLPSuite()
-
+if __name__ == '__main__':
 # runNMHHComputationalTimeExperiments()
-runCUSTOMHySComputationalTimeExperiments()
+# runCUSTOMHySComputationalTimeExperiments()
 # # runRandomHHSuite()
 # # runNMHHSuite()
-runShiftedNMHHSuite()
+# runShiftedNMHHSuite()
 # # runCUSTOMHySSuite()
 # # runMealpySuite()
-runShiftedMealpySuite()
+        # runShiftedMealpySuite() 
+        runShiftedCUSTOMHySSuite()
 # # runClusteringSuite()
 # # runSPRTTTestNMHHSuite()
 # # runSPRTClusteringSuite()
