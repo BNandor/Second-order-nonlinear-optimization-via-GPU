@@ -95,7 +95,8 @@ allmethods=[
 
             ('customhys2','/'),
             # ('mealpy','/'),
-            ('mealpy','/benchmarks/dim/2_100/pop/30')
+            ('mealpy','/benchmarks/dim/2_100/pop/30'),
+            # ('mealpy','/benchmarks/shifted/pop/30')
             ]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
@@ -105,6 +106,7 @@ nonSeparable=['PROBLEM_ROSENBROCK','PROBLEM_TRID','PROBLEM_DIXONPRICE','PROBLEM_
 separable=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_SCHWEFEL223','PROBLEM_MICHALEWICZ','PROBLEM_SCHWEFEL','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
 
 initialproblems=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK']
+shiftproblems=['PROBLEM_SHIFTED_RASTRIGIN','PROBLEM_SHIFTED_SCHWEFEL223']
 extraProblems=['PROBLEM_MICHALEWICZ',
                'PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL','PROBLEM_SUMSQUARES','PROBLEM_SPHERE']
 allproblems=initialproblems+extraProblems
@@ -135,6 +137,7 @@ highdimensions=[10,15,30,50,100,500,750]
 lowerdimensions=[2,3,4,5,6,7,8,9]
 singleDim=[2]
 compare(allmethods,allproblems,alldimensions)
+# compare(allmethods,shiftproblems,initialdimensions)
 # compare(allmethods,initialproblems,initialdimensions)
 
 

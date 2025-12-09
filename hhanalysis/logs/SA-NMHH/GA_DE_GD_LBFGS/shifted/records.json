@@ -1,3 +1,156 @@
 {
-    "experiments": {}
+    "experiments": {
+        "6c9e29f7fae60565817c9b525854c17059f06b457ceedebb42688081ab8ffa5f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 258.56795807299204,
+                "threads": 128
+            }
+        },
+        "3144bf90f1405076673bdb10c7288dca947e4da12373cc3536950107a3b528c1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1921.9786878449959,
+                "threads": 128
+            }
+        },
+        "ff6d0e42e6424e81fffaaae0be51b2d7bbb15f70b2ad2d1ef5009c9fc64b0752": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 919.5869355610048,
+                "threads": 128
+            }
+        },
+        "90f96fb14e5b32adb3b67fa90b5b34aa46a7e6d86793ce01a5e31945c0b33211": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 535.6394264529954,
+                "threads": 128
+            }
+        },
+        "f7019d940519f31105cc625b3c21582acf68b4b376ae84e1f51627670adc76ed": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 5,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 522.9347268840065,
+                "threads": 128
+            }
+        },
+        "6b6ef3febd40816ed436f88b0d7fb1465d796e47d0dd957ec6fa5aa265d8a955": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 50,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 645.3535957540007,
+                "threads": 128
+            }
+        },
+        "8db6588fe49e409f75df260669d69104bcd793ce374728134c608a2da38ac12f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 677.838323316013,
+                "threads": 128
+            }
+        },
+        "0449ce476f98b57aebdc5212edfcb399dde432c9b80d9f96f76e6000d3dcbdf0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SHIFTED_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/shifted/shifted_schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 500,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2563.6740637539915,
+                "threads": 128
+            }
+        }
+    }
 }

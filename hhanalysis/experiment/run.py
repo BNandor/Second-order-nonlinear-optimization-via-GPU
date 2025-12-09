@@ -196,7 +196,7 @@ def runNMHHComputationalTimeExperiments():
                                         ("PROBLEM_QING",f"{logspath}/qing.json")]
         dimensions=[5,100]
         populationSize=[30]
-        iterations=3
+        iterations=10
         for i in range(iterations):
                 config={'name':f'comptime/{i}',
                         'problems':problems,
@@ -221,7 +221,7 @@ def runCUSTOMHySComputationalTimeExperiments():
                    ("Qing",f"hhanalysis/logs/qing.json")]
         dimensions=[5,100]
         populationSize=[30]
-        iterations=3
+        iterations=10
         for i in range(iterations):
                 config={'name':f'comptime/{i}',
                         'problems':problems,
@@ -1203,7 +1203,8 @@ if __name__ == '__main__':
 # # runCUSTOMHySSuite()
 # # runMealpySuite()
         # runShiftedMealpySuite() 
-        runShiftedCUSTOMHySSuite()
+  runShiftedCUSTOMHySSuite()
+# runShiftedMealpySuite()
 # # runClusteringSuite()
 # # runSPRTTTestNMHHSuite()
 # # runSPRTClusteringSuite()

@@ -73,6 +73,7 @@ allmethods=[
             # ('mealpy','/'),
             ('mealpy','/benchmarks/dim/2_100/pop/30')
             ]
+shiftedExperiments=[('nmhh2','/shifted'),('mealpy','/benchmarks/shifted/pop/30'),('customhys2','/shifted')]
 
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
 nonconvexMultimodal=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK',
@@ -83,6 +84,7 @@ separable=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_
 initialproblems=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK']
 extraProblems=['PROBLEM_MICHALEWICZ',
                'PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL','PROBLEM_SUMSQUARES','PROBLEM_SPHERE']
+shiftedproblems=['PROBLEM_SHIFTED_RASTRIGIN','PROBLEM_SHIFTED_SCHWEFEL223']
 allproblems=initialproblems+extraProblems
 
 #next benchmark functions
@@ -111,8 +113,10 @@ highdimensions=[15,30,50,100]
 lowerdimensions=[2,3,4,5,6,7,8,9,10]
 
 # compare(allmethods,allproblems,alldimensions)
-compare(allmethods,initialproblems,initialdimensions)
+# compare(allmethods,initialproblems,initialdimensions)
 
+# shifted experiments
+compare(shiftedExperiments,shiftedproblems,initialdimensions)
 
 # print("All-Lower dimensions")
 # compare(allmethods,allproblems,lowerdimensions)

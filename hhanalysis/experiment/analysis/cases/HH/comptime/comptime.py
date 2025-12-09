@@ -209,9 +209,9 @@ def aggregate_by_problem_only(combined_df, method_names):
             
             if mean_col in problem_data.columns:
                 # Average of means across dimensions
-                row[f'{method_name}_mean'] = problem_data[mean_col].mean()
-                # Standard deviation across the different means (per problem)
-                row[f'{method_name}_std'] = problem_data[mean_col].std()
+                row[f'{method_name}_mean'] = problem_data[mean_col].mean() 
+                # Compute combined std across dimensions
+                row[f'{method_name}_std'] = problem_data[std_col].mean()
         
         result_rows.append(row)
     
@@ -473,16 +473,16 @@ def compare(method_configs):
 # Example usage
 if __name__ == "__main__":
     # NMHH comparison
-    # method_configs = [
-    #     ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime"),
-    #     ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
-    # ]
-    # NMHH, NMHH-SPRT comparison
     method_configs = [
-        ("SA-NMHH-SPRT", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt-seq-t"),
-        ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/extended_comptime"),
-        # ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
+        ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime"),
+        ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
     ]
+    # NMHH, NMHH-SPRT comparison
+    # method_configs = [
+    #     ("SA-NMHH-SPRT", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt-seq-t"),
+    #     ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/extended_comptime"),
+    #     # ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
+    # ]
     compare(method_configs)
    
     

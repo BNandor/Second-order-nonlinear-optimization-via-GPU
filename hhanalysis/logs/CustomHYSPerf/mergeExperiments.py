@@ -5,8 +5,12 @@ def defaultTo(exp,key,val):
         exp[key]=val
 def merge_json_files(base_json_path, customhys_paths):
     # Load the base JSON file
-    with open(base_json_path, 'r') as base_file:
-        base_data = json.load(base_file)
+    if os.path.exists(base_json_path):
+        with open(base_json_path, 'r') as base_file:
+            base_data = json.load(base_file)
+    else:
+        base_data = {"experiments": {}}
+        os.makedirs(os.path.dirname(base_json_path), exist_ok=True)
 
     # Loop through customhys files and update base_data
     for customhys_path in customhys_paths:
@@ -28,8 +32,9 @@ def merge_json_files(base_json_path, customhys_paths):
 
 if __name__ == "__main__":
     # Specify the base JSON file and subdirectories
-    base_json_path = "allRecords.json"
-    subdirectories = ["michalewiczDixonPriceLecy750/", "schwefelSquaresSphere750/", "tridSchwefel223Qing750/","rosenbrockRastriginStyblinskitang750/"]  # Add your subdirectories here
+    base_json_path = "shifted/allRecords.json"
+    # subdirectories = ["michalewiczDixonPriceLecy750/", "schwefelSquaresSphere750/", "tridSchwefel223Qing750/","rosenbrockRastriginStyblinskitang750/"]  # Add your subdirectories here
+    subdirectories = ["shifted/"]  # Add your subdirectories here
 
     # Get the full paths of customhys JSON files in subdirectories
     customhys_paths = []
