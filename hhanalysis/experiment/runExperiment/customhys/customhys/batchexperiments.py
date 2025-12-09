@@ -69,11 +69,7 @@ def experimentWith(experiment,path):
                                            'num_iterations':experiment['baselevelIterations'],
                                            'num_agents':experiment['populationSize'],
                                            "num_steps": experiment['hhsteps'],
-<<<<<<< Updated upstream
-                                           'stagnation_percentage':0.1},
-=======
                                            'stagnation_percentage': 0.1},
->>>>>>> Stashed changes
                             prob_config= {"dimensions": [experiment['modelSize']],
                                                           "functions": [problemname]})
             

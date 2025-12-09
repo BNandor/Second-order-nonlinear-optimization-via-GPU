@@ -193,12 +193,18 @@ def runNMHHComputationalTimeExperiments():
                                         ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
                                         ("PROBLEM_TRID",f"{logspath}/trid.json"),
                                         ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
-                                        ("PROBLEM_QING",f"{logspath}/qing.json")]
-        dimensions=[5,100]
+                                        ("PROBLEM_QING",f"{logspath}/qing.json"),
+                                ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+                                ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+                                ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+                                ("PROBLEM_SCHWEFEL", f"{logspath}/schwefel.json"),
+                                ("PROBLEM_SUMSQUARES", f"{logspath}/sumsquares.json"),
+                                ("PROBLEM_SPHERE", f"{logspath}/sphere.json")]
+        dimensions=[2,100,750]
         populationSize=[30]
         iterations=10
         for i in range(iterations):
-                config={'name':f'comptime/{i}',
+                config={'name':f'comptime_extended/{i}',
                         'problems':problems,
                         'dimensions':dimensions,
                         'populationSize':populationSize
@@ -266,6 +272,37 @@ def runSPRTTTestNMHHSuite():
             'dimensions':dimensions,
             'populationSize':populationSize}
     runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)
+
+def runSPRTTComputationalTimeExperiments():
+    problems=lambda logspath: [
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json"),
+              ("PROBLEM_MICHALEWICZ",f"{logspath}/michalewicz.json"),
+              ("PROBLEM_DIXONPRICE",f"{logspath}/dixonprice.json"),
+              ("PROBLEM_LEVY",f"{logspath}/levy.json"),
+              ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
+              ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
+              ("PROBLEM_SPHERE",f"{logspath}/sphere.json")]
+    #dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+    dimensions=[2,100,750]
+    populationSize=[30]
+    iterations=10
+    for i in range(iterations):
+                config={'name':f'comptime_extended/{i}',
+                        'problems':problems,
+                        'dimensions':dimensions,
+                        'populationSize':populationSize
+                        }
+                start_time = timer()
+                runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)
+                elapsed = timer() - start_time
+                remaining_iterations = iterations - (i + 1)
+                estimated_remaining = elapsed * remaining_iterations
+                print(f"Iteration {i+1}/iterations completed in {elapsed:.2f}s. Estimated remaining time: {estimated_remaining:.2f}s")
 
 def runSPRTClusteringSuite():
     populationSize=[120]
@@ -1195,7 +1232,7 @@ def runDefaultClassificationSuite():
 
 # runSNLPSuite()
 if __name__ == '__main__':
-# runNMHHComputationalTimeExperiments()
+        runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # # runRandomHHSuite()
 # # runNMHHSuite()
@@ -1203,10 +1240,11 @@ if __name__ == '__main__':
 # # runCUSTOMHySSuite()
 # # runMealpySuite()
         # runShiftedMealpySuite() 
-  runShiftedCUSTOMHySSuite()
+#   runShiftedCUSTOMHySSuite()
 # runShiftedMealpySuite()
 # # runClusteringSuite()
 # # runSPRTTTestNMHHSuite()
+        runSPRTTComputationalTimeExperiments()
 # # runSPRTClusteringSuite()
 # # runSPRTTTestNMHHSuite()
 
