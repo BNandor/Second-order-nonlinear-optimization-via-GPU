@@ -46,7 +46,8 @@ def runNMHH2(logsPathFromRoot,root,config):
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty(config['dimensions'],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    steps= config['trialStepCount'] if 'trialStepCount' in config else 100
+    params["trialStepCount"]=zipWithProperty([steps],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     variations=list(itertools.product(*list(params.values())))
@@ -364,7 +365,8 @@ def runSPRTTestNMHH(logsPathFromRoot,root,config):
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty(config['dimensions'],"modelSize")
     params["trialSampleSizes"]=zipWithProperty([30],"trialSampleSizes")
-    params["trialStepCount"]=zipWithProperty([100],"trialStepCount")
+    steps= config['trialStepCount'] if 'trialStepCount' in config else 100
+    params["trialStepCount"]=zipWithProperty([steps],"trialStepCount")
     params["HH-SA-temp"]=zipWithProperty([10000],"HH-SA-temp")
     params["HH-SA-alpha"]=zipWithProperty([50],"HH-SA-alpha")
     flags=[f"   -DSAMPLING={backslash}{dquote}SPRT-T-test{backslash}{dquote}"]
