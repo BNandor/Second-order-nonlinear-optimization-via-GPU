@@ -1,0 +1,688 @@
+{
+    "experiments": {
+        "a740a804d966e2cbcd4dd35cfd44f8972a445da7a021a9dc8867384139c3fea1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 250.33046609299709,
+                "threads": 128
+            }
+        },
+        "6914d1ede8ec20264133283bc39237e0f7d03d6438c4ed4f5e842f7a71bf82b6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 520.4876236960044,
+                "threads": 128
+            }
+        },
+        "075cb812041c0ea9a714f126487e2b4467178657ea27f1e9decd0d070704c879": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 3177.7141384740025,
+                "threads": 128
+            }
+        },
+        "ef8e051242bfb9b658fe6f6e100e2d2f55b5f21d431c1d4a9b52e065fe28c8b9": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 198.22179348499776,
+                "threads": 128
+            }
+        },
+        "c98776a0afa1c5eb87b5f51213ab5f7976e49629a670e95af3fea52156cfe609": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 296.6382586030013,
+                "threads": 128
+            }
+        },
+        "aa7ea32161ff6b900bf06dee2ba7cfae79c1023012e3f62f49bc7f4d732f382a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1088.0601407789945,
+                "threads": 128
+            }
+        },
+        "5daa34763ae8a226222394662e38d44f966bd41f8eec0d767b2b38dcbe8829da": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 246.95834860500327,
+                "threads": 128
+            }
+        },
+        "d35bb2bea75008d7fe2f8e78737b8a5da6c724da4a2ec3be3360afd18dfa64ae": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 334.79063681000116,
+                "threads": 128
+            }
+        },
+        "6729c3a9483838ae2ecfc825ba12ae2c540417126862a8573ce8aba2dc1f055f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1392.6061503579986,
+                "threads": 128
+            }
+        },
+        "1ee3b7b9ebf5fe8993c5a35730193cd1f28656994d52a71ca31eb745ffed1979": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 136.44507736900414,
+                "threads": 128
+            }
+        },
+        "68bde745b4aff0ca4f475d8a31d5d6c9c1161115ab04ba5f5fa400eef007ae21": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 210.0174378790034,
+                "threads": 128
+            }
+        },
+        "0f3f70171a63dd0fa20b6a7a6be409e9adb57d07dba324e018e082f68d691242": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1002.2904697949998,
+                "threads": 128
+            }
+        },
+        "31f60efc164a591d53f2e9099734dcbc570113ca23d706474fa5cd07cf69cede": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 237.8075011530018,
+                "threads": 128
+            }
+        },
+        "f8b79eac2bb6ad627dce4647d26144976a8e74bc369f87178b1661417085d932": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 447.73431757800427,
+                "threads": 128
+            }
+        },
+        "316a6e453ac626a27ae40072fe2f08ca92aee64a063ea27f289ef46565842290": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2405.9921068699987,
+                "threads": 128
+            }
+        },
+        "10715969e3d965a5186532948a9555f6b7ba3b2667472094b7d40c6ba7e81ed8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 136.83653138499358,
+                "threads": 128
+            }
+        },
+        "2167f8a0a218cbc30f0e389ece3520867738769eb92eb5bb7a0ed09915848183": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 207.40683397799876,
+                "threads": 128
+            }
+        },
+        "05807f13a481d5fde708e5f2e303078ca75ee06bfd6abc9d49d023e30657cee2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1328.252996229996,
+                "threads": 128
+            }
+        },
+        "b51e59c5768c36dc2d0fdfc72a53bfe9da95b06731ccb390411cf7dc4a352897": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 349.40729967100197,
+                "threads": 128
+            }
+        },
+        "833177e619f818d58069d973a5127eb69d7a14022d8476c6904d99244fe508d2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 787.0573814279996,
+                "threads": 128
+            }
+        },
+        "2fb302dd2e0b5318c31d99132e23ce2443f00845b7f70e6671756d4852e5d001": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 8385.584429050003,
+                "threads": 128
+            }
+        },
+        "a40e290729089dccbe4f072e25ee7e3f40bfbc7749b9fbba6e3f16035f411e68": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 204.4522916269998,
+                "threads": 128
+            }
+        },
+        "ae8875632865e0f593855c8e1045f175fac19c0273ce5f278b1add08bdc640f1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 498.6920018410019,
+                "threads": 128
+            }
+        },
+        "62fc87c1982458819ec5dd832ae2bdb1f06b06ae5ee1dd9594f60df7d6e5d568": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 2698.5675698850027,
+                "threads": 128
+            }
+        },
+        "6ed3e0ee3ea3bdbc68a889cc4b5b3d487d2b9b221d699727503db15974887cdc": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 593.2903649159998,
+                "threads": 128
+            }
+        },
+        "f1ac18b11dd78609cb71af7840679859cc6706e59c560a64a268270d1a7f75e7": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 512.9036227649995,
+                "threads": 128
+            }
+        },
+        "c1ef1b3cebf88e567dc0c60ff0e043599f78b205e0cb084a327cb7c978d5bfeb": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 1593.819468351001,
+                "threads": 128
+            }
+        },
+        "95208e40ade36a2d3f49e595e42f40ccae41fa8dde24ea55b0fc03c69dcf516b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 175.82451121399936,
+                "threads": 128
+            }
+        },
+        "34ebde9d87d07a5e433aa433ec2d3b91e1db6e50a71662fb3ca1e92180c390f0": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 898.4055078370002,
+                "threads": 128
+            }
+        },
+        "333a17f4726eae089348ad8e087aa44418cb1f5985713a5e1dead9c10e124ea9": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 3347.378528911009,
+                "threads": 128
+            }
+        },
+        "51a085ac0a40102be904d2e3c222ac506371c8ecbc2e9b905f9864a632b1e09f": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 95.7017250439967,
+                "threads": 128
+            }
+        },
+        "26ef0b36cb8005c4f54c9da3221a50f1831127bead9480f8360bc5f3ee024d6c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 156.35045213400736,
+                "threads": 128
+            }
+        },
+        "e8585cbb3d68255acc14064f940aaebbffd644a5afe0a9962d84fc0ac056127a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 996.3716665760003,
+                "threads": 128
+            }
+        },
+        "b485532e8e883ff23dbc7b455ba7933a0bb698a0fc146917700fe6b04e87fca2": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 100.47068967499945,
+                "threads": 128
+            }
+        },
+        "e4cf0fade9d3d51b69dddb634fbdc3b92a6d994110961d20cfdae0023b22e3d4": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 112.80220797500806,
+                "threads": 128
+            }
+        },
+        "51a300f4bab8c8fb7cb453208398354209315cc1b04625cb177cde3741e4c33b": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended/7/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50
+            },
+            "metadata": {
+                "elapsedTimeSec": 267.0710665410006,
+                "threads": 128
+            }
+        }
+    }
+}

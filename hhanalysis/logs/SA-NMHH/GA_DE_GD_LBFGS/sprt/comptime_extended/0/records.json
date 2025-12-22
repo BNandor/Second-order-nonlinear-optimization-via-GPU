@@ -1,0 +1,724 @@
+{
+    "experiments": {
+        "b12596bbe1f9bae7cf5f5eadb9ef77ab3ee51717564d6fd4b68d9029b4fad342": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 383.2359348429891,
+                "threads": 128
+            }
+        },
+        "30a14f0380728b37d1905611cd8b777247129bba1ee4d60402b9fee0e16c12bf": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 643.1847279810172,
+                "threads": 128
+            }
+        },
+        "6b0c9d4a89f9573dffaf5ed22c0ac9da5a1b45b3471e032bd40c9d6648f2b041": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_ROSENBROCK",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rosenbrock.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 3990.166899484,
+                "threads": 128
+            }
+        },
+        "fdfece26b13f2d15fa85ae540345ec63d9cb74e9352792e9c65df50d8d7aa014": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 223.18395636498462,
+                "threads": 128
+            }
+        },
+        "38690dd27bf79510d0b0317a0470c047956cbbc8ba88c1618f617ebedbaf6381": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 276.117268950009,
+                "threads": 128
+            }
+        },
+        "4cc5d13069dad5539c6ffa60d17f76af45307a7a46218a7e92074b2eb474ea62": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_RASTRIGIN",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/rastrigin.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 735.7495274469838,
+                "threads": 128
+            }
+        },
+        "765680491085c4b272b9d98a020f1d08d21a50fb175d15b547c5574826d2bb81": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 335.7616106189962,
+                "threads": 128
+            }
+        },
+        "11664bfe30c14e1208297d4f3c66bb2426004e0622df577a6dfa074f8ab06f03": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 1428.0277141430124,
+                "threads": 128
+            }
+        },
+        "5bff4ced9d62c61927f07ac66e929068b81308cbb7a696c1a83d0d78f87e3175": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_STYBLINSKITANG",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/styblinskitang.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 8120.620733207994,
+                "threads": 128
+            }
+        },
+        "c81705e88a14483339a52cf5b3fd868f3147c800979979aaea206c33563ec27e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 130.39873372597503,
+                "threads": 128
+            }
+        },
+        "ed3d74091d7d2230a026e3c8e333b77f0f7850f033e66653389a9c41ab09d8d3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 216.92415986402193,
+                "threads": 128
+            }
+        },
+        "a4690a25c06e4aec7ad81332d0dc0314e7526bfe1205ca5a93b5881a42434630": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_TRID",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/trid.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 968.5852306879824,
+                "threads": 128
+            }
+        },
+        "1880e566efbf7235064cdc7be2a211a5fafd33f3d5cdeda828ade125166892ff": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 265.7053587489936,
+                "threads": 128
+            }
+        },
+        "80335fd28dc9d2f1cd8b7d8738ea08e3eaf4a70993f35671aa14b1ab3ab4140c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 414.3333802569832,
+                "threads": 128
+            }
+        },
+        "227fb5b08830c231d1f28b0f07cdfacfa87712218e0d1ddb57dffb0ff38aa738": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL223",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel223.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 1968.4831777329964,
+                "threads": 128
+            }
+        },
+        "a02bbfa169d4ab4e276792bf5c7f5e68f9f88c80f163cddf3e473f6d3460a72a": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 150.63167183101177,
+                "threads": 128
+            }
+        },
+        "8ecac17630e4df5d15de7df5f26c2f4a8f98d9465941ece0073b13c67dbdacca": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 267.2094367379905,
+                "threads": 128
+            }
+        },
+        "b6b85dfbf65c84c9c30ef6cf0bcbe897acacf23354e555e6a489b138ef9687ee": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_QING",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/qing.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 1405.0590861420205,
+                "threads": 128
+            }
+        },
+        "8a23ac957a0dc562f5560d436ac21809a4a354f32c7f54af27ebd85f3a43eada": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 530.6233386620006,
+                "threads": 128
+            }
+        },
+        "202b4e4b66978f5ac9fbe70bd5c5b8f66b363d84ebd3e8e5f9a7fe81897cc346": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 634.8271855539933,
+                "threads": 128
+            }
+        },
+        "e771880a97eeaa061fc53bd3bd71f6be0eca2c4f1f6eb5a1e8f3d298b2ef778e": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_MICHALEWICZ",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/michalewicz.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 5460.362006668001,
+                "threads": 128
+            }
+        },
+        "2edc855fef50e7202bdb69f67920b2e4aacb232c7eee911065f42a1ee7d25122": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 221.05859117000364,
+                "threads": 128
+            }
+        },
+        "b08499aa1b3abea0409a00c7c31b57da795ab9f84c802e27a8d26a420b08c6c8": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 536.6478878339985,
+                "threads": 128
+            }
+        },
+        "9206eeef6943939b12bd5e4a687a0128a82b00cd202cecd1195d078647f8ac34": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_DIXONPRICE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/dixonprice.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 2975.0579184769886,
+                "threads": 128
+            }
+        },
+        "eb6f8477fcde678f181d27aa67b41c69c6e605ee29444f2267b424ae609885fd": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 576.8951084,
+                "threads": 128
+            }
+        },
+        "26a62c1798919ce2843584f58d839be19ae1f89211d020b12a518f0e518fec8c": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 652.0552374809922,
+                "threads": 128
+            }
+        },
+        "8bb0aa15e4f6081cae343c2ff83b7fdeb2e6fd158d5855f2d41ef7bffd40b3c1": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_LEVY",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/levy.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 2441.9267641970073,
+                "threads": 128
+            }
+        },
+        "c4394d4ff4c857c9fe5ec81bfab34b096e59710643875abd54eacc3fc8747ce3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 230.00748827701318,
+                "threads": 128
+            }
+        },
+        "38831c2bf5d6360d9fd0f4ae75be3b4c27614f053f15128abb76263df17c47e6": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 249.97434636298567,
+                "threads": 128
+            }
+        },
+        "1e058857dc00c0d6a18825a52b903bb3bb018ed0dee5d934b20fb8765b0d38ea": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SCHWEFEL",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/schwefel.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 797.5962034130062,
+                "threads": 128
+            }
+        },
+        "f7571e3ae88a2016460db754290b1f3dcbd07c823de1934bf9a2168e088cc3aa": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 109.07412826898508,
+                "threads": 128
+            }
+        },
+        "5c92ff05ef3e10674d7843eee9b56ced725b555e565ea9a7bd0c4388ec31e4fe": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 191.16515932802577,
+                "threads": 128
+            }
+        },
+        "37761dcd49b04a0470570fc568f46927e6fba88af2850d64b0c13b229acd0c5d": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SUMSQUARES",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sumsquares.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 930.022204154986,
+                "threads": 128
+            }
+        },
+        "6bbd989722250d7e658eba7a877884f8be46ab974ca69e1131412fc68d1e84e3": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 2,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 99.15974583299248,
+                "threads": 128
+            }
+        },
+        "c6d4a61fd69450853f3c9d3e62cbf4080800e119e41f7ba87abc5bae76976598": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 100,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 112.27694962799433,
+                "threads": 128
+            }
+        },
+        "d247a3b9c8d928078eacd41e350b4657846d468152495436695f253083767187": {
+            "experiment": {
+                "problems": [
+                    "PROBLEM_SPHERE",
+                    "hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended/0/sphere.json"
+                ],
+                "baselevelIterations": 100,
+                "populationSize": 30,
+                "modelSize": 750,
+                "trialSampleSizes": 30,
+                "trialStepCount": 100,
+                "HH-SA-temp": 10000,
+                "HH-SA-alpha": 50,
+                "additionalFlags": "   -DSAMPLING=\\\"SPRT-T-test\\\""
+            },
+            "metadata": {
+                "elapsedTimeSec": 266.5423194800096,
+                "threads": 128
+            }
+        }
+    }
+}

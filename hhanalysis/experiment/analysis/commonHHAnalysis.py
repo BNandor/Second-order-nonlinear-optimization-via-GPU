@@ -5,6 +5,7 @@ from commonPlots import *
 from common import *
 import tabloo
 import numpy as np
+from matplotlib import cm
 
 def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',labelfunction= lambda x:x, optimizerOrderlist=[]):
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
@@ -62,6 +63,135 @@ def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',l
     # printMinMedIQRStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # printLatexMinAvgStd(transpose,metadata['optimizers'])
     # return (mealpyMHs,nmhh)
+    return statisticsforDimension
+
+def methodsTimeComparison(all,metadata,statsisticsforDimension=None):
+    metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
+    all=all.groupby(['hyperLevel-id','modelSize'])
+    transpose=pd.DataFrame()
+    optimizersSet=set()
+    for (group,groupIndex) in all:
+        transposedRow={}
+        transposedRow['hyperLevel-id']=group[0]
+        transposedRow['modelSize']=group[1]
+        
+        # Extract elapsedTimeSec samples from the group
+        time_samples = []
+        for index,row in groupIndex.iterrows():
+            time_samples.append(row['elapsedTimeSec'])
+        
+        # Calculate average and std of elapsedTimeSec
+        transposedRow['avgTime'] = np.mean(time_samples)
+        transposedRow['stdTime'] = np.std(time_samples)
+        transposedRow['time-samples'] = time_samples
+        
+        if not group[0] in optimizersSet:
+            metadata['optimizers'].append(group[0])
+            optimizersSet.add(group[0])
+        
+        transpose=transpose.append(transposedRow,ignore_index=True)
+    plotTimePerDimension(transpose,statsisticsforDimension)
+
+def plotTimePerDimension(times, statisticsforDimension=None):
+        """ times is a dataframe with columns: 'hyperLevel-id', 'modelSize', 'avgTime', 'stdTime', 'time-samples' 
+            Plots a violin plot of time-samples per modelSize for each hyperLevel-id. 
+            Creates multiple subplots, one for each modelSize, with maximum 4 subplots per row and 2 rows per figure.
+            Shows separate figures if data exceeds 4x2 subplots.
+
+            If statisticsforDimension is provided, colors each violin plot according to optimizer performance
+            for that specific dimension.
+            statisticsforDimension schema: dict[modelSize -> dict[optimizer -> int (wins)]]
+            The color mapping uses the 'wins' for each dimension: 
+            - Lower wins (worse performance) -> blueish colors
+            - Higher wins (better performance) -> greenish colors
+            
+        """
+        
+        modelSizes = sorted(times['modelSize'].unique())
+        numSizes = len(modelSizes)
+        
+        # Maximum subplots per figure
+        max_cols = 3
+        max_rows = 2
+        subplots_per_fig = max_cols * max_rows
+        
+        # Calculate number of figures needed
+        num_figures = (numSizes + subplots_per_fig - 1) // subplots_per_fig  # Ceiling division
+        
+        for fig_idx in range(num_figures):
+            # Calculate which modelSizes belong to this figure
+            start_idx = fig_idx * subplots_per_fig
+            end_idx = min(start_idx + subplots_per_fig, numSizes)
+            fig_sizes = modelSizes[start_idx:end_idx]
+            
+            num_subplots = len(fig_sizes)
+            ncols = min(max_cols, num_subplots)
+            nrows = min(max_rows, (num_subplots + ncols - 1) // ncols)  # Ceiling division
+            
+            fig, axs = plt.subplots(nrows, ncols, figsize=(5*ncols, 6*nrows), squeeze=False)
+            
+            # Flatten axs for easier indexing
+            axs_flat = axs.flatten()
+            
+            # Calculate max y value for each row
+            row_max_y = []
+            for row_idx in range(nrows):
+                row_start = row_idx * ncols
+                row_end = min(row_start + ncols, num_subplots)
+                row_sizes = fig_sizes[row_start:row_end]
+            
+                max_y = 0
+                for size in row_sizes:
+                    data = times[times['modelSize'] == size]
+                    for _, row in data.iterrows():
+                        max_y = max(max_y, max(row['time-samples']))
+                row_max_y.append(max_y * 1.05)  # Add 5% padding
+
+            for i, size in enumerate(fig_sizes):
+                ax = axs_flat[i]
+                data = times[times['modelSize'] == size]
+                samples = [row['time-samples'] for _, row in data.iterrows()]
+                labels = data['hyperLevel-id'].tolist()
+
+                # Create violin plot
+                parts = ax.violinplot(samples, showmeans=True)
+                
+                # Color violins based on optimizer performance for this specific dimension
+                if statisticsforDimension is not None and size in statisticsforDimension:
+                    dim_wins = statisticsforDimension[size]
+                    if dim_wins:
+                        # Normalize wins to [0, 1] range for this dimension
+                        min_wins = min(dim_wins.values())
+                        max_wins = max(dim_wins.values())
+                        win_range = max_wins - min_wins if max_wins > min_wins else 1
+                        
+                        # Create colormap: blue (low wins) to green (high wins)
+                        cmap = cm.get_cmap('winter')  # Blue (low) to Green (high) colormap
+                        
+                        for j, (label, part_body) in enumerate(zip(labels, parts['bodies'])):
+                            if label in dim_wins:
+                                normalized_wins = (dim_wins[label] - min_wins) / win_range
+                                color = cmap(normalized_wins)
+                                part_body.set_facecolor(color)
+                                part_body.set_alpha(0.7)
+                
+                ax.set_title(f'Dimension: {int(size)}')
+                ax.set_ylabel('Elapsed Time (sec)')
+                ax.set_xticks(range(1, len(labels) + 1))
+                ax.set_xticklabels([optimizer.replace("/-", "").replace("/benchmarks/dim/2_100/pop/30", "") for optimizer in labels], rotation=30, ha='right')
+                
+                # Set y-axis limit based on row
+                row_idx = i // ncols
+                ax.set_ylim(0, row_max_y[row_idx])
+                
+            # Hide unused subplots and adjust positioning for last row
+            # Hide unused subplots
+            for j in range(num_subplots, len(axs_flat)):
+                axs_flat[j].set_visible(False)
+
+            plt.tight_layout()
+            plt.show()
+        
 
 def all5000IterationResults():
     testGroupDF=createTestGroupView(SA_EXPERIMENT_RECORDS_PATH,

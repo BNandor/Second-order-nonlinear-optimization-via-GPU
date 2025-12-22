@@ -200,16 +200,16 @@ def runNMHHComputationalTimeExperiments():
                                 ("PROBLEM_SCHWEFEL", f"{logspath}/schwefel.json"),
                                 ("PROBLEM_SUMSQUARES", f"{logspath}/sumsquares.json"),
                                 ("PROBLEM_SPHERE", f"{logspath}/sphere.json")]
-        #dimensions=[2,100,750]
-        dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+        dimensions=[2,100,750]
+        # dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
         populationSize=[30]
         iterations=10
         for i in range(iterations):
-                config={'name':f'comptime_extended_aws/{i}',
+                config={'name':f'comptime_extended/{i}',
                         'problems':problems,
                         'dimensions':dimensions,
                         'populationSize':populationSize,
-                        'trialStepCount':10
+                        # 'trialStepCount':10
                         }
                 start_time = timer()
                 runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
@@ -289,16 +289,17 @@ def runSPRTTComputationalTimeExperiments():
               ("PROBLEM_SCHWEFEL",f"{logspath}/schwefel.json"),
               ("PROBLEM_SUMSQUARES",f"{logspath}/sumsquares.json"),
               ("PROBLEM_SPHERE",f"{logspath}/sphere.json")]
-    dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
-    #dimensions=[2,100,750]
+#     dimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
+    dimensions=[2,100,750]
     populationSize=[30]
     iterations=10
     for i in range(iterations):
-                config={'name':f'sprt/comptime_extended_aws/{i}',
+                # config={'name':f'sprt/comptime_extended_aws/{i}',
+                config={'name':f'sprt/comptime_extended/{i}',
                         'problems':problems,
                         'dimensions':dimensions,
                         'populationSize':populationSize,
-                        'trialStepCount':10
+                        # 'trialStepCount':10
                         }
                 start_time = timer()
                 runSPRTTestNMHH(LOGS_PATH_FROM_ROOT,ROOT,config)

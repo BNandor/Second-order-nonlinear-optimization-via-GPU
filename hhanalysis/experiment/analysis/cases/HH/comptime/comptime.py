@@ -431,7 +431,15 @@ def compare(method_configs):
     # Aggregate multiple methods
     combined_df = aggregate_multiple_methods(method_configs)
     method_names = [name for name, _ in method_configs]
-    
+    # Calculate average mean time for each method
+    print("\n" + "=" * 80)
+    print("Average Mean Time Across All Problems and Dimensions:")
+    print("=" * 80)
+    for method_name in method_names:
+            mean_col = f'{method_name}_mean'
+            if mean_col in combined_df.columns:
+                avg_mean = combined_df[mean_col].mean()
+                print(f"{method_name}: {avg_mean:.2f} seconds")
     print("\n" + "=" * 80)
     print("Combined Results (by Problem and Dimension):")
     print("=" * 80)
@@ -473,15 +481,21 @@ def compare(method_configs):
 # Example usage
 if __name__ == "__main__":
     # NMHH comparison
-    method_configs = [
-        ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime"),
-        ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
-    ]
-    # NMHH, NMHH-SPRT comparison
     # method_configs = [
-    #     ("SA-NMHH-SPRT", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt-seq-t"),
-    #     ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/extended_comptime"),
-    #     # ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
+    #     ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime"),
+    #     ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
+    # ]
+    # NMHH, NMHH-SPRT comparison 10 hyper steps
+    method_configs = [
+        ("SA-NMHH-SPRT", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/sprt/comptime_extended_aws"),
+        ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended_aws"),
+        # ("CustomHyS", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/CustomHYSPerf/newExperiment/comptime"),
+    ]
+    # # NMHH Hybrid methods comparison
+    # method_configs = [
+    #     ("SA-NMHH", "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended_initial"),
+    #     ("mealpy",  "/home/spaceman/dissertation/finmat/ParallelLBFGS/hhanalysis/logs/SA-NMHH/GA_DE_GD_LBFGS/comptime_extended_initial"),
+        
     # ]
     compare(method_configs)
    

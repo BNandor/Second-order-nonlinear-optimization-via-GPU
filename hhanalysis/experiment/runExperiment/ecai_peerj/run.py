@@ -39,9 +39,9 @@ def runRandomHHControlGroupExperiments(logsPathFromRoot,root,config):
 def runNMHH2(logsPathFromRoot,root,config):
     logspath=f"{logsPathFromRoot}/SA-NMHH/GA_DE_GD_LBFGS/{config['name']}"
     recordspath=f"{root}/{logspath}/records.json"
+
     params={}
     params["problems"]=zipWithProperty(config['problems'](logspath),"problems")
-    
     params["baselevelIterations"]=zipWithProperty([100],"baselevelIterations")
     params["populationSize"]=zipWithProperty(config['populationSize'],"populationSize")
     params["modelSize"]=zipWithProperty(config['dimensions'],"modelSize")

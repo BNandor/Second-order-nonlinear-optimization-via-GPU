@@ -53,13 +53,42 @@ def compare(methodExperiments,problems,dimensions):
     hhdata=loadDataMap()
     all=pd.concat([hhdata[methodAndExperiment[0]](metadata,methodAndExperiment[1]) for methodAndExperiment in methodExperiments])
 
-    all=dropIrrelevantColumns(all,set(['modelSize','problemName','hyperLevel-id','baselevelIterations','minAvg','minStd','minMedIQR','samples']))
+    all=dropIrrelevantColumns(all,set(['modelSize','problemName','hyperLevel-id','baselevelIterations','minAvg','minStd','minMedIQR','samples','elapsedTimeSec']))
     all=all[selectAllMatchAtLeastOne(all,[('baselevelIterations',metadata["baselevelIterations"]),('modelSize',metadata["modelSize"]),('problemName',metadata["problems"])])]
     all=all.sort_values(by=['modelSize',"problemName",metadata["minMetricColumn"]])
     # all=all[['problemName','modelSize','hyperLevel-id',metadata["minMetricColumn"],'minStd','samples']]
 
     print(f"Problems: {problems} \n Dimensions: {dimensions}")
-    methodsComparison(all,metadata,True,mapBarplotColors,optimizerPrettify,optimizerOrderlist=[4,1,2,3,5,6,7,8,9])
+    winstatistics=methodsComparison(all,metadata,True,mapBarplotColors,optimizerPrettify,optimizerOrderlist=[4,1,2,3,5,6,7,8,9])
+    methodsTimeComparison(all,metadata,winstatistics)
+
+ablationcomparisonmethods=[
+            ('nmhh2','/'),
+            ('saperturbGroup','/'),
+            ('sarefineGroup','/'),
+]
+
+hybridmethods=[
+            ('nmhh2','/'),
+            ('saGWOGroup','/'),
+            ('sacmaesGWOGroup','/'),
+            ('bigsacmaesGWOGroup','/'),
+            ('bigsacmaesGroup','/'),
+            ('sacmaesGroup','/'),   
+            ('cmaesGWOGroup','/'),
+            ('cmaesGroup','/'),
+            ('bigsamadsGroup','/'),
+            ('bigsamadsGWOGroup','/'),
+            ('saMadsGWOGroup','/'),
+            ('madsGWOGroup','/'),
+            ('madsGroup','/'),
+            ('saMadsGroup','/'),
+
+            # ('customhys2','/'),
+            # ('mealpy','/'),
+            # ('mealpy','/benchmarks/dim/2_100/pop/30'),
+            # ('mealpy','/benchmarks/shifted/pop/30')
+            ]
 
 allmethods=[
             ('nmhh2','/'),
@@ -99,6 +128,7 @@ allmethods=[
             # ('mealpy','/benchmarks/shifted/pop/30')
             ]
 
+
 convexUnimodal=['PROBLEM_SCHWEFEL223','PROBLEM_TRID','PROBLEM_SPHERE','PROBLEM_SUMSQUARES']
 nonconvexMultimodal=['PROBLEM_RASTRIGIN','PROBLEM_STYBLINSKITANG','PROBLEM_QING','PROBLEM_ROSENBROCK',
                      'PROBLEM_MICHALEWICZ','PROBLEM_DIXONPRICE','PROBLEM_LEVY','PROBLEM_SCHWEFEL']
@@ -136,7 +166,9 @@ alldimensions=[2,3,4,5,6,7,8,9,10,15,30,50,100,500,750]
 highdimensions=[10,15,30,50,100,500,750]
 lowerdimensions=[2,3,4,5,6,7,8,9]
 singleDim=[2]
-compare(allmethods,allproblems,alldimensions)
+
+# compare(allmethods,allproblems,alldimensions)
+
 # compare(allmethods,shiftproblems,initialdimensions)
 # compare(allmethods,initialproblems,initialdimensions)
 
@@ -162,3 +194,11 @@ compare(allmethods,allproblems,alldimensions)
 # compare(allmethods,separable,highdimensions)
 # print("NonSeparable-High dimensions")
 # compare(allmethods,nonSeparable,highdimensions)
+
+# Hybrid comparisons
+# print("All- dimensions ")
+# compare(hybridmethods,allproblems,alldimensions)
+
+# Ablation comparisons
+
+compare(ablationcomparisonmethods,allproblems,alldimensions)
