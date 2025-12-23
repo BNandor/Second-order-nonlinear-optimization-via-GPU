@@ -112,15 +112,20 @@ def nmhh2Perf(metadata,experimentPath='/'):
     return metadata['datasets'][dataId]
 
 def sarefineGroup(metadata,experimentPath='/'):
-    dataId=f'{experimentPath}-LBFGS'
+    dataId=f'{experimentPath}-SA-REFINE'
     if dataId not in metadata['datasets']:
         metadata['datasets'][dataId] = createTestGroupView(f"{SAREFINE_EXPERIMENT_RECORDS_PATH}{experimentPath}/records.json",
-            (filterMetricPropertiesMinMedIQR, "hashSHA256"),
+            # (filterMetricPropertiesMinMedIQR, "hashSHA256"),
+            (filterMetricPropertiesAverageAndMedIQR,"hashSHA256"),
             recordToExperiment,
             set(),
-            set(["minMedIQR"]),
-            {'minMedIQR': 'min'},
-            enrichAndFilterSA)
+            # set(["minMedIQR"]),
+            # {'minMedIQR': 'min'},
+            # enrichAndFilterSA
+            set(["minMedIQR", "minAvg", "minStd", "samples"]),
+            metadata['metricsAggregation'],
+            metadata['mergeOn']
+            )
         metadata['datasets'][dataId]['hyperLevel-id']=dataId
     return metadata['datasets'][dataId]
 

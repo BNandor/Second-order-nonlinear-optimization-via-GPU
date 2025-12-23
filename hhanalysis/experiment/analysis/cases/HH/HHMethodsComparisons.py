@@ -32,7 +32,7 @@ def mapBarplotColors(optimizer):
 
 def optimizerPrettify(optimizer):
     noPathInName=optimizer.split('/')[-1]
-    noNumbers=re.sub(r'\d+', '',noPathInName)
+    noNumbers=re.sub(r'\d+', '',noPathInName).replace("ablation-", "")
     return noNumbers[1:] if noNumbers.startswith('-') else noNumbers
 
 def compare(methodExperiments,problems,dimensions):
@@ -64,8 +64,8 @@ def compare(methodExperiments,problems,dimensions):
 
 ablationcomparisonmethods=[
             ('nmhh2','/'),
-            ('saperturbGroup','/'),
-            ('sarefineGroup','/'),
+            ('saperturbGroup','/ablation'),
+            ('sarefineGroup','/ablation'),
 ]
 
 hybridmethods=[
@@ -197,8 +197,8 @@ singleDim=[2]
 
 # Hybrid comparisons
 # print("All- dimensions ")
-# compare(hybridmethods,allproblems,alldimensions)
+compare(hybridmethods,allproblems,alldimensions)
 
 # Ablation comparisons
 
-compare(ablationcomparisonmethods,allproblems,alldimensions)
+# compare(ablationcomparisonmethods,initialproblems,initialdimensions)

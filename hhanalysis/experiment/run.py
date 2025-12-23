@@ -8,6 +8,7 @@ import pandas as pd
 from timeit import default_timer as timer
 from analysis.common import *
 from runExperiment.ecai_peerj.run import *
+from runExperiment.ablation.run import *
 from runExperiment.classification.commonClassificationRun import *
 import runExperiment.mealpy.run
 import runExperiment.customhys.customhys.batchexperiments 
@@ -94,6 +95,25 @@ def runShiftedNMHHSuite():
             'populationSize':populationSize
             }
     runNMHH2(LOGS_PATH_FROM_ROOT,ROOT,config)
+
+def runAblationSuite():
+    problems=lambda logspath: [
+              ("PROBLEM_ROSENBROCK",f"{logspath}/rosenbrock.json"),
+              ("PROBLEM_RASTRIGIN",f"{logspath}/rastrigin.json"),
+              ("PROBLEM_STYBLINSKITANG",f"{logspath}/styblinskitang.json"),
+              ("PROBLEM_TRID",f"{logspath}/trid.json"),
+              ("PROBLEM_SCHWEFEL223",f"{logspath}/schwefel223.json"),
+              ("PROBLEM_QING",f"{logspath}/qing.json")
+              ]
+    dimensions=[5,50,100,500]
+    populationSize=[30]
+    config={'name':'ablation',
+            'problems':problems,
+            'dimensions':dimensions,
+            'populationSize':populationSize
+            }
+    runAblationSAPerturb(LOGS_PATH_FROM_ROOT,ROOT,config)
+    runAblationSARefine(LOGS_PATH_FROM_ROOT,ROOT,config)
 
 def runCUSTOMHySSuite():
     EXPERIMENT_RECORDS_PATH=f"{ROOT}/{LOGS_PATH_FROM_ROOT}/CustomHYSPerf/michalewiczDixonPriceLecy750/"
@@ -1234,9 +1254,9 @@ def runDefaultClassificationSuite():
     }
     runClassificationExperiments(LOGS_PATH_FROM_ROOT,ROOT,config,defaultClassificationExperiment)
 
-# runSNLPSuite()
 if __name__ == '__main__':
-        runNMHHComputationalTimeExperiments()
+     # runSNLPSuite()
+        # runNMHHComputationalTimeExperiments()
 # runCUSTOMHySComputationalTimeExperiments()
 # # runRandomHHSuite()
 # # runNMHHSuite()
@@ -1248,7 +1268,7 @@ if __name__ == '__main__':
 # runShiftedMealpySuite()
 # # runClusteringSuite()
 # # runSPRTTTestNMHHSuite()
-        runSPRTTComputationalTimeExperiments()
+        # runSPRTTComputationalTimeExperiments()
 # # runSPRTClusteringSuite()
 # # runSPRTTTestNMHHSuite()
 
@@ -1266,3 +1286,5 @@ if __name__ == '__main__':
 # runDefaultClassificationSuite()
 
 # runGeneticSearchClassificationSuite()
+
+        # runAblationSuite()

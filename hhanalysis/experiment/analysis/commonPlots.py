@@ -265,6 +265,11 @@ def plot_optimizer_scores(optimizer_scores, colorfunction, labelfunction):
     num_plots = len(optimizer_scores)
     number_of_cols_per_page=3
     num_rows_per_page = 2
+
+    # ablation plots
+    # number_of_cols_per_page=4
+    # num_rows_per_page = 1
+
     num_rows = num_plots // number_of_cols_per_page + (num_plots % number_of_cols_per_page > 0)  # Calculate total number of rows
     num_pages = num_rows // num_rows_per_page + (num_rows % num_rows_per_page > 0)  # Calculate total number of pages
 
@@ -283,8 +288,8 @@ def plot_optimizer_scores(optimizer_scores, colorfunction, labelfunction):
             labels=[labelfunction(label) for label in sorted_scores.keys()]
             colors=[colorfunction(label) for label in labels]
             ax.bar(sorted_scores.keys(), sorted_scores.values(),color=colors)
-            ax.set_title(f'Dimension {dimension} Scores')
-            ax.tick_params(axis='x', rotation=90)  # Rotate x-axis labels by 90 degrees
+            ax.set_title(f'Dimension {int(dimension)} Scores')
+            ax.tick_params(axis='x', rotation=30)  # Rotate x-axis labels by 30 degrees
             ax.set_xticklabels(labels)  # Remove specified text
 
         plt.tight_layout()

@@ -63,7 +63,8 @@ def methodsComparison(all,metadata,block=True, barplotMapping=lambda x: 'blue',l
     # printMinMedIQRStdHighlighWilcoxRanksums(transpose,metadata['optimizers'])
     # printLatexMinAvgStd(transpose,metadata['optimizers'])
     # return (mealpyMHs,nmhh)
-    return statisticsforDimension
+    # return statisticsforDimension
+    return scoresPerDim
 
 def methodsTimeComparison(all,metadata,statsisticsforDimension=None):
     metadata["baselevelIterations"]=all['baselevelIterations'].iloc[0]
@@ -113,6 +114,9 @@ def plotTimePerDimension(times, statisticsforDimension=None):
         # Maximum subplots per figure
         max_cols = 3
         max_rows = 2
+
+        # max_cols = 4
+        # max_rows = 1
         subplots_per_fig = max_cols * max_rows
         
         # Calculate number of figures needed
@@ -178,7 +182,9 @@ def plotTimePerDimension(times, statisticsforDimension=None):
                 ax.set_title(f'Dimension: {int(size)}')
                 ax.set_ylabel('Elapsed Time (sec)')
                 ax.set_xticks(range(1, len(labels) + 1))
-                ax.set_xticklabels([optimizer.replace("/-", "").replace("/benchmarks/dim/2_100/pop/30", "") for optimizer in labels], rotation=30, ha='right')
+                ax.set_xticklabels([optimizer.replace("/-", "").replace("/benchmarks/dim/2_100/pop/30", "")
+                                    .replace("/ablation-", "")
+                                     for optimizer in labels], rotation=30, ha='right')
                 
                 # Set y-axis limit based on row
                 row_idx = i // ncols
